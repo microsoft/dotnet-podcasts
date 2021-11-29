@@ -1,0 +1,6 @@
+﻿.titlePage {
+    font-family: var(--ff-semibold);
+    font-size: var(--headlines-h5-fs);
+    line-height: var(--headlines-h5-lh);
+    margin-bottom: 2px;
+}

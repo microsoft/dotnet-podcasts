@@ -1,0 +1,35 @@
+﻿@typeparam TItem
+
+@if (Items == null || !Items.Any())
+{
+    @if (EmptyResults != null)
+    {
+        @EmptyResults
+    }
+    else
+    {
+        <NoResults Message="Oops, no results found." Image="_content/Podcast.Components/images/empty-results.png" ShowDiscoverButton="false" />
+    }
+}
+else
+{
+    <div class="grid">
+        @foreach (TItem item in Items)
+        {
+            @ItemTemplate(item)
+        }
+    </div>
+}
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public IEnumerable<TItem>? Items { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment<TItem> ItemTemplate { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment? EmptyResults { get; set; }
+}

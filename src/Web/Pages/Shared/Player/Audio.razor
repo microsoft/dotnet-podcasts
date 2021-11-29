@@ -1,0 +1,126 @@
+﻿@implements IDisposable
+@inject PlayerService PlayerService
+@inject AudioInterop AudioJsInterop
+
+<audio @ref="AudioElementRef"
+       src="@url"
+       oncustomdurationchange="@OnDurationChange"
+       oncustomtimeupdate="@OnTimeUpdate"
+       oncanplay="@OnCanPlay"
+       onplay="@OnPlay"
+       onpause="@OnPause" />
+
+@code {
+    ElementReference AudioElementRef;
+
+    private string? url;
+    private bool loadingUrl;
+
+    protected override void OnInitialized()
+    {
+        PlayerService.VolumeChanged += OnVolumeChanged;
+        PlayerService.MutedChanged += OnMutedChanged;
+        PlayerService.EpisodeChanged += OnEpisodeChanged;
+        PlayerService.PlayingChanged += OnPlayingChanged;
+        PlayerService.TimeSought += OnTimeSought;
+
+        url = PlayerService.Episode?.Url;
+    }
+
+    public void Dispose()
+    {
+        PlayerService.VolumeChanged -= OnVolumeChanged;
+        PlayerService.MutedChanged -= OnMutedChanged;
+        PlayerService.EpisodeChanged -= OnEpisodeChanged;
+        PlayerService.PlayingChanged -= OnPlayingChanged;
+        PlayerService.TimeSought -= OnTimeSought;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await AudioJsInterop.SetMuted(AudioElementRef, PlayerService.IsMuted);
+            await AudioJsInterop.SetVolume(AudioElementRef, PlayerService.Volume);
+        }
+    }
+
+    private void OnDurationChange(DurationChangeEventArgs args)
+    {
+        PlayerService.Duration = args.Duration;
+    }
+
+    private void OnTimeUpdate(TimeUpdateEventArgs args)
+    {
+        PlayerService.CurrentTime = args.CurrentTime;
+    }
+
+    private async Task OnCanPlay(EventArgs args)
+    {
+        loadingUrl = false;
+        if (PlayerService.IsPlaying)
+        {
+            await AudioJsInterop.Play(AudioElementRef);
+        }
+    }
+
+    private void OnPlay(EventArgs args)
+    {
+        if (!PlayerService.IsPlaying)
+        {
+            PlayerService.IsPlaying = true;
+        }
+    }
+
+    private void OnPause(EventArgs args)
+    {
+        if (PlayerService.IsPlaying)
+        {
+            PlayerService.IsPlaying = false;
+        }
+    }
+
+    private async void OnVolumeChanged(int volume)
+    {
+        await AudioJsInterop.SetVolume(AudioElementRef, volume);
+    }
+
+    private async void OnMutedChanged(bool muted)
+    {
+        await AudioJsInterop.SetMuted(AudioElementRef, muted);
+    }
+
+    private async void OnPlayingChanged(bool play)
+    {
+        if (!loadingUrl)
+        {
+            if (play)
+            {
+                await AudioJsInterop.Play(AudioElementRef);
+            }
+            else
+            {
+                await AudioJsInterop.Pause(AudioElementRef);
+            }
+        }
+    }
+
+    private async void OnEpisodeChanged(EpisodeInfo? episode)
+    {
+        var newValue = episode?.Url;
+        if (url != newValue)
+        {
+            url = newValue;
+            loadingUrl = true;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async void OnTimeSought(double? time)
+    {
+        if (time != null)
+        {
+            await AudioJsInterop.SetCurrentTime(AudioElementRef, time.Value);
+        }
+    }
+}

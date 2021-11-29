@@ -1,0 +1,20 @@
+﻿@typeparam TItem
+
+<ul class="tags">
+    @foreach (var item in Items ?? new TItem[] { })
+    {
+        <li class="tags-item">
+            @ItemTemplate(item)
+        </li>
+    }
+</ul>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public IEnumerable<TItem> Items { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment<TItem> ItemTemplate { get; set; } = default!;
+}

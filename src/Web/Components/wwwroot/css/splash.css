@@ -1,0 +1,123 @@
+@import url('reset.css');
+@import url('styles.css');
+
+.splash {
+    background: var(--gradient-splash);
+    width: 100vw;
+    height: 100%;
+    color: var(--c-neutral-white);
+}
+
+.splash:before {
+    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: grayscale(1);
+}
+
+.splash-effects {
+    display: none;
+}
+
+.splash-effects,
+.splash-effect-one,
+.splash-effect-two,
+.splash-effect-three {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.splash-effect-one {
+    background: var(--gradient-splash);
+    mix-blend-mode: multiply;
+    opacity: 0.6;
+    z-index: 10;
+}
+
+.splash-effect-two {
+    background: var(--gradient-splash);
+    mix-blend-mode: screen;
+    opacity: 0.1;
+    z-index: 20;
+}
+
+.splash-logo {
+    position: relative;
+    top: auto;
+    left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.splash-logo-img {
+    width: 230px;
+}
+
+.splash-logo-claim {
+    display: none;
+}
+
+@media screen and (min-width: 992px) {
+    .splash {
+        background: url('../images/bg-splash.jpg') no-repeat center center transparent;
+        background-size: cover;
+    }
+
+    .splash:before {
+        display: block;
+    }
+
+    .splash-effects {
+        display: block;
+        z-index: 50;
+    }
+
+    .splash-logo {
+        position: absolute;
+        top: 10%;
+        left: 10%;
+        z-index: 100;
+        width: auto;
+        height: auto;
+        flex-direction: column;
+        display: block;
+        align-items: inherit;
+        justify-content: inherit;
+    }
+
+    .splash-logo-img {
+        margin-bottom: 5vh;
+        width: 400px;
+    }
+
+    .splash-logo-claim {
+        display: block;
+        margin-left: 168px;
+        font-size: var(--subheadings-s3-fs);
+        line-height: var(--subheadings-s3-lh);
+        color: var(--c-primary-xlight);
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1439px) {
+    .splash-logo-img {
+        margin-bottom: 3vh;
+        width: 250px;
+    }
+
+    .splash-logo-claim {
+        font-size: var(--subheadings-s4-fs);
+        line-height: var(--subheadings-s4-lh);
+        margin-left: 103px;
+    }
+}

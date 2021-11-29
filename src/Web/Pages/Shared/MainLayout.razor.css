@@ -1,0 +1,147 @@
+.page {
+    background-color: var(--c-neutral-grey1);
+    display: grid;
+    grid-template-areas:
+        "header"
+        "main-view"
+        "player-bar"
+        "nav-bar";
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px 1fr auto auto;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+main {
+    grid-area: main-view;
+    overflow: hidden;
+    display: flex;
+    justify-content: inherit;
+    width: 100%;
+}
+
+    main > article {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+.page__header {
+    grid-area: header;
+/*    height: 100%;
+    box-sizing: border-box;*/
+}
+
+.page__sidebar {
+    grid-area: nav-bar;
+    background-color: var(--c-neutral-white-complementary);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.05);
+    color: var(--c-neutral-grey8);
+    width: 100%;
+    z-index: 5;
+}
+
+::deep .footerPlayer {
+    grid-area: player-bar;
+    z-index: 1;
+}
+
+::deep .containerPage {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 8px;
+    padding-bottom: 16px;
+    margin-right: -8px;
+    margin-top: 8px;
+    height: 100%;
+}
+
+::deep .containerPage--featured {
+    padding-bottom: 16px;
+}
+
+::deep .titleWrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding: 0 16px;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+}
+
+::deep .contentWrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+::deep .appLink {
+    color: var(--c-primary);
+    font-family: var(--ff-semibold);
+    display: inline-flex;
+    align-items: center;
+}
+
+    ::deep .appLink:hover {
+        color: var(--c-primary-dark);
+        cursor: pointer;
+    }
+
+::deep .appLink-icon {
+    font-size: 16px;
+    margin-right: 2px;
+}
+
+@media screen and (min-width: 992px) {
+    .page {
+        grid-template-areas:
+            "header main-view"
+            "nav-bar main-view"
+            "player-bar player-bar";
+        grid-template-columns: auto 1fr;
+        grid-template-rows: 142px 1fr auto;
+    }
+
+    main > article {
+        padding-top: 39px;
+        padding-bottom: 0;
+    }
+
+    .page__header {
+        background-color: var(--c-neutral-white-complementary);
+    }
+
+    .page__sidebar {
+        box-shadow: 0 0 0;
+        height: 100%;
+        position: sticky;
+        top: 0;
+        width: 312px;
+        grid-area: nav-bar;
+        z-index: unset;
+    }
+
+    ::deep .containerPage {
+        padding-bottom: 39px;
+        padding-right: 0;
+        margin-right: 10px;
+        margin-top: 0;
+    }
+
+    ::deep .containerPage--featured {
+        padding-bottom: 0;
+    }
+
+    ::deep .contentWrapper {
+        padding-left: 48px;
+        padding-right: 48px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    ::deep .titleWrapper {
+        padding: 0 48px;
+        flex-direction: row;
+        align-items: flex-end;
+    }
+}

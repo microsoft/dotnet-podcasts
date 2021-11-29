@@ -1,0 +1,24 @@
+﻿<button class="emojiPanelButton @(isPressed ? "pressed": "")" @attributes="AdditionalAttributes" @onclick="HandleClick">
+    @ChildContent
+</button>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; } = default!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalAttributes { get; set; } = default!;
+
+    private bool isPressed = false;
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        isPressed = false;
+        await OnClick.InvokeAsync(e);
+        isPressed = true;
+    }
+}

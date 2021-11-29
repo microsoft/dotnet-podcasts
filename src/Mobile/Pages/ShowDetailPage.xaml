@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Microsoft.NetConf2021.Maui.Pages.ShowDetailPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
+             xmlns:models="clr-namespace:Microsoft.NetConf2021.Maui.Models"
+             xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
+             xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+             x:Name="this"
+             Title="{Binding Show.Show.Title}"
+             Style="{StaticResource DetailPageStyle}"
+             x:DataType="viewmodels:ShowDetailViewModel">
+    <ContentPage.BindingContext>
+        <viewmodels:ShowDetailViewModel />
+    </ContentPage.BindingContext>
+    <Grid>
+        <StackLayout Margin="10,0">
+            <controls:HeaderControl IsVisible="{OnIdiom Default=true, Phone=false}"
+                                    ShowSearchCategories="False"
+                                    VerticalOptions="Start"
+                                    TextToSearch="{Binding TextToSearch, Mode=OneWayToSource}"
+                                    SearchCommand="{Binding SearchEpisodeCommand}" />
+        </StackLayout>
+        <CollectionView ItemsSource="{Binding Episodes}"
+                        SelectionMode="None"
+                        Margin="{OnIdiom Phone='10,0', Default='10,50,10,0'}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Episode">
+                    <Grid Margin="0,6"
+                          Padding="22,0"
+                          ColumnDefinitions="auto,*"
+                          ColumnSpacing="10"
+                          RowDefinitions="56, auto">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShowDetailViewModel}}, Path=TapEpisodeCommand}"
+                                                  CommandParameter="{Binding}" />
+                        </Grid.GestureRecognizers>
+                        <ImageButton Aspect="AspectFill"
+                                     GridLayout.Column="0"
+                                     GridLayout.Row="0"
+                                     HeightRequest="38"
+                                     Source="player_play.png"
+                                     VerticalOptions="Center"
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShowDetailViewModel}}, Path=PlayEpisodeCommand}"
+                                     CommandParameter="{Binding}"
+                                     WidthRequest="38">
+                        </ImageButton>
+
+                        <Label GridLayout.Column="0"
+                               GridLayout.Row="1"
+                               Style="{StaticResource BodySLabelStyle}"
+                               Text="{Binding Duration, Converter={StaticResource DurationConverter}}" />
+                        <Label GridLayout.Column="1"
+                               GridLayout.Row="1"
+                               Style="{StaticResource BodySLabelStyle}"
+                               Text="{Binding Published, StringFormat='{0:MMM dd, yyyy}'}" />
+                        <Label GridLayout.Column="1"
+                               GridLayout.Row="0"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="Center"
+                               Style="{StaticResource LinkLLabelStyle}"
+                               Text="{Binding Title}" />
+                        <ImageButton Aspect="AspectFill"
+                                     GridLayout.Column="1"
+                                     HorizontalOptions="End"
+                                     VerticalOptions="Center"
+                                     HeightRequest="24"
+                                     Source="clockpink.png"
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShowDetailViewModel}}, Path=AddToListenLaterCommand}"
+                                     CommandParameter="{Binding}"
+                                     WidthRequest="24">
+                            <ImageButton.IsVisible>
+                                <OnPlatform x:TypeArguments="x:Boolean">
+                                    <On Platform="Android,iOS">false</On>
+                                    <On Platform="UWP,macOS">true</On>
+                                </OnPlatform>
+                            </ImageButton.IsVisible>
+                            <ImageButton.Triggers>
+                                <DataTrigger Binding="{Binding IsInListenLater}"
+                                             TargetType="ImageButton"
+                                             Value="true">
+                                    <Setter Property="Source"
+                                            Value="listenlaterfilled.png" />
+                                </DataTrigger>
+                            </ImageButton.Triggers>
+                        </ImageButton>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Header>
+                <Grid Padding="{OnIdiom Default=30, Phone=22}"
+                      ColumnDefinitions="auto, *"
+                      ColumnSpacing="{OnIdiom Default=22, Phone=10}"
+                      RowDefinitions="auto,auto,auto,auto,auto,auto"
+                      RowSpacing="{OnIdiom Default=10, Phone=6}">
+
+                    <Image Aspect="AspectFit"
+                           GridLayout.Column="0"
+                           GridLayout.Row="0"
+                           GridLayout.RowSpan="{OnIdiom Default=5, Phone=3}"
+                           HeightRequest="{OnIdiom Default=230, Phone=156}"
+                           Source="{Binding Show.Image, FallbackValue=default_podcast_image.png}"
+                           WidthRequest="{OnIdiom Default=230, Phone=156}" />
+                    <Label GridLayout.Column="1"
+                           GridLayout.Row="0"
+                           HorizontalOptions="Start"
+                           Style="{OnIdiom Default={StaticResource H4LabelStyle}, Phone={StaticResource H6LabelStyle}}"
+                           Text="{Binding Show.Title}" />
+                    <Label GridLayout.Column="1"
+                           GridLayout.Row="1"
+                           Style="{StaticResource BodyMLabelStyle}"
+                           Text="{Binding Show.Author}"
+                           TextColor="{AppThemeBinding Light={StaticResource Grey7},Dark={StaticResource Grey4}}" />
+                    <Label GridLayout.Column="{OnIdiom Default=1, Phone=0}"
+                           GridLayout.Row="{OnIdiom Default=2, Phone=4}"
+                           GridLayout.ColumnSpan="{OnIdiom Default=1, Phone=2}"
+                           TextColor="{AppThemeBinding Light={StaticResource Dark},Dark={StaticResource Grey1}}"
+                           Style="{StaticResource BodyMLabelStyle}"
+                           Text="{Binding Show.Description}" />
+                    <Button BackgroundColor="{StaticResource Primary}"
+                            GridLayout.Column="{OnIdiom Default=1,Phone=0}"
+                            GridLayout.ColumnSpan="{OnIdiom Default=1, Phone=2}"
+                            GridLayout.Row="{OnIdiom Default=4, Phone=3}"
+                            Command="{Binding SubscribeCommand}"
+                            Text="{x:Static res:AppResource.Subscribe}">
+                        <Button.Triggers>
+                            <DataTrigger Binding="{Binding Show.IsSubscribed }"
+                                         Value="true"
+                                         TargetType="Button">
+                                <Setter Property="Text"
+                                        Value="{x:Static res:AppResource.Subscribed}" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.Footer>
+                <Grid HeightRequest="56" />
+            </CollectionView.Footer>
+        </CollectionView>
+
+
+        <controls:Player x:Name="player"
+                         VerticalOptions="End">
+        </controls:Player>
+    </Grid>
+</ContentPage>

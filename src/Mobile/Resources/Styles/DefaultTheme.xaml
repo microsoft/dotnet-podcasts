@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Microsoft.NetConf2021.Maui.Resources.Styles.DefaultTheme"
+                    xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls">
+
+
+    <Color x:Key="Black">#000000</Color>
+    <Color x:Key="Dark">#1F1F1F</Color>
+    <Color x:Key="Primary">#c00cc0</Color>
+    <Color x:Key="PrimaryLight">#DD0EB3</Color>
+    <Color x:Key="PrimaryDark">#8B0995</Color>
+    <Color x:Key="Secondary">#E10890</Color>
+    <Color x:Key="PrimaryExtraLight">#FCF2F7</Color>
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Grey1">#FAF9F8</Color>
+    <Color x:Key="Grey2">#F3F2F1</Color>
+    <Color x:Key="Grey3">#EDEBE9</Color>
+    <Color x:Key="Grey4">#D2D0CE</Color>
+    <Color x:Key="Grey5">#C8C6C4</Color>
+    <Color x:Key="Grey6">#A19F9D</Color>
+    <Color x:Key="Grey7">#605E5C</Color>
+    <Color x:Key="Grey8">#3B3A39</Color>
+    <Color x:Key="Grey9">#323130</Color>
+    <Color x:Key="Grey0">#979797</Color>
+
+    <Style x:Key="BaseStyle"  TargetType="Element">
+        <Setter Property="Shell.BackgroundColor" 
+                Value="{AppThemeBinding Dark=Black, Light=White}" />
+        <Setter Property="Shell.TitleColor"
+                Value="{StaticResource Primary}" />
+        <Setter Property="Shell.ForegroundColor" 
+                Value="{StaticResource Primary}" />
+        <Setter Property="Shell.TabBarUnselectedColor"
+                Value="{AppThemeBinding Dark={StaticResource White},Light={StaticResource Grey8}}" />
+        <Setter Property="Shell.TabBarTitleColor"
+                Value="{StaticResource Primary}" />
+        <Setter Property="Shell.NavBarIsVisible"
+                Value="False" />
+        <Setter Property="Shell.TabBarForegroundColor"
+                Value="{StaticResource Primary}" />
+        <Setter Property="Shell.TabBarBackgroundColor"
+                Value="{AppThemeBinding Dark={StaticResource Dark},Light={StaticResource White}}" />
+    </Style>
+
+    <Style BasedOn="{StaticResource BaseStyle}" TargetType="TabBar" />
+    
+    <Style x:Key="MainSectionStyle"
+           TargetType="Page">
+        <Setter Property="Shell.BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}" />
+        <Setter Property="Shell.NavBarIsVisible"
+                Value="False" />
+    </Style>
+
+    <Style x:Key="DetailPageStyle" BasedOn="{StaticResource MainSectionStyle}" TargetType="Page">
+        <Setter Property="Shell.NavBarIsVisible"
+                    Value="{OnPlatform Android=true, iOS=true, UWP=false, macOS=true}" />
+    </Style>
+
+    <Style TargetType="Page"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}" />
+        <Setter Property="Shell.NavBarHasShadow"
+                Value="false" />
+        <Setter Property="Shell.NavBarIsVisible"
+                Value="True" />
+    </Style>
+
+    <Style TargetType="SearchBar"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Placeholder"
+                Value="Search" />
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Grey8}}" />
+        <Setter Property="PlaceholderColor"
+                Value="{AppThemeBinding Light={StaticResource Grey8}, Dark={StaticResource Grey1}}" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiRegular" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="H5LabelStyle">
+        <Setter Property="FontSize"
+                Value="32" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiSemibold" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Grey8}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="H6LabelStyle">
+        <Setter Property="FontSize"
+                Value="24" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiSemibold" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Grey8}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="H4LabelStyle">
+        <Setter Property="FontSize"
+                Value="36" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiSemibold" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Grey8}, Dark={StaticResource Grey1}}" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="SH6LabelStyle">
+        <Setter Property="FontSize"
+                Value="18" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiRegular" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Grey7}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="BodyXLLabelStyle">
+        <Setter Property="FontSize"
+                Value="20" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiSemibold" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="BodyLLabelStyle">
+        <Setter Property="FontSize"
+                Value="18" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiSemibold" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="BodyMLabelStyle">
+        <Setter Property="FontSize"
+                Value="16" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiRegular" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Grey7}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="BodySLabelStyle">
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiRegular" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Dark}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="LinkLLabelStyle">
+        <Setter Property="FontSize"
+                Value="20" />
+        <Setter Property="FontFamily"
+                Value="SegoeUiSemibold" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Grey8}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Label">
+        <Setter Property="FontFamily"
+                Value="SegoeUiRegular" />
+        <Setter Property="FontSize"
+                Value="17" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource Grey8}, Dark={StaticResource Grey1}}" />
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="TextColor"
+                Value="White"></Setter>
+        <Setter Property="FontFamily"
+                Value="SegoeUiRegular" />
+        <Setter Property="CornerRadius"
+                Value="8" />
+        <Setter Property="Padding"
+                Value="14,10" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="Red" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="LightGray" />
+                            <Setter Property="TextColor"
+                                    Value="White" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style Class="FlyoutItemLayoutStyle"
+           TargetType="Layout"
+           ApplyToDerivedTypes="True">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{AppThemeBinding Dark={StaticResource Dark},Light={StaticResource White}}" />
+                            <Setter TargetName="FlyoutItemLabel"
+                                    Property="Label.TextColor"
+                                    Value="{AppThemeBinding Dark={StaticResource Grey1},Light={StaticResource Grey8}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{AppThemeBinding Dark={StaticResource Grey8},Light=#FCF2F4}" />
+                            <Setter  TargetName="FlyoutItemLabel"
+                                     Property="Label.TextColor"
+                                     Value="{StaticResource Primary}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Switch">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="On">
+                        <VisualState.Setters>
+                            <Setter Property="ThumbColor"
+                            Value="{AppThemeBinding Dark={StaticResource Grey1},Light={StaticResource Grey2}}" />
+                            <Setter Property="OnColor"
+                            Value="{AppThemeBinding Dark={StaticResource PrimaryLight},Light={StaticResource Primary}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Off">
+                        <VisualState.Setters>
+                            <Setter Property="ThumbColor"
+                            Value="{StaticResource Grey7}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ImageButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderColor"
+                Value="Transparent" />
+        <Setter Property="android:ImageButton.ShadowColor"
+                Value="Transparent" />
+    </Style>
+</ResourceDictionary>

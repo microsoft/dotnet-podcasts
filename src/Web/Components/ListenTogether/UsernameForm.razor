@@ -1,0 +1,46 @@
+﻿<div class="usernameModal">
+    <p class="usernameModal__info">
+        It seems that you are not registered. Please, tell us the name you want to use in this room.
+    </p>
+    <h3 class="usernameModal__title">What’s your name?</h3>
+    <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+
+        <div class="usernameModal__input">
+            <InputText @ref="inputRef" class="inputApp" @bind-Value="formModel.User" placeholder="Your name" />
+            <ValidationSummary />
+        </div>
+
+        <button type="submit" class="buttonApp primary" title="@(IsCreatingRoom ? "Open room" : "Join room")">
+            <span class="buttonApp-icon icon-listen-together"></span>
+            <span>@(IsCreatingRoom ? "Open room" : "Join room")</span>
+        </button>
+    </EditForm>
+</div>
+
+@code {
+    private record FormModel()
+    {
+        [Required] public string? User { get; set; }
+    };
+
+    [EditorRequired]
+    [Parameter]
+    public bool IsCreatingRoom { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<string> OnSetUsername { get; set; }
+
+    private InputText? inputRef;
+    private FormModel formModel = new();
+
+    private Task HandleValidSubmit() => OnSetUsername.InvokeAsync(formModel.User);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && inputRef?.Element != null)
+        {
+            await inputRef.Element.Value.FocusAsync();
+        }
+    }
+}

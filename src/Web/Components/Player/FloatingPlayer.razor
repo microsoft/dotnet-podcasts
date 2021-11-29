@@ -1,0 +1,178 @@
+﻿@using Microsoft.JSInterop
+@using System.Globalization
+
+<div class="player">
+    <div class="player-info">
+        <picture class="player-picture">
+            <img src="@Image" alt="@Title" loading="lazy" />
+        </picture>
+
+        <div class="player-info-details">
+            <h2 class="player-info-title" title="@Title">@Title</h2>
+            <p class="player-info-data" title="@Album - @(Date?.ToString("MMM dd, yyyy"))">
+                <span class="player-info-author">@Album</span>
+                <span class="player-info-date">@(Date?.ToString("MMM dd, yyyy"))</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="player-controls">
+        @if (Duration == null || Duration == 0)
+        {
+            <div class="player-controls-spinner">
+                <Spinner />
+            </div>
+        }
+        else
+        {
+            <div class="player-controls-buttons">
+                <button class="buttonIcon" title="Back 15 seconds" @onclick="Back">
+                    <span class="player-controls-jump icon-back-15" />
+                </button>
+                <button class="buttonIcon player-controls-action" title="@(IsPlaying ? "Pause" : "Play")" @onclick="TogglePlay">
+                    <span class="@(IsPlaying ? "icon-pause" : "icon-play")"></span>
+                </button>
+                <button class="buttonIcon" title="Forward 15 seconds" @onclick="Forward">
+                    <span class="player-controls-jump icon-forward-15" />
+                </button>
+            </div>
+            <div class="player-duration-bar">
+
+                <span>@TimeSpan.FromSeconds(currentTime).ToDurationString()</span>
+                <input type="range"
+                   min="0"
+                   max="@(Duration.Value.ToString("0.00", CultureInfo.InvariantCulture))"
+                   step="1"
+                   value="@(currentTime.ToString("0.00", CultureInfo.InvariantCulture) ?? "0")"
+                   @oninput="OnInputCurrentTime"
+                   @onchange="OnChangeCurrentTime"
+                   style="--current-width: @(((currentTime / Duration.Value) * 100).ToString(" 0.00", CultureInfo.InvariantCulture))%" />
+                <span>@(TimeSpan.FromSeconds(Duration.Value).ToDurationString())</span>
+            </div>
+        }
+    </div>
+
+    <div class="player-actions">
+        <button class="buttonIcon player-actions-share" title="Listen Together" @onclick="ListenTogether">
+            <span class="icon-listen-together"></span>
+        </button>
+        <button class="buttonIcon player-actions-later" title="Listen Later" @onclick="ToggleListenLater">
+            <span class="@(IsListenLater ? "icon-listen-later-fill" : "icon-listen-later-line")"></span>
+        </button>
+        <button class="buttonIcon player-actions-volume" title="@(IsMuted ? "Unmute" : "Mute")" @onclick="ToggleMuted">
+            <span class="@(IsMuted ? "icon-sound-mute" : Volume <= 33 ? "icon-sound-low"  : Volume <= 66 ? "icon-sound-medium" : "icon-sound-full")"></span>
+        </button>
+
+        <div class="player-volume-bar">
+            <input type="range" min="0" max="100" step="1" value="@currentVolume"
+                   @oninput="ChangeVolume" style="--current-width: @(currentVolume)%" />
+        </div>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Album { get; set; }
+
+    [Parameter]
+    public DateTime? Date { get; set; }
+
+    [Parameter]
+    public string? Image { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public bool IsPlaying { get; set; } = false;
+
+    [EditorRequired]
+    [Parameter]
+    public bool IsListenLater { get; set; } = false;
+
+    [EditorRequired]
+    [Parameter]
+    public bool IsMuted { get; set; } = false;
+
+    [EditorRequired]
+    [Parameter]
+    public int Volume { get; set; }
+
+    [Parameter]
+    public double? Duration { get; set; }
+
+    [Parameter]
+    public double? CurrentTime { get; set; }
+
+    [Parameter]
+    public EventCallback OnPlay { get; set; }
+
+    [Parameter]
+    public EventCallback OnPause { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnListenLater { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnSeek { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnVolumeChange { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnMutedChange { get; set; }
+
+    [Parameter]
+    public EventCallback OnListenTogether { get; set; }
+
+    private int currentVolume => IsMuted ? 0 : Volume;
+    private double? seekingTime;
+    private double currentTime => seekingTime ?? CurrentTime ?? 0;
+
+    private Task TogglePlay() => IsPlaying ? OnPause.InvokeAsync() : OnPlay.InvokeAsync();
+    private Task ToggleMuted() => OnMutedChange.InvokeAsync(!IsMuted);
+    private Task ToggleListenLater() => OnListenLater.InvokeAsync(!IsListenLater);
+    private Task ListenTogether() => OnListenTogether.InvokeAsync();
+
+    private Task SetCurrentTime(int time) => OnSeek.InvokeAsync(time);
+    private Task Back() => SetCurrentTime((int)CurrentTime! - 15);
+    private Task Forward() => SetCurrentTime((int)CurrentTime! + 15);
+
+    private async Task ChangeVolume(ChangeEventArgs e)
+    {
+        if (e.Value != null && int.TryParse(e.Value.ToString()!, out var volume))
+        {
+            Volume = volume;
+            await OnVolumeChange.InvokeAsync(volume);
+
+            if (Volume == 0 && !IsMuted)
+            {
+                await OnMutedChange.InvokeAsync(true);
+            }
+            else if (Volume >= 0 && IsMuted)
+            {
+                await OnMutedChange.InvokeAsync(false);
+            }
+        }
+    }
+
+
+    private void OnInputCurrentTime(ChangeEventArgs e)
+    {
+        if (e.Value != null && int.TryParse(e.Value.ToString()!, out var time))
+        {
+            seekingTime = time;
+        }
+    }
+
+    private async Task OnChangeCurrentTime(ChangeEventArgs e)
+    {
+        if (e.Value != null && int.TryParse(e.Value.ToString()!, out var time))
+        {
+            await SetCurrentTime(time);
+        }
+        seekingTime = null;
+    }
+}

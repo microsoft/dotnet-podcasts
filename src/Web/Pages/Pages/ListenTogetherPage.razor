@@ -1,0 +1,107 @@
+﻿@page "/listen-together"
+@page "/listen-together/create/{episodeId:guid}"
+@page "/listen-together/room/{roomCode}"
+@using static Podcast.Components.ListenTogether.ListenTogether
+@implements IDisposable
+@inject NavigationManager NavigationManager
+@inject PlayerService PlayerService
+
+<PageTitle>.NET Podcasts - Listen together</PageTitle>
+
+<ListenTogether @ref="listenTogetherRef"
+                CanCreateRoom="@canCreateRoom"
+                EpisodeId="@EpisodeId"
+                RoomCode="@RoomCode"
+                OnJoinRoom="@JoinRoom"
+                OnCreateRoom="@CreateRoom"
+                OnRoomCreated="@UpdatePlayerState"
+                OnLeaveRoom="@LeaveRoom"
+                OnPlayerStateChange="@UpdatePlayer" />
+
+
+@code {
+    [Parameter]
+    public Guid? EpisodeId { get; set; }
+
+    [Parameter]
+    public string? RoomCode { get; set; }
+
+    private ListenTogether? listenTogetherRef;
+    private bool canCreateRoom = false;
+    private bool isUpdatingPlayer = false;
+
+    protected override void OnInitialized()
+    {
+        PlayerService.EpisodeChanged += OnEpisodeChanged;
+        PlayerService.TimeSought += OnCurrentTimeChanged;
+        PlayerService.PlayingChanged += OnPlayingChanged;
+
+        canCreateRoom = PlayerService.Episode != null;
+    }
+
+    public void Dispose()
+    {
+        PlayerService.EpisodeChanged -= OnEpisodeChanged;
+        PlayerService.TimeSought -= OnCurrentTimeChanged;
+        PlayerService.PlayingChanged -= OnPlayingChanged;
+    }
+
+    private async void OnEpisodeChanged(EpisodeInfo? episode)
+    {
+        canCreateRoom = episode != null;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void CreateRoom()
+    {
+        if (PlayerService.Episode != null)
+        {
+            NavigationManager.NavigateTo($"/listen-together/create/{PlayerService.Episode.Id}");
+        }
+    }
+
+    private void JoinRoom(string roomCode)
+    {
+        if (roomCode != RoomCode)
+        {
+            NavigationManager.NavigateTo($"/listen-together/room/{roomCode}");
+        }
+    }
+
+    private void LeaveRoom()
+    {
+        NavigationManager.NavigateTo("/listen-together");
+    }
+
+    private void UpdatePlayer(RoomPlayerState playerState)
+    {
+        var (episode, progress, isPlaying) = playerState;
+        isUpdatingPlayer = true;
+
+        if (PlayerService.Episode?.Id != episode.Id)
+        {
+            var show = new ShowInfo(episode.Show.Id, episode.Show.Title, episode.Show.Author, episode.Show.Image);
+            PlayerService.Episode = new EpisodeInfo(episode.Id, episode.Title, episode.Description, episode.Url, episode.Published, episode.Duration, show);
+        }
+        if (PlayerService.CurrentTime != progress.TotalSeconds)
+        {
+            PlayerService.SeekTime(progress.TotalSeconds);
+        }
+        if (isPlaying != PlayerService.IsPlaying)
+        {
+            PlayerService.IsPlaying = isPlaying;
+        }
+        isUpdatingPlayer = false;
+    }
+
+    private async void OnCurrentTimeChanged(double? _) => await UpdatePlayerState();
+    private async void OnPlayingChanged(bool _) => await UpdatePlayerState();
+
+    private async Task UpdatePlayerState()
+    {
+        if (!isUpdatingPlayer && listenTogetherRef != null && PlayerService.CurrentTime != null)
+        {
+            await listenTogetherRef.UpdateRoomPlayerState((long)PlayerService.CurrentTime, PlayerService.IsPlaying);
+        }
+    }
+}

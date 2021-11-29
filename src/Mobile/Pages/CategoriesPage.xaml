@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+             Style="{StaticResource DetailPageStyle}"
+             xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
+             x:Class="Microsoft.NetConf2021.Maui.Pages.CategoriesPage">
+    <ContentPage.BindingContext>
+        <viewmodels:CategoriesViewModel />
+    </ContentPage.BindingContext>
+
+    <CollectionView ItemsSource="{Binding Categories}"
+                    Margin="10,0">
+        <CollectionView.Header>
+            <Label Text="{x:Static res:AppResource.Categories}"
+                   Style="{StaticResource H5LabelStyle}" />
+        </CollectionView.Header>
+        <CollectionView.ItemsLayout>
+            <GridItemsLayout Orientation="Vertical"
+                             Span="{OnIdiom Phone=2, Tablet=3, Desktop=3}"
+                             HorizontalItemSpacing="{OnIdiom Phone=16, Tablet=24, Desktop=24}"
+                             VerticalItemSpacing="{OnIdiom Phone=16, Tablet=24, Desktop=24}" />
+        </CollectionView.ItemsLayout>
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Grid BackgroundColor="{AppThemeBinding Light={StaticResource White},Dark={StaticResource Dark}}">
+                    <Label Text="{Binding Genre}"
+                           Margin="32"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="{OnPlatform UWP=24, macOS=24, Android=14,iOS=14}"
+                           Style="{StaticResource H5LabelStyle}" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectedCommand, Source={RelativeSource AncestorType={x:Type viewmodels:CategoriesViewModel}}}"
+                                              CommandParameter="{Binding}" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+</ContentPage>

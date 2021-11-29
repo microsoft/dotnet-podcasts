@@ -1,0 +1,93 @@
+﻿@implements IDisposable
+@inject SubscriptionsService SubscriptionsService
+@inject PlayerService PlayerService
+
+<Card Title="@Title"
+      Subtitle="@Author"
+      Image="@Image">
+    <ActionMenu>
+        <div class="item-actions @(isSubscribed || isCurrentShow ? "visible" : "")">
+            @if (isCurrentShow)
+            {
+                <PlayerBars Color="bars-white" IsPaused="@(!isPlaying)" />
+            }
+            <button class="buttonIcon item-actions-button @(isSubscribed ? "fixed" : "")"
+                    @onclick="ToggleSubscribed"
+                    @onclick:preventDefault
+                    title="@(isSubscribed ? "Unsubscribe" : "Subscribe")">
+                <span class="item-actions-icon @(isSubscribed ? "icon-subscribed-fill" : "icon-add-line")"></span>
+            </button>
+        </div>
+    </ActionMenu>
+</Card>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public Guid Id { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string Title { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string Author { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string Image { get; set; } = default!;
+
+    private bool isSubscribed = false;
+    private bool isPlaying = false;
+    private bool isCurrentShow = false;
+
+    protected override void OnInitialized()
+    {
+        isCurrentShow = PlayerService.Episode?.Show.Id == Id;
+        isPlaying = PlayerService.IsPlaying;
+
+        PlayerService.EpisodeChanged += OnEpisodeChanged;
+        PlayerService.PlayingChanged += OnPlayingChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isSubscribed = await SubscriptionsService.IsSubscribedShow(Id);
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        PlayerService.EpisodeChanged -= OnEpisodeChanged;
+        PlayerService.PlayingChanged -= OnPlayingChanged;
+    }
+
+    private async void OnEpisodeChanged(EpisodeInfo? episode)
+    {
+        var newValue = episode?.Show.Id == Id;
+        if (isCurrentShow != newValue)
+        {
+            isCurrentShow = newValue;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async void OnPlayingChanged(bool playing)
+    {
+        if (isCurrentShow && isPlaying != playing)
+        {
+            isPlaying = playing;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task ToggleSubscribed()
+    {
+        isSubscribed = !isSubscribed;
+        await SubscriptionsService.ToggleShowSubscription(new ShowInfo(Id, Title, Author, Image), isSubscribed);
+    }
+}

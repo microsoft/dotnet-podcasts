@@ -1,0 +1,45 @@
+﻿@inject ClipboardInterop ClipboardInterop
+
+<div class="listen-together__invite">
+    <h4 class="listen-together__invite-title">Invite people to listen to this podcast with you!</h4>
+    <div class="listen-together__invite-input-wrapper">
+        <input class="listen-together__invite-input" type="text" readonly value="@RoomCode" />
+        <div class="listen-togethter__invite-input-tooltip">
+            <Tooltip>
+                <Container>
+                    <button class="listen-together__invite-input-button" @onclick="CopyRoomCode">
+                        <span class="icon-copy"></span>
+                    </button>
+                </Container>
+                <Content>
+                    Copied!
+                </Content>
+            </Tooltip>
+        </div>
+    </div>
+    <p class="listen-together__invite-notes">Anyone with this link can listen to the podcast with you.<br />Share it with your friends!</p>
+    <div class="listen-together__invite-button">
+        <Tooltip>
+            <Container>
+                <button class="buttonApp primary" @onclick="CopyRoomCode">
+                    <span class="buttonApp-icon icon-copy"></span>
+                    <span>Copy code</span>
+                </button>
+            </Container>
+            <Content>
+                Copied!
+            </Content>
+        </Tooltip>
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string RoomCode { get; set; } = default!;
+
+    private async Task CopyRoomCode()
+    {
+        await ClipboardInterop.WriteTextAsync(RoomCode);
+    }
+}

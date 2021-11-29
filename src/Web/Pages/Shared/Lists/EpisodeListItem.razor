@@ -1,0 +1,138 @@
+﻿@implements IDisposable
+@inject PlayerService PlayerService
+@inject ListenLaterService ListenLaterService
+@inject NavigationManager NavigationManager
+
+<article class="episode">
+    <div class="episode-sound">
+        <button class="buttonIcon episode-play" title="@(isCurrentEpisode && isPlaying ? "Pause" : "Play")" @onclick="TogglePlay">
+            <span class="@(isCurrentEpisode && isPlaying ? "icon-pause" : "icon-play")"></span>
+        </button>
+
+        @if (isCurrentEpisode)
+        {
+            <PlayerBars Color="bars-color" IsPaused="@(!isPlaying)" />
+        }
+
+        <span class="episode-length">@(Math.Round(Episode.Duration?.TotalMinutes ?? 0, 0)) min</span>
+    </div>
+    <div class="episode-resumeTitle">
+        @if (IsShowVisible)
+        {
+            <Picture Title="@Episode.Show.Title" Image="@Episode.Show.Image" />
+        }
+
+        <div>
+            <h3 class="episode-resumeTitle-title @(isCurrentEpisode ? "is-playing" : "")">@Episode.Title</h3>
+            @if (IsShowVisible)
+            {
+                <h4 class="episode-resumeTitle-showTitle">@Episode.Show.Title</h4>
+            }
+            <h4 class="episode-resumeTitle-date">@Episode.Published.ToString("MMM dd, yyyy")</h4>
+        </div>
+    </div>
+    <p class="episode-description">
+        @((MarkupString)(Episode.Description ?? ""))
+    </p>
+    <div class="episode-actions">
+        <button class="buttonIcon episode-actions-share" title="Listen Together" @onclick="CreateListenTogetherRoom">
+            <span class="icon-listen-together"></span>
+        </button>
+        <button class="buttonIcon episode-actions-later" title="Listen Later" @onclick="ToggleListenLater">
+            <span class="@(isListenLater ? "icon-listen-later-fill" : "icon-listen-later-line")"></span>
+        </button>
+    </div>
+</article>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public EpisodeInfo Episode { get; set; } = default!;
+
+    [Parameter]
+    public bool IsShowVisible { get; set; } = false;
+
+    private bool isPlaying = false;
+    private bool isCurrentEpisode = false;
+    private bool isListenLater = false;
+
+    protected override void OnInitialized()
+    {
+        PlayerService.EpisodeChanged += OnEpisodeChanged;
+        PlayerService.PlayingChanged += OnPlayingChanged;
+        ListenLaterService.EpisodesChanged += UpdateListenLater;
+
+        isCurrentEpisode = PlayerService.Episode?.Id == Episode.Id;
+        isPlaying = isCurrentEpisode && PlayerService.IsPlaying;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isListenLater = await ListenLaterService.IsListenLaterEpisode(Episode.Id);
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        PlayerService.EpisodeChanged -= OnEpisodeChanged;
+        PlayerService.PlayingChanged -= OnPlayingChanged;
+        ListenLaterService.EpisodesChanged -= UpdateListenLater;
+    }
+
+    private async void OnEpisodeChanged(EpisodeInfo? episode)
+    {
+        var newValue = episode?.Id == Episode.Id;
+        if (isCurrentEpisode != newValue)
+        {
+            isCurrentEpisode = newValue;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async void OnPlayingChanged(bool playing)
+    {
+        if (isCurrentEpisode && isPlaying != playing)
+        {
+            isPlaying = playing;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async void UpdateListenLater(IEnumerable<EpisodeInfo> episodes)
+    {
+        var newValue = await ListenLaterService.IsListenLaterEpisode(Episode.Id);
+        if (isListenLater != newValue)
+        {
+            isListenLater = newValue;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void TogglePlay()
+    {
+        isPlaying = !isCurrentEpisode || !isPlaying;
+        if (isPlaying)
+        {
+            PlayerService.Play(Episode);
+        }
+        else
+        {
+            PlayerService.Pause();
+        }
+    }
+
+    private async Task ToggleListenLater()
+    {
+        isListenLater = !isListenLater;
+        await ListenLaterService.ToggleListenLaterEpisode(Episode, isListenLater);
+    }
+
+    private void CreateListenTogetherRoom()
+    {
+        PlayerService.Episode = Episode;
+        NavigationManager.NavigateTo($"listen-together/create/{PlayerService.Episode!.Id}");
+    }
+}

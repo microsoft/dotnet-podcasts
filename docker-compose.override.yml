@@ -1,0 +1,58 @@
+version: '3.4'
+
+services:
+
+  podcast.api:
+    environment:
+        - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:80
+        - ConnectionStrings__FeedQueue=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://azurite
+    ports:
+        - "5000:80"
+
+  podcast.db:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
+    volumes:
+      - podcast-sqldata:/var/opt/mssql
+
+  podcast.updater.worker:
+    environment:
+      - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word
+
+  podcast.ingestion.worker:
+    environment:
+      - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word
+      - ConnectionStrings__FeedQueue=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://azurite
+
+  listentogether.hub:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - NetPodcastApi__BaseAddress=http://podcast.api
+      - ConnectionStrings__ListenTogetherDb=Server=podcast.db;Database=ListenTogether;User Id=sa;Password=Pass@word
+    ports:
+      - "5001:80"
+
+  storage:
+    hostname: azurite
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+
+  podcast.web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - PodcastApi__BaseAddress=http://podcast.api
+      - ListenTogetherHub=http://listentogether.hub/listentogether
+    ports:
+    - "5002:80"
+
+volumes:
+  podcast-sqldata:
+    external: false

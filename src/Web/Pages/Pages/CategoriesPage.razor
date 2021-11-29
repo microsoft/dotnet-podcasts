@@ -1,0 +1,58 @@
+﻿@page "/categories"
+@implements IDisposable
+@inject PodcastService PodcastService
+@inject PersistentComponentState ApplicationState
+
+<PageTitle>.NET Podcasts - Categories</PageTitle>
+
+<div class="titleWrapper">
+    <button class="appLink" onclick="history.go(-1)">
+        <span class="appLink-icon icon-chevron-left"></span>
+        <span>Back</span>
+    </button>
+</div>
+
+<div class="containerPage">
+    <div class="titleWrapper">
+        <TitlePage Label="All Categories" />
+    </div>
+
+    <div class="contentWrapper categories-list">
+        @foreach (var category in categories ?? new Category[] { })
+        {
+            <NavLink href="@($"category/{category.Id}")" title="@category.Genre" class="categories-list-item">
+                @category.Genre
+            </NavLink>
+        }
+    </div>
+</div>
+
+@code {
+    private IEnumerable<Category>? categories;
+    private PersistingComponentStateSubscription _persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _persistingSubscription = ApplicationState.RegisterOnPersisting(PersistCategories);
+
+        if (!ApplicationState.TryTakeFromJson<IEnumerable<Category>>("categories", out var restored))
+        {
+            categories = await PodcastService.GetCategories();
+        }
+        else
+        {
+            categories = restored!;
+        }
+    }
+
+     private Task PersistCategories()
+    {
+        ApplicationState.PersistAsJson("categories", categories);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _persistingSubscription.Dispose();
+    }
+}

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<VerticalStackLayout  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Microsoft.NetConf2021.Maui.Views.ShowItemView"
+                      xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+                      x:DataType="viewmodels:ShowViewModel"
+                      x:Name="self"
+                      >
+    <VerticalStackLayout.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding NavigateToDetailCommand}" />
+    </VerticalStackLayout.GestureRecognizers>
+    <Grid>
+        <Image Aspect="AspectFit"
+               MinimumWidthRequest="{x:OnIdiom Phone=180, Default=264}"
+               MinimumHeightRequest="{x:OnIdiom Default=264, Phone=180}"
+               MaximumHeightRequest="{x:OnIdiom Phone=190, Default=264}"
+               MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
+               Source="{Binding Show.Image}"
+               HorizontalOptions="Start"
+               Margin="0,0,0,12" />
+
+        <Image Source="suscribed.png"
+               HorizontalOptions="End"
+               VerticalOptions="End"
+               Margin="22"
+               IsVisible="{Binding IsSubscribed}"
+               WidthRequest="24"
+               HeightRequest="24">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding SubscriptionCommand, Source={x:Reference self}}" CommandParameter="{Binding }"/>
+            </Image.GestureRecognizers>
+        </Image>
+    </Grid>
+    <Label Text="{Binding Show.Title}"
+           MaxLines="1"
+           HorizontalOptions="Start"
+           LineBreakMode="TailTruncation"
+           MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
+           Style="{OnIdiom Default={StaticResource BodyXLLabelStyle},Phone={StaticResource BodyLLabelStyle}}" />
+    <Label Text="{Binding Show.Author}"
+           LineBreakMode="TailTruncation"
+           MaxLines="1"
+           Style="{OnIdiom Default={StaticResource BodyMLabelStyle},Phone={StaticResource BodySLabelStyle}}" />
+</VerticalStackLayout>
+

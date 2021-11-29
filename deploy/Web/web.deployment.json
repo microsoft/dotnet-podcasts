@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "webAppName": {
+      "type": "string",
+      "minLength": 2,
+      "metadata": {
+        "description": "Web app name."
+      }
+    },
+    "servicePlanName": {
+      "type": "string",
+      "minLength": 2,
+      "metadata": {
+        "description": "Service plan name."
+      }
+    },
+    "servicePlanSku": {
+      "type": "string",
+      "defaultValue": "B1",
+      "metadata": {
+        "description": "The SKU of App Service Plan."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "linuxFxVersion": {
+      "type": "string",
+      "defaultValue": "DOTNETCORE|6.0",
+      "metadata": {
+        "description": "The Runtime stack of current web app"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2020-06-01",
+      "name": "[parameters('servicePlanName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('servicePlanSku')]"
+      },
+      "kind": "linux",
+      "properties": {
+        "reserved": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2020-06-01",
+      "name": "[parameters('webAppName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+        "siteConfig": {
+          "linuxFxVersion": "[parameters('linuxFxVersion')]",
+          "alwaysOn": true,
+          "http20Enabled" : true
+        },
+        "httpsOnly": true,
+        "clientAffinityEnabled": false
+      }
+    }
+  ]
+}

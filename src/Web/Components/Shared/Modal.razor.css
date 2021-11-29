@@ -1,0 +1,38 @@
+﻿.modal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+}
+
+.modal__container {
+    flex: 1;
+    background: var(--c-neutral-grey1);
+    display: flex;
+    padding: 0 16px;
+}
+
+@media screen and (min-width: 768px) {
+    .modal {
+        position: fixed;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal::before {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background-color: var(--c-neutral-grey4);
+        opacity: 0.4;
+    }
+
+    .modal__container {
+        box-shadow: var(--box-shadow-l);
+        border-radius: 16px;
+        display: flex;
+        z-index: 9999;
+        padding: 24px;
+        max-width: 440px;
+        padding: 32px;
+    }
+}

@@ -1,0 +1,34 @@
+﻿<div class="card" title="See Podcast Detail">
+    <div class="card-picture">
+        <Picture Title="@Title" Image="@Image" />
+        <div class="item-bg-deco"></div>
+        <div class="item-primary-action">
+            @PrimaryAction
+        </div>
+        @ActionMenu
+    </div>
+    <div class="card-info">
+        <h1 class="card-title" title="@Title">@Title</h1>
+        <h2 class="card-subtitle" title="@Subtitle">@Subtitle</h2>
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string Title { get; set; } = default!;
+
+    [Parameter]
+    public string? Subtitle { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public string Image { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment? PrimaryAction { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment ActionMenu { get; set; } = default!;
+}

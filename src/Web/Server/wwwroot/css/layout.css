@@ -1,0 +1,125 @@
+@import "reset.css";
+
+@font-face {
+  font-display: swap;
+  font-family: "Segoe UI Light";
+  font-style: normal;
+  font-weight: 100;
+  src: url("../fonts/SegoeUILight.woff") format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Segoe UI Semilight";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/SegoeUISemilight.woff") format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Segoe UI";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/SegoeUI.woff") format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Segoe UI Semibold";
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/SegoeUISemibold.woff") format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Segoe UI Bold";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/SegoeUIBold.woff") format("woff");
+}
+
+body {
+  --c-primary: #c00cc0;
+  --c-primary-dark: #8b0995;
+  --c-primary-light: #dd0eb3;
+  --c-primary-xlight: #fcf2f7;
+  --c-primary-xxlight: #fcf2f4;
+  --c-secondary: #e10890;
+  --c-neutral-black: #000000;
+  --c-neutral-dark: #1f1f1f;
+  --c-neutral-grey1: #faf9f8;
+  --c-neutral-grey2: #f3f2f1;
+  --c-neutral-grey3: #edebe9;
+  --c-neutral-grey4: #d2d0ce;
+  --c-neutral-grey5: #c8c6c4;
+  --c-neutral-grey6: #a19f9d;
+  --c-neutral-grey7: #605e5c;
+  --c-neutral-grey8: #3b3a39;
+  --c-neutral-grey9: #323130;
+  --c-neutral-white: #ffffff;
+  --gradient-primary-color: #c00cc0;
+  --gradient-secondary-color: #e10890;
+  --gradient-final: radial-gradient(
+    101.22% 790.99% at 0% 3.41%,
+    #c00cc0 0%,
+    #e10890 100%
+  );
+  --ff-light: "Segoe UI Light";
+  --ff-semilight: "Segoe UI Semilight";
+  --ff-regular: "Segoe UI";
+  --ff-semibold: "Segoe UI Semibold";
+  --ff-bold: "Segoe UI Bold";
+  --headlines-h1-fs: 80px;
+  --headlines-h1-lh: 94px;
+  --headlines-extra-fs: 284px;
+  --headlines-extra-lh: 72px;
+  --text-xxl-fs: 24px;
+  --text-xxl-lh: 32px;
+  --text-xl-fs: 20px;
+  --text-xl-lh: 30px;
+  --text-l-fs: 18px;
+  --text-l-lh: 28px;
+  --text-m-fs: 16px;
+  --text-m-lh: 24px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--c-neutral-grey1);
+  color: var(--c-neutral-dark);
+  font-family: var(--ff-regular);
+  font-size: var(--text-m-fs);
+  line-height: var(--text-m-lh);
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+* {
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+*::-webkit-scrollbar {
+  background-color: transparent;
+  border-radius: 4px;
+  height: 6px;
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--c-neutral-grey4);
+  border-radius: 4px;
+}

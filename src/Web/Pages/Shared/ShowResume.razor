@@ -1,0 +1,53 @@
+<div class="showResume">
+    <div class="showResume-picture">
+        <Picture Title="@Title" Image="@Image" />
+    </div>
+
+    <div class="showResume-info">
+        <h1 class="showResume-title">@Title</h1>
+        <h2 class="showResume-author">@Author</h2>
+        <Tags Items="@Categories" TItem="string">
+            <ItemTemplate Context="item">
+                <span>@item</span>
+            </ItemTemplate>
+        </Tags>
+    </div>
+
+    <button class="buttonApp @(IsSubscribed ? "secondary" : "primary")" title="@(IsSubscribed ? "Unsubscribe" : "Subscribe")" @onclick="OnSubscriptionChange">
+        <span class="buttonApp-icon @(IsSubscribed ? "icon-subscribed-line" : "icon-add-line")"></span>
+        <span>@(IsSubscribed ? "Subscribed" : "Subscribe")</span>
+    </button>
+    <p class="showResume-description">@((MarkupString)(Description ?? ""))</p>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string Title { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string Author { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public bool IsSubscribed { get; set; } = false;
+
+    [EditorRequired]
+    [Parameter]
+    public string Description { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string Image { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public IEnumerable<string> Categories { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnSubscriptionChange { get; set; }
+
+    [Parameter]
+    public EventCallback OnPlay { get; set; }
+}

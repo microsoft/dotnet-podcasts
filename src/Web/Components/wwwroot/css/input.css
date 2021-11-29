@@ -1,0 +1,28 @@
+﻿.inputApp {
+    appearance: none;
+    outline: 0 none;
+    font-size: var(--text-m-fs);
+    line-height: var(--text-m-lh);
+    background-color: var(--c-searchbar);
+    border: 1px solid var(--c-neutral-grey4);
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 36px;
+    padding: 6px;
+    display: block;
+    width: 100%;
+    color: var(--c-neutral-grey8);
+}
+
+    .inputApp::placeholder {
+        color: var(--c-neutral-grey7);
+    }
+
+    .inputApp:hover {
+        border-color: var(--c-neutral-grey6);
+    }
+
+    .inputApp:active,
+    .inputApp:focus {
+        border-color: var(--c-primary);
+    }

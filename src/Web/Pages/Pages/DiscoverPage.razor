@@ -1,0 +1,111 @@
+﻿@page "/discover"
+@implements IDisposable
+@inject PodcastService PodcastService
+@inject PlayerService PlayerService
+@inject SubscriptionsService SubscriptionsService
+@inject PersistentComponentState ApplicationState
+
+<PageTitle>.NET Podcasts - Discover</PageTitle>
+
+<SearchBar OnSearch="@FetchShows" />
+
+@if (groupedShows == null)
+{
+    <Spinner />
+}
+else
+{
+    <div class="containerPage containerPage--featured">
+        <div class="categories">
+            <NavLink href="categories" class="appLink" title="See all categories">
+                See all categories
+            </NavLink>
+            <Tags Items="@topCategories" TItem="Category">
+                <ItemTemplate Context="item">
+                    <NavLink href="@($"category/{item.Id}")" title="@item.Genre">
+                        @item.Genre
+                    </NavLink>
+                </ItemTemplate>
+            </Tags>
+        </div>
+
+        @if (!groupedShows.Any())
+        {
+            <NoResults Message="Oops, no results found." Image="_content/Podcast.Components/images/empty-results.png" ShowDiscoverButton="false" />
+        }
+        else
+        {
+            foreach (var group in groupedShows)
+            {
+                <div class="titleWrapper">
+                    <TitlePage Label="@group.Key" />
+                </div>
+
+                <Grid Items="@group.Value" TItem="Show">
+                    <ItemTemplate Context="item">
+                        <NavLink @key="item.Id" href="@($"show/{item.Id}")">
+                            <ShowCard Id="@item.Id" Title="@item.Title" Author="@item.Author" Image="@item.Image" />
+                        </NavLink>
+                    </ItemTemplate>
+                    <EmptyResults></EmptyResults>
+                </Grid>
+            }
+        }
+    </div>
+}
+
+@code {
+    private const int MaxShows = 10;
+    private const int MaxCategories = 5;
+
+    private Show[]? allShows;
+    private Dictionary<string, List<Show>>? groupedShows;
+    private IEnumerable<Category>? topCategories;
+    private PersistingComponentStateSubscription _persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _persistingSubscription = ApplicationState.RegisterOnPersisting(PersistShows);
+
+        if (!ApplicationState.TryTakeFromJson<Show[]>("shows", out var restored))
+        {
+            allShows = await PodcastService.GetShows(MaxShows, null);
+        }
+        else
+        {
+            allShows = restored!;
+        }
+        UpdateGroupedShowsAndCategories(allShows);
+    }
+
+    private void UpdateGroupedShowsAndCategories(Show[]? shows)
+    {
+        groupedShows = shows?
+            .GroupBy(s => s.IsFeatured)
+            .Where(s => s.Any())
+            .ToDictionary(s => s.Key ? "What's new" : "Specially for you", s => s.ToList());
+
+        topCategories = shows?
+            .SelectMany(s => s.Categories)
+            .Distinct()
+            .Take(MaxCategories)
+            .ToArray();
+    }
+
+    private async Task FetchShows(string? searchValue = null)
+    {
+        var searchShows = await PodcastService.GetShows(MaxShows, searchValue);
+        UpdateGroupedShowsAndCategories(searchShows);
+    }
+
+    private Task PersistShows()
+    {
+        ApplicationState.PersistAsJson("shows", allShows);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _persistingSubscription.Dispose();
+    }
+}

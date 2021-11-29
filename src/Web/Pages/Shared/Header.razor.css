@@ -1,0 +1,23 @@
+﻿.header ::deep .header__logo {
+    display: flex;
+    width: 120px;
+    padding: 12px 14px;
+    align-items: center;
+}
+
+    .header ::deep .header__logo img,
+    .header ::deep .header__logo svg {
+        width: 100%;
+        height: auto;
+    }
+
+    .header ::deep .header__logo .logo-label {
+        fill: var(--c-neutral-grey8);
+    }
+
+@media screen and (min-width: 992px) {
+    .header ::deep .header__logo {
+        width: 230px;
+        padding: 43px 41px;
+    }
+}

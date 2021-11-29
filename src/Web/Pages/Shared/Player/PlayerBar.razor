@@ -1,0 +1,87 @@
+﻿@implements IDisposable
+@inject PlayerService PlayerService
+@inject ListenLaterService ListenLaterService
+@inject NavigationManager NavigationManager
+
+@if (PlayerService.Episode != null)
+{
+    <div class="footerPlayer">
+        <FloatingPlayer Title="@PlayerService.Episode.Title"
+                    Album="@PlayerService.Episode.Show.Title"
+                    Date="@PlayerService.Episode.Published"
+                    Image="@PlayerService.Episode.Show.Image"
+                    IsPlaying="@PlayerService.IsPlaying"
+                    IsMuted="@PlayerService.IsMuted"
+                    Volume="@PlayerService.Volume"
+                    Duration="@PlayerService.Duration"
+                    CurrentTime="@PlayerService.CurrentTime"
+                    IsListenLater="@isListenLater"
+                    OnListenLater="@ChangeListenLater"
+                    OnPlay="@PlayerService.Resume"
+                    OnPause="@PlayerService.Pause"
+                    OnVolumeChange="@((value) => PlayerService.Volume = value)"
+                    OnMutedChange="@((value) => PlayerService.IsMuted = value)"
+                    OnSeek="@((value) => PlayerService.SeekTime(value))"
+                    OnListenTogether="@CreateListenTogetherRoom" />
+    </div>
+}
+
+@code {
+    private bool isListenLater = false;
+
+    protected override void OnInitialized()
+    {
+        PlayerService.EpisodeChanged += OnEpisodeChanged;
+        PlayerService.PlayingChanged += OnPlayingChanged;
+        PlayerService.CurrentTimeChanged += OnCurrentTimeChanged;
+        PlayerService.DurationChanged += OnDurationChanged;
+        ListenLaterService.EpisodesChanged += UpdateListenLater;
+    }
+
+    public void Dispose()
+    {
+        PlayerService.EpisodeChanged -= OnEpisodeChanged;
+        PlayerService.PlayingChanged -= OnPlayingChanged;
+        PlayerService.CurrentTimeChanged -= OnCurrentTimeChanged;
+        PlayerService.DurationChanged -= OnDurationChanged;
+        ListenLaterService.EpisodesChanged -= UpdateListenLater;
+    }
+
+    private void CreateListenTogetherRoom() 
+    {
+        NavigationManager.NavigateTo($"listen-together/create/{PlayerService.Episode!.Id}");
+    }
+
+    private async void OnEpisodeChanged(EpisodeInfo? episode)
+    {
+        isListenLater = episode != null
+            ? await ListenLaterService.IsListenLaterEpisode(episode.Id)
+            : false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnPlayingChanged(bool isPlaying) => await InvokeAsync(StateHasChanged);
+    private async void OnCurrentTimeChanged(double? currentTime) => await InvokeAsync(StateHasChanged);
+    private async void OnDurationChanged(double? duration) => await InvokeAsync(StateHasChanged);
+
+    private async Task ChangeListenLater(bool value)
+    {
+        isListenLater = value;
+        await ListenLaterService.ToggleListenLaterEpisode(PlayerService.Episode!, value);
+    }
+
+    private async void UpdateListenLater(IEnumerable<EpisodeInfo> episodes)
+    {
+        if (PlayerService.Episode != null)
+        {
+            var newValue = await ListenLaterService.IsListenLaterEpisode(PlayerService.Episode.Id);
+            if (isListenLater != newValue)
+            {
+                isListenLater = newValue;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+}
+
+

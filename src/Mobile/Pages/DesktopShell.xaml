@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:Microsoft.NetConf2021.Maui.Pages"
+       FlyoutBehavior="Locked"
+       xmlns:root="clr-namespace:Microsoft.NetConf2021.Maui"
+       xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+       x:DataType="viewmodels:ShellViewModel"
+       x:Class="Microsoft.NetConf2021.Maui.Pages.DesktopShell">
+
+    <Shell.FlyoutHeader>
+        <Grid>
+            <Image Source="{AppThemeBinding Dark=logo_color_horizontal_darkmode.png,Light=logo_header_horizontal.png}"
+                   SemanticProperties.Description=".NET Podcast application logo"
+                   HeightRequest="142"
+                   VerticalOptions="Center"
+                   WidthRequest="230"
+                   HorizontalOptions="Center" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <ShellContent Title="{Binding Discover.Title}"
+                  Icon="{AppThemeBinding Light=discover.png, Dark=discover_dark.png}"
+                  ContentTemplate="{DataTemplate pages:DiscoverPage}"
+                  NavigationPage.HasNavigationBar="False" />
+    <ShellContent Title="{Binding Subscriptions.Title}"
+                  Icon="{AppThemeBinding Light=subscriptions.png, Dark=subscriptions_dark.png}"
+                  ContentTemplate="{DataTemplate pages:SubscriptionsPage}" />
+    <ShellContent Title="{Binding ListenLater.Title}"
+                  Icon="{AppThemeBinding Light=clock.png, Dark=clock_dark.png}"
+                  ContentTemplate="{DataTemplate pages:ListenLaterPage}" />
+    <ShellContent Title="{Binding ListenTogether.Title}"
+                  Icon="{AppThemeBinding Light=listentogether.png, Dark=listentogether_dark.png}"
+                  FlyoutItemIsVisible="{x:Static root:Config.ListenTogetherIsVisible}"
+                  ContentTemplate="{DataTemplate pages:ListenTogetherPage}" />
+    <ShellContent Title="{Binding Settings.Title}"
+                  Icon="{AppThemeBinding Light=settings.png, Dark=settings_dark.png}"
+                  ContentTemplate="{DataTemplate pages:SettingsPage}" />
+</Shell>

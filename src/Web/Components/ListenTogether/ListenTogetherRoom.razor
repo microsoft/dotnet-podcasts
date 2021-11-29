@@ -1,0 +1,92 @@
+﻿@implements IDisposable
+@inject ListenTogetherHubClient ListenTogetherHubClient
+
+<div class="listen-together-wrapper listen-together-wrapper--users">
+    <div class="listen-together-sidebar">
+        <div class="titleWrapper">
+            <TitlePage Label="Listen together" />
+        </div>
+        <SubtitlePage Label="@(CurrentRoom.Users.Count + " People in this room")" />
+
+        <ul class="listen-together-sidebar__list listen-together-sidebar__list--users">
+            @if (CurrentRoom.Users != null)
+            {
+                foreach (var user in CurrentRoom.Users.OrderByDescending(u => u.Name == User))
+                {
+                    <li class="listen-together-sidebar__list-item listen-together-sidebar__item-avatar">
+                        <span class="avatar-icon icon-avatar-generic" aria-hidden="true"></span>
+                        <div>
+                            <h3 class="avatar-user">@user.Name</h3>
+                            @if (user.Name == User)
+                            {
+                                <p class="avatar-self">(You)</p>
+                            }
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+        <button class="listen-together-sidebar__leave-room buttonApp secondary" title="Leave the room" @onclick="@OnLeaveRoom">Leave the room</button>
+
+        <div class="listen-together-sidebar-invite">
+            <ListenTogetherInvite RoomCode="@CurrentRoom.Code" />
+        </div>
+    </div>
+
+    <div class="listen-together-main listen-together-main--episode">
+        <div class="listen-together-room__episode">
+            <ListenTogetherEpisode EpisodeTitle="@CurrentRoom.Episode.Title"
+                                   EpisodeDate="@CurrentRoom.Episode.Published"
+                                   ShowTitle="@CurrentRoom.Episode.Show.Title"
+                                   ShowAuthor="@CurrentRoom.Episode.Show.Author"
+                                   EpisodeDescription="@CurrentRoom.Episode.Description"
+                                   ShowImage="@CurrentRoom.Episode.Show.Image" />
+        </div>
+        <div class="listen-together-emoji-wrapper">
+            <SubtitlePage Label="Share your reactions with your friends" />
+            <EmojiPanel @ref="emojiPanelRef" OnSendEmoji="@SendEmoji" />
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string User { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public Room CurrentRoom { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnLeaveRoom { get; set; }
+
+    private EmojiPanel? emojiPanelRef;
+
+    protected override void OnInitialized()
+    {
+        ListenTogetherHubClient.MessageReceived += OnMessageReceived;
+    }
+
+    public void Dispose()
+    {
+        ListenTogetherHubClient.MessageReceived -= OnMessageReceived;
+    }
+
+    private async void OnMessageReceived(string user, string message)
+    {
+        if (emojiPanelRef != null)
+        {
+            await emojiPanelRef.AddEmojiBubble(message);
+        }
+    }
+
+    private async Task SendEmoji(string emojiKey)
+    {
+        if (CurrentRoom != null)
+        {
+            await ListenTogetherHubClient.SendMessage(User, emojiKey, CurrentRoom.Code);
+        }
+    }
+}

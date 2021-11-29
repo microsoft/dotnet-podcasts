@@ -1,0 +1,52 @@
+﻿.player-bars {
+}
+
+svg[data-color="bars-white"] rect {
+    fill: var(--c-neutral-white);
+}
+
+svg[data-color="bars-color"] rect {
+    fill: var(--c-primary);
+}
+
+.player-bars rect {
+    --scaleStart: 0.7;
+    transform-origin: bottom center;
+    animation: breath 0.5s alternate infinite ease-in-out;
+}
+
+.player-bars.paused rect {
+    animation-play-state: paused;
+}
+
+.player-bars rect:nth-child(3),
+.player-bars rect:nth-child(9) {
+    --scaleEnd: 1.1;
+}
+
+.player-bars rect:nth-child(2),
+.player-bars rect:nth-child(4),
+.player-bars rect:nth-child(6),
+.player-bars rect:nth-child(10) {
+    animation-delay: -800ms;
+    --scaleEnd: 1.1;
+}
+
+.player-bars rect:nth-child(1),
+.player-bars rect:nth-child(5),
+.player-bars rect:nth-child(8),
+.player-bars rect:nth-child(11),
+.player-bars rect:nth-child(12) {
+    animation-delay: -400ms;
+    --scaleEnd: 1.1;
+}
+
+@keyframes breath {
+    0% {
+        transform: scaleY(var(--scaleStart));
+    }
+
+    100% {
+        transform: scaleY(var(--scaleEnd));
+    }
+}

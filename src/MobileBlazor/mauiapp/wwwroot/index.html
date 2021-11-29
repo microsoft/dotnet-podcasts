@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>.NET Podcasts</title>
+    <base href="/" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="preload" href="_content/Podcast.Components/css/fonts/SegoeUI.woff" as="font" type="font/woff" crossorigin />
+    <link rel="preload" href="_content/Podcast.Components/css/fonts/SegoeUISemibold.woff" as="font" type="font/woff" crossorigin />
+    <link rel="preload" href="_content/Podcast.Components/css/splash.css" as="style" />
+    <link rel="preload" href="_content/Podcast.Components/images/bg-splash.jpg" as="image" />
+    <link rel="preload" href="_content/Podcast.Pages/images/logo-flat.svg" as="image" />
+    <link rel="preload" href="_content/Podcast.Pages/js/theme.js" as="script" crossorigin />
+    <link href="_content/Podcast.Components/css/splash.css" rel="stylesheet" />
+    <link href="_content/Podcast.Components/css/site.css" rel="stylesheet" />
+    <link href="NetPodsMauiBlazor.styles.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <app>
+        <div class="splash">
+            <div class="splash-effects">
+                <span class="splash-effect-one"></span>
+                <span class="splash-effect-two"></span>
+                <span class="splash-effect-three"></span>
+            </div>
+            <div class="splash-logo">
+                <img class="splash-logo-img" src="_content/Podcast.Pages/images/logo-flat.svg" alt="Logo .NET Podcasts" />
+                <h2 class="splash-logo-claim">Play and let yourself go</h2>
+            </div>
+        </div>
+    </app>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.webview.js" autostart="false"></script>
+    <script type="module" src="_content/Podcast.Pages/js/theme.js"></script>
+    <script src="_content/Podcast.Pages/js/customEvents.js"></script>
+</body>
+
+</html>
+

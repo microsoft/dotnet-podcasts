@@ -1,0 +1,30 @@
+﻿.grid {
+    display: grid;
+    grid-auto-rows: auto;
+    grid-template-rows: 1fr;
+    gap: 8px;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0 16px 36px;
+    padding: 0 0 16px;
+}
+
+.grid ::deep .card {
+    width: 184px;
+}
+
+@media screen and (min-width: 992px) {
+    .grid {
+        margin: -20px -30px 0;
+        padding: 0 50px 30px 60px;
+        grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+        grid-auto-flow: inherit;
+        overflow-x: inherit;
+    }
+
+    .grid ::deep .card {
+        width: auto;
+    }
+}

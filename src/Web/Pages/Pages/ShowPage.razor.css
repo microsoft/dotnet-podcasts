@@ -1,0 +1,19 @@
+﻿.showEpisodes {
+    padding: 0 16px;
+}
+
+.showEpisodes ::deep .subtitlePage {
+    margin-bottom: 0;
+}
+
+@media screen and (min-width: 992px) {
+    .showEpisodes {
+        padding: 0 48px;
+    }
+}
+
+@media screen and (min-width: 1366px) {
+    .showEpisodes {
+        margin-left: 332px;
+    }
+}

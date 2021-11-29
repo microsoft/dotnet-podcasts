@@ -1,0 +1,78 @@
+.showResume {
+    align-items: stretch;
+    display: grid;
+    gap: 0 32px;
+    padding: 0 16px;
+    grid-template-columns: 156px auto;
+    grid-template-areas:
+        "showPicture showResumeInfo"
+        "buttonApp buttonApp"
+        "showResumeDescription showResumeDescription";
+}
+
+    .showResume:not(:last-child) {
+        margin-bottom: 32px;
+    }
+
+.showResume-picture {
+    grid-area: showPicture;
+}
+
+.showResume-info {
+    display: flex;
+    flex-direction: column;
+    grid-area: showResumeInfo;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.showResume-title {
+    color: var(--c-neutral-grey8);
+    font-family: var(--ff-semibold);
+    font-size: var(--headlines-h6-fs);
+    line-height: var(--headlines-h6-lh);
+}
+
+.showResume-author {
+    color: var(--c-neutral-grey7);
+    font-size: var(--text-s-fs);
+    line-height: var(--text-s-lh);
+}
+
+.showResume-description {
+    grid-area: showResumeDescription;
+    max-width: 796px;
+    margin-bottom: 12px;
+    font-size: var(--text-m-fs);
+    line-height: var(--text-m-lh);
+}
+
+.showResume .buttonApp {
+    margin: 24px 0;
+}
+
+@media screen and (min-width: 992px) {
+    .showResume {
+        grid-template-columns: 300px auto;
+        padding: 0 48px;
+        grid-template-areas:
+            "showPicture showResumeInfo"
+            "showPicture showResumeDescription"
+            "showPicture buttonApp";
+    }
+
+        .showResume .buttonApp {
+            margin: 0;
+            width: fit-content;
+        }
+
+    .showResume-title {
+        font-size: var(--headlines-h4-fs);
+        line-height: var(--headlines-h4-lh);
+    }
+
+    .showResume-author {
+        font-size: var(--text-m-fs);
+        line-height: var(--text-m-lh);
+    }
+}

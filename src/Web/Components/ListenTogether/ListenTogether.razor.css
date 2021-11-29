@@ -1,0 +1,237 @@
+﻿.containerPage.listen-together {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.listen-together ::deep .subtitlePage {
+    margin-bottom: 12px;
+}
+
+.listen-together ::deep .listen-together-wrapper {
+    display: grid;
+    gap: 16px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        'main'
+        'sidebar';
+    grid-template-columns: 1fr;
+    height: 100%;
+}
+
+.listen-together ::deep .contentWrapper {
+    flex-grow: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.listen-together ::deep .listen-together-sidebar {
+    display: flex;
+    flex-direction: column;
+    grid-area: sidebar;
+}
+
+    .listen-together ::deep .listen-together-sidebar .titleWrapper {
+        display: none;
+        padding-left: 0;
+    }
+
+.listen-together ::deep .listen-together-sidebar__list {
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0 -12px 8px -24px;
+    padding: 0 12px 24px;
+}
+
+    .listen-together
+    ::deep
+    .listen-together-sidebar__list.listen-together-sidebar__list--users {
+        margin-bottom: 0;
+        max-height: 250px;
+        padding-bottom: 0;
+    }
+
+.listen-together ::deep .listen-together-sidebar__list-item {
+    align-items: center;
+    border-radius: 16px;
+    display: flex;
+    padding: 12px;
+}
+
+.listen-together ::deep .listen-together-sidebar__item-link:hover {
+    background-color: var(--c-neutral-white-complementary);
+    box-shadow: var(--box-shadow-l);
+}
+
+.listen-together ::deep .listen-together-sidebar__data > h3,
+.listen-together ::deep .listen-together-sidebar__data > p {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.listen-together ::deep .listen-together-sidebar__data > h3 {
+    color: var(--c-neutral-grey8);
+    font-family: var(--ff-semibold);
+    font-size: var(--text-xl-fs);
+    line-height: var(--text-xl-lh);
+    margin-bottom: 2px;
+}
+
+.listen-together ::deep .listen-together-sidebar__data > p {
+    color: var(--c-neutral-grey7);
+    margin-bottom: 8px;
+}
+
+.listen-together ::deep .listen-together-sidebar__people {
+    align-items: center;
+    color: var(--c-neutral-grey7);
+    display: flex;
+    font-size: var(--text-s-fs);
+    line-height: var(--text-s-lh);
+}
+
+    .listen-together ::deep .listen-together-sidebar__people .people-icon {
+        font-size: 24px;
+        margin-right: 4px;
+    }
+
+.listen-together ::deep .listen-together-sidebar__item-link > h3 {
+    word-break: unset;
+}
+
+.listen-together ::deep .listen-together-sidebar__item-link:hover {
+    color: var(--c-primary);
+    cursor: pointer;
+}
+
+.listen-together ::deep .listen-together-sidebar__item-picture {
+    margin-right: 12px;
+    max-width: 80px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    background-color: var(--c-neutral-white-complementary);
+    color: var(--c-primary);
+    font-size: 24px;
+}
+
+    .listen-together ::deep .listen-together-sidebar__item-picture .picture {
+        filter: none;
+    }
+
+.listen-together ::deep .listen-together-main {
+    background-color: var(--c-neutral-white-complementary);
+    border-radius: 24px;
+    grid-area: main;
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+    .listen-together ::deep .listen-together-main.listen-together-main--episode {
+        align-items: flex-start;
+        background-color: transparent;
+        border-radius: 0;
+        justify-content: flex-start;
+        gap: 24px;
+        padding: 0;
+    }
+
+@media screen and (max-width: 1279px) {
+    .listen-together
+    ::deep
+    .listen-together-sidebar__list.listen-together-sidebar__list--users {
+        max-height: 145px;
+    }
+
+    .listen-together ::deep .listen-together-main.listen-together-main__rooms {
+        display: none;
+    }
+
+    .listen-together ::deep .listen-together-main.listen-together-main--episode {
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .listen-together ::deep .listen-together-sidebar .titleWrapper {
+        display: flex;
+    }
+
+    .listen-together ::deep .listen-together-wrapper {
+        gap: 0 42px;
+        grid-template-rows: auto;
+        grid-template-areas: 'sidebar main';
+        grid-template-columns: 1fr 2fr;
+    }
+
+    .listen-together ::deep .listen-together-sidebar__list {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0;
+        margin: 0 -32px;
+        max-height: calc(100vh - 225px);
+        padding-bottom: 0;
+        padding: 0 16px 32px;
+    }
+
+        .listen-together
+        ::deep
+        .listen-together-sidebar__list.listen-together-sidebar__list--users {
+            max-height: calc(100vh - 647px);
+            padding-bottom: 0;
+        }
+
+    .listen-together ::deep .listen-together-sidebar__list-item {
+        flex-direction: row;
+        max-width: unset;
+        min-width: unset;
+        padding: 16px;
+    }
+
+    .listen-together ::deep .listen-together-sidebar__item-picture {
+        max-width: 96px;
+        min-width: 96px;
+        height: 96px;
+    }
+}
+
+@media screen and (min-width: 1680px) {
+    .listen-together
+    ::deep
+    .listen-together-wrapper.listen-together-wrapper--users {
+        grid-template-columns: 1fr 3fr;
+    }
+}
+
+
+@media screen and (max-width: 767px) {
+    .listen-together ::deep .listen-together-sidebar {
+        flex-grow: 1;
+    }
+
+    .listen-together ::deep .listen-together-main.listen-together-main--episode {
+        flex-grow: inherit;
+    }
+
+    .listen-together
+    ::deep
+    .listen-together-sidebar__list.listen-together-sidebar__list--users {
+        flex: 1 0 0;
+        max-height: unset;
+    }
+}

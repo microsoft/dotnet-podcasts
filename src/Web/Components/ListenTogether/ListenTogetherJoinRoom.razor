@@ -1,0 +1,71 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@inject ListenTogetherHubClient ListenTogetherHubClient
+
+<div class="listen-together-wrapper">
+    <div class="listen-together-sidebar">
+        <div class="titleWrapper">
+            <TitlePage Label="Listen together" />
+        </div>
+
+        <div class="listen-together-join-room-code">
+            <p>Enter a room code below to join an existing room.</p>
+
+            <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+
+                <div class="roomCode__input">
+                    <InputText @ref="inputRef" class="inputApp"
+                               @bind-Value="formModel.RoomCode"
+                               placeholder="Room code" />
+                    <ValidationSummary />
+                </div>
+
+                <button type="submit" class="buttonApp primary" title="Join room">
+                    <span class="buttonApp-icon icon-listen-together"></span>
+                    <span>Join room</span>
+                </button>
+            </EditForm>
+        </div>
+    </div>
+
+    <div class="listen-together-main listen-together-main__rooms">
+        <ListenTogetherEmptyRoom Message="You can create a room or join one of the available ones"
+                                 Description="You must be listening to a podcast in order to create a new room."
+                                 IsDisabled="@(!CanCreateRoom)"
+                                 OnCreateRoom="@OnCreateRoom" />
+    </div>
+
+</div>
+
+@code {
+    private record FormModel()
+    {
+        [Required, Display(Name = "Room Code")] public string? RoomCode { get; set; }
+    };
+
+    [EditorRequired]
+    [Parameter]
+    public bool CanCreateRoom { get; set; } = false;
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback OnCreateRoom { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public EventCallback<string> OnJoinRoom { get; set; }
+
+    private InputText? inputRef;
+    private FormModel formModel = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && inputRef?.Element != null)
+        {
+            await inputRef.Element.Value.FocusAsync();
+        }
+    }
+
+    private Task HandleValidSubmit() => OnJoinRoom.InvokeAsync(formModel.RoomCode);
+}

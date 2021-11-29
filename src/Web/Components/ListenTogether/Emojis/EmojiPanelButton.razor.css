@@ -1,0 +1,60 @@
+﻿.emojiPanelButton {
+    position: relative;
+    transition: all 0.1s ease-in-out;
+    transform-origin: center;
+    line-height: 0;
+    width: fit-content;
+}
+
+.emojiPanelButton:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.emojiPanelButton:before {
+    content: "";
+    width: 150%;
+    height: 150%;
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: var(--c-neutral-grey6);
+    opacity: 0;
+    z-index: -1;
+    transform: scale(0);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.emojiPanelButton.pressed:before {
+    animation: emojibubble 1s ease-out;
+}
+
+.emojiPanelButton ::deep > svg {
+    height: auto;
+    width: 30px;
+}
+
+@media screen and (min-width: 768px) {
+    .emojiPanelButton ::deep > svg {
+        width: 44px;
+    }
+}
+
+@keyframes emojibubble {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+}

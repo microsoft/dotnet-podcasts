@@ -1,0 +1,16 @@
+﻿.subtitlePage {
+    color: var(--c-neutral-grey8);
+    font-family: var(--ff-semibold);
+    font-size: var(--subheadings-s6-fs);
+    line-height: var(--subheadings-s6-lh);
+    grid-area: subtitle;
+    margin-bottom: 16px;
+}
+
+@media screen and (min-width: 992px) {
+    .subtitlePage {
+        font-size: var(--headlines-h6-fs);
+        line-height: var(--headlines-h6-lh);
+        margin-bottom: 32px;
+    }
+}

@@ -1,0 +1,18 @@
+﻿.categories {
+    align-items: flex-end;
+    flex-direction: column;
+    margin-bottom: 8px;
+    padding: 0 16px;
+}
+
+::deep .categories .appLink {
+    margin-bottom: 16px;
+}
+
+@media screen and (min-width: 1280px) {
+    .categories {
+        display: flex;
+        margin-bottom: 0;
+        padding: 0 48px;
+    }
+}

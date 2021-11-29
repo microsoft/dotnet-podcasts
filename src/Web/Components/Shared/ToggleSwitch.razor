@@ -1,0 +1,33 @@
+﻿<div class="toggle-switch" title="@Label">
+    <div class="toggle-switch-input-wrapper">
+        <input class="toggle-switch-input" type="checkbox" name="@Name" id="@Name" checked="@Checked" @onchange="@OnValueChange" />
+        <span class="toggle-switch-control"></span>
+    </div>
+    <div>
+        <label class="toggle-switch-label" for="@Name">@Label</label>
+
+        @if (Description != null)
+        {
+            <p class="toggle-switch-description">@Description</p>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? Name { get; set; } 
+    
+    [Parameter]
+    public string? Label { get; set; }
+    
+    [Parameter]
+    public string? Description { get; set; }
+
+    [Parameter]
+    public bool Checked { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<bool> OnChange { get; set; }
+
+    private Task OnValueChange(ChangeEventArgs e) => OnChange.InvokeAsync((bool?)e.Value ?? false);
+}

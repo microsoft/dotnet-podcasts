@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:Microsoft.NetConf2021.Maui.Pages"
+       xmlns:root="clr-namespace:Microsoft.NetConf2021.Maui"
+       xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+       x:DataType="viewmodels:ShellViewModel"
+       x:Class="Microsoft.NetConf2021.Maui.Pages.MobileShell">
+    <TabBar>
+        <Tab Title="{Binding Discover.Title}"
+             Icon="{Binding Discover.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:DiscoverPage}" />
+        </Tab>
+        <Tab Title="{Binding Subscriptions.Title}"
+             Icon="{Binding Subscriptions.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:SubscriptionsPage}" />
+        </Tab>
+        <Tab Title="{Binding ListenLater.Title}"
+             Icon="{Binding ListenLater.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:ListenLaterPage}" />
+        </Tab>
+        <Tab Title="{Binding ListenTogether.Title}"
+             Icon="{Binding ListenTogether.Icon}"
+             IsVisible="{x:Static root:Config.ListenTogetherIsVisible}">
+            <ShellContent 
+                ContentTemplate="{DataTemplate pages:ListenTogetherPage}" />
+        </Tab>
+        <Tab Title="{Binding Settings.Title}"
+             Icon="{Binding Settings.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        </Tab>
+    </TabBar>
+</Shell>

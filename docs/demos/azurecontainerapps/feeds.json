@@ -1,0 +1,287 @@
+[
+  {
+    "Title": "Microsoft Mechanics Podcast",
+    "Url": "https://microsoftmechanics.libsyn.com/rss",
+    "Categories": ["Tech News", "News", "Technology"]
+  },
+  {
+    "Title": "Microsoft Cloud IT Pro Podcast",
+    "Url": "https://feeds.podcastmirror.com/microsoftclouditpropodcast",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "Command Line Heroes",
+    "Url": "https://feeds.pacific-content.com/commandlineheroes",
+    "Categories": ["Technology", "Society & Culture"]
+  },
+  {
+    "Title": "Microsoft Cloud Show",
+    "Url": "http://feeds.microsoftcloudshow.com/MicrosoftCloudShowEpisodes",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": ".NET Rocks!",
+    "Url": "http://feeds.feedburner.com/netRocksFullMp3Downloads",
+    "Categories": ["Technology", "Education", "How To"]
+  },
+  {
+    "Title": "Microsoft 365 Developer Podcast",
+    "Url": "https://feed.podbean.com/www.m365devpodcast.com/feed.xml",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Microsoft Business Applications Podcast",
+    "Url": "https://feeds.buzzsprout.com/1796418.rss",
+    "Categories": ["Education", "Technology"]
+  },
+  {
+    "Title": "The Intrazone by Microsoft",
+    "Url": "http://intrazone.mpsn.libsynpro.com/rss",
+    "Categories": ["Tech News", "News", "Technology"]
+  },
+  {
+    "Title": "Azure DevOps Podcast",
+    "Url": "http://azuredevopspodcast.clear-measure.com/rss",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "Microsoft Teams News from UC Today",
+    "Url": "https://feeds.buzzsprout.com/158464.rss",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "The Azure Podcast",
+    "Url": "http://feeds.feedburner.com/TheAzurePodcast",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "Knee-deep in Tech",
+    "Url": "https://feeds.acast.com/public/shows/5a5ce3c51afb29d07db864e9",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Security Unlocked",
+    "Url": "https://feeds.megaphone.fm/security-unlocked",
+    "Categories": ["Technology", "Science"]
+  },
+  {
+    "Title": "DBAle",
+    "Url": "https://redgate.libsyn.com/rss",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "The Cloud Architects Podcast",
+    "Url": "http://feeds.thearchitects.cloud/thecloudarchitects",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Thoughtstuff Podcast - Tom Morgan on Teams Dev",
+    "Url": "https://thoughtstuff.libsyn.com/rss",
+    "Categories": ["Tech News", "News", "Technology"]
+  },
+  {
+    "Title": "Microsoft Spotlight Podcast",
+    "Url": "https://anchor.fm/s/4a2d419c/podcast/rss",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Microsoft Research Podcast",
+    "Url": "https://feeds.blubrry.com/feeds/microsoftresearch.xml",
+    "Categories": ["Technology", "Science", "Mathematics"]
+  },
+  {
+    "Title": "RunAs Radio",
+    "Url": "https://feeds.simplecast.com/cRTTfxcT",
+    "Categories": ["Technology", "Business", "Careers"]
+  },
+  {
+    "Title": "Microsoft Roadmap Roundup",
+    "Url": "https://anchor.fm/s/3567c318/podcast/rss",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Microsoft Stories",
+    "Url": "https://feed.podbean.com/microsoftstories/feed.xml",
+    "Categories": ["Technology", "Business"]
+  },
+  {
+    "Title": "Windows Weekly (Video)",
+    "Url": "https://feeds.twit.tv/ww_video_hd.xml",
+    "Categories": ["Tech News", "News", "Technology"]
+  },
+  {
+    "Title": "BIFocal - Clarifying Business Intelligence",
+    "Url": "http://feeds.feedburner.com/bifocal",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "Get Your New View Podcast",
+    "Url": "https://getyournewview.libsyn.com/rss",
+    "Categories": ["Management", "Business"]
+  },
+  {
+    "Title": "O365Eh!",
+    "Url": "https://o365eh.com/feed/podcast/",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "The Practical 365 Podcast",
+    "Url": "https://feeds.buzzsprout.com/638908.rss",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "Raw Data By P3 Adaptive",
+    "Url": "https://rawdatabyp3.libsyn.com/rss",
+    "Categories": ["Business", "Technology"]
+  },
+  {
+    "Title": "Microsoft Research Podcast",
+    "Url": "https://feeds.blubrry.com/feeds/microsoftresearch.xml",
+    "Categories": ["Technology", "Science", "Mathematics"]
+  },
+  {
+    "Title": "Technology Architecture Solution Engineering",
+    "Url": "https://feeds.buzzsprout.com/681983.rss",
+    "Categories": ["Technology", "Business"]
+  },
+  {
+    "Title": "Tech Fit 4 Europe",
+    "Url": "http://techfit4europe.mpsn.libsynpro.com/rss",
+    "Categories": ["Government", "News", "Politics"]
+  },
+  {
+    "Title": "Windows Insider Podcast",
+    "Url": "https://windowsinsider.libsyn.com/rss",
+    "Categories": ["Tech News", "News", "Technology"]
+  },
+  {
+    "Title": "Super Ultra Podcast Arcade",
+    "Url": "https://daniel-nicholson-ew7p.squarespace.com/podcast?format=rss",
+    "Categories": ["Leisure", "Podcasts"]
+  },
+  {
+    "Title": "soundbite.fm: a podcast network",
+    "Url": "https://www.soundbite.fm/rss",
+    "Categories": ["Technology", "Leisure"]
+  },
+  {
+    "Title": "The PowerShell News Podcast",
+    "Url": "https://feed.podbean.com/powershellnews/feed.xml",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Someone Elses Cloud",
+    "Url": "https://www.someoneelsescloud.com/episodes?format=rss",
+    "Categories": ["Technology", "Education", "How To"]
+  },
+  {
+    "Title": "WorkLab",
+    "Url": "https://worklab.libsyn.com/rss",
+    "Categories": ["Business News", "News", "Technology"]
+  },
+  {
+    "Title": "The Innovia Conversation",
+    "Url": "https://feed.podbean.com/innovia/feed.xml",
+    "Categories": ["Business", "Podcasts"]
+  },
+  {
+    "Title": "Learn Microsoft Excel with MyExcelOnline",
+    "Url": "https://myexcelonline.libsyn.com/rss",
+    "Categories": ["Technology", "Business"]
+  },
+  {
+    "Title": "Windows Central Podcast",
+    "Url": "https://windowscentral.libsyn.com/rss",
+    "Categories": ["Tech News", "News", "Technology"]
+  },
+  {
+    "Title": "Microsoft Cloud Show",
+    "Url": "http://feeds.microsoftcloudshow.com/MicrosoftCloudShowEpisodes",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "The Constant Geekery Podcast",
+    "Url": "https://feeds.buzzsprout.com/1398979.rss",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "Nerds Without Pants",
+    "Url": "http://www.pixlbit.com/podcasts/nwopfeed.xml",
+    "Categories": ["Leisure", "Technology"]
+  },
+  {
+    "Title": "Afternoon Cyber Tea with Ann Johnson",
+    "Url": "http://www.podcastone.com/podcast?categoryID2=2020",
+    "Categories": ["Technology", "Business"]
+  },
+  {
+    "Title": "Cloud Wars Live with Bob Evans",
+    "Url": "https://feeds.simplecast.com/bTRtoGJt",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "MarketFoolery",
+    "Url": "https://marketfoolery.libsyn.com/rss",
+    "Categories": ["Business News", "News"]
+  },
+  {
+    "Title": "Entertainment 2.0 from The Digital Media Zone",
+    "Url": "https://www.thedigitalmediazone.com/category/podcasts/entertainment-20/feed/",
+    "Categories": ["Tech News", "News"]
+  },
+  {
+    "Title": "BIFocal - Clarifying Business Intelligence",
+    "Url": "http://feeds.feedburner.com/bifocal",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "CRM Audio",
+    "Url": "https://crmaudio.libsyn.com/crm",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Azure Friday (HD) - Channel 9",
+    "Url": "https://s.ch9.ms/Shows/Azure-Friday/feed/mp4high",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Azure for Executives",
+    "Url": "https://feeds.simplecast.com/NRZKaqnb",
+    "Categories": ["Technology", "Education", "How To"]
+  },
+  {
+    "Title": "365 Message Center Show",
+    "Url": "https://feed.podbean.com/www.messagecentershow.com/feed.xml",
+    "Categories": ["Technology", "News", "Tech News"]
+  },
+  {
+    "Title": "Microsoft Canada",
+    "Url": "https://feeds.soundcloud.com/users/soundcloud:users:176023084/sounds.rss",
+    "Categories": ["Business", "Podcasts"]
+  },
+  {
+    "Title": "Enterprise Software Podcast",
+    "Url": "https://enterprisesoftwarepodcast.libsyn.com/rss",
+    "Categories": ["Tech News", "News"]
+  },
+  {
+    "Title": "Hybrid Identity Protection Podcast",
+    "Url": "https://hipconf.libsyn.com/rss",
+    "Categories": ["Technology", "Business"]
+  },
+  {
+    "Title": "The History of Computing",
+    "Url": "https://thehistoryofcomputing.libsyn.com/rss",
+    "Categories": ["Technology", "History"]
+  },
+  {
+    "Title": "Tech TalkBack with Richard Pascoe",
+    "Url": "https://feed.podbean.com/www.techtalkback.com.au/feed.xml",
+    "Categories": ["Technology", "Podcasts"]
+  },
+  {
+    "Title": "Last Week in .NET",
+    "Url": "https://feeds.transistor.fm/last-week-in-net",
+    "Categories": ["Microsoft" , "Community" ]
+  }
+]

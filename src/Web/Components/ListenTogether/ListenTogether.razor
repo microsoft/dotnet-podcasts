@@ -1,0 +1,207 @@
+﻿@implements IAsyncDisposable
+@inject ListenTogetherHubClient ListenTogetherHubClient
+
+<div class="containerPage listen-together">
+    <div class="contentWrapper">
+        @if ((EpisodeId == null && RoomCode == null) || user == null)
+        {
+            <ListenTogetherJoinRoom CanCreateRoom="@CanCreateRoom"
+                                OnCreateRoom="@OnCreateRoom"
+                                OnJoinRoom="@OnJoinRoom" />
+
+            @if ((EpisodeId != null || RoomCode != null) && user == null)
+            {
+                <Modal OnClose="@OnLeaveRoom">
+                    <UsernameForm IsCreatingRoom="@(EpisodeId != null)" OnSetUsername="@SetUser" />
+                </Modal>
+            }
+        }
+        else if (currentRoom != null && user != null)
+        {
+            <ListenTogetherRoom User="@user"
+                            CurrentRoom="@currentRoom"
+                            OnLeaveRoom="@(() => LeaveRoom())" />
+        }
+        else
+        {
+            <Spinner />
+        }
+    </div>
+</div>
+
+@code {
+    public record RoomPlayerState(RoomEpisode Episode, TimeSpan Progress, bool IsPlaying);
+
+    [Parameter]
+    public Guid? EpisodeId { get; set; }
+
+    [Parameter]
+    public string? RoomCode { get; set; }
+
+    [Parameter]
+    public bool CanCreateRoom { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<string> OnJoinRoom { get; set; }
+
+    [Parameter]
+    public EventCallback OnRoomCreated { get; set; }
+
+    [Parameter]
+    public EventCallback OnCreateRoom { get; set; }
+
+    [Parameter]
+    public EventCallback OnLeaveRoom { get; set; }
+
+    [Parameter]
+    public EventCallback<RoomPlayerState> OnPlayerStateChange { get; set; }
+
+    private string? user;
+    private Room? currentRoom;
+    private Guid? episodeId;
+    private string? roomCode;
+    private bool isRoomHost = false;
+
+    protected override void OnInitialized()
+    {
+        ListenTogetherHubClient.PlayerStateUpdated += OnPlayerStateUpdated;
+        ListenTogetherHubClient.RoomOpened += OnRoomOpened;
+        ListenTogetherHubClient.RoomUpdated += OnRoomUpdated;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ListenTogetherHubClient.Initialize();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (episodeId != EpisodeId)
+        {
+            episodeId = EpisodeId;
+            if (episodeId != null)
+            {
+                if (!CanCreateRoom)
+                {
+                    await OnLeaveRoom.InvokeAsync();
+                }
+            }
+            else
+            {
+                await LeaveRoom(false);
+                await OpenRoom();
+            }
+        }
+
+        if (roomCode != RoomCode)
+        {
+            roomCode = RoomCode;
+            if (roomCode != null)
+            {
+                await LeaveRoom(false);
+                await JoinRoom();
+            }
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        ListenTogetherHubClient.PlayerStateUpdated -= OnPlayerStateUpdated;
+        ListenTogetherHubClient.RoomOpened -= OnRoomOpened;
+        ListenTogetherHubClient.RoomUpdated -= OnRoomUpdated;
+
+        await ListenTogetherHubClient.DisposeAsync();
+    }
+
+    public async Task UpdateRoomPlayerState(long progress, bool isPlaying)
+    {
+        if (RoomCode != null)
+        {
+            await ListenTogetherHubClient.UpdatePlayerState(progress, isPlaying, RoomCode);
+        }
+    }
+
+    private async void OnRoomOpened(Room room)
+    {
+        isRoomHost = true;
+        roomCode = room.Code;
+        await OnJoinRoom.InvokeAsync(room.Code);
+        await OnRoomCreated.InvokeAsync();
+    }
+
+    private async void OnRoomUpdated(Room room)
+    {
+        if (currentRoom == null && !isRoomHost)
+        {
+            await SetPlayerState(room);
+        }
+        currentRoom = room;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnPlayerStateUpdated(Room room) => await SetPlayerState(room);
+
+    private async Task SetPlayerState(Room room)
+    {
+        var state = new RoomPlayerState(room.Episode, room.Progress, room.PlayerState == PlayerState.Playing);
+        await OnPlayerStateChange.InvokeAsync(state);
+    }
+
+    private async Task SetUser(string username)
+    {
+        user = username;
+        if (currentRoom == null)
+        {
+            if (EpisodeId != null)
+            {
+                await OpenRoom();
+            }
+            else
+            {
+                await JoinRoom();
+            }
+        }
+    }
+
+    private async Task OpenRoom()
+    {
+        if (user != null && episodeId != null)
+        {
+            await ListenTogetherHubClient.OpenRoom(user, episodeId.Value);
+        }
+    }
+
+    private async Task JoinRoom()
+    {
+        if (roomCode != null && user != null)
+        {
+            try
+            {
+                await ListenTogetherHubClient.JoinRoom(user, roomCode);
+            }
+            catch
+            {
+                currentRoom = null;
+                await OnLeaveRoom.InvokeAsync();
+            }
+        }
+    }
+
+    private async Task LeaveRoom(bool fireEvents = true)
+    {
+        if (currentRoom != null)
+        {
+            await ListenTogetherHubClient.LeaveRoom(currentRoom.Code);
+            isRoomHost = false;
+            currentRoom = null;
+            if (fireEvents)
+            {
+                await OnLeaveRoom.InvokeAsync();
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    }

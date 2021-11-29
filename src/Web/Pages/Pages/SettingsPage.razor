@@ -1,0 +1,51 @@
+﻿@page "/settings"
+@inject ThemeInterop ThemeInterop
+
+<PageTitle>.NET Podcasts - Settings</PageTitle>
+
+@if (isLoading)
+{
+    <Spinner />
+}
+else
+{
+    <div class="containerPage">
+        <div class="titleWrapper">
+            <TitlePage Label="Settings" />
+        </div>
+
+        <div class="contentWrapper">
+            <SubtitlePage Label="Download settings" />
+            <div class="settings-content">
+                <ToggleSwitch Name="autodownload" Label="Autodownload using data" Description="Turn on to alow to download over cellular data if wifi is unavailable." />
+
+                <ToggleSwitch Name="deleteplayed" Label="Delete played episodes" />
+
+                <ToggleSwitch Name="darkmode" Label="Dark Mode" Checked="@isDarkMode" OnChange="@ChangeDarkMode" />
+            </div>
+            <p class="settings-developed">Podcasts demo website developed in Blazor</p>
+        </div>
+    </div>
+}
+
+
+@code {
+    private bool isLoading = true;
+    private bool isDarkMode = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isDarkMode = await ThemeInterop.GetTheme() == Theme.Dark;
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task ChangeDarkMode(bool value)
+    {
+        isDarkMode = value;
+        await ThemeInterop.SetTheme(isDarkMode ? Theme.Dark : Theme.Light);
+    }
+}

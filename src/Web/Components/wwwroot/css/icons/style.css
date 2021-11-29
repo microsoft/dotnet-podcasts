@@ -1,0 +1,176 @@
+@font-face {
+  font-family: 'podcast-icons';
+  src:
+    url('fonts/podcast-icons.ttf?qn0jpn') format('truetype'),
+    url('fonts/podcast-icons.woff?qn0jpn') format('woff'),
+    url('fonts/podcast-icons.svg?qn0jpn#podcast-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'podcast-icons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-hamburger-menu:before {
+  content: "\e931";
+}
+.icon-avatar-generic:before {
+  content: "\e930";
+}
+.icon-copy:before {
+  content: "\e92f";
+}
+.icon-bars:before {
+  content: "\e92e";
+}
+.icon-listen-later-menu:before {
+  content: "\e92c";
+}
+.icon-listen-together:before {
+  content: "\e92d";
+}
+.icon-play:before {
+  content: "\e91b";
+}
+.icon-sound-full:before {
+  content: "\e921";
+}
+.icon-sound-low:before {
+  content: "\e922";
+}
+.icon-sound-medium:before {
+  content: "\e923";
+}
+.icon-sound-mute:before {
+  content: "\e924";
+}
+.icon-fitness:before {
+  content: "\e907";
+}
+.icon-leisure:before {
+  content: "\e911";
+}
+.icon-music:before {
+  content: "\e913";
+}
+.icon-sport:before {
+  content: "\e916";
+}
+.icon-tv-film:before {
+  content: "\e925";
+}
+.icon-subscribed-line:before {
+  content: "\e927";
+}
+.icon-favorite-line:before {
+  content: "\e90c";
+}
+.icon-favorite-fill:before {
+  content: "\e90b";
+}
+.icon-listen-later-line:before {
+  content: "\e914";
+}
+.icon-listen-later-fill:before {
+  content: "\e926";
+}
+.icon-chevron-left:before {
+  content: "\e90d";
+}
+.icon-add-fill:before {
+  content: "\e900";
+}
+.icon-add-line:before {
+  content: "\e901";
+}
+.icon-arts:before {
+  content: "\e902";
+}
+.icon-back-15:before {
+  content: "\e903";
+}
+.icon-forward-15:before {
+  content: "\e904";
+}
+.icon-business:before {
+  content: "\e905";
+}
+.icon-cards:before {
+  content: "\e906";
+}
+.icon-close:before {
+  content: "\e908";
+}
+.icon-comedy:before {
+  content: "\e909";
+}
+.icon-education:before {
+  content: "\e90a";
+}
+.icon-health:before {
+  content: "\e90e";
+}
+.icon-home:before {
+  content: "\e90f";
+}
+.icon-kids:before {
+  content: "\e910";
+}
+.icon-list:before {
+  content: "\e912";
+}
+.icon-lists:before {
+  content: "\e915";
+}
+.icon-news:before {
+  content: "\e917";
+}
+.icon-pause:before {
+  content: "\e918";
+}
+.icon-pause_24:before {
+  content: "\e919";
+}
+.icon-pause_36:before {
+  content: "\e91a";
+}
+.icon-play_L:before {
+  content: "\e91c";
+}
+.icon-play_36:before {
+  content: "\e91d";
+}
+.icon-search:before {
+  content: "\e91e";
+}
+.icon-settings:before {
+  content: "\e91f";
+}
+.icon-society-culture:before {
+  content: "\e920";
+}
+.icon-subscribed-fill:before {
+  content: "\e92b";
+}
+.icon-subscriptions:before {
+  content: "\e928";
+}
+.icon-technology:before {
+  content: "\e929";
+}
+.icon-true-crime:before {
+  content: "\e92a";
+}

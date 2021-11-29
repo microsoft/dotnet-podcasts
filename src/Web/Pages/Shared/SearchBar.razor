@@ -1,0 +1,15 @@
+﻿<form @onsubmit="@HandleSubmit" class="searchBarForm">
+    <div class="searchBar">
+        <span class="searchBar__icon icon-search" />
+        <input class="searchBar__input" @bind="searchValue" type="text" placeholder="Search here" />
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private string? searchValue;
+
+    private Task HandleSubmit() => OnSearch.InvokeAsync(searchValue);
+}

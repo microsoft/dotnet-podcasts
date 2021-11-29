@@ -1,0 +1,75 @@
+name: Podcast Hub CICD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/Services/ListenTogether/**'
+      - 'deploy/Services/hub.deployment.json'
+      - '.github/workflows/podcast-hub.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/Services/ListenTogether/**'
+      - '.github/workflows/podcast-hub.yml'
+
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: Build
+        run: dotnet build --configuration Release src/Services/ListenTogether/ListenTogether.Hub
+
+      - name: Publish
+        run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: drop
+          path: hub
+
+  deploy:
+    needs: build
+    environment: 
+      name: prod
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Deploy ARM
+        uses: azure/powershell@v1
+        with:
+            azPSVersion: '3.1.0'
+            inlineScript: |
+              az extension add --source https://workerappscliextension.blob.core.windows.net/azure-cli-extension/containerapp-0.2.0-py2.py3-none-any.whl --yes
+              $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n podcastapica -o tsv --query configuration.ingress.fqdn)+"/"
+              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.deployment.json --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
+
+      - uses: actions/download-artifact@master
+        with:
+          name: drop
+          path: hub
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.HUB_WEBAPP_NAME }}
+          package: hub
+

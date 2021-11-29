@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="{x:Static res:AppResource.Settings}"
+    xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
+    xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+    Style="{StaticResource MainSectionStyle}"
+    x:Class="Microsoft.NetConf2021.Maui.Pages.SettingsPage">
+    <ContentPage.BindingContext>
+        <viewmodels:SettingsViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto"
+          ColumnDefinitions="2*,8*"
+          Padding="16">
+        <Label Text="{x:Static res:AppResource.Download_Settings}"
+               Margin="0,0,0,20"
+               Style="{StaticResource H6LabelStyle}"
+               GridLayout.ColumnSpan="2"/>
+        <Switch
+            GridLayout.Row="1"
+            HorizontalOptions="Center"/>
+        <Label Text="{x:Static res:AppResource.Autodownload_Using_Data}" 
+               GridLayout.Column="1"
+               GridLayout.Row="1"
+               Style="{StaticResource BodySLabelStyle}"
+               VerticalOptions="Center"/>
+        <Label Text="{x:Static res:AppResource.Autodownload_Using_Data_Subtitle}" 
+               GridLayout.Column="1" 
+               GridLayout.Row="2" 
+               Style="{StaticResource BodySLabelStyle}"/>
+        <Switch HorizontalOptions="Center"
+                GridLayout.Row="3"
+                Margin="0,24,0,0"/>
+        <Label Text="{x:Static res:AppResource.Delete_Played_Episodes}" 
+               GridLayout.Column="1"
+               GridLayout.Row="3" 
+               Margin="0,24,0,0"
+               VerticalOptions="Center"
+               Style="{StaticResource BodySLabelStyle}"/>
+        <Switch HorizontalOptions="Center"
+                GridLayout.Row="4"
+                IsToggled="{Binding IsDarkModeEnabled}"
+                Margin="0,24,0,0"/>
+        <Label Text="{x:Static res:AppResource.Dark_Mode}" 
+               GridLayout.Column="1"
+               GridLayout.Row="4" 
+               Margin="0,24,0,0"
+               VerticalOptions="Center"
+               Style="{StaticResource BodySLabelStyle}"/>
+        <Switch HorizontalOptions="Center"
+                GridLayout.Row="5"
+                IsVisible="{OnIdiom Default=false,Phone=true}"
+                IsToggled="{Binding IsWifiOnlyEnabled}"
+                Margin="0,24,0,0"/>
+        <Label Text="{x:Static res:AppResource.Only_Wifi}" 
+               GridLayout.Column="1"
+               GridLayout.Row="5" 
+               Margin="0,24,0,0"
+               IsVisible="{OnIdiom Default=false,Phone=true}"
+               VerticalOptions="Center"
+               Style="{StaticResource BodySLabelStyle}"/>
+        <Label
+               GridLayout.ColumnSpan="2"
+               GridLayout.Row="6" 
+               Margin="0,48,0,0"
+               VerticalOptions="Center"
+               Text="{x:Static res:AppResource.Settings_Info}"
+               TextColor="{AppThemeBinding Light={StaticResource Dark},Dark={StaticResource Grey1}}"
+               Style="{StaticResource BodySLabelStyle}"/>
+        <Label
+               GridLayout.ColumnSpan="2"
+               GridLayout.Row="7"
+               Margin="0,11,0,0"
+               VerticalOptions="Center"
+               Style="{StaticResource BodySLabelStyle}">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="{x:Static res:AppResource.Version}"/>
+                    <Span Text=" - "/>
+                    <Span Text="{Binding AppVersion}"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+        <Label Text="Version 10.16.541_1699" 
+               GridLayout.ColumnSpan="2"
+               GridLayout.Row="7"
+               Margin="0,11,0,0"
+               VerticalOptions="Center"
+               Style="{StaticResource BodySLabelStyle}"/>
+    </Grid>
+   
+</ContentPage>

@@ -1,0 +1,118 @@
+﻿@implements IDisposable
+@using Podcast.Components.ListenTogether
+@using static Podcast.Components.ListenTogether.ListenTogether
+@inject ThemeInterop ThemeInterop
+@inject PlayerService PlayerService
+
+<ListenTogether @ref="listenTogetherRef"
+				CanCreateRoom="@canCreateRoom"
+				EpisodeId="@episodeId"
+				RoomCode="@roomCode"
+				OnJoinRoom="@JoinRoom"
+				OnCreateRoom="@CreateRoom"
+				OnRoomCreated="@UpdateRoomPlayerState"
+				OnLeaveRoom="@LeaveRoom"
+				OnPlayerStateChange="@UpdatePlayer" />
+
+@code {
+	private ListenTogether? listenTogetherRef;
+	private Guid? episodeId;
+	private string? roomCode;
+	private bool canCreateRoom = false;
+
+	protected override void OnInitialized()
+	{
+		MessagingCenter.Instance.Subscribe<string>(
+			".NET Pods",
+			"ChangeWebTheme",
+			async (sender) =>
+				{
+					await UpdateWebThemeAsync();
+				});
+		MessagingCenter.Instance.Subscribe<string>(
+			".NET Pods",
+			"LeaveRoom",
+			async (sender) =>
+				{
+					LeaveRoom();
+					await InvokeAsync(StateHasChanged);
+				});
+
+		canCreateRoom = PlayerService.CurrentEpisode != null;
+		PlayerService.NewEpisodeAdded += NewEpisodeAddedToPlayer;
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await UpdateWebThemeAsync();
+		}
+	}
+
+	public void Dispose()
+	{
+		PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
+		PlayerService.NewEpisodeAdded -= NewEpisodeAddedToPlayer;
+		MessagingCenter.Instance.Unsubscribe<string>(".NET Pods", "ChangeWebTheme");
+		MessagingCenter.Instance.Unsubscribe<string>(".NET Pods", "LeaveRoom");
+	}
+
+	private void JoinRoom(string roomCode)
+	{
+		this.roomCode = roomCode;
+		PlayerService.IsPlayingChanged += IsLocalPlayingChanged;
+	}
+
+	private void LeaveRoom()
+	{
+		PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
+		roomCode = null;
+	}
+
+	private void CreateRoom()
+	{
+		episodeId = PlayerService.CurrentEpisode?.Id;
+	}
+
+	private async void UpdatePlayer(RoomPlayerState playerState)
+	{
+		PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
+
+		var episode = new Episode(playerState);
+		var show = new Show(playerState);
+
+		await PlayerService.PlayAsync(episode, show, playerState.IsPlaying, playerState.Progress.TotalSeconds);
+
+		PlayerService.IsPlayingChanged += IsLocalPlayingChanged;
+	}
+
+	private async Task UpdateRoomPlayerState()
+	{
+		if (listenTogetherRef != null)
+		{
+			double currentTime = PlayerService?.CurrentPosition ?? 0;
+			bool isPlaying = PlayerService?.IsPlaying ?? false;
+
+			await listenTogetherRef.UpdateRoomPlayerState((long)currentTime, isPlaying);
+		}
+	}
+
+	private async Task UpdateWebThemeAsync()
+	{
+		var darkModeIsActive = Settings.Theme == OSAppTheme.Dark;
+		await ThemeInterop.SetTheme(darkModeIsActive ? Theme.Dark : Theme.Light);
+
+	}
+
+	private async void IsLocalPlayingChanged(object sender, EventArgs e)
+	{
+		await UpdateRoomPlayerState();
+	}
+	
+	private async void NewEpisodeAddedToPlayer(object sender, EventArgs e)
+	{
+		canCreateRoom = PlayerService.CurrentEpisode != null;
+		await InvokeAsync(StateHasChanged);
+	}
+}

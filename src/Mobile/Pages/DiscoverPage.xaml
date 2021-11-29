@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
+             Title="{x:Static res:AppResource.Home}"
+             x:Name="this"
+             xmlns:view="clr-namespace:Microsoft.NetConf2021.Maui.Views"
+             xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+             BackgroundColor="{DynamicResource PageBackgroundColor}"
+             xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
+             Shell.NavBarIsVisible="False"
+             x:DataType="viewmodels:DiscoverViewModel"
+             x:Class="Microsoft.NetConf2021.Maui.Pages.DiscoverPage">
+    <ContentPage.BindingContext>
+        <viewmodels:DiscoverViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <Style x:Key="ListTitleStyle"
+               TargetType="Label"
+               BasedOn="{OnIdiom Default={StaticResource H5LabelStyle}, Phone={StaticResource H6LabelStyle}}">
+            <Setter Property="Padding"
+                    Value="{OnIdiom Desktop='48,0,0,12', Phone='16,0,0,0'}" />
+        </Style>
+    </ContentPage.Resources>
+    <Grid>
+        <StackLayout Margin="10,0">
+            <controls:HeaderControl TextToSearch="{Binding Text, Mode=OneWayToSource}"
+                                    SearchCommand="{Binding SearchCommand}"
+                                    VerticalOptions="Start" />
+        </StackLayout>
+        <CollectionView ItemsSource="{Binding PodcastsGroup}"
+                        Margin="10,50,10,0"
+                        SelectionMode="None"
+                        IsGrouped="True">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="{OnIdiom Phone=2, Tablet=3, Desktop=3}"
+                                 HorizontalItemSpacing="5"
+                                 VerticalItemSpacing="5" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <view:ShowItemView SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}}"
+                                       SubscriptionCommandParameter="{Binding }" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="{x:Null}">
+                    <Label Text="{Binding Name}"
+                           Style="{StaticResource ListTitleStyle}"
+                           FontSize="32" />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>           
+        </CollectionView>
+
+        <controls:Player x:Name="player"
+                         VerticalOptions="End">
+        </controls:Player>
+
+    </Grid>
+</ContentPage>

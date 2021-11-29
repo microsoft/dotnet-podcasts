@@ -1,0 +1,13 @@
+﻿<picture class="picture">
+    <img src="@Image" alt="@Title" loading="lazy" />
+</picture>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string Title { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string Image { get; set; } = default!;
+}

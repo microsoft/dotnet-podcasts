@@ -1,0 +1,17 @@
+﻿<div class="container" @onclick="@(() => showTooltip = true)">
+    @Container
+    <span class="listen-together__tooltip @(showTooltip ? "active" : "")"
+          onanimationend="@((EventArgs ev) => showTooltip = false)">@Content</span>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment Content { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment Container { get; set; } = default!;
+
+    private bool showTooltip = false;
+}

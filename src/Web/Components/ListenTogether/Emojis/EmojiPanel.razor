@@ -1,0 +1,64 @@
+﻿<div class="emojiPanel">
+    @foreach (var emoji in emojiComponents)
+    {
+        <EmojiPanelButton @key="emoji.Key" @onclick="@(() => SendEmoji(emoji.Key))">
+            <DynamicComponent Type="@emoji.Value" />
+        </EmojiPanelButton>
+    }
+
+    @foreach (var bubble in emojiBubbles)
+    {
+        <div @key="bubble.Key"
+         class="emojiPanel__bubble"
+         onanimationend="@(() => RemoveEmojiBubble(bubble.Key))"
+         style="@($"--left:{bubble.Value.Left}%;--size:{bubble.Value.Size}px;--rotate:{bubble.Value.Rotate}deg;--opacity:{bubble.Value.Opacity};")">
+            <DynamicComponent Type="@emojiComponents[bubble.Value.EmojiKey]" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnSendEmoji { get; set; }
+
+    private record EmojiBubble(string EmojiKey, int Size, int Left, int Rotate, float Opacity);
+
+    private static readonly Dictionary<string, Type> emojiComponents = new()
+        {
+            { "thumbs-up", typeof(ThumbsUpEmoji) },
+            { "heart", typeof(HeartEmoji) },
+            { "clapping-hands", typeof(ClappingHandsEmoji) },
+            { "thumbs-down", typeof(ThumbsDownEmoji) },
+            { "face-with-tears-of-joy", typeof(FaceTearsOfJoyEmoji) },
+            { "loudly-crying-face", typeof(CryingFaceEmoji) }
+        };
+
+    private const int MinBubbleSizePx = 30;
+    private const int MaxBubbleSizePx = 120;
+    private const int MinLeftPercentage = 5;
+    private const int MaxLeftPercentage = 95;
+    private const int MinRotatePercentage = -25;
+    private const int MaxRotatePercentage = 25;
+    private const int MinOpacityPercentage = 50;
+    private const int MaxOpacityPercentage = 100;
+
+    private Dictionary<Guid, EmojiBubble> emojiBubbles = new();
+
+    private Task SendEmoji(string emojiKey) => OnSendEmoji.InvokeAsync(emojiKey);
+
+    public async Task AddEmojiBubble(string emojiKey)
+    {
+        var size = new Random().Next(MinBubbleSizePx, MaxBubbleSizePx);
+        var left = new Random().Next(MinLeftPercentage, MaxLeftPercentage);
+        var rotate = new Random().Next(MinRotatePercentage, MaxRotatePercentage);
+        var opacity = new Random().Next(MinOpacityPercentage, MaxOpacityPercentage);
+        emojiBubbles.TryAdd(Guid.NewGuid(), new EmojiBubble(emojiKey, size, left, rotate, (float)opacity / 100));
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task RemoveEmojiBubble(Guid bubbleId)
+    {
+        emojiBubbles.Remove(bubbleId);
+        await InvokeAsync(StateHasChanged);
+    }
+}

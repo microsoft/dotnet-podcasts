@@ -1,0 +1,62 @@
+﻿@page "/listen-later"
+@implements IDisposable
+@inject ListenLaterService ListenLaterService
+
+<PageTitle>.NET Podcasts - Listen later</PageTitle>
+
+@if (listenLaterEpisodes == null)
+{
+    <Spinner />
+}
+else
+{
+    <div class="containerPage">
+        <div class="titleWrapper">
+            <TitlePage Label="Listen later" />
+        </div>
+
+        <div class="contentWrapper">
+            @if (!listenLaterEpisodes.Any())
+            {
+                <NoResults Message="You haven't added any podcasts yet."
+                   Description="Discover content related to your interests and add it to this list if you want to listen to it later."
+                   Image="_content/Podcast.Pages/images/no-listen-later.png" />
+            }
+            else
+            {
+                <Virtualize Items="@listenLaterEpisodes" Context="item" TItem="EpisodeInfo" ItemSize="220">
+                    <EpisodeListItem Episode="@item" IsShowVisible />
+                </Virtualize>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private ICollection<EpisodeInfo>? listenLaterEpisodes;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            listenLaterEpisodes = await ListenLaterService.GetEpisodes();
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        ListenLaterService.EpisodesChanged += UpdateEpisodes;
+    }
+
+    public void Dispose()
+    {
+        ListenLaterService.EpisodesChanged -= UpdateEpisodes;
+    }
+
+    private async void UpdateEpisodes(ICollection<EpisodeInfo> episodes)
+    {
+        listenLaterEpisodes = episodes;
+        await InvokeAsync(StateHasChanged);
+    }
+}

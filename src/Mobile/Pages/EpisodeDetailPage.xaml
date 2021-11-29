@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Microsoft.NetConf2021.Maui.Pages.EpisodeDetailPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+             x:DataType="viewmodels:EpisodeDetailViewModel"
+             Style="{StaticResource DetailPageStyle}"
+             Title="{Binding Episode.Title}"
+             xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
+             xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls">
+    <ContentPage.BindingContext>
+        <viewmodels:EpisodeDetailViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="16"
+                                 Spacing="8">
+                <Image Margin="0,4,0,8"
+                       HeightRequest="156"
+                       Source="{Binding Image}"
+                       SemanticProperties.Description="It is the banner of the episode"
+                       WidthRequest="156" />
+                <Label Style="{StaticResource H6LabelStyle}"
+                       Text="{Binding Episode.Title}" />
+                <Label Style="{StaticResource SH6LabelStyle}"
+                       Text="{Binding Show.Title}" />
+                <Label Margin="0,0,0,16"
+                       Style="{StaticResource BodySLabelStyle}"
+                       Text="{Binding Episode.Published, StringFormat='{0:MMM dd, yyyy}'}" />
+                <Grid Margin="0,0,0,16"
+                      ColumnDefinitions="auto,auto,auto,auto"
+                      ColumnSpacing="12">
+                    <Button BackgroundColor="{StaticResource Primary}"
+                            Command="{Binding PlayCommand}"
+                            SemanticProperties.Hint="Play the episode"
+                            Text="{x:Static res:AppResource.Play}" />
+                    <Label GridLayout.Column="1"
+                           Style="{StaticResource BodySLabelStyle}"
+                           Text="{Binding Episode.Duration, Converter={StaticResource DurationConverter}}"
+                           VerticalOptions="Center" />
+                    <ImageButton GridLayout.Column="2"
+                                 HeightRequest="28"
+                                 Aspect="AspectFill"
+                                 Source="sare_button.png"
+                                 SemanticProperties.Description="Tap to share the episode"
+                                 VerticalOptions="Center"
+                                 Command="{Binding ShareCommand}"
+                                 WidthRequest="28">
+                    </ImageButton>
+                    <ImageButton GridLayout.Column="3"
+                                 HeightRequest="28"
+                                 Aspect="AspectFill"
+                                 Source="clockpink.png"
+                                 SemanticProperties.Description="Tap to add the episode to listen later"
+                                 VerticalOptions="Center"
+                                 Command="{Binding ListenLaterCommand}"
+                                 WidthRequest="28">
+                        <ImageButton.Triggers>
+                            <DataTrigger Binding="{Binding IsInListenLater}"
+                                         TargetType="ImageButton"
+                                         Value="true">
+                                <Setter Property="Source"
+                                        Value="listenlaterfilled.png" />
+                            </DataTrigger>
+                        </ImageButton.Triggers>
+                    </ImageButton>
+                </Grid>
+                <Label Style="{StaticResource BodySLabelStyle}"
+                       TextType="Html"
+                       Text="{Binding Episode.Description}" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+
+        <controls:Player x:Name="player"
+                         VerticalOptions="End">
+        </controls:Player>
+
+    </Grid>
+</ContentPage>

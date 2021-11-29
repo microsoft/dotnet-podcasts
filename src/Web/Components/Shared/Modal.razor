@@ -1,0 +1,16 @@
+﻿<div class="modal" @onclick="BackdropClick">
+    <div class="modal__container" @onclick:stopPropagation>
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private Task BackdropClick() => OnClose.InvokeAsync();
+}

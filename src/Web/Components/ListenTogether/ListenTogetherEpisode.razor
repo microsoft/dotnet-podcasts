@@ -1,0 +1,40 @@
+﻿<div class="listen-together-episode">
+    <SubtitlePage Label="You’re listening" />
+    <div class="listen-together-episode__picture">
+        <Picture Title="@ShowTitle" Image="@ShowImage" />
+    </div>
+    <div class="listen-together-episode__info">
+        <h2 class="listen-together-episode__episode-title" title="@EpisodeTitle">@EpisodeTitle</h2>
+        <h3 class="listen-together-episode__title" title="@ShowTitle">@ShowTitle</h3>
+        <p class="listen-together-episode__data" title="@ShowAuthor - @EpisodeDate.ToString("MMM dd, yyyy")">
+            @ShowAuthor - @EpisodeDate.ToString("MMM dd, yyyy")
+        </p>
+        <p class="listen-together-episode__description" title="@EpisodeDescription">@((MarkupString)EpisodeDescription)</p>
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string EpisodeTitle { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public DateTime EpisodeDate { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string EpisodeDescription { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string ShowTitle { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string ShowAuthor { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string ShowImage { get; set; } = default!;
+}

@@ -1,0 +1,30 @@
+﻿<div class="listen-together-empty-room">
+    <div class="listen-together-empty-room-empty">
+        <h3 class="listen-together-empty-room-title">@Message</h3>
+        <p class="listen-together-empty-room-description">@Description</p>
+
+        <button class="buttonApp primary" title="Create new room" disabled="@IsDisabled" @onclick="OnCreateRoom">
+            <span class="buttonApp-icon icon-listen-together"></span>
+            <span>Create new room</span>
+        </button>
+
+        <img class="listen-together-empty-room-image" src="_content/Podcast.Components/images/bot-wait.svg" alt="" />
+    </div>
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string Message { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public string Description { get; set; } = default!;
+
+    [EditorRequired]
+    [Parameter]
+    public bool IsDisabled { get; set; } = false;
+
+    [Parameter]
+    public EventCallback OnCreateRoom { get; set; }
+}

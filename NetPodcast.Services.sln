@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.API", "src\Services\Podcasts\Podcast.API\Podcast.API.csproj", "{777229ED-F33B-4A49-B872-EB1CF454C329}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Infrastructure", "src\Services\Podcasts\Podcast.Infrastructure\Podcast.Infrastructure.csproj", "{0004571F-FFA3-4DB3-BF91-65DF1E774677}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Updater.Worker", "src\Services\Podcasts\Podcast.Updater.Worker\Podcast.Updater.Worker.csproj", "{3B324F00-AE02-4FC7-B665-86F87B22BD75}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Hub", "src\Services\ListenTogether\ListenTogether.Hub\ListenTogether.Hub.csproj", "{03EC558C-665F-4E3A-BDC4-8F56B5ED45C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Podcasts", "Podcasts", "{3577F0EE-7091-46E0-9B25-37559228A896}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ListenTogether", "ListenTogether", "{0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Ingestion.Worker", "src\Services\Podcasts\Podcast.Ingestion.Worker\Podcast.Ingestion.Worker.csproj", "{60A658E2-2365-461B-A1E0-F6DDF91795AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{1B0A13EE-F8DB-4734-ACE6-FD5EB19BA5D3}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\podcast-api.yml = .github\workflows\podcast-api.yml
+		.github\workflows\podcast-hub.yml = .github\workflows\podcast-hub.yml
+		.github\workflows\podcast-web.yml = .github\workflows\podcast-web.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{CE88241B-B740-4E6A-9D73-7C0B9F7CC069}"
+	ProjectSection(SolutionItems) = preProject
+		deploy\Services\api.deployment.bicep = deploy\Services\api.deployment.bicep
+		deploy\Services\hub.deployment.json = deploy\Services\hub.deployment.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Infrastructure", "src\Services\ListenTogether\ListenTogether.Infrastructure\ListenTogether.Infrastructure.csproj", "{F7C33B71-158B-4956-B707-EEE291E6EBF9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Domain", "src\Services\ListenTogether\ListenTogether.Domain\ListenTogether.Domain.csproj", "{5C09F557-3425-4290-9122-56D1EBA8330F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Application", "src\Services\ListenTogether\ListenTogether.Application\ListenTogether.Application.csproj", "{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{777229ED-F33B-4A49-B872-EB1CF454C329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{777229ED-F33B-4A49-B872-EB1CF454C329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{777229ED-F33B-4A49-B872-EB1CF454C329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{777229ED-F33B-4A49-B872-EB1CF454C329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0004571F-FFA3-4DB3-BF91-65DF1E774677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0004571F-FFA3-4DB3-BF91-65DF1E774677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0004571F-FFA3-4DB3-BF91-65DF1E774677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0004571F-FFA3-4DB3-BF91-65DF1E774677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B324F00-AE02-4FC7-B665-86F87B22BD75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B324F00-AE02-4FC7-B665-86F87B22BD75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B324F00-AE02-4FC7-B665-86F87B22BD75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B324F00-AE02-4FC7-B665-86F87B22BD75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03EC558C-665F-4E3A-BDC4-8F56B5ED45C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03EC558C-665F-4E3A-BDC4-8F56B5ED45C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03EC558C-665F-4E3A-BDC4-8F56B5ED45C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03EC558C-665F-4E3A-BDC4-8F56B5ED45C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60A658E2-2365-461B-A1E0-F6DDF91795AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60A658E2-2365-461B-A1E0-F6DDF91795AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60A658E2-2365-461B-A1E0-F6DDF91795AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60A658E2-2365-461B-A1E0-F6DDF91795AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7C33B71-158B-4956-B707-EEE291E6EBF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C33B71-158B-4956-B707-EEE291E6EBF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C33B71-158B-4956-B707-EEE291E6EBF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C33B71-158B-4956-B707-EEE291E6EBF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C09F557-3425-4290-9122-56D1EBA8330F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C09F557-3425-4290-9122-56D1EBA8330F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C09F557-3425-4290-9122-56D1EBA8330F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C09F557-3425-4290-9122-56D1EBA8330F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{777229ED-F33B-4A49-B872-EB1CF454C329} = {3577F0EE-7091-46E0-9B25-37559228A896}
+		{0004571F-FFA3-4DB3-BF91-65DF1E774677} = {3577F0EE-7091-46E0-9B25-37559228A896}
+		{3B324F00-AE02-4FC7-B665-86F87B22BD75} = {3577F0EE-7091-46E0-9B25-37559228A896}
+		{03EC558C-665F-4E3A-BDC4-8F56B5ED45C1} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
+		{60A658E2-2365-461B-A1E0-F6DDF91795AA} = {3577F0EE-7091-46E0-9B25-37559228A896}
+		{F7C33B71-158B-4956-B707-EEE291E6EBF9} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
+		{5C09F557-3425-4290-9122-56D1EBA8330F} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
+		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {11182059-7938-44A8-9759-7A0BCCFACBE7}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,114 @@
+﻿.toggle-switch {
+    align-items: flex-start;
+    display: flex;
+}
+
+.toggle-switch-input-wrapper {
+    margin-right: 8px;
+    position: relative;
+}
+
+.toggle-switch-input {
+    appearance: none;
+    border: 0;
+    margin: 0;
+    outline: none;
+    padding: 0;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.toggle-switch-control {
+    background-color: var(--c-neutral-grey1);
+    display: block;
+    height: 22px;
+    width: 42px;
+    border: 1px solid var(--c-switch);
+    box-sizing: border-box;
+    border-radius: 50px;
+    position: relative;
+}
+
+    .toggle-switch-control::before {
+        background-color: var(--c-switch);
+        border-radius: 50%;
+        content: "";
+        display: block;
+        height: 12px;
+        width: 12px;
+        transition: transform 0.3s ease;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate(3px, -50%);
+    }
+
+.toggle-switch-input:hover:not(:disabled),
+.toggle-switch-label:hover {
+    cursor: pointer;
+}
+
+    .toggle-switch-input:hover:not(:disabled) ~ .toggle-switch-control {
+        border-color: var(--c-switch-dark);
+    }
+
+        .toggle-switch-input:hover:not(:disabled) ~ .toggle-switch-control::before {
+            background-color: var(--c-switch-dark);
+        }
+
+.toggle-switch-input:checked ~ .toggle-switch-control::before {
+    transform: translate(calc(100% + 12px), -50%);
+}
+
+.toggle-switch-input:checked ~ .toggle-switch-control {
+    background-color: var(--c-primary);
+    border-color: var(--c-primary);
+}
+
+    .toggle-switch-input:checked ~ .toggle-switch-control::before {
+        background-color: var(--c-neutral-white);
+    }
+
+.toggle-switch-input:checked:hover:not(:disabled) ~ .toggle-switch-control {
+    background-color: var(--c-primary-dark);
+    border-color: var(--c-primary-dark);
+}
+
+    .toggle-switch-input:checked:hover:not(:disabled) ~ .toggle-switch-control::before {
+        background-color: var(--c-neutral-white);
+    }
+
+.toggle-switch-input:disabled ~ .toggle-switch-control {
+    background-color: var(--c-neutral-white);
+    border-color: var(--c-neutral-grey5);
+}
+
+    .toggle-switch-input:disabled ~ .toggle-switch-control::before {
+        background-color: var(--c-neutral-grey5);
+    }
+
+.toggle-switch-input:disabled:checked ~ .toggle-switch-control {
+    background-color: var(--c-neutral-grey5);
+    border-color: var(--c-neutral-grey5);
+}
+
+    .toggle-switch-input:disabled:checked ~ .toggle-switch-control::before {
+        background-color: var(--c-neutral-white);
+    }
+
+.toggle-switch-label,
+.toggle-switch-description {
+    font-size: var(--text-s-fs);
+    line-height: var(--text-s-lh);
+}
+
+.toggle-switch-description {
+    color: var(--c-neutral-grey7);
+    margin-top: 4px;
+}
+
+@media screen and (min-width: 992px) {
+}

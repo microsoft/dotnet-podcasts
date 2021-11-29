@@ -1,0 +1,30 @@
+﻿<div class="no-results">
+    <img class="no-results_image" src="@Image" alt="@Message" loading="lazy" />
+    <h2 class="no-results_message">@Message</h2>
+    @if (Description != null)
+    {
+        <p class="no-results_description">@Description</p>
+    }
+    @if (ShowDiscoverButton == null || ShowDiscoverButton.Value)
+    {
+        <NavLink class="no-results_button buttonApp primary" title="Discover podcasts" href="discover" Match="NavLinkMatch.All">
+            <span>Discover podcasts</span>
+        </NavLink>
+    }
+</div>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public string Message { get; set; } = default!;
+
+    [Parameter]
+    public string? Description { get; set; }
+
+    [EditorRequired]
+    [Parameter]
+    public string Image { get; set; } = default!;
+
+    [Parameter]
+    public bool? ShowDiscoverButton { get; set; }
+}

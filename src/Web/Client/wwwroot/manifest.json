@@ -1,0 +1,32 @@
+{
+  "name": ".NET Podcasts",
+  "description": "Discover the application that allows you to listen to the most interesting development podcasts: Azure, .NET, Microsoft 365, and much more.",
+  "start_url": "/discover",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#c00cc0",
+  "background_color": "#faf9f8",
+  "icons": [
+    {
+      "src": "images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
