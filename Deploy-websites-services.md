@@ -129,9 +129,10 @@ That's it! Now, Navigate to you https://`WEBAPP_NAME`/azurewebsites.net/ to watc
 
 Happy Deployments!
 
+---
 ## Azure Container Apps Demo
 
-- To run the Azure Container Apps demo that we showcased at .NET Conf, checkout the [Azure Container Apps](docs/demos/azurecontainerapps).
+To run the Azure Container Apps demo that we showcased at .NET Conf, checkout the [Azure Container Apps](docs/demos/azurecontainerapps).
 
 ## Individual Deployment Guides and Configurations
 
@@ -139,7 +140,7 @@ Happy Deployments!
 
 1. .NET Podcast API:
     - [Run Backend Services Locally](src/Services/Podcasts/Podcast.API#run-backend-locally)
-    - [Deployment Podcast Images](deploy/Images)
+    - [Podcast images deployment to Azure Blob storage](deploy/Images)
 
 1. Listen Together Mode Backend Services:
     - [Run Locally](src/Services/ListenTogether/ListenTogether.Hub)
@@ -152,4 +153,4 @@ Happy Deployments!
 
 ### ASP.NET Core Website & Blazor Web App
 
-- [Deploy on Azure](src/Web#deploy-to-azure)
+- [Deploy to Azure](src/Web#deploy-to-azure)
