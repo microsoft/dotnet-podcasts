@@ -103,7 +103,6 @@ jobs:
 
              if( $LASTEXITCODE -ne 0 ) { exit -1 }
             
-
       - name: Upload Images
         uses: azure/powershell@v1
         with:
