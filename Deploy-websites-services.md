@@ -26,7 +26,7 @@ To understand the dotnet-podcasts architecture better, see the diagram below.
 
 ## Step-by-step guide to deploying websites and services to Azure
 
-To keep this guide simple and less confusing, we will be using Azure CLI in our next steps. If you haven't installed them, please take a look at the guide [How to install the Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli) in your favorite platform. These instructions are only required for the first-time setup for GitHub actions. If it is easier, you may run the commands in the [Azure Cloud Shell](https://docs.microsoft.com/azure/cloud-shell/quickstart) and avoid local installation.
+To keep this guide simple, we will be using Azure CLI in our next steps. If you haven't installed them, please take a look at the guide [How to install the Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli) in your favorite platform. These instructions are only required for the first-time setup for GitHub actions. If it is easier, you may run the commands in the [Azure Cloud Shell](https://docs.microsoft.com/azure/cloud-shell/quickstart) and avoid local installation.
 
 ### Create an Azure resource group
 
@@ -89,15 +89,15 @@ Go ahead and add the following GitHub secrets. Some of the values need to be uni
 - `AZURE_RESOURCE_GROUP_NAME`: Use `podcastrg`. If you have changed it in the previous step, be sure to use that here.
 - `PODCASTDB_USER_LOGIN` : Provide a user name for your database login.
 - `PODCASTDB_USER_PASSWORD` : Provide a strong password for Podcast db.
-- `ACR_NAME`: Provide a container registry name. _This needs to be unique_. For e.g,. `yourname-podcastacr`
-- `STORAGE_NAME`: Provide a name for your Azure Storage. _This needs to be unique_. For e.g,.`yourname-podcaststorage`
-- `PODCASTDB_SERVER_NAME`: Provide an Azure SQL server name. For e.g,. `podcastdbserver`
+- `ACR_NAME`: Provide a container registry name. _This needs to be unique_. For e.g., `yourname-podcastacr`
+- `STORAGE_NAME`: Provide a name for your Azure Storage. _This needs to be unique_. For e.g.,`yourname-podcaststorage`
+- `PODCASTDB_SERVER_NAME`: Provide an Azure SQL server name. For e.g., `podcastdbserver`
 - `KUBERNETES_ENV_NAME`: Provide a Container apps environment name. For e.g,.`podcastskve`
-- `WORKSPACE_NAME`: Provide a Log Analytics workspace name. For e.g,. `podcastslogs`
-- `SERVICE_PLAN_NAME`: Provide a Service plan name. For e.g,. `podcastappserviceplan`
-- `SERVICE_PLAN_SKU`: Provide a preferred SKU for the service plan. For e.g. `S3`.
-- `HUB_WEBAPP_NAME`: Provide a Web App name for Listen Together SignalR Hub. _This needs to be unique_. For e.g,. `yourname-podcasthub`
-- `WEBAPP_NAME`: Provide a Web App name for the the websites._This needs to be unique_. For e.g,. `yourname-podcastwebapp`
+- `WORKSPACE_NAME`: Provide a Log Analytics workspace name. For e.g., `podcastslogs`
+- `SERVICE_PLAN_NAME`: Provide a Service plan name. For e.g., `podcastappserviceplan`
+- `SERVICE_PLAN_SKU`: Provide a preferred SKU for the service plan. For e.g., `S3`.
+- `HUB_WEBAPP_NAME`: Provide a Web App name for Listen Together SignalR Hub. _This needs to be unique_. For e.g., `yourname-podcasthub`
+- `WEBAPP_NAME`: Provide a Web App name for the the websites._This needs to be unique_. For e.g., `yourname-podcastwebapp`
 
 Once configured correctly, you should be having 13 secrets. Here's our list for reference:
 
