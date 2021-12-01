@@ -1,10 +1,24 @@
-
-
 # .NET Podcasts - Sample Application
 
 We are happy to announce the release of .NET Podcast App: a sample application showcasing [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://docs.microsoft.com/dotnet/maui/what-is-maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), and more.
 
+You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor.
+
 ![Logo](./docs/net-podcasts.png)
+
+
+## Build Status
+
+| Project | Status |
+| --- | --- |
+|Website|![Build status](/../../actions/workflows/podcast-web.yml/badge.svg)|
+|Web API|![Services Build status](/../../actions/workflows/podcast-api.yml/badge.svg)|
+|Listen Together Hub| ![Services Build status](/../../actions/workflows/podcast-hub.yml/badge.svg) |
+
+
+## Application Architecture Diagram
+
+![.NET Podcast Application Diagram](docs/arch_diagram_podcast.png)
 
 ## Repositories
 
@@ -15,6 +29,9 @@ For this sample application, we build an app to listen all you favorite .NET pod
 - [Backend API:](src/Services) ASP.NET Core Web APIs & Minimal APIs, injestion worker, and podcast update worker
 - [Blazor Hybrid App:](src/MobileBlazor) Sample hybrid application of .NET MAUI with Blazor.
 
+## Full Deployment with GitHub Actions
+
+`dotnet-podcasts` repo is configured to deploy all services and websites automatically to Azure using GitHub Actions. [Follow the detailed guidelines](Deploy-websites-services.md) to setup GitHub Actions on your fork.
 
 ## Local Deployment Quickstart
 
@@ -46,23 +63,6 @@ Ensure that the following services are running in Docker, note that you only nee
 
 ![Configured Docker services](docs/docker/docker-services-config.png)
 
-## Step by step guide to deploy to Azure
-
-`dotnet-podcasts` repo is configured to deploy all services and websites automatically to Azure using GitHub Actions. [Follow the detailed guidelines](Deploy-websites-services.md) to setup GitHub Actions on your fork.
-
-## Build Status
-
-![Build status](/../../actions/workflows/podcast-web.yml/badge.svg)
-
-![Services Build status](/../../actions/workflows/podcast-api.yml/badge.svg)
-
-![Services Build status](/../../actions/workflows/podcast-hub.yml/badge.svg)
-
-----
-
-# Application Diagram
-
-![.NET Podcast Application Diagram](docs/arch_diagram_podcast.png)
 
 ## Contributing
 
