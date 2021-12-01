@@ -47,23 +47,3 @@ Via CLI it is necesary to build:
 
 To run iOS from windows we can use Visual Studio 2022 Preview from Windows.
 
-### Screenshots
-
-#### Discover
-
-![Discover](docs/screens/mobile/discover.jpeg)
-
-#### Show detail
-
-![Show detail](docs/screens/mobile/podcast-detail.jpeg)
-
-#### Listen together
-
-![Listen together](docs/screens/mobile/listen-together.jpeg)
-
-![Listen together room](docs/screens/mobile/listen-together-room.jpeg)
-
-#### Settings
-
-![Settings](docs/screens/mobile/settings.jpeg)
-
