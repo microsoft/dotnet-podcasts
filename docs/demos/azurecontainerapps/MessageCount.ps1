@@ -22,11 +22,10 @@ function GetMessageCount($storageAccount, $accesskey, $queueName){
         'x-ms-date' = $GMTTime
         Authorization = "SharedKeyLite " + $storageAccount + ":" + $signature
         "x-ms-version" = $version
-        Accept = "text/xml"
     }
     $response = Invoke-WebRequest -Method $method -Uri $queue_url -Headers $headers -ContentType $contenttype
     return $response.Headers["x-ms-approximate-messages-count"]
 }
  
 $messageCount = GetMessageCount -storageAccount $storageAccount -accesskey $accesskey -queueName $queueName
-Write-Output "Queue Messages: $messageCount"
+Write-Output "Messages count: $messageCount"
