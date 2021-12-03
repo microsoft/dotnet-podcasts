@@ -2,6 +2,12 @@
 
 This folder contains additional scripts needed for testing the Azure Container Apps scenario.
 
+You must first enable the _feeds_ injestion API by turning it on in the `api.deployment.json` file on [line 64](https://github.com/microsoft/dotnet-podcasts/blob/main/deploy/Services/api.deployment.json#L64). 
+
+```
+"deployIngestion": true
+```
+
 ## Demo steps:
 
 1. Get the HTTP API application details:
