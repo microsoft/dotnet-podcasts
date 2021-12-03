@@ -29,4 +29,4 @@ function GetMessageCount($storageAccount, $accesskey, $queueName){
 }
  
 $messageCount = GetMessageCount -storageAccount $storageAccount -accesskey $accesskey -queueName $queueName
-Write-Output "Feed Queue Messages: $messageCount"
+Write-Output "Queue Messages: $messageCount"
