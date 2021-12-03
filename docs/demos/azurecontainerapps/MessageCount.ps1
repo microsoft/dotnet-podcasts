@@ -1,14 +1,15 @@
 
 Param(
     [parameter(Mandatory=$true)][string]$storageAccount,
-    [parameter(Mandatory=$true)][string]$accesskey
+    [parameter(Mandatory=$true)][string]$accesskey,
+    [parameter(Mandatory=$false)][string]$queueName = "feed-queue"
 )
 
-function GetMessages($storageAccount, $accesskey){
+function GetMessageCount($storageAccount, $accesskey, $queueName){
     $method = "GET"
     $contenttype = "application/x-www-form-urlencoded"
     $version = "2017-04-17"
-    $resource = "$QueueName/?comp=metadata"
+    $resource = "$queueName/?comp=metadata"
     $queue_url = "https://$storageAccount.queue.core.windows.net/$resource"
     $GMTTime = (Get-Date).ToUniversalTime().toString('R')
     $canonheaders = "x-ms-date:$GMTTime`nx-ms-version:$version`n"
@@ -27,5 +28,5 @@ function GetMessages($storageAccount, $accesskey){
     return $response.Headers["x-ms-approximate-messages-count"]
 }
  
-$messageCount = GetMessages -storageAccount $storageAccount -accesskey $accesskey
+$messageCount = GetMessageCount -storageAccount $storageAccount -accesskey $accesskey -queueName $queueName
 Write-Output "Feed Queue Messages: $messageCount"
