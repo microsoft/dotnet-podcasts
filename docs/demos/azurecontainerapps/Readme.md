@@ -89,6 +89,14 @@ This folder contains additional scripts needed for testing the Azure Container A
         sleep 2;
     }
     ```
+    ```ps1
+        while (1) { 
+        $output = ./MessageCount.ps1 -storageAccount <storageAccountName> -accessKey <accessKey>
+        clear;
+        echo $output;
+        sleep 1;
+    }
+    ```
 
     ![Initial replicas](./scale-out-demo-0.png)
 
