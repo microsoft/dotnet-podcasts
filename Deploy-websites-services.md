@@ -84,13 +84,13 @@ To connect GitHub Actions, you will create a secret named `AZURE_CREDENTIALS` th
 
 ### Configure all other GitHub Secrets
 
-Go ahead and add the following GitHub secrets. Some of the values need to be unique since they expose a public endpoint. Those details are explicitly called out below. Except the Resource Group name, all others will be automatically created for you within your subscription.
+Go ahead and add the following GitHub secrets. Some of the values need to be unique since they expose a public endpoint. Those details are explicitly called out below. Except the Resource Group name, all others will be automatically created for you within your subscription. When naming the Azure Resources, be sure to check out the [naming rules and restrictions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules).
 
 - `AZURE_RESOURCE_GROUP_NAME`: Use `podcastrg`. If you have changed it in the previous step, be sure to use that here.
 - `PODCASTDB_USER_LOGIN` : Provide a user name for your database login.
 - `PODCASTDB_USER_PASSWORD` : Provide a strong password for Podcast db.
-- `ACR_NAME`: Provide a container registry name. _This needs to be unique_. For e.g., `yourname-podcastacr`
-- `STORAGE_NAME`: Provide a name for your Azure Storage. _This needs to be unique_. For e.g.,`yourname-podcaststorage`
+- `ACR_NAME`: Provide a container registry name. _This needs to be unique_. For e.g., `yournamepodcastacr`
+- `STORAGE_NAME`: Provide a name for your Azure Storage. _This needs to be unique_. For e.g.,`yournamepodcaststg`
 - `PODCASTDB_SERVER_NAME`: Provide an Azure SQL server name. For e.g., `podcastdbserver`
 - `KUBERNETES_ENV_NAME`: Provide a Container apps environment name. For e.g,.`podcastskve`
 - `WORKSPACE_NAME`: Provide a Log Analytics workspace name. For e.g., `podcastslogs`
