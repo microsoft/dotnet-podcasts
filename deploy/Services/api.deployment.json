@@ -61,7 +61,7 @@
     "podcastUpdaterImage": "[format('{0}/podcastupdaterworker:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
     "podcastIngestionWorkerImage": "[format('{0}/podcastingestionworker:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
     "imagesStorage": "[format('https://{0}.blob.core.windows.net/covers/', parameters('storageAccountName'))]",
-    "deployIngestion": false
+    "deployIngestion": true
   },
   "resources": [
     {
