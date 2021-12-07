@@ -33,4 +33,4 @@ To configure the Github Action it is necessary to create an environment called `
 - `AZURE_RESOURCE_GROUP_NAME`: Existing resource group where resources will be deployed.
 - `HUB_WEBAPP_NAME`: Web App name
 - `SERVICE_PLAN_NAME`: Service plan name
-- `PODCASTDB_SERVER_NAME`: Azure SQL server name
+- `PODCASTDB_SERVER_NAME`: Azure SQL server name 
