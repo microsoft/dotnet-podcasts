@@ -33,4 +33,4 @@ To configure the Github Action it is necessary to create an environment called `
 - `STORAGE_NAME`: Storage name
 - `PODCASTDB_SERVER_NAME`: Azure SQL server name
 - `KUBERNETES_ENV_NAME`: Container apps environment name
-- `WORKSPACE_NAME`: Log Analytics workspace name 
+- `WORKSPACE_NAME`: Log Analytics workspace name
