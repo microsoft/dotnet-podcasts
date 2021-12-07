@@ -98,4 +98,4 @@ This solution has five projects:
 
 #### Settings
 
-![Settings](docs/screens/desktop/settings.jpeg)
+![Settings](docs/screens/desktop/settings.jpeg) 
