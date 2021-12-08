@@ -87,11 +87,11 @@ To connect GitHub Actions, you will create a secret named `AZURE_CREDENTIALS` th
 Go ahead and add the following GitHub secrets. Some of the values need to be unique since they expose a public endpoint. Those details are explicitly called out below. Except the Resource Group name, all others will be automatically created for you within your subscription. When naming the Azure Resources, be sure to check out the [naming rules and restrictions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules).
 
 - `AZURE_RESOURCE_GROUP_NAME`: Use `podcastrg`. If you have changed it in the previous step, be sure to use that here.
-- `PODCASTDB_USER_LOGIN` : Provide a user name for your database login.
-- `PODCASTDB_USER_PASSWORD` : Provide a strong password for Podcast db.
+- `PODCASTDB_USER_LOGIN`: Provide a user name for your database login.
+- `PODCASTDB_USER_PASSWORD`: Provide a strong password for Podcast db  e.g., something like P0dc@st!022).
 - `ACR_NAME`: Provide a container registry name. _This needs to be unique_. For e.g., `yournamepodcastacr`
 - `STORAGE_NAME`: Provide a name for your Azure Storage. _This needs to be unique_. For e.g.,`yournamepodcaststg`
-- `PODCASTDB_SERVER_NAME`: Provide an Azure SQL server name. For e.g., `podcastdbserver`
+- `PODCASTDB_SERVER_NAME`: Provide an Azure SQL server name. _This needs to be unique_ For e.g., `podcastdbserver`
 - `KUBERNETES_ENV_NAME`: Provide a Container apps environment name. For e.g,.`podcastskve`
 - `WORKSPACE_NAME`: Provide a Log Analytics workspace name. For e.g., `podcastslogs`
 - `SERVICE_PLAN_NAME`: Provide a Service plan name. For e.g., `podcastappserviceplan`
@@ -103,7 +103,7 @@ Once configured correctly, you should be having 13 secrets. Here's our list for 
 
 ![Configured GitHub Secrets](docs/gh-configured-secrets.png)
 
-That's it! You're all set. Now, run the configured Workflows, one by one, to deploy the Websites and Backend services.
+That's it! You're all set. Now, let's run the configured Workflows, one by one, to deploy the Websites and Backend services.
 
 ### Enable the GitHub Workflows and run one by one
 
@@ -113,19 +113,23 @@ Go to the GitHub actions tab, and enable the workflows.
 
 ## Run the Podcast API CICD first
 
-The backend services need to be run first to set up all necessary dependencies, databases, and blob storage. The GitHub workflow is currently configured to deploy apps only if the source within the `src/Services/Podcasts/` folder is changed. Go ahead, make some changes to the code, build locally and then commit changes to see the GitHub workflow kickstart. Need any ideas for code change? You'll notice an empty `GlobalUsings.cs` in the `Podcasts.API` project.Go ahead refactor the code and move your global namespaces there.
+The backend services need to be run first to set up all necessary dependencies, databases, and blob storage.  You can manually run this from the `Actions` tab, click on `Select workflow` -> `Podcast API CICD` -> `Run workflow`. 
 
-Wait for the workflow run to complete and execute the next steps.
+Wait for the workflow run to complete and execute the next steps. The first time you run this it will take a bit longer as it creates all of the Azure resources.
 
 ## Run the Podcast HUB CICD and  Podcast Web CICD workflows
 
-Similarly, make some changes to the ListenTogether project in the `src/Services/ListenTogether/` folder to trigger the Podcast HUB workflow. Once complete, repeat the same for the Web Project in the `src/Web/` folder.
+Next we will wanto to deploy the listen together hub and the web app.
+
+You can manually run the Hub action from the `Actions` tab, click on `Select workflow` -> `Podcast Hub CICD` -> `Run workflow`. Then run the web action with `Select workflow` -> `Podcast Web CICD` -> `Run workflow`
 
 Once all the runs are complete, you'll see something like this under the Actions tab.
 
 ![Al workflow runs](docs/all-workflow-runs.png)
 
-That's it! Now, Navigate to you https://`WEBAPP_NAME`/azurewebsites.net/ to watch the podcast app in action!
+That's it! Now, Navigate to you https://`WEBAPP_NAME`.azurewebsites.net/ to watch the podcast app in action!
+
+The GitHub workflow is also configured to deploy these apps only if the source within specific folders such as `src/Services/Podcasts/` is changed. So now, if you make some changes to the code, build locally, and then commit changes to see the GitHub workflow kickstart. Need any ideas for code change? You'll notice an empty `GlobalUsings.cs` in the `Podcasts.API` project. Go ahead refactor the code and move your global namespaces there.
 
 Happy Deployments!
 
