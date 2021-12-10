@@ -95,7 +95,7 @@ Go ahead and add the following GitHub secrets. Some of the values need to be uni
 - `KUBERNETES_ENV_NAME`: Provide a Container apps environment name. For e.g,.`podcastskve`
 - `WORKSPACE_NAME`: Provide a Log Analytics workspace name. For e.g., `podcastslogs`
 - `SERVICE_PLAN_NAME`: Provide a Service plan name. For e.g., `podcastappserviceplan`
-- `SERVICE_PLAN_SKU`: Provide a preferred SKU for the service plan. For e.g., `S3`.
+- `SERVICE_PLAN_SKU`: Provide a preferred SKU for the service plan. For e.g., `S1`.
 - `HUB_WEBAPP_NAME`: Provide a Web App name for Listen Together SignalR Hub. _This needs to be unique_. For e.g., `yourname-podcasthub`
 - `WEBAPP_NAME`: Provide a Web App name for the the websites._This needs to be unique_. For e.g., `yourname-podcastwebapp`
 
@@ -103,7 +103,7 @@ Once configured correctly, you should be having 13 secrets. Here's our list for 
 
 ![Configured GitHub Secrets](docs/gh-configured-secrets.png)
 
-That's it! You're all set. Now, let's run the configured Workflows, one by one, to deploy the Websites and Backend services.
+That's it! You're all set. Now, let's run the configured Workflows, one by one, to deploy the Websites and Backend services. Be cognizant of pricing tiers for different services. You may want to adjust your App Service plan and database tiers to control costs.
 
 ### Enable the GitHub Workflows and run one by one
 
