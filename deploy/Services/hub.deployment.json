@@ -25,7 +25,7 @@
     },
     "sku": {
       "type": "string",
-      "defaultValue": "S3",
+      "defaultValue": "S1",
       "metadata": {
         "description": "The SKU of App Service Plan."
       }
@@ -125,8 +125,9 @@
       "name": "[format('{0}/{1}', parameters('serverName'), parameters('sqlDBName'))]",
       "location": "[parameters('location')]",
       "sku": {
-        "name": "P2",
-        "tier": "Premium"
+        "name": "Basic",
+        "tier": "Basic",
+        "capacity": 5
       },
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
