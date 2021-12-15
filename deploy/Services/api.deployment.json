@@ -80,8 +80,9 @@
       "name": "[format('{0}/{1}', parameters('serverName'), parameters('sqlDBName'))]",
       "location": "[parameters('location')]",
       "sku": {
-        "name": "P2",
-        "tier": "Premium"
+        "name": "Basic",
+        "tier": "Basic",
+        "capacity": 5
       },
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
@@ -385,7 +386,7 @@
             "enabled": false
           },
           "scale": {
-            "minReplicas": 1,
+            "minReplicas": 0,
             "maxReplicas": 1
           }
         }
