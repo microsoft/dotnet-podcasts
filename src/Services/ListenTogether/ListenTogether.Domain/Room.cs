@@ -51,7 +51,7 @@ public class Room
         }
     }
 
-    public bool Empty()
+    public bool IsEmpty()
     {
         return Users.Count == 0;
     }
