@@ -1,9 +1,3 @@
-using Azure.Storage.Queues;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Podcast.API.Models;
-using Podcast.Infrastructure.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("PodcastDb");
