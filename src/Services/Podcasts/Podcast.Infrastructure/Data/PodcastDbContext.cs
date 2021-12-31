@@ -9,7 +9,7 @@ public class PodcastDbContext : DbContext
     {
     }
 
-    public PodcastDbContext(DbContextOptions options) : base(options)
+    public PodcastDbContext(DbContextOptions<PodcastDbContext> options) : base(options)
     {
     }
 
