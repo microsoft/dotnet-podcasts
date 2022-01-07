@@ -121,7 +121,7 @@
     <value>Autodownload using data</value>
   </data>
   <data name="Autodownload_Using_Data_Subtitle" xml:space="preserve">
-    <value>Turn on to alow to download over cellular data if wifi is unavailable.</value>
+    <value>Turn on to allow to download over cellular data if wifi is unavailable.</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Categories</value>
