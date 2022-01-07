@@ -70,7 +70,7 @@ namespace Microsoft.NetConf2021.Maui.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Turn on to alow to download over cellular data if wifi is unavailable..
+        ///   Looks up a localized string similar to Turn on to allow to download over cellular data if wifi is unavailable..
         /// </summary>
         internal static string Autodownload_Using_Data_Subtitle {
             get {
