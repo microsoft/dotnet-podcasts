@@ -11,6 +11,7 @@ using Android.Graphics;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Maui.Platform;
 
 namespace Microsoft.NetConf2021.Maui.Platforms.Android.Services
 {
