@@ -4,9 +4,10 @@
     {
         private EpisodeDetailViewModel viewModel => BindingContext as EpisodeDetailViewModel;
 
-        public EpisodeDetailPage()
+        public EpisodeDetailPage(EpisodeDetailViewModel vm)
         {
             InitializeComponent();
+            BindingContext = vm;
         }
 
         protected override async void OnAppearing()

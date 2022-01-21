@@ -10,6 +10,7 @@
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
     <MauiVersion>$(MauiV)</MauiVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
     <!-- Display name -->
     <ApplicationTitle>.NET Pods</ApplicationTitle>
 

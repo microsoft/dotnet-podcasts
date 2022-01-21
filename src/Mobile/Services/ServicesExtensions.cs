@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Hosting;
-using Podcast.Components;
+﻿using Podcast.Components;
 
 namespace Microsoft.NetConf2021.Maui.Services;
 
@@ -15,13 +14,13 @@ public static class ServicesExtensions
         });
         builder.Services.AddSingleton<ListenLaterService>();
 #if WINDOWS
-            builder.Services.TryAddSingleton<IAudioService, Platforms.Windows.AudioService>();
-            builder.Services.TryAddTransient<IShareService, Platforms.Windows.ShareService>();
+        builder.Services.TryAddSingleton<IAudioService, Platforms.Windows.AudioService>();
+        builder.Services.TryAddTransient<IShareService, Platforms.Windows.ShareService>();
 #elif ANDROID
         builder.Services.TryAddSingleton<IAudioService, Platforms.Android.AudioService>();
 #elif MACCATALYST
-            builder.Services.TryAddSingleton<IAudioService, Platforms.MacCatalyst.AudioService>();
-            builder.Services.TryAddSingleton< Platforms.MacCatalyst.ConnectivityService>();
+        builder.Services.TryAddSingleton<IAudioService, Platforms.MacCatalyst.AudioService>();
+        builder.Services.TryAddSingleton< Platforms.MacCatalyst.ConnectivityService>();
 #elif IOS
         builder.Services.TryAddSingleton<IAudioService, Platforms.iOS.AudioService>();
 #endif

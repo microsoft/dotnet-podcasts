@@ -1,11 +1,9 @@
-﻿
-using System.Net.NetworkInformation;
+﻿using System.Net.NetworkInformation;
 
 namespace Microsoft.NetConf2021.Maui.Platforms.MacCatalyst;
 
 public class ConnectivityService
 {
-
     public ConnectivityService()
     {
     }

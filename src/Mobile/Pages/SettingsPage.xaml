@@ -7,10 +7,6 @@
     xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
     Style="{StaticResource MainSectionStyle}"
     x:Class="Microsoft.NetConf2021.Maui.Pages.SettingsPage">
-    <ContentPage.BindingContext>
-        <viewmodels:SettingsViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto"
           ColumnDefinitions="2*,8*"
           Padding="16">

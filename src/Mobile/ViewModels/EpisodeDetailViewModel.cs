@@ -54,11 +54,11 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
         private readonly ShowsService podcastService;
         private readonly PlayerService playerService;
 
-        public EpisodeDetailViewModel()
+        public EpisodeDetailViewModel(ListenLaterService listen, ShowsService shows, PlayerService player)
         {
-            listenLaterService = ServicesProvider.GetService<ListenLaterService>();
-            podcastService = ServicesProvider.GetService<ShowsService>();
-            playerService = ServicesProvider.GetService<PlayerService>();
+            listenLaterService = listen;
+            podcastService = shows;
+            playerService = player;
             ShareCommand = new AsyncCommand(ShareCommandExecuteAsync);
             PlayCommand = new AsyncCommand(PlayCommandExecute);
             ListenLaterCommand = new AsyncCommand(ListenLaterCommandExecuteAsync);

@@ -21,8 +21,7 @@
 
     <ShellContent Title="{Binding Discover.Title}"
                   Icon="{AppThemeBinding Light=discover.png, Dark=discover_dark.png}"
-                  ContentTemplate="{DataTemplate pages:DiscoverPage}"
-                  NavigationPage.HasNavigationBar="False" />
+                  ContentTemplate="{DataTemplate pages:DiscoverPage}"/>
     <ShellContent Title="{Binding Subscriptions.Title}"
                   Icon="{AppThemeBinding Light=subscriptions.png, Dark=subscriptions_dark.png}"
                   ContentTemplate="{DataTemplate pages:SubscriptionsPage}" />

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Microsoft.NetConf2021.Maui.Services
+﻿namespace Microsoft.NetConf2021.Maui.Services
 {
     public static class ServicesProvider
 	{

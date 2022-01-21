@@ -24,9 +24,9 @@ public class SubscriptionsViewModel : BaseViewModel
 
     public ICommand SubscribeCommand => new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
 
-    public SubscriptionsViewModel()
+    public SubscriptionsViewModel(SubscriptionsService subs)
     {
-        subscriptionsService = ServicesProvider.GetService<SubscriptionsService>();
+        subscriptionsService = subs;
         subscribedShows = new ObservableCollection<ShowViewModel>();
         NavigateToDiscoverCommand = new AsyncCommand(NavigateToDiscoverCommandExecute);
     }
@@ -43,7 +43,7 @@ public class SubscriptionsViewModel : BaseViewModel
         SubscribedShows.Clear();
         foreach (var podcast in podcasts)
         {
-            var podcastViewModel = new ShowViewModel(podcast);
+            var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
             await podcastViewModel.InitializeAsync();
             SubscribedShows.Add(podcastViewModel);
         }

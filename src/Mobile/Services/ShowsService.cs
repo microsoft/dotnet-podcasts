@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using Microsoft.NetConf2021.Maui.Models.Responses;
 using MonkeyCache.FileStore;
 using Newtonsoft.Json;

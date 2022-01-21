@@ -6,7 +6,7 @@
              Style="{StaticResource MainSectionStyle}"
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              Title="{x:Static res:AppResource.Listen_Together}"
-             Shell.NavBarIsVisible="True"
+             Shell.NavBarIsVisible="False"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
              x:Class="Microsoft.NetConf2021.Maui.Pages.ListenTogetherPage">
     <Grid RowDefinitions="*,auto">

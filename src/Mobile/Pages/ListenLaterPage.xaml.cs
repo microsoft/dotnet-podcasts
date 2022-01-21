@@ -4,9 +4,10 @@ public partial class ListenLaterPage : ContentPage
 {
     ListenLaterViewModel viewModel => BindingContext as ListenLaterViewModel;
 
-    public ListenLaterPage()
+    public ListenLaterPage(ListenLaterViewModel vm)
     {
         InitializeComponent();
+        BindingContext = vm;
     }
 
     protected override async void OnAppearing()

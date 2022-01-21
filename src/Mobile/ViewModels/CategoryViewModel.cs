@@ -36,11 +36,12 @@ public class CategoryViewModel : BaseViewModel
     public ICommand SubscribeCommand => new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
     public ICommand SearchCommand => new MvvmHelpers.Commands.Command(OnSearchCommand);
 
-    public CategoryViewModel()
+    public CategoryViewModel(ShowsService shows, SubscriptionsService subs)
     {
-        showsService = ServicesProvider.GetService<ShowsService>();
-        subscriptionsService = ServicesProvider.GetService<SubscriptionsService>();
+        showsService = shows;
+        subscriptionsService = subs;
     }
+
 
     public async Task InitializeAsync()
     {
@@ -79,7 +80,7 @@ public class CategoryViewModel : BaseViewModel
 
         foreach (var show in shows)
         {
-            var showVM = new ShowViewModel(show);
+            var showVM = new ShowViewModel(show, subscriptionsService);
             await showVM.InitializeAsync();
             showList.Add(showVM);
         }
