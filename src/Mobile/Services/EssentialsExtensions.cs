@@ -57,15 +57,19 @@ public static class EssentialsExtensions
                     Platform.PerformActionForShortcutItem(application, shortcutItem, completionHandler);
                 }));
 #elif WINDOWS
-				life.AddWindows(windows => windows
-					.OnActivated((window, args) =>
-					{
-						Platform.OnActivated(window, args);
-					})
-					.OnLaunched((application, args) =>
-					{
-						Platform.OnLaunched(args);
-					}));
+            life.AddWindows(windows => windows
+                .OnActivated((window, args) =>
+                {
+                    Platform.OnActivated(window, args);
+                })
+                .OnLaunched((application, args) =>
+                {
+                    Platform.OnLaunched(args);
+                })
+                .OnNativeMessage((app, args) =>
+                {
+                    app.ExtendsContentIntoTitleBar = false;
+                }));
 #endif
         });
 
