@@ -2,9 +2,10 @@
 
 public partial class SettingsPage
 {
-    public SettingsPage()
+    public SettingsPage(SettingsViewModel vm)
     {
         InitializeComponent();
+        BindingContext = vm;
     }
 }
 

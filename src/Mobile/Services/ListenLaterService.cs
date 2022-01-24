@@ -1,46 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Microsoft.NetConf2021.Maui.Services;
 
-namespace Microsoft.NetConf2021.Maui.Services
+public class ListenLaterService
 {
-    class ListenLaterService
+    List<Tuple<Episode, Show>> episodes;
+
+    public ListenLaterService()
     {
-        List<Tuple<Episode, Show>> episodes;
+        episodes = new List<Tuple<Episode, Show>>();
+    }
 
-        public ListenLaterService()
-        {
-            episodes = new List<Tuple<Episode, Show>>();
-        }
+    public List<Tuple<Episode, Show>> GetEpisodes()
+    {
+        return episodes;
+    }
 
-        public List<Tuple<Episode, Show>> GetEpisodes()
-        {
-            return episodes;
-        }
-
-        public void Add(Episode episode, Show Show)
-        {
-            if (episodes.Any(ep => ep.Item1.Id == episode.Id))
-                
-                return;
+    public void Add(Episode episode, Show Show)
+    {
+        if (episodes.Any(ep => ep.Item1.Id == episode.Id))
             
-            episodes.Add(new Tuple<Episode, Show>(episode, Show));
-        }
+            return;
+        
+        episodes.Add(new Tuple<Episode, Show>(episode, Show));
+    }
 
-        public void Remove(Episode episode)
+    public void Remove(Episode episode)
+    {
+        var episodeToRemove = episodes.First(ep => ep.Item1.Id == episode.Id);
+        if (episodeToRemove != null)
         {
-            var episodeToRemove = episodes.First(ep => ep.Item1.Id == episode.Id);
-            if (episodeToRemove != null)
-            {
-                episodes.Remove(episodeToRemove);
-            }
+            episodes.Remove(episodeToRemove);
         }
+    }
 
-        public bool IsInListenLater(Episode episode)
-        {
-            return episodes.Any(ep => ep.Item1.Id == episode.Id);
-        }
+    public bool IsInListenLater(Episode episode)
+    {
+        return episodes.Any(ep => ep.Item1.Id == episode.Id);
     }
 }

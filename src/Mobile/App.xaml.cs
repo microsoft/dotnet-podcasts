@@ -1,26 +1,24 @@
-﻿using Microsoft.NetConf2021.Maui.Helpers;
-using Application = Microsoft.Maui.Controls.Application;
+﻿using Application = Microsoft.Maui.Controls.Application;
 
-namespace Microsoft.NetConf2021.Maui
+namespace Microsoft.NetConf2021.Maui;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
-        public App()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            TheTheme.SetTheme();
+        TheTheme.SetTheme();
 
-            if (Config.Desktop)
-                MainPage = new DesktopShell();
-            else
-                MainPage = new MobileShell();
+        if (Config.Desktop)
+            MainPage = new DesktopShell();
+        else
+            MainPage = new MobileShell();
 
-            Routing.RegisterRoute(nameof(DiscoverPage), typeof(DiscoverPage));
-            Routing.RegisterRoute(nameof(ShowDetailPage), typeof(ShowDetailPage));
-            Routing.RegisterRoute(nameof(EpisodeDetailPage), typeof(EpisodeDetailPage));
-            Routing.RegisterRoute(nameof(CategoriesPage), typeof(CategoriesPage));
-            Routing.RegisterRoute(nameof(CategoryPage), typeof(CategoryPage));
-        }
+        Routing.RegisterRoute(nameof(DiscoverPage), typeof(DiscoverPage));
+        Routing.RegisterRoute(nameof(ShowDetailPage), typeof(ShowDetailPage));
+        Routing.RegisterRoute(nameof(EpisodeDetailPage), typeof(EpisodeDetailPage));
+        Routing.RegisterRoute(nameof(CategoriesPage), typeof(CategoriesPage));
+        Routing.RegisterRoute(nameof(CategoryPage), typeof(CategoryPage));
     }
 }

@@ -4,9 +4,10 @@
     {
         private ShowDetailViewModel viewModel => BindingContext as ShowDetailViewModel;
 
-        public ShowDetailPage()
+        public ShowDetailPage(ShowDetailViewModel vm)
         {
             InitializeComponent();
+            BindingContext = vm;
         }
 
         protected override async void OnAppearing()

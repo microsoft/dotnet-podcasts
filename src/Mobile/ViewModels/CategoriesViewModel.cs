@@ -14,9 +14,9 @@ public class CategoriesViewModel : BaseViewModel
 
     public ICommand SelectedCommand => new AsyncCommand<Category>(SelectedCommandExecute);
 
-    public CategoriesViewModel()
+    public CategoriesViewModel(ShowsService shows)
     {
-        showsService = ServicesProvider.GetService<ShowsService>();
+        showsService = shows;
     }
 
     public async Task InitializeAsync()

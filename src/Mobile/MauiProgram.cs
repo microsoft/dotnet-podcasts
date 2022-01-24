@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
 using MonkeyCache.FileStore;
 
 namespace Microsoft.NetConf2021.Maui;
@@ -9,12 +7,13 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        var appBuilder = MauiApp.CreateBuilder();
-        appBuilder
+        var builder = MauiApp.CreateBuilder();
+        builder
             .RegisterBlazorMauiWebView()
             .UseMauiApp<App>()
             .ConfigureEssentials()
             .ConfigureServices()
+            .ConfigureViewModels()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Segoe-Ui-Bold.ttf", "SegoeUiBold");
@@ -25,7 +24,6 @@ public static class MauiProgram
 
         Barrel.ApplicationId = "dotnetpodcasts";
 
-        return appBuilder.Build();
+        return builder.Build();
     }
 }
-

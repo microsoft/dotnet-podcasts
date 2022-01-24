@@ -34,10 +34,10 @@ public class ShowViewModel : BaseViewModel
     public ICommand SubscribeCommand { get; internal set; }
     public ICommand NavigateToDetailCommand => new AsyncCommand(NavigateToDetailCommandExecute);
 
-    public ShowViewModel(Show show)
+    public ShowViewModel(Show show, SubscriptionsService subs)
     {
         Show = show;
-        subscriptionsService = ServicesProvider.GetService<SubscriptionsService>();
+        subscriptionsService = subs;
     }
 
     internal Task InitializeAsync()

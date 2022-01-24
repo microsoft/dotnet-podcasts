@@ -3,9 +3,10 @@
 public partial class CategoryPage : ContentPage
 {
     CategoryViewModel vm => BindingContext as CategoryViewModel;
-    public CategoryPage()
+    public CategoryPage(CategoryViewModel vm)
     {
         InitializeComponent();
+        BindingContext = vm;
     }
 
     protected override async void OnAppearing()

@@ -1,5 +1,4 @@
 ﻿using Microsoft.NetConf2021.Maui.Resources.Strings;
-using Command = MvvmHelpers.Commands.Command;
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
@@ -34,13 +33,13 @@ public class DiscoverViewModel : BaseViewModel
         set {  SetProperty(ref categoriesVM, value); }
     }
 
-    public DiscoverViewModel()
+    public DiscoverViewModel(ShowsService shows, SubscriptionsService subs, CategoriesViewModel categories)
     {
-        showsService = ServicesProvider.GetService<ShowsService>();
-        subscriptionsService = ServicesProvider.GetService<SubscriptionsService>();
+        showsService = shows;
+        subscriptionsService = subs;
 
         SearchCommand = new AsyncCommand(OnSearchCommandAsync);
-        categoriesVM = new CategoriesViewModel();
+        categoriesVM = categories;
     }
 
     internal async Task InitializeAsync()
@@ -72,7 +71,7 @@ public class DiscoverViewModel : BaseViewModel
         var viewmodels = new List<ShowViewModel>();
         foreach (var podcast in podcasts)
         {
-            var podcastViewModel = new ShowViewModel(podcast);
+            var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
             await podcastViewModel.InitializeAsync();
             viewmodels.Add(podcastViewModel);
         }

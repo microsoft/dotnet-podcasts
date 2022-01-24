@@ -10,9 +10,6 @@
              Title="{Binding Show.Show.Title}"
              Style="{StaticResource DetailPageStyle}"
              x:DataType="viewmodels:ShowDetailViewModel">
-    <ContentPage.BindingContext>
-        <viewmodels:ShowDetailViewModel />
-    </ContentPage.BindingContext>
     <Grid>
         <StackLayout Margin="10,0">
             <controls:HeaderControl IsVisible="{OnIdiom Default=true, Phone=false}"

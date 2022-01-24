@@ -1,47 +1,43 @@
-﻿using System;
-using Microsoft.NetConf2021.Maui.Services;
-using AVFoundation;
-using System.Threading.Tasks;
+﻿using AVFoundation;
 using Foundation;
 
-namespace Microsoft.NetConf2021.Maui.Platforms.MacCatalyst
+namespace Microsoft.NetConf2021.Maui.Platforms.MacCatalyst;
+
+public class AudioService : IAudioService
 {
-    public class AudioService : IAudioService
+    AVPlayer avPlayer;
+    string _uri;
+
+    public bool IsPlaying => avPlayer != null
+        ? avPlayer.TimeControlStatus == AVPlayerTimeControlStatus.Playing
+        : false; //TODO
+        
+    public double CurrentPosition => avPlayer?.CurrentTime.Seconds ?? 0;
+
+    public async Task InitializeAsync(string audioURI)
     {
-        AVPlayer avPlayer;
-        string _uri;
+        _uri = audioURI;
+        NSUrl fileURL = new NSUrl(_uri.ToString());
 
-        public bool IsPlaying => avPlayer != null
-            ? avPlayer.TimeControlStatus == AVPlayerTimeControlStatus.Playing
-            : false; //TODO
-            
-        public double CurrentPosition => avPlayer?.CurrentTime.Seconds ?? 0;
-
-        public async Task InitializeAsync(string audioURI)
+        if (avPlayer != null)
         {
-            _uri = audioURI;
-            NSUrl fileURL = new NSUrl(_uri.ToString());
-
-            if (avPlayer != null)
-            {
-                await PauseAsync();
-            }
-
-            avPlayer = new AVPlayer(fileURL);
+            await PauseAsync();
         }
 
-        public Task PauseAsync()
-        {
-            avPlayer?.Pause();
+        avPlayer = new AVPlayer(fileURL);
+    }
 
-            return Task.CompletedTask;
-        }
+    public Task PauseAsync()
+    {
+        avPlayer?.Pause();
 
-         public async Task PlayAsync(double position = 0)
-        {
-            await avPlayer.SeekAsync(new CoreMedia.CMTime((long)position, 1));
-            avPlayer?.Play();
+        return Task.CompletedTask;
+    }
 
-        }
+     public async Task PlayAsync(double position = 0)
+    {
+        await avPlayer.SeekAsync(new CoreMedia.CMTime((long)position, 1));
+        avPlayer?.Play();
+
     }
 }

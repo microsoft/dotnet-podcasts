@@ -1,7 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using WinRT;
 
-
 namespace Microsoft.NetConf2021.Maui.Platforms.Windows;
 
 public static class WindowExtensions

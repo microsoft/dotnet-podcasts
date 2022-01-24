@@ -1,10 +1,9 @@
-﻿namespace Microsoft.NetConf2021.Maui.Resources.Styles
+﻿namespace Microsoft.NetConf2021.Maui.Resources.Styles;
+
+public partial class DefaultTheme : ResourceDictionary
 {
-    public partial class DefaultTheme : ResourceDictionary
+    public DefaultTheme()
     {
-        public DefaultTheme()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

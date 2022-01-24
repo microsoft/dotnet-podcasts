@@ -10,9 +10,6 @@
              x:Name="self"
              x:Class="Microsoft.NetConf2021.Maui.Pages.SubscriptionsPage"
              x:DataType="viewmodels:SubscriptionsViewModel">
-    <ContentPage.BindingContext>
-        <viewmodels:SubscriptionsViewModel />
-    </ContentPage.BindingContext>
     <ContentPage.Content>
         <Grid>
             <CollectionView x:Name="subscribedPodcasts"
