@@ -1,9 +1,7 @@
 ﻿namespace Microsoft.NetConf2021.Maui.Pages
 {
-    public partial class ShowDetailPage : ContentPage
+    public partial class ShowDetailPage : BaseContentPage
     {
-        private ShowDetailViewModel viewModel => BindingContext as ShowDetailViewModel;
-
         public ShowDetailPage(ShowDetailViewModel vm)
         {
             InitializeComponent();
@@ -12,9 +10,8 @@
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
             this.player.OnAppearing();
-            await viewModel.InitializeAsync();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

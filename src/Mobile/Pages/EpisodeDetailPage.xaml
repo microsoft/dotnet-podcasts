@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="Microsoft.NetConf2021.Maui.Pages.EpisodeDetailPage"
+<pages:BaseContentPage x:Class="Microsoft.NetConf2021.Maui.Pages.EpisodeDetailPage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Microsoft.NetConf2021.Maui.Pages"
              xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
              x:DataType="viewmodels:EpisodeDetailViewModel"
              Style="{StaticResource DetailPageStyle}"
@@ -74,4 +75,4 @@
         </controls:Player>
 
     </Grid>
-</ContentPage>
+</pages:BaseContentPage>

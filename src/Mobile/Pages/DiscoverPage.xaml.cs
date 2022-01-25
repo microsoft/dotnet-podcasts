@@ -1,9 +1,7 @@
 ﻿namespace Microsoft.NetConf2021.Maui.Pages;
 
-public partial class DiscoverPage : ContentPage
+public partial class DiscoverPage : BaseContentPage
 {
-    private DiscoverViewModel viewModel => BindingContext as DiscoverViewModel;
-
     public DiscoverPage(DiscoverViewModel vm)
     {
         InitializeComponent();
@@ -12,9 +10,8 @@ public partial class DiscoverPage : ContentPage
 
     protected override async void OnAppearing()
     {
-        base.OnAppearing();
         player.OnAppearing();
-        await viewModel.InitializeAsync();
+        base.OnAppearing();
     }
 
     protected override void OnDisappearing()

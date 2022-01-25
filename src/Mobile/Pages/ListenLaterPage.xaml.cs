@@ -1,9 +1,7 @@
 ﻿namespace Microsoft.NetConf2021.Maui.Pages;
 
-public partial class ListenLaterPage : ContentPage
+public partial class ListenLaterPage : BaseContentPage
 {
-    ListenLaterViewModel viewModel => BindingContext as ListenLaterViewModel;
-
     public ListenLaterPage(ListenLaterViewModel vm)
     {
         InitializeComponent();
@@ -12,9 +10,8 @@ public partial class ListenLaterPage : ContentPage
 
     protected override async void OnAppearing()
     {
-        base.OnAppearing();
         player.OnAppearing();
-        await viewModel.InitializeAsync();
+        base.OnAppearing();
     }
 
     protected override void OnDisappearing()

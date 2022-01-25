@@ -2,19 +2,16 @@
 {
     public partial class EpisodeDetailPage
     {
-        private EpisodeDetailViewModel viewModel => BindingContext as EpisodeDetailViewModel;
-
         public EpisodeDetailPage(EpisodeDetailViewModel vm)
         {
-            InitializeComponent();
             BindingContext = vm;
+            InitializeComponent();
         }
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
             this.player.OnAppearing();
-            await viewModel.InitializeAsync();
+            base.OnAppearing();
         }
 
         protected override void OnDisappearing()

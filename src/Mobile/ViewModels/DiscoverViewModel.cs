@@ -2,7 +2,7 @@
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class DiscoverViewModel : BaseViewModel
+public class DiscoverViewModel : AppBaseViewModel
 {
     private readonly ShowsService showsService;
     private readonly SubscriptionsService subscriptionsService;
@@ -42,10 +42,6 @@ public class DiscoverViewModel : BaseViewModel
         categoriesVM = categories;
     }
 
-    internal async Task InitializeAsync()
-    {
-        await FetchAsync();
-    }
 
     private async Task FetchAsync()
     {
@@ -61,7 +57,7 @@ public class DiscoverViewModel : BaseViewModel
             return;
         }
 
-        await CategoriesVM.InitializeAsync();
+        await CategoriesVM.OnAppearingAsync();
         shows = await ConvertToViewModels(podcastsModels);
         UpdatePodcasts(shows);
     }
@@ -112,5 +108,11 @@ public class DiscoverViewModel : BaseViewModel
     private Task SeeAllCategoriesCommandExecute()
     {
         return Shell.Current.GoToAsync($"{nameof(CategoriesPage)}");
+    }
+
+    public override async Task OnAppearingAsync()
+    {
+        await base.OnAppearingAsync();
+        await FetchAsync();
     }
 }
