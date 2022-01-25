@@ -3,7 +3,7 @@
 namespace Microsoft.NetConf2021.Maui.ViewModels
 {
     [QueryProperty(nameof(Id), nameof(Id))]
-    public class ShowDetailViewModel : BaseViewModel
+    public class ShowDetailViewModel : AppBaseViewModel
     {
         public string Id { get; set; }
         private Guid showId;
@@ -79,9 +79,9 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
                 OnPropertyChanged(nameof(Show));
             });
         }
-
-        internal async Task InitializeAsync()
+        public override async Task OnAppearingAsync()
         {
+            await base.OnAppearingAsync();
             if (Show != null)
                 return;
 

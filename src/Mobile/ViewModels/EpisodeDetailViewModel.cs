@@ -4,7 +4,7 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
 {
     [QueryProperty(nameof(Id), nameof(Id))]
     [QueryProperty(nameof(ShowId), nameof(ShowId))]
-    public class EpisodeDetailViewModel : BaseViewModel
+    public class EpisodeDetailViewModel : AppBaseViewModel
     {
         public string Id { get; set; }
         public string ShowId { get; set; }
@@ -64,8 +64,9 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
             ListenLaterCommand = new AsyncCommand(ListenLaterCommandExecuteAsync);
         }
 
-        internal async Task InitializeAsync()
+        public override async Task OnAppearingAsync()
         {
+            await base.OnAppearingAsync();
             if (Episode != null)
                 return;
 

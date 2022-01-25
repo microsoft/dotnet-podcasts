@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class ListenLaterViewModel : BaseViewModel
+public class ListenLaterViewModel : AppBaseViewModel
 {
     public bool HasData => Episodes?.Any() ?? false;
     public bool HasNoData => !HasData;
@@ -25,8 +25,9 @@ public class ListenLaterViewModel : BaseViewModel
         Episodes = new ObservableCollection<EpisodeViewModel>();
     }
 
-    internal async Task InitializeAsync()
+    public override async Task OnAppearingAsync()
     {
+        await base.OnAppearingAsync();
         var episodes = listenLaterService.GetEpisodes();
         Episodes.Clear();
         foreach (var episode in episodes)

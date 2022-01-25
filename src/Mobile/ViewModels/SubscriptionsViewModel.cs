@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class SubscriptionsViewModel : BaseViewModel
+public class SubscriptionsViewModel : AppBaseViewModel
 {
     public bool HasData => SubscribedShows?.Any() ?? false;
     public bool HasNoData => !HasData;
@@ -36,8 +36,9 @@ public class SubscriptionsViewModel : BaseViewModel
         return Shell.Current.GoToAsync($"{nameof(DiscoverPage)}");
     }
 
-    public async Task InitializeAsync()
+    public override async Task OnAppearingAsync()
     {
+        await base.OnAppearingAsync();
         var podcasts = subscriptionsService.GetSubscribedShows();
 
         SubscribedShows.Clear();

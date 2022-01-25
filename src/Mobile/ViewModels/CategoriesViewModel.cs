@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class CategoriesViewModel : BaseViewModel
+public class CategoriesViewModel :AppBaseViewModel
 {
     private readonly ShowsService showsService;
 
@@ -19,15 +19,18 @@ public class CategoriesViewModel : BaseViewModel
         showsService = shows;
     }
 
-    public async Task InitializeAsync()
-    {   
-        var categories = await showsService.GetAllCategories();
-        
-        Categories = categories?.ToList();
-    }
-
     private Task SelectedCommandExecute(Category category)
     {
         return Shell.Current.GoToAsync($"{nameof(CategoryPage)}?Id={category.Id}");
     }
+
+    
+    public override async Task OnAppearingAsync()
+    {
+        await base.OnAppearingAsync();
+        var categories = await showsService.GetAllCategories();
+        Categories = categories?.ToList();
+    }
+
+
 }

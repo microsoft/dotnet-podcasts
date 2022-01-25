@@ -1,20 +1,18 @@
 ﻿namespace Microsoft.NetConf2021.Maui.Pages
 {
-    public partial class SubscriptionsPage: ContentPage
+    public partial class SubscriptionsPage: BaseContentPage
     {
-        SubscriptionsViewModel viewModel => BindingContext as SubscriptionsViewModel;
         public SubscriptionsPage(SubscriptionsViewModel vm)
         {
-            InitializeComponent();
             BindingContext = vm;
+            InitializeComponent();
         }
 
         protected override async void OnAppearing()
         {
+            player.OnAppearing();
+            subscribedPodcasts.SelectedItem = null;
             base.OnAppearing();
-            this.subscribedPodcasts.SelectedItem = null;
-            await viewModel.InitializeAsync();
-            this.player.OnAppearing();
         }
 
         protected override void OnDisappearing()

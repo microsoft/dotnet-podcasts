@@ -1,17 +1,10 @@
 ﻿namespace Microsoft.NetConf2021.Maui.Pages;
 
-public partial class CategoriesPage : ContentPage
-{
-    CategoriesViewModel vm => BindingContext as CategoriesViewModel;
+public partial class CategoriesPage : BaseContentPage
+{ 
     public CategoriesPage(CategoriesViewModel vm)
     {
+        BindingContext = vm;
         InitializeComponent();
-        BindingContext = vm;    
-    }
-
-    protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-        await vm.InitializeAsync();
     }
 }
