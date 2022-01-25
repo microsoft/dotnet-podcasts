@@ -2,11 +2,10 @@
 {
     public partial class MobileShell
     {
-        public MobileShell()
+        public MobileShell(ShellViewModel vm)
         {
+            BindingContext = vm;
             InitializeComponent();
-
-            BindingContext = new ShellViewModel();
         }
     }
 }

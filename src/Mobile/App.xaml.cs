@@ -4,16 +4,16 @@ namespace Microsoft.NetConf2021.Maui;
 
 public partial class App : Application
 {
-    public App()
+    public App(ShellViewModel vm)
     {
         InitializeComponent();
 
         TheTheme.SetTheme();
 
         if (Config.Desktop)
-            MainPage = new DesktopShell();
+            MainPage = new DesktopShell(vm);
         else
-            MainPage = new MobileShell();
+            MainPage = new MobileShell(vm);
 
         Routing.RegisterRoute(nameof(DiscoverPage), typeof(DiscoverPage));
         Routing.RegisterRoute(nameof(ShowDetailPage), typeof(ShowDetailPage));

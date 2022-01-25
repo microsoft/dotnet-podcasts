@@ -2,11 +2,11 @@
 {
     public partial class DesktopShell
     {
-        public DesktopShell()
+        public DesktopShell(ShellViewModel vm)
         {
+            BindingContext = vm;
             InitializeComponent();
 
-            BindingContext = new ShellViewModel();
         }
     }
 }
