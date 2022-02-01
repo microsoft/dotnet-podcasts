@@ -11,9 +11,6 @@
              Shell.NavBarIsVisible="False"
              x:DataType="viewmodels:DiscoverViewModel"
              x:Class="Microsoft.NetConf2021.Maui.Pages.DiscoverPage">
-    <ContentPage.BindingContext>
-        <viewmodels:DiscoverViewModel />
-    </ContentPage.BindingContext>
     <ContentPage.Resources>
         <Style x:Key="ListTitleStyle"
                TargetType="Label"

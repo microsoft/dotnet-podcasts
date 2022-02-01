@@ -65,14 +65,14 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
             Episodes = show.Episodes.Where(ep=>ep.Title.Contains(TextToSearch, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
 
-        public ShowDetailViewModel()
+        public ShowDetailViewModel(ShowsService shows, PlayerService player, SubscriptionsService subs, ListenLaterService later)
         {
-            showsService = ServicesProvider.GetService<ShowsService>();
-            playerService = ServicesProvider.GetService<PlayerService>();
-            subscriptionsService = ServicesProvider.GetService<SubscriptionsService>();
-            listenLaterService = ServicesProvider.GetService<ListenLaterService>();
+            showsService = shows;
+            playerService = player;
+            subscriptionsService = subs;
+            listenLaterService = later;
 
-            MessagingCenter.Instance.Subscribe<string>(".NET Pods", "UnSubscribe",  async (sender) =>
+            MessagingCenter.Instance.Subscribe<string>(".NET Pods", "UnSubscribe", async (sender) =>
             {
                 await Show.InitializeAsync();
 
@@ -103,7 +103,7 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
                 return;
             }
 
-            var showVM = new ShowViewModel(show);
+            var showVM = new ShowViewModel(show, subscriptionsService);
             await showVM.InitializeAsync();
 
             Show = showVM;

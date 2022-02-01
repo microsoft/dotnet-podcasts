@@ -1,182 +1,179 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Hosting;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 
-namespace Microsoft.Maui.Essentials
+namespace Microsoft.NetConf2021.Maui.Services;
+
+public interface IEssentialsBuilder
 {
-    public interface IEssentialsBuilder
+    IEssentialsBuilder UseMapServiceToken(string token);
+
+    IEssentialsBuilder AddAppAction(AppAction appAction);
+
+    IEssentialsBuilder OnAppAction(Action<AppAction> action);
+
+    IEssentialsBuilder UseVersionTracking();
+}
+
+public static class EssentialsExtensions
+{
+    public static MauiAppBuilder ConfigureEssentials(this MauiAppBuilder builder, Action<IEssentialsBuilder> configureDelegate = null)
     {
-        IEssentialsBuilder UseMapServiceToken(string token);
+        if (configureDelegate != null)
+        {
+            builder.Services.AddSingleton<EssentialsRegistration>(new EssentialsRegistration(configureDelegate));
+        }
+        builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IMauiInitializeService, EssentialsInitializer>());
 
-        IEssentialsBuilder AddAppAction(AppAction appAction);
+        builder.ConfigureLifecycleEvents(life =>
+        {
+#if __ANDROID__
+            Platform.Init(MauiApplication.Current);
 
-        IEssentialsBuilder OnAppAction(Action<AppAction> action);
+            life.AddAndroid(android => android
+                .OnRequestPermissionsResult((activity, requestCode, permissions, grantResults) =>
+                {
+                    Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+                })
+                .OnNewIntent((activity, intent) =>
+                {
+                    Platform.OnNewIntent(intent);
+                })
+                .OnResume((activity) =>
+                {
+                    Platform.OnResume();
+                }));
+#elif __IOS__
+            life.AddiOS(ios => ios
+                .ContinueUserActivity((application, userActivity, completionHandler) =>
+                {
+                    return Platform.ContinueUserActivity(application, userActivity, completionHandler);
+                })
+                .OpenUrl((application, url, options) =>
+                {
+                    return Platform.OpenUrl(application, url, options);
+                })
+                .PerformActionForShortcutItem((application, shortcutItem, completionHandler) =>
+                {
+                    Platform.PerformActionForShortcutItem(application, shortcutItem, completionHandler);
+                }));
+#elif WINDOWS
+            life.AddWindows(windows => windows
+                .OnActivated((window, args) =>
+                {
+                    Platform.OnActivated(window, args);
+                })
+                .OnLaunched((application, args) =>
+                {
+                    Platform.OnLaunched(args);
+                })
+                .OnNativeMessage((app, args) =>
+                {
+                    app.ExtendsContentIntoTitleBar = false;
+                }));
+#endif
+        });
 
-        IEssentialsBuilder UseVersionTracking();
+        return builder;
     }
 
-    public static class EssentialsExtensions
+    public static IEssentialsBuilder AddAppAction(this IEssentialsBuilder essentials, string id, string title, string subtitle = null, string icon = null) =>
+        essentials.AddAppAction(new AppAction(id, title, subtitle, icon));
+
+    internal class EssentialsRegistration
     {
-        public static MauiAppBuilder ConfigureEssentials(this MauiAppBuilder builder, Action<IEssentialsBuilder> configureDelegate = null)
+        private readonly Action<IEssentialsBuilder> _registerEssentials;
+
+        public EssentialsRegistration(Action<IEssentialsBuilder> registerEssentials)
         {
-            if (configureDelegate != null)
-            {
-                builder.Services.AddSingleton<EssentialsRegistration>(new EssentialsRegistration(configureDelegate));
-            }
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IMauiInitializeService, EssentialsInitializer>());
-
-            builder.ConfigureLifecycleEvents(life =>
-            {
-#if __ANDROID__
-				Platform.Init(MauiApplication.Current);
-
-				life.AddAndroid(android => android
-					.OnRequestPermissionsResult((activity, requestCode, permissions, grantResults) =>
-					{
-						Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-					})
-					.OnNewIntent((activity, intent) =>
-					{
-						Platform.OnNewIntent(intent);
-					})
-					.OnResume((activity) =>
-					{
-						Platform.OnResume();
-					}));
-#elif __IOS__
-                life.AddiOS(ios => ios
-                    .ContinueUserActivity((application, userActivity, completionHandler) =>
-                    {
-                        return Platform.ContinueUserActivity(application, userActivity, completionHandler);
-                    })
-                    .OpenUrl((application, url, options) =>
-                    {
-                        return Platform.OpenUrl(application, url, options);
-                    })
-                    .PerformActionForShortcutItem((application, shortcutItem, completionHandler) =>
-                    {
-                        Platform.PerformActionForShortcutItem(application, shortcutItem, completionHandler);
-                    }));
-#elif WINDOWS
-				life.AddWindows(windows => windows
-					.OnActivated((window, args) =>
-					{
-						Platform.OnActivated(window, args);
-					})
-					.OnLaunched((application, args) =>
-					{
-						Platform.OnLaunched(args);
-					}));
-#endif
-            });
-
-            return builder;
+            _registerEssentials = registerEssentials;
         }
 
-        public static IEssentialsBuilder AddAppAction(this IEssentialsBuilder essentials, string id, string title, string subtitle = null, string icon = null) =>
-            essentials.AddAppAction(new AppAction(id, title, subtitle, icon));
-
-        internal class EssentialsRegistration
+        internal void RegisterEssentialsOptions(IEssentialsBuilder essentials)
         {
-            private readonly Action<IEssentialsBuilder> _registerEssentials;
+            _registerEssentials(essentials);
+        }
+    }
 
-            public EssentialsRegistration(Action<IEssentialsBuilder> registerEssentials)
-            {
-                _registerEssentials = registerEssentials;
-            }
+    class EssentialsInitializer : IMauiInitializeService
+    {
+        private readonly IEnumerable<EssentialsRegistration> _essentialsRegistrations;
+        private EssentialsBuilder _essentialsBuilder;
 
-            internal void RegisterEssentialsOptions(IEssentialsBuilder essentials)
-            {
-                _registerEssentials(essentials);
-            }
+        public EssentialsInitializer(IEnumerable<EssentialsRegistration> essentialsRegistrations)
+        {
+            _essentialsRegistrations = essentialsRegistrations;
         }
 
-        class EssentialsInitializer : IMauiInitializeService
+        public async void Initialize(IServiceProvider services)
         {
-            private readonly IEnumerable<EssentialsRegistration> _essentialsRegistrations;
-            private EssentialsBuilder _essentialsBuilder;
-
-            public EssentialsInitializer(IEnumerable<EssentialsRegistration> essentialsRegistrations)
+            _essentialsBuilder = new EssentialsBuilder();
+            if (_essentialsRegistrations != null)
             {
-                _essentialsRegistrations = essentialsRegistrations;
-            }
-
-            public async void Initialize(IServiceProvider services)
-            {
-                _essentialsBuilder = new EssentialsBuilder();
-                if (_essentialsRegistrations != null)
+                foreach (var essentialsRegistration in _essentialsRegistrations)
                 {
-                    foreach (var essentialsRegistration in _essentialsRegistrations)
-                    {
-                        essentialsRegistration.RegisterEssentialsOptions(_essentialsBuilder);
-                    }
+                    essentialsRegistration.RegisterEssentialsOptions(_essentialsBuilder);
                 }
+            }
 
 #if WINDOWS
 				Platform.MapServiceToken = _essentialsBuilder.MapServiceToken;
 #endif
 
-                AppActions.OnAppAction += HandleOnAppAction;
+            AppActions.OnAppAction += HandleOnAppAction;
 
-                try
-                {
-                    await AppActions.SetAsync(_essentialsBuilder.AppActions);
-                }
-                catch (FeatureNotSupportedException ex)
-                {
-                    services.GetService<ILoggerFactory>()?
-                        .CreateLogger<IEssentialsBuilder>()?
-                        .LogError(ex, "App Actions are not supported on this platform.");
-                }
-
-                if (_essentialsBuilder.TrackVersions)
-                    VersionTracking.Track();
-            }
-
-            void HandleOnAppAction(object sender, AppActionEventArgs e)
+            try
             {
-                _essentialsBuilder.AppActionHandlers?.Invoke(e.AppAction);
+                await AppActions.SetAsync(_essentialsBuilder.AppActions);
             }
+            catch (FeatureNotSupportedException ex)
+            {
+                services.GetService<ILoggerFactory>()?
+                    .CreateLogger<IEssentialsBuilder>()?
+                    .LogError(ex, "App Actions are not supported on this platform.");
+            }
+
+            if (_essentialsBuilder.TrackVersions)
+                VersionTracking.Track();
         }
 
-        class EssentialsBuilder : IEssentialsBuilder
+        void HandleOnAppAction(object sender, AppActionEventArgs e)
         {
-            internal readonly List<AppAction> AppActions = new List<AppAction>();
-            internal Action<AppAction> AppActionHandlers;
-            internal bool TrackVersions;
+            _essentialsBuilder.AppActionHandlers?.Invoke(e.AppAction);
+        }
+    }
+
+    class EssentialsBuilder : IEssentialsBuilder
+    {
+        internal readonly List<AppAction> AppActions = new List<AppAction>();
+        internal Action<AppAction> AppActionHandlers;
+        internal bool TrackVersions;
 
 #pragma warning disable CS0414 // Remove unread private members
-            internal string MapServiceToken;
+        internal string MapServiceToken;
 #pragma warning restore CS0414 // Remove unread private members
 
-            public IEssentialsBuilder UseMapServiceToken(string token)
-            {
-                MapServiceToken = token;
-                return this;
-            }
+        public IEssentialsBuilder UseMapServiceToken(string token)
+        {
+            MapServiceToken = token;
+            return this;
+        }
 
-            public IEssentialsBuilder AddAppAction(AppAction appAction)
-            {
-                AppActions.Add(appAction);
-                return this;
-            }
+        public IEssentialsBuilder AddAppAction(AppAction appAction)
+        {
+            AppActions.Add(appAction);
+            return this;
+        }
 
-            public IEssentialsBuilder OnAppAction(Action<AppAction> action)
-            {
-                AppActionHandlers += action;
-                return this;
-            }
+        public IEssentialsBuilder OnAppAction(Action<AppAction> action)
+        {
+            AppActionHandlers += action;
+            return this;
+        }
 
-            public IEssentialsBuilder UseVersionTracking()
-            {
-                TrackVersions = true;
-                return this;
-            }
+        public IEssentialsBuilder UseVersionTracking()
+        {
+            TrackVersions = true;
+            return this;
         }
     }
 }

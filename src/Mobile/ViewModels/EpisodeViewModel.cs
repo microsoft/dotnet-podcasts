@@ -23,11 +23,11 @@ public class EpisodeViewModel : BaseViewModel
 
     public ICommand PlayEpisodeCommand => new AsyncCommand(PlayEpisodeCommandExecute);
 
-    public EpisodeViewModel(Episode episode, Show show)
+    public EpisodeViewModel(Episode episode, Show show, ListenLaterService listen, PlayerService player)
     {
-        listenLaterService = ServicesProvider.GetService<ListenLaterService>();
-        playerService = ServicesProvider.GetService<PlayerService>();
-        
+        listenLaterService = listen;
+        playerService = player;
+
         Episode = episode;
         Show = show;
     }

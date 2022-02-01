@@ -5,10 +5,6 @@
              Style="{StaticResource DetailPageStyle}"
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              x:Class="Microsoft.NetConf2021.Maui.Pages.CategoriesPage">
-    <ContentPage.BindingContext>
-        <viewmodels:CategoriesViewModel />
-    </ContentPage.BindingContext>
-
     <CollectionView ItemsSource="{Binding Categories}"
                     Margin="10,0">
         <CollectionView.Header>

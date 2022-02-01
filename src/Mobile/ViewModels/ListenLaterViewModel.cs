@@ -6,6 +6,7 @@ public class ListenLaterViewModel : BaseViewModel
     public bool HasNoData => !HasData;
 
     private readonly ListenLaterService listenLaterService;
+    private readonly PlayerService playerService;
 
     private ObservableCollection<EpisodeViewModel> episodes;
 
@@ -17,9 +18,10 @@ public class ListenLaterViewModel : BaseViewModel
 
     public ICommand RemoveCommand => new MvvmHelpers.Commands.Command<EpisodeViewModel>(RemoveCommandExecute);
 
-    public ListenLaterViewModel()
+    public ListenLaterViewModel(ListenLaterService listen, PlayerService player)
     {
-        listenLaterService = ServicesProvider.GetService<ListenLaterService>();
+        listenLaterService = listen;
+        playerService = player;
         Episodes = new ObservableCollection<EpisodeViewModel>();
     }
 
@@ -29,7 +31,7 @@ public class ListenLaterViewModel : BaseViewModel
         Episodes.Clear();
         foreach (var episode in episodes)
         {
-            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2);
+            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, listenLaterService, playerService);
             await episodeVM.InitializeAsync();
 
             Episodes.Add(episodeVM);

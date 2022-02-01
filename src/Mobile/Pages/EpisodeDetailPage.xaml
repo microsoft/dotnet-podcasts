@@ -8,10 +8,6 @@
              Title="{Binding Episode.Title}"
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls">
-    <ContentPage.BindingContext>
-        <viewmodels:EpisodeDetailViewModel />
-    </ContentPage.BindingContext>
-
     <Grid>
         <ScrollView>
             <VerticalStackLayout Padding="16"

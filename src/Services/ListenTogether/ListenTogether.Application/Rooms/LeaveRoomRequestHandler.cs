@@ -40,7 +40,7 @@ public class LeaveRoomRequestHandler : IRequestHandler<LeaveRoomRequest, Room>
         var requestConnectionId = request.ConnectionId;
         room.RemoveUser(requestConnectionId);
 
-        if (room.Empty())
+        if (room.IsEmpty())
         {
             _dbContext.Rooms.Remove(room);
         }

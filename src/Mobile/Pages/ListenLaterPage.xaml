@@ -7,9 +7,6 @@
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
              Style="{StaticResource MainSectionStyle}"
              x:Class="Microsoft.NetConf2021.Maui.Pages.ListenLaterPage">
-    <ContentPage.BindingContext>
-        <viewmodels:ListenLaterViewModel />
-    </ContentPage.BindingContext>
     <ContentPage.Content>
         <Grid>
             <CollectionView ItemsSource="{Binding Episodes}"

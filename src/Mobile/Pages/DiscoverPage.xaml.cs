@@ -4,9 +4,10 @@ public partial class DiscoverPage : ContentPage
 {
     private DiscoverViewModel viewModel => BindingContext as DiscoverViewModel;
 
-    public DiscoverPage()
+    public DiscoverPage(DiscoverViewModel vm)
     {
         InitializeComponent();
+        BindingContext = vm;    
     }
 
     protected override async void OnAppearing()

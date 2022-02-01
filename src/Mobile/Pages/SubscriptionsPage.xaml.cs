@@ -3,9 +3,10 @@
     public partial class SubscriptionsPage: ContentPage
     {
         SubscriptionsViewModel viewModel => BindingContext as SubscriptionsViewModel;
-        public SubscriptionsPage()
+        public SubscriptionsPage(SubscriptionsViewModel vm)
         {
             InitializeComponent();
+            BindingContext = vm;
         }
 
         protected override async void OnAppearing()

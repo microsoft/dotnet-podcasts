@@ -1,13 +1,9 @@
-﻿using Microsoft.Maui.Controls;
-using System;
+﻿namespace NetPodsMauiBlazor;
 
-namespace NetPodsMauiBlazor
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    public MainPage()
     {
-        public MainPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
