@@ -31,10 +31,10 @@ public class MainActivity : MauiAppCompatActivity
         instance = this;
         NotificationHelper.CreateNotificationChannel(ApplicationContext);
         if (mediaPlayerServiceConnection == null)
-            InitilizeMedia();
+            InitializeMedia();
     }
 
-    private void InitilizeMedia()
+    private void InitializeMedia()
     {
         mediaPlayerServiceIntent = new Intent(ApplicationContext, typeof(MediaPlayerService));
         mediaPlayerServiceConnection = new MediaPlayerServiceConnection(this);
