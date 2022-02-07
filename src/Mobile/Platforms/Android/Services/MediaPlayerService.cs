@@ -12,7 +12,7 @@ using Microsoft.Maui.Platform;
 
 namespace Microsoft.NetConf2021.Maui.Platforms.Android.Services;
 
-[Service]
+[Service(Exported = true)]
 [IntentFilter(new[] { ActionPlay, ActionPause, ActionStop, ActionTogglePlayback, ActionNext, ActionPrevious })]
 public class MediaPlayerService : Service, 
    AudioManager.IOnAudioFocusChangeListener,
@@ -136,7 +136,7 @@ public class MediaPlayerService : Service,
                 remoteComponentName = new ComponentName(PackageName, new RemoteControlBroadcastReceiver().ComponentName);
 
                 mediaSession = new MediaSession(ApplicationContext, "MauiStreamingAudio"/*, remoteComponentName*/); //TODO
-                mediaSession.SetSessionActivity(PendingIntent.GetActivity(ApplicationContext, 0, nIntent, 0));
+                mediaSession.SetSessionActivity(PendingIntent.GetActivity(ApplicationContext, 0, nIntent, PendingIntentFlags.Mutable));
                 mediaController = new MediaController(ApplicationContext, mediaSession.SessionToken);
             }
 
