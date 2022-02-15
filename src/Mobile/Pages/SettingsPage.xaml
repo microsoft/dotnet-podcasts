@@ -13,61 +13,61 @@
         <Label Text="{x:Static res:AppResource.Download_Settings}"
                Margin="0,0,0,20"
                Style="{StaticResource H6LabelStyle}"
-               GridLayout.ColumnSpan="2"/>
+               Grid.ColumnSpan="2"/>
         <Switch
-            GridLayout.Row="1"
+            Grid.Row="1"
             HorizontalOptions="Center"/>
         <Label Text="{x:Static res:AppResource.Autodownload_Using_Data}" 
-               GridLayout.Column="1"
-               GridLayout.Row="1"
+               Grid.Column="1"
+               Grid.Row="1"
                Style="{StaticResource BodySLabelStyle}"
                VerticalOptions="Center"/>
         <Label Text="{x:Static res:AppResource.Autodownload_Using_Data_Subtitle}" 
-               GridLayout.Column="1" 
-               GridLayout.Row="2" 
+               Grid.Column="1" 
+               Grid.Row="2" 
                Style="{StaticResource BodySLabelStyle}"/>
         <Switch HorizontalOptions="Center"
-                GridLayout.Row="3"
+                Grid.Row="3"
                 Margin="0,24,0,0"/>
         <Label Text="{x:Static res:AppResource.Delete_Played_Episodes}" 
-               GridLayout.Column="1"
-               GridLayout.Row="3" 
+               Grid.Column="1"
+               Grid.Row="3" 
                Margin="0,24,0,0"
                VerticalOptions="Center"
                Style="{StaticResource BodySLabelStyle}"/>
         <Switch HorizontalOptions="Center"
-                GridLayout.Row="4"
+                Grid.Row="4"
                 IsToggled="{Binding IsDarkModeEnabled}"
                 Margin="0,24,0,0"/>
         <Label Text="{x:Static res:AppResource.Dark_Mode}" 
-               GridLayout.Column="1"
-               GridLayout.Row="4" 
+               Grid.Column="1"
+               Grid.Row="4" 
                Margin="0,24,0,0"
                VerticalOptions="Center"
                Style="{StaticResource BodySLabelStyle}"/>
         <Switch HorizontalOptions="Center"
-                GridLayout.Row="5"
+                Grid.Row="5"
                 IsVisible="{OnIdiom Default=false,Phone=true}"
                 IsToggled="{Binding IsWifiOnlyEnabled}"
                 Margin="0,24,0,0"/>
         <Label Text="{x:Static res:AppResource.Only_Wifi}" 
-               GridLayout.Column="1"
-               GridLayout.Row="5" 
+               Grid.Column="1"
+               Grid.Row="5" 
                Margin="0,24,0,0"
                IsVisible="{OnIdiom Default=false,Phone=true}"
                VerticalOptions="Center"
                Style="{StaticResource BodySLabelStyle}"/>
         <Label
-               GridLayout.ColumnSpan="2"
-               GridLayout.Row="6" 
+               Grid.ColumnSpan="2"
+               Grid.Row="6" 
                Margin="0,48,0,0"
                VerticalOptions="Center"
                Text="{x:Static res:AppResource.Settings_Info}"
                TextColor="{AppThemeBinding Light={StaticResource Dark},Dark={StaticResource Grey1}}"
                Style="{StaticResource BodySLabelStyle}"/>
         <Label
-               GridLayout.ColumnSpan="2"
-               GridLayout.Row="7"
+               Grid.ColumnSpan="2"
+               Grid.Row="7"
                Margin="0,11,0,0"
                VerticalOptions="Center"
                Style="{StaticResource BodySLabelStyle}">
@@ -80,8 +80,8 @@
             </Label.FormattedText>
         </Label>
         <Label Text="Version 10.16.541_1699" 
-               GridLayout.ColumnSpan="2"
-               GridLayout.Row="7"
+               Grid.ColumnSpan="2"
+               Grid.Row="7"
                Margin="0,11,0,0"
                VerticalOptions="Center"
                Style="{StaticResource BodySLabelStyle}"/>

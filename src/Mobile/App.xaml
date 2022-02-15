@@ -2,8 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
              x:Class="Microsoft.NetConf2021.Maui.App"
-             xmlns:converters="clr-namespace:Microsoft.NetConf2021.Maui.Converters"
-             windows:Application.ImageDirectory="Assets">
+             xmlns:converters="clr-namespace:Microsoft.NetConf2021.Maui.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary Source="Resources/Styles/DefaultTheme.xaml"/>

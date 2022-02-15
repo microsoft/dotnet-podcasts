@@ -20,7 +20,7 @@
                 <Grid ColumnDefinitions="*,auto"
                       RowDefinitions="auto"
                       Padding="8">
-                    <VerticalStackLayout GridLayout.Column="0"
+                    <VerticalStackLayout Grid.Column="0"
                                          VerticalOptions="Start">
                         <Label x:Name="epiosdeTitle"
                                FontSize="Medium"
@@ -35,7 +35,7 @@
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
                            HeightRequest="38"
-                           GridLayout.Column="1"
+                           Grid.Column="1"
                            Clicked="PlayGesture_Tapped"
                            Aspect="AspectFill">
                     </ImageButton>
@@ -53,20 +53,20 @@
                                WidthRequest="56"
                                HeightRequest="56"
                                HorizontalOptions="Center"
-                               GridLayout.RowSpan="2" />
-                        <Label GridLayout.Column="1"
+                               Grid.RowSpan="2" />
+                        <Label Grid.Column="1"
                                Text="{Binding Text, Source={x:Reference epiosdeTitle}}"
                                FontSize="Medium"
                                TextColor="White"
                                MaxLines="1" />
                         <Label Text="{Binding Text, Source={x:Reference authorText}}"
-                               GridLayout.Row="1"
-                               GridLayout.Column="1"
+                               Grid.Row="1"
+                               Grid.Column="1"
                                FontSize="Small"
                                TextColor="White" />
                     </Grid>
 
-                    <Grid GridLayout.Column="1"
+                    <Grid Grid.Column="1"
                           HorizontalOptions="Center"
                           RowDefinitions="auto,auto"
                           VerticalOptions="Center">
@@ -81,7 +81,7 @@
                             </Image.GestureRecognizers>
                         </Image>
 
-                        <Label GridLayout.Row="1"
+                        <Label Grid.Row="1"
                                x:Name="duration"
                                HorizontalOptions="Center"
                                FontSize="Small"
