@@ -15,7 +15,7 @@
                                         Margin="5"
                                         ShowSearchCategories="False"
                                         IsVisible="{OnIdiom Default=true, Phone=false}"
-                                        GridLayout.Row="0"
+                                        Grid.Row="0"
                                         VerticalOptions="Start" />
 
                 <Label Text="{Binding Category.Genre}"

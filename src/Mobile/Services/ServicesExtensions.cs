@@ -15,7 +15,6 @@ public static class ServicesExtensions
         builder.Services.AddSingleton<ListenLaterService>();
 #if WINDOWS
         builder.Services.TryAddSingleton<IAudioService, Platforms.Windows.AudioService>();
-        builder.Services.TryAddTransient<IShareService, Platforms.Windows.ShareService>();
 #elif ANDROID
         builder.Services.TryAddSingleton<IAudioService, Platforms.Android.AudioService>();
 #elif MACCATALYST

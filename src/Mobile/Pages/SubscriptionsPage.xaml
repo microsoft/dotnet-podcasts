@@ -42,7 +42,7 @@
                                    VerticalOptions="Center"/>
                 <StackLayout HorizontalOptions="CenterAndExpand"
                                          VerticalOptions="CenterAndExpand"
-                                         GridLayout.Row="1"
+                                         Grid.Row="1"
                                          Spacing="20">
                     <Label Text="You haven't subscribed to any channel yet."
                             Style="{StaticResource BodySLabelStyle}"

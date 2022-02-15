@@ -42,7 +42,7 @@
                                        Text="{Binding Episode.Duration }"
                                        TextColor="{StaticResource Grey7}" />
                             </StackLayout>
-                            <StackLayout GridLayout.Column="1">
+                            <StackLayout Grid.Column="1">
                                 <StackLayout Orientation="Horizontal"
                                              HorizontalOptions="StartAndExpand"
                                              Spacing="5">
@@ -54,18 +54,18 @@
                                     <Grid HorizontalOptions="FillAndExpand"
                                           RowDefinitions="auto,auto,auto">
                                         <Label Text="{Binding Episode.Title}"
-                                               GridLayout.Row="0"
+                                               Grid.Row="0"
                                                HorizontalOptions="FillAndExpand"
                                                Style="{StaticResource LinkLLabelStyle}" />
                                         <Label Text="{Binding Show.Title}"
                                                HorizontalOptions="FillAndExpand"
                                                Style="{OnIdiom Desktop={StaticResource H4LabelStyle}, Phone={StaticResource H6LabelStyle}}"
-                                               GridLayout.Row="1" />
+                                               Grid.Row="1" />
                                         <Label Text="{Binding Episode.Published, StringFormat='{0:MMM dd, yyyy}'}"
                                                HorizontalOptions="FillAndExpand"
                                                Style="{StaticResource BodySLabelStyle}"
                                                TextColor="{StaticResource Grey7}"
-                                               GridLayout.Row="2" />
+                                               Grid.Row="2" />
                                     </Grid>
                                 </StackLayout>
                                 <Label Text="{Binding Episode.Description}"
@@ -77,7 +77,7 @@
                             </StackLayout>
 
                             <Image Aspect="AspectFit"
-                                   GridLayout.Column="2"
+                                   Grid.Column="2"
                                    VerticalOptions="Center"
                                    HeightRequest="24"
                                    Source="listenlaterfilled.png"
@@ -91,9 +91,9 @@
                                 </Image.GestureRecognizers>
                             </Image>
                             <StackLayout VerticalOptions="End"
-                                         GridLayout.Row="1"
+                                         Grid.Row="1"
                                          Margin="0,5"
-                                         GridLayout.ColumnSpan="3"
+                                         Grid.ColumnSpan="3"
                                          BackgroundColor="{StaticResource Grey4}">
                                 <BoxView HeightRequest="1" />
                             </StackLayout>
@@ -111,7 +111,7 @@
                        VerticalOptions="Center" />
                 <StackLayout HorizontalOptions="CenterAndExpand"
                              VerticalOptions="CenterAndExpand"
-                             GridLayout.Row="1"
+                             Grid.Row="1"
                              Spacing="20">
                     <Label Text="You don't have any episodes saved yet."
                            Style="{StaticResource BodySLabelStyle}"
