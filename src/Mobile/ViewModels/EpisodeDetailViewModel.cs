@@ -116,11 +116,7 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
                 Title = "Share the episode uri"
             };
 
-            #if WINDOWS
-            return ServicesProvider.GetService<IShareService>().RequestAsync(request);
-#else
             return Share.RequestAsync(request);
-#endif
         }
     }
 }
