@@ -2,11 +2,15 @@
 
 public class WifiOptionsService
 {
+#if __MACCATALYST__
+    Platforms.MacCatalyst.ConnectivityService connectivity;
+    public WifiOptionsService(Platforms.MacCatalyst.ConnectivityService connectivity) => this.connectivity = connectivity;
+#endif
+
     public async Task<bool> HasWifiOrCanPlayWithOutWifiAsync()
     {
         
 #if __MACCATALYST__
-         var connectivity = ServicesProvider.GetService<Platforms.MacCatalyst.ConnectivityService>();
          return await connectivity.IsConnected();
 #else
    		if (Config.Desktop)

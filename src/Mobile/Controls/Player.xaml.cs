@@ -7,7 +7,7 @@ public partial class Player : ContentView
     public Player()
     {
         InitializeComponent();
-        this.playerService = ServicesProvider.GetService<PlayerService>();
+        this.playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
         this.IsVisible = false;
     }
 
