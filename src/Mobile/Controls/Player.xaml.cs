@@ -14,7 +14,11 @@ public partial class Player : ContentView
     {
         base.OnHandlerChanged();
 
-        this.playerService ??= this.Handler.MauiContext.Services.GetService<PlayerService>();
+        if (playerService == null)
+        {
+            this.playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
+            InitPlayer();
+        }
     }
 
     private async void PlayGesture_Tapped(object sender, EventArgs e)
@@ -24,6 +28,14 @@ public partial class Player : ContentView
 
     internal void OnAppearing()
     {
+        InitPlayer();  
+    }
+
+    void InitPlayer()
+    {
+        if (playerService == null)
+            return;
+
         this.playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
         IsVisible = playerService.CurrentEpisode != null;
         if (this.playerService.CurrentEpisode != null)
