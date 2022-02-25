@@ -8,10 +8,12 @@ namespace Microsoft.NetConf2021.Maui.Services;
 public class ShowsService
 {
     private readonly HttpClient httpClient;
+    private readonly ListenLaterService listenLaterService;
 
-    public ShowsService(HttpClient httpClient)
+    public ShowsService(HttpClient httpClient, ListenLaterService listenLaterService)
     {
         this.httpClient = httpClient;
+        this.listenLaterService = listenLaterService;
     }
 
     public async Task<IEnumerable<Category>> GetAllCategories()
@@ -68,7 +70,7 @@ public class ShowsService
 
     private Show GetShow(ShowResponse response)
     {
-        return new Show(response);
+        return new Show(response, listenLaterService);
     }
 
     private async Task<T> TryGetAsync<T>(string path)

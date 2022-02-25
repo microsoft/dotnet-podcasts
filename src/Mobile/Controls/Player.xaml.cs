@@ -2,13 +2,19 @@
 
 public partial class Player : ContentView
 {   
-    private readonly PlayerService playerService;
+    private PlayerService playerService;
     
     public Player()
     {
         InitializeComponent();
-        this.playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
         this.IsVisible = false;
+    }
+
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+
+        this.playerService ??= this.Handler.MauiContext.Services.GetService<PlayerService>();
     }
 
     private async void PlayGesture_Tapped(object sender, EventArgs e)

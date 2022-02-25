@@ -14,7 +14,7 @@ public class Show : ObservableObject
         Image = new Uri(playerState.Episode.Show.Image);
     }
 
-    public Show(ShowResponse response)
+    public Show(ShowResponse response, ListenLaterService listenLaterService)
     {
         Id = response.Id;
         Title = response.Title;
@@ -22,7 +22,7 @@ public class Show : ObservableObject
         Description = response.Description;
         Image = response.Image;
         Updated = response.Updated;
-        Episodes = response.Episodes?.Select(resp => new Episode(resp));
+        Episodes = response.Episodes?.Select(resp => new Episode(resp, listenLaterService));
         Categories = response.Categories?.Select(resp => new Category(resp));
     }
 
