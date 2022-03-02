@@ -18,6 +18,8 @@ services:
       dockerfile: src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile
     depends_on:
       - podcast.db
+      - podcast.api
+      - storage
 
   podcast.db:
     image: mcr.microsoft.com/mssql/server:2019-latest 

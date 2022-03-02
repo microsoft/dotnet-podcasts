@@ -11,8 +11,8 @@ var host = Host.CreateDefaultBuilder(args)
                     hostContext.Configuration.GetConnectionString("PodcastDb"),
                     builder =>
                     {
-                        builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-                        builder.CommandTimeout(10);
+                        builder.EnableRetryOnFailure(10, TimeSpan.FromSeconds(60), null);
+                        builder.CommandTimeout(30);
                     }
                 );
             })
