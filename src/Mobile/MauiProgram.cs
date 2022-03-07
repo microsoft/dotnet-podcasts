@@ -13,6 +13,7 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .ConfigureEssentials()
             .ConfigureServices()
+            .ConfigurePages()
             .ConfigureViewModels()
             .ConfigureFonts(fonts =>
             {
