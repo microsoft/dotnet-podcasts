@@ -9,7 +9,7 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .RegisterBlazorMauiWebView()
+
             .UseMauiApp<App>()
             .ConfigureEssentials()
             .ConfigureServices()
@@ -21,6 +21,8 @@ public static class MauiProgram
                 fonts.AddFont("Segoe-Ui-Semibold.ttf", "SegoeUiSemibold");
                 fonts.AddFont("Segoe-Ui-Semilight.ttf", "SegoeUiSemilight");
             });
+
+        builder.Services.AddMauiBlazorWebView();
 
         Barrel.ApplicationId = "dotnetpodcasts";
 
