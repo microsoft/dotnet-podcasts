@@ -26,6 +26,16 @@ public static class MauiProgram
 
         Barrel.ApplicationId = "dotnetpodcasts";
 
+        builder.Services.AddTransient<CategoriesPage>();
+        builder.Services.AddTransient<CategoryPage>();
+        builder.Services.AddTransient<DiscoverPage>();
+        builder.Services.AddTransient<EpisodeDetailPage>();
+        builder.Services.AddTransient<ListenLaterPage>();
+        builder.Services.AddTransient<ListenTogetherPage>();
+        builder.Services.AddTransient<SettingsPage>();
+        builder.Services.AddTransient<ShowDetailPage>();
+        builder.Services.AddTransient<SubscriptionsPage>();
+
         return builder.Build();
     }
 }
