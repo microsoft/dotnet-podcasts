@@ -8,7 +8,6 @@
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
-		<MauiVersion>$(MauiV)</MauiVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!-- Display name -->
 		<ApplicationTitle>.NET Pods Blazor</ApplicationTitle>
