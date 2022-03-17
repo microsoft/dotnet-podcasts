@@ -55,7 +55,7 @@
 
     <Style x:Key="DetailPageStyle" BasedOn="{StaticResource MainSectionStyle}" TargetType="Page">
         <Setter Property="Shell.NavBarIsVisible"
-                    Value="{OnPlatform Android=true, iOS=true, UWP=false}" />
+                    Value="{OnPlatform Android=true, iOS=true, UWP=false, macOS=true}" />
     </Style>
 
     <Style TargetType="Page"

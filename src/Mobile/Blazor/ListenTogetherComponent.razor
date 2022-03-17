@@ -100,7 +100,7 @@
 
 	private async Task UpdateWebThemeAsync()
 	{
-		var darkModeIsActive = Settings.Theme == AppTheme.Dark;
+		var darkModeIsActive = Settings.Theme == OSAppTheme.Dark;
 		await ThemeInterop.SetTheme(darkModeIsActive ? Theme.Dark : Theme.Light);
 
 	}

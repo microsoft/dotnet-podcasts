@@ -2,11 +2,11 @@
 
 public static class Settings
 {
-    const AppTheme theme = AppTheme.Light;
+    const OSAppTheme theme = OSAppTheme.Light;
 
-    public static AppTheme Theme
+    public static OSAppTheme Theme
     {
-        get => Enum.Parse<AppTheme>(Preferences.Get(nameof(Theme), Enum.GetName(theme)));
+        get => Enum.Parse<OSAppTheme>(Preferences.Get(nameof(Theme), Enum.GetName(theme)));
         set => Preferences.Set(nameof(Theme), value.ToString());
     }
     

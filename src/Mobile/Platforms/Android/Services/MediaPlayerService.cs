@@ -302,9 +302,10 @@ public class MediaPlayerService : Service,
     {
         try
         {
-            if (true)
+            if (NativeVersion.IsAtLeast(21))
             {
                 MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+
                 await mediaPlayer.SetDataSourceAsync(ApplicationContext, AndroidNet.Uri.Parse(AudioUrl));
 
                 await metaRetriever.SetDataSourceAsync(AudioUrl, new Dictionary<string, string>());

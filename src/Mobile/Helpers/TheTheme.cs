@@ -7,11 +7,11 @@ public static class TheTheme
         switch (Settings.Theme)
         {
             default:
-            case AppTheme.Light:
-                App.Current.UserAppTheme = AppTheme.Light;
+            case OSAppTheme.Light:
+                App.Current.UserAppTheme = OSAppTheme.Light;
                 break;
-            case AppTheme.Dark:
-                App.Current.UserAppTheme = AppTheme.Dark;
+            case OSAppTheme.Dark:
+                App.Current.UserAppTheme = OSAppTheme.Dark;
                 break;
 
         }

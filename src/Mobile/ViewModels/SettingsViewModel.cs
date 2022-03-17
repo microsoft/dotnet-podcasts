@@ -33,15 +33,15 @@ public class SettingsViewModel : BaseViewModel
 
     public SettingsViewModel()
     {
-        isDarkModeEnabled = Settings.Theme == AppTheme.Dark;
+        isDarkModeEnabled = Settings.Theme == OSAppTheme.Dark;
         isWifiOnlyEnabled = Settings.IsWifiOnlyEnabled;
     }
 
     private void ChangeUserAppTheme(bool activateDarkMode)
     {
         Settings.Theme = activateDarkMode 
-            ? AppTheme.Dark
-            : AppTheme.Light;
+            ? OSAppTheme.Dark
+            : OSAppTheme.Light;
 
         TheTheme.SetTheme();
     }
