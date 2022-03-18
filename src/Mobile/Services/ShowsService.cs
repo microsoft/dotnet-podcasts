@@ -7,12 +7,11 @@ namespace Microsoft.NetConf2021.Maui.Services;
 
 public class ShowsService
 {
-    private readonly HttpClient httpClient;
+    private readonly static HttpClient s_httpClient = new HttpClient() { BaseAddress = new Uri(Config.APIUrl) };
     private readonly ListenLaterService listenLaterService;
 
-    public ShowsService(HttpClient httpClient, ListenLaterService listenLaterService)
+    public ShowsService(ListenLaterService listenLaterService)
     {
-        this.httpClient = httpClient;
         this.listenLaterService = listenLaterService;
     }
 
@@ -89,7 +88,7 @@ public class ShowsService
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                var response = await httpClient.GetAsync(path);
+                var response = await s_httpClient.GetAsync(path);
                 if (response.IsSuccessStatusCode)
                 {
                     responseData = await response.Content.ReadFromJsonAsync<T>();

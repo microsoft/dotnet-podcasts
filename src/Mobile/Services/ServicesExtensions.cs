@@ -8,10 +8,7 @@ public static class ServicesExtensions
     {
         builder.Services.AddBlazorWebView();
         builder.Services.AddSingleton<SubscriptionsService>();
-        builder.Services.AddHttpClient<ShowsService>(client => 
-        {
-            client.BaseAddress = new Uri(Config.APIUrl);
-        });
+        builder.Services.AddSingleton<ShowsService>();
         builder.Services.AddSingleton<ListenLaterService>();
 #if WINDOWS
         builder.Services.TryAddSingleton<IAudioService, Platforms.Windows.AudioService>();
