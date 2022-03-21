@@ -10,9 +10,9 @@ public class ShowsService
     private readonly HttpClient httpClient;
     private readonly ListenLaterService listenLaterService;
 
-    public ShowsService(HttpClient httpClient, ListenLaterService listenLaterService)
+    public ShowsService(ListenLaterService listenLaterService)
     {
-        this.httpClient = httpClient;
+        this.httpClient = new HttpClient() { BaseAddress = new Uri(Config.APIUrl) };
         this.listenLaterService = listenLaterService;
     }
 
