@@ -1,0 +1,27 @@
+name: Podcast Mobile CI
+
+on:
+  push:
+    branches: [ main, maui/perf ]
+  pull_request:
+    branches: [ main, maui/perf ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-11
+
+    steps:
+      - name: install .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+
+      - name: install MAUI workload
+        run: dotnet workload install maui
+
+      - name: build Microsoft.NetConf2021.Maui.csproj
+        run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj
