@@ -1,0 +1,40 @@
+name: Podcast Mobile CI
+
+on:
+  push:
+    branches:
+      - main
+      - maui/perf
+  pull_request:
+    branches:
+      - main
+      - maui/perf
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-mobile:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+
+      - name: install MAUI workload
+        run: dotnet workload install maui
+
+      - name: build Microsoft.NetConf2021.Maui.csproj
+        run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
+
+      - name: archive logs
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: '*.binlog'
