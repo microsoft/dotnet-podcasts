@@ -25,6 +25,7 @@ public static class MauiProgram
 
         Barrel.ApplicationId = "dotnetpodcasts";
 
+        builder.Services.AddMauiBlazorWebView();
         builder.Services.AddTransient<CategoriesPage>();
         builder.Services.AddTransient<CategoryPage>();
         builder.Services.AddTransient<DiscoverPage>();
