@@ -4,13 +4,13 @@ on:
   push:
     branches: 
       - main
-      - 'maui/perf'
+      - maui/perf
     paths:
       - 'src/Mobile/**'
   pull_request:
     branches:
       - main
-      - 'maui/perf'
+      - maui/perf
     paths:
       - 'src/Mobile/**'
 
