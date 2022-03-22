@@ -302,7 +302,7 @@ public class MediaPlayerService : Service,
     {
         try
         {
-            if (NativeVersion.IsAtLeast(21))
+            if (OperatingSystem.IsAndroidVersionAtLeast(21))
             {
                 MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
 
