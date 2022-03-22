@@ -27,7 +27,11 @@ jobs:
           include-prerelease: true
 
       - name: install MAUI workload
-        run: dotnet workload install maui
+        shell: pwsh
+        run: |
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/main/NuGet.config -OutFile NuGet.config
+          dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/main.json --configfile NuGet.config
 
       - name: build Microsoft.NetConf2021.Maui.csproj
         run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
