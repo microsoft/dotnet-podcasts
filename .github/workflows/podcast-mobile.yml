@@ -30,4 +30,10 @@ jobs:
         run: dotnet workload install maui
 
       - name: build Microsoft.NetConf2021.Maui.csproj
-        run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj
+        run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
+
+      - name: archive logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: '*.binlog'
