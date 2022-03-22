@@ -1,8 +1,8 @@
-name: Podcast Mobile CI
+name: 'Podcast Mobile CI'
 
 on:
   push:
-    branches: 
+    branches:
       - main
       - maui/perf
     paths:
@@ -19,7 +19,7 @@ on:
 
 jobs:
   build-mobile:
-    runs-on: macos-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
