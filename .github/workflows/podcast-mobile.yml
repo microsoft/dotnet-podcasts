@@ -33,6 +33,7 @@ jobs:
         run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
 
       - name: archive logs
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: logs
