@@ -9,7 +9,6 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .RegisterBlazorMauiWebView()
             .UseMauiApp<App>()
             .ConfigureEssentials()
             .ConfigureServices()
@@ -25,6 +24,7 @@ public static class MauiProgram
 
         Barrel.ApplicationId = "dotnetpodcasts";
 
+        builder.Services.AddMauiBlazorWebView();
         builder.Services.AddTransient<CategoriesPage>();
         builder.Services.AddTransient<CategoryPage>();
         builder.Services.AddTransient<DiscoverPage>();
