@@ -18,10 +18,10 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .RegisterBlazorMauiWebView()
             .UseMauiApp<App>();
 
         builder.Services.AddBlazorWebView();
+        builder.Services.AddMauiBlazorWebView();
         builder.Services.AddHttpClient<PodcastService>(client =>
         {
             client.BaseAddress = new Uri(APIUrl);
