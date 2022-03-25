@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{3C5FB15D-901F-4991-AAFE-4C60F3B328C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Components.Maui", "..\Web\Components\Podcast.Components.Maui.csproj", "{346FBAD6-F121-4FD7-9F2D-6D685397FF3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Components", "..\Web\Components\Podcast.Components.csproj", "{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,16 +27,16 @@ Global
 		{40AF2684-0216-4D63-A53E-FE96B524EA10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40AF2684-0216-4D63-A53E-FE96B524EA10}.Release|Any CPU.Build.0 = Release|Any CPU
 		{40AF2684-0216-4D63-A53E-FE96B524EA10}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{346FBAD6-F121-4FD7-9F2D-6D685397FF3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{346FBAD6-F121-4FD7-9F2D-6D685397FF3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{346FBAD6-F121-4FD7-9F2D-6D685397FF3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{346FBAD6-F121-4FD7-9F2D-6D685397FF3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{346FBAD6-F121-4FD7-9F2D-6D685397FF3C} = {3C5FB15D-901F-4991-AAFE-4C60F3B328C4}
+		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD} = {3C5FB15D-901F-4991-AAFE-4C60F3B328C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}

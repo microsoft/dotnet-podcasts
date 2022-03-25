@@ -61,6 +61,6 @@
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\Web\Pages\Podcast.Pages.Maui.csproj" />
+		<ProjectReference Include="..\..\Web\Pages\Podcast.Pages.csproj" />
 	</ItemGroup>
 </Project>

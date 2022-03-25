@@ -68,7 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Web\Components\Podcast.Components.Maui.csproj" />
+    <ProjectReference Include="..\Web\Components\Podcast.Components.csproj" />
   </ItemGroup>
 
   <ItemGroup>
