@@ -6,7 +6,6 @@
              x:Name="this"
              xmlns:view="clr-namespace:Microsoft.NetConf2021.Maui.Views"
              xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
-             BackgroundColor="{DynamicResource PageBackgroundColor}"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
              Shell.NavBarIsVisible="False"
              x:DataType="viewmodels:DiscoverViewModel"
@@ -19,7 +18,7 @@
                     Value="{OnIdiom Desktop='48,0,0,12', Phone='16,0,0,0'}" />
         </Style>
     </ContentPage.Resources>
-    <Grid>
+    <Grid Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <StackLayout Margin="10,0">
             <controls:HeaderControl TextToSearch="{Binding Text, Mode=OneWayToSource}"
                                     SearchCommand="{Binding SearchCommand}"

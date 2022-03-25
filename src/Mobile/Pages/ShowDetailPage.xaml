@@ -10,7 +10,7 @@
              Title="{Binding Show.Show.Title}"
              Style="{StaticResource DetailPageStyle}"
              x:DataType="viewmodels:ShowDetailViewModel">
-    <Grid>
+    <Grid Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <StackLayout Margin="10,0">
             <controls:HeaderControl IsVisible="{OnIdiom Default=true, Phone=false}"
                                     ShowSearchCategories="False"

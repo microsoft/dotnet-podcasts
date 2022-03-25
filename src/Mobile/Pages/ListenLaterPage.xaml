@@ -8,7 +8,7 @@
              Style="{StaticResource MainSectionStyle}"
              x:Class="Microsoft.NetConf2021.Maui.Pages.ListenLaterPage">
     <ContentPage.Content>
-        <Grid>
+        <GridBackground="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
             <CollectionView ItemsSource="{Binding Episodes}"
                             Margin="10,0">
                 <CollectionView.Header>
@@ -124,6 +124,6 @@
             </Grid>
             <controls:Player x:Name="player"
                              VerticalOptions="End" />
-        </Grid>
+        </GridBackground>
     </ContentPage.Content>
 </ContentPage>

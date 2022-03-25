@@ -7,7 +7,8 @@
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
              x:Class="Microsoft.NetConf2021.Maui.Pages.CategoryPage">
     <CollectionView ItemsSource="{Binding Shows}"
-                    Margin="10">
+                    Margin="10"
+                    Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <CollectionView.Header>
             <StackLayout>
                 <controls:HeaderControl TextToSearch="{Binding Text, Mode=OneWayToSource}"

@@ -11,7 +11,7 @@
              x:Class="Microsoft.NetConf2021.Maui.Pages.SubscriptionsPage"
              x:DataType="viewmodels:SubscriptionsViewModel">
     <ContentPage.Content>
-        <Grid>
+        <Grid Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
             <CollectionView x:Name="subscribedPodcasts"
                             Margin="10,0"
                             SelectionMode="None"
