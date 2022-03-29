@@ -9,7 +9,7 @@
     x:Class="Microsoft.NetConf2021.Maui.Pages.SettingsPage">
     <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto"
           ColumnDefinitions="2*,8*"
-          Padding="16"Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
+          Padding="16" Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <Label Text="{x:Static res:AppResource.Download_Settings}"
                Margin="0,0,0,20"
                Style="{StaticResource H6LabelStyle}"
