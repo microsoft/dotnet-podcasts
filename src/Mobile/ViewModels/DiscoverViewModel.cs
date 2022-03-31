@@ -49,9 +49,7 @@ public class DiscoverViewModel : BaseViewModel
 
     private async Task FetchAsync()
     {
-        // run GetShowsAsync in the background, so things get initialized in the background
-        // like checking the cache and the web request
-        var podcastsModels = await Task.Run(() => showsService.GetShowsAsync());
+        var podcastsModels = await showsService.GetShowsAsync();
 
         if (podcastsModels == null)
         {
