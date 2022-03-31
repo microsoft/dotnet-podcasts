@@ -9,6 +9,7 @@ public class ShowsService
 {
     private readonly HttpClient httpClient;
     private readonly ListenLaterService listenLaterService;
+    private bool firstLoad = true;
 
     public ShowsService(ListenLaterService listenLaterService)
     {
@@ -73,7 +74,25 @@ public class ShowsService
         return new Show(response, listenLaterService);
     }
 
-    private async Task<T> TryGetAsync<T>(string path)
+    private Task<T> TryGetAsync<T>(string path)
+    {
+        if (firstLoad)
+        {
+            firstLoad = false;
+
+            // On first load, it takes a significant amount of time to initialize
+            // the ShowsService. For example, Connectivity.NetworkAccess, Barrel.Current.Get,
+            // and HttpClient all take time to initialize.
+            //
+            // Don't block the UI thread while doing this initialization, so the app starts faster.
+            // Instead, run the first TryGet in a background thread to unblock the UI during startup.
+            return Task.Run(() => TryGetImplementationAsync<T>(path));
+        }
+
+        return TryGetImplementationAsync<T>(path);
+    }
+
+    private async Task<T> TryGetImplementationAsync<T>(string path)
     {
         var json = string.Empty;
 
