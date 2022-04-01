@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.NetConf2021.Maui.Models.Responses;
 using MonkeyCache.FileStore;
-using Newtonsoft.Json;
 
 namespace Microsoft.NetConf2021.Maui.Services;
 
@@ -116,7 +116,7 @@ public class ShowsService
             }
             else
             {
-                responseData = JsonConvert.DeserializeObject<T>(json);
+                responseData = JsonSerializer.Deserialize<T>(json);
             }
 
             if (responseData != null)
