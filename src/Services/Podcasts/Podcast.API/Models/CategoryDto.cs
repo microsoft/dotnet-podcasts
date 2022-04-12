@@ -1,4 +1,3 @@
-﻿namespace Podcast.API.Models
-{
-	public record CategoryDto(Guid Id, string Genre);
-}
+﻿namespace Podcast.API.Models;
+
+public record CategoryDto(Guid Id, string Genre);

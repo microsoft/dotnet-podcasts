@@ -27,34 +27,36 @@ public class PodcastIngestionHandler : IPodcastIngestionHandler
     public async Task HandleIngestionAsync(string title, string url, IReadOnlyCollection<string> feedCategories,
         CancellationToken stoppingToken)
     {
+        _logger.LogInformation($"The show {title} at {url} was received by the ingestion worker.");
+        var isExistingShow = await _podcastDbContext.Feeds.AnyAsync(feed => feed.Url.ToLower() == url.ToLower(), stoppingToken);
+        if (isExistingShow) 
+            return;
+
+        _logger.LogInformation($"The show {title} doesn't already exist in the database, checking for accepted topics in the category list.");
         var isAcceptedTopic = AcceptedTopics.Any(topic => title.Contains(topic, StringComparison.InvariantCultureIgnoreCase));
-        if (!isAcceptedTopic) return;
-
-        var isExistingShow = await _podcastDbContext.Shows.AnyAsync(show => show.Title == title, stoppingToken);
-        if (isExistingShow) return;
-
-        var feed = new Feed(Guid.NewGuid(), url);
-
-        var categories = await _podcastDbContext.Categories
-            .Where(category => feedCategories.Any(feedCategory => feedCategory == category.Genre))
-            .ToListAsync(stoppingToken);
-
-        foreach (var category in categories)
+        if (!isAcceptedTopic)
         {
-            feed.Categories.Add(new FeedCategory(category.Id, feed.Id));
+            _logger.LogInformation($"The show {title} at {url} was not automatically approved.");
+            var categoryStringArray = string.Empty;
+            foreach (var cat in feedCategories)
+            {
+                categoryStringArray += $"{cat},";
+            }
+
+            if(categoryStringArray.Contains(","))
+            {
+                categoryStringArray = categoryStringArray.Substring(0, categoryStringArray.LastIndexOf(','));
+            }
+
+            // Must be manually approved
+            var userFeed = new UserSubmittedFeed(title, url, categoryStringArray);
+            await _podcastDbContext.UserSubmittedFeeds.AddAsync(userFeed, stoppingToken);
+            await _podcastDbContext.SaveChangesAsync(stoppingToken);
+            _logger.LogInformation($"The show {title} at {url} was saved as a user-submitted feed.");
+            return;
         }
 
-        try
-        {
-            var show = await _feedClient.GetShowAsync(feed, stoppingToken);
-            feed.Show = show;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error adding feed: {error}", ex.Message);
-        }
+        await _feedClient.AddFeedAsync(_podcastDbContext, url, feedCategories, stoppingToken);
 
-        await _podcastDbContext.Feeds.AddAsync(feed, stoppingToken);
-        await _podcastDbContext.SaveChangesAsync(stoppingToken);
     }
 }

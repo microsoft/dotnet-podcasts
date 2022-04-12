@@ -6,7 +6,10 @@ public class Room
     private const string ValidCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private readonly Random _randGenerator = new();
 
-    protected Room () {}
+    public Room () 
+    {
+        Code = GenerateRoomCode();
+    }
 
     public Room(Episode episode)
     {

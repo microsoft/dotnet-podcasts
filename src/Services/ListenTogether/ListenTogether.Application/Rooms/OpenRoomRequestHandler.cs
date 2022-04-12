@@ -1,5 +1,6 @@
 ﻿using ListenTogether.Application.Interfaces;
 using ListenTogether.Domain;
+using Orleans;
 
 namespace ListenTogether.Application.Rooms;
 
@@ -16,12 +17,13 @@ public class OpenRoomRequest : IRequest<Room>
 public class OpenRoomRequestHandler : IRequestHandler<OpenRoomRequest, Room>
 {
     private readonly IEpisodesClient _episodesClient;
-    private readonly IApplicationDbContext _dbContext;
+    private readonly IGrainFactory _grainFactory;
+    private readonly IRoomGrain _roomGrain;
 
-    public OpenRoomRequestHandler(IEpisodesClient episodesClient, IApplicationDbContext dbContext)
+    public OpenRoomRequestHandler(IEpisodesClient episodesClient, IGrainFactory grainFactory)
     {
         _episodesClient = episodesClient;
-        _dbContext = dbContext;
+        _grainFactory = grainFactory;
     }
 
     public async Task<Room> HandleAsync(OpenRoomRequest request, CancellationToken cancellationToken)
@@ -29,9 +31,8 @@ public class OpenRoomRequestHandler : IRequestHandler<OpenRoomRequest, Room>
         var episode = await _episodesClient.GetEpisodeByIdAsync(request.EpisodeId, cancellationToken);
         var room = new Room(episode);
 
-        _dbContext.Rooms.Add(room);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        var roomGrain = _grainFactory.GetGrain<IRoomGrain>(room.Code);
+        await roomGrain.SetRoom(room);
 
         return room;
     }
