@@ -6,7 +6,7 @@ public static class ServicesExtensions
 {
     public static MauiAppBuilder ConfigureServices(this MauiAppBuilder builder)
     {
-        builder.Services.AddBlazorWebView();
+        builder.Services.AddMauiBlazorWebView();
         builder.Services.AddSingleton<SubscriptionsService>();
         builder.Services.AddSingleton<ShowsService>();
         builder.Services.AddSingleton<ListenLaterService>();
