@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
-using MonkeyCache.FileStore;
+﻿using MonkeyCache.FileStore;
 
 namespace Microsoft.NetConf2021.Maui;
 
@@ -9,7 +8,6 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .RegisterBlazorMauiWebView()
             .UseMauiApp<App>()
             .ConfigureEssentials()
             .ConfigureServices()

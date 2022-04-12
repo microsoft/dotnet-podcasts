@@ -30,7 +30,7 @@
                         IsGrouped="True">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical"
-                                 Span="{OnIdiom Phone=2, Tablet=3, Desktop=3}"
+                                 Span="{OnIdiom Phone=2, Tablet=3, Desktop=3, Default=3}"
                                  HorizontalItemSpacing="5"
                                  VerticalItemSpacing="5" />
             </CollectionView.ItemsLayout>
