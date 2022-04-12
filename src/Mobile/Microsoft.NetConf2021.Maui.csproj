@@ -6,18 +6,20 @@
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) and '$(MSBuildRuntimeType)' == 'Full'">$(TargetFrameworks);net6.0-windows10.0.19041</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>Microsoft.NetConf2021.Maui</RootNamespace>
-    <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
     <UseMaui>true</UseMaui>
-    <SingleProject>true</SingleProject>
-    
+    <SingleProject>true</SingleProject>    
     <ImplicitUsings>enable</ImplicitUsings>
+    
     <!-- Display name -->
     <ApplicationTitle>.NET Pods</ApplicationTitle>
 
     <!-- App Identifier -->
     <ApplicationId>com.Microsoft.NetConf2021.Maui</ApplicationId>
+    <ApplicationId Condition="$(TargetFramework.Contains('-windows'))">9C8A8C29-3AB6-4DD4-854C-313F379ABF70</ApplicationId>
+
 
     <!-- Versions -->
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
 
     <!-- Required for C# Hot Reload -->
@@ -46,26 +48,11 @@
   </ItemGroup>
 
 
-  <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <!-- Required - WinUI does not yet have buildTransitive for everything -->
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.0.30" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="MonkeyCache.FileStore" Version="2.0.0-beta" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
   </ItemGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <OutputType>WinExe</OutputType>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="Properties\launchSettings.json" />
-    <Content Remove="NuGet.config" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Web\Components\Podcast.Components.csproj" />
