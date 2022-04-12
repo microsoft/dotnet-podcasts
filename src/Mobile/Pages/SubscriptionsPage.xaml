@@ -11,19 +11,19 @@
              x:Class="Microsoft.NetConf2021.Maui.Pages.SubscriptionsPage"
              x:DataType="viewmodels:SubscriptionsViewModel">
     <ContentPage.Content>
-        <Grid>
+        <Grid RowDefinitions="auto,*" Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
+            <StackLayout Margin="10,0" Spacing="0">
+                <controls:HeaderControl IsVisible="{OnIdiom Phone=true, Tablet=false, Desktop=false}" />
+
+                <Label Text="{x:Static res:AppResource.Subscriptions}"
+                               Style="{StaticResource H5LabelStyle}"
+                        Margin="14,-6,0,0" />
+            </StackLayout>
             <CollectionView x:Name="subscribedPodcasts"
+                            Grid.Row="1"
                             Margin="10,0"
                             SelectionMode="None"
                             ItemsSource="{Binding SubscribedShows}">
-                <CollectionView.Header>
-                    <StackLayout>
-                        <controls:HeaderControl IsVisible="{OnIdiom Phone=true, Tablet=false, Desktop=false}" />
-
-                        <Label Text="{x:Static res:AppResource.Subscriptions}"
-                               Style="{StaticResource H5LabelStyle}" />
-                    </StackLayout>
-                </CollectionView.Header>
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
                                      Span="{OnIdiom Phone=2, Tablet=4, Desktop=4}"
@@ -37,7 +37,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Grid IsVisible="{Binding HasNoData}" RowDefinitions="*, auto" Padding="{OnIdiom Desktop=200, Default=50}">
+            <Grid Grid.Row="1" IsVisible="{Binding HasNoData}" RowDefinitions="*, auto" Padding="{OnIdiom Desktop=200, Default=50}">
                 <Image Source="empty_collection.png" HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
                 <StackLayout HorizontalOptions="CenterAndExpand"
@@ -54,7 +54,8 @@
                 </StackLayout>
             </Grid>
             <controls:Player x:Name="player"
-                             VerticalOptions="End"/>
+                             VerticalOptions="End"
+                             Grid.Row="1"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

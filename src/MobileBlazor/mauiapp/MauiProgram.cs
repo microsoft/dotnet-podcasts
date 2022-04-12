@@ -20,7 +20,6 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>();
 
-        builder.Services.AddBlazorWebView();
         builder.Services.AddMauiBlazorWebView();
         builder.Services.AddHttpClient<PodcastService>(client =>
         {

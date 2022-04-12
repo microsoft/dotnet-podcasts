@@ -8,16 +8,16 @@
              Style="{StaticResource MainSectionStyle}"
              x:Class="Microsoft.NetConf2021.Maui.Pages.ListenLaterPage">
     <ContentPage.Content>
-        <Grid>
+        <Grid RowDefinitions="auto,*" Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
+            <StackLayout Margin="10,0">
+                <controls:HeaderControl IsVisible="{OnIdiom Phone=true, Tablet=false, Desktop=false}" />
+                <Label Text="{x:Static res:AppResource.Listen_Later}"
+                               Style="{StaticResource H5LabelStyle}"
+                        Margin="14,-6,0,0"/>
+            </StackLayout>
             <CollectionView ItemsSource="{Binding Episodes}"
-                            Margin="10,0">
-                <CollectionView.Header>
-                    <StackLayout>
-                        <controls:HeaderControl IsVisible="{OnIdiom Phone=true, Tablet=false, Desktop=false}" />
-                        <Label Text="{x:Static res:AppResource.Listen_Later}"
-                               Style="{StaticResource H5LabelStyle}" />
-                    </StackLayout>
-                </CollectionView.Header>
+                            Margin="10,0"
+                            Grid.Row="1">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
                                      Span="1"
@@ -105,6 +105,7 @@
 
             <Grid IsVisible="{Binding HasNoData}"
                   RowDefinitions="*, auto"
+                  Grid.Row="1"
                   Padding="{OnIdiom Desktop=200, Default=50}">
                 <Image Source="empty_collection.png"
                        HorizontalOptions="Center"
@@ -123,6 +124,7 @@
                 </StackLayout>
             </Grid>
             <controls:Player x:Name="player"
+                             Grid.Row="1"
                              VerticalOptions="End" />
         </Grid>
     </ContentPage.Content>

@@ -6,7 +6,8 @@
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              x:Class="Microsoft.NetConf2021.Maui.Pages.CategoriesPage">
     <CollectionView ItemsSource="{Binding Categories}"
-                    Margin="10,0">
+                    Margin="10,0"
+                    Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <CollectionView.Header>
             <Label Text="{x:Static res:AppResource.Categories}"
                    Style="{StaticResource H5LabelStyle}" />

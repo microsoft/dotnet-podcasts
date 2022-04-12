@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
-using MonkeyCache.FileStore;
+﻿using MonkeyCache.FileStore;
 
 namespace Microsoft.NetConf2021.Maui;
 
@@ -25,16 +24,6 @@ public static class MauiProgram
         Barrel.ApplicationId = "dotnetpodcasts";
 
         builder.Services.AddMauiBlazorWebView();
-        builder.Services.AddTransient<CategoriesPage>();
-        builder.Services.AddTransient<CategoryPage>();
-        builder.Services.AddTransient<DiscoverPage>();
-        builder.Services.AddTransient<EpisodeDetailPage>();
-        builder.Services.AddTransient<ListenLaterPage>();
-        builder.Services.AddTransient<ListenTogetherPage>();
-        builder.Services.AddTransient<SettingsPage>();
-        builder.Services.AddTransient<ShowDetailPage>();
-        builder.Services.AddTransient<SubscriptionsPage>();
-
         return builder.Build();
     }
 }
