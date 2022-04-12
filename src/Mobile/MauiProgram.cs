@@ -23,7 +23,7 @@ public static class MauiProgram
 
         Barrel.ApplicationId = "dotnetpodcasts";
 
-
+        builder.Services.AddMauiBlazorWebView();
         return builder.Build();
     }
 }

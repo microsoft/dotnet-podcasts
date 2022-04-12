@@ -21,16 +21,23 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
-          include-prerelease: true
+        shell: pwsh
+        run: |
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
+          .\dotnet-install.ps1 -Channel 6.0.3xx -Quality daily -InstallDir .
 
       - name: install MAUI workload
-        run: dotnet workload install maui
+        shell: pwsh
+        run: |
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/main/NuGet.config -OutFile NuGet.config
+          & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/main.json --configfile NuGet.config
 
       - name: build Microsoft.NetConf2021.Maui.csproj
-        run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
+        shell: pwsh
+        run: |
+          & .\dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
 
       - name: archive logs
         if: always()

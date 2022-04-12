@@ -12,7 +12,7 @@
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>mauiapp</DisplayName>
+    <DisplayName>.NET Pods Blazor</DisplayName>
     <PublisherDisplayName>Microsoft</PublisherDisplayName>
     <Logo>appiconStoreLogo.png</Logo>
   </Properties>
@@ -31,7 +31,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="mauiapp"
+        DisplayName=".NET Pods Blazor"
         Description="mauiapp"
         BackgroundColor="transparent"
         Square150x150Logo="appiconMediumTile.png"
