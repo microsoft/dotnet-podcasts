@@ -4,7 +4,7 @@ public class Room
 {
     private const int Length = 5;
     private const string ValidCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private readonly Random _randGenerator = new();
+    private readonly Random _randGenerator = Random.Shared;
 
     public Room () 
     {

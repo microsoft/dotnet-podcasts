@@ -28,7 +28,7 @@ public class PodcastIngestionHandler : IPodcastIngestionHandler
         CancellationToken stoppingToken)
     {
         _logger.LogInformation($"The show {title} at {url} was received by the ingestion worker.");
-        var isExistingShow = await _podcastDbContext.Feeds.AnyAsync(feed => feed.Url.ToLower() == url.ToLower(), stoppingToken);
+        var isExistingShow = await _podcastDbContext.Feeds.AnyAsync(feed => string.Equals(feed.Url, url, StringComparison.OrdinalIgnoreCase), stoppingToken);
         if (isExistingShow) 
             return;
 
@@ -37,19 +37,9 @@ public class PodcastIngestionHandler : IPodcastIngestionHandler
         if (!isAcceptedTopic)
         {
             _logger.LogInformation($"The show {title} at {url} was not automatically approved.");
-            var categoryStringArray = string.Empty;
-            foreach (var cat in feedCategories)
-            {
-                categoryStringArray += $"{cat},";
-            }
-
-            if(categoryStringArray.Contains(","))
-            {
-                categoryStringArray = categoryStringArray.Substring(0, categoryStringArray.LastIndexOf(','));
-            }
-
             // Must be manually approved
-            var userFeed = new UserSubmittedFeed(title, url, categoryStringArray);
+            var userFeed = new UserSubmittedFeed(
+                title, url, string.Join(",", feedCategories));
             await _podcastDbContext.UserSubmittedFeeds.AddAsync(userFeed, stoppingToken);
             await _podcastDbContext.SaveChangesAsync(stoppingToken);
             _logger.LogInformation($"The show {title} at {url} was saved as a user-submitted feed.");
