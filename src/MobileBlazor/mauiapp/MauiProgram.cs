@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Infrastructure;
 using Microsoft.AspNetCore.Components.WebView.Maui;
+using NetPodsMauiBlazor.Services;
 using Podcast.Components;
 using Podcast.Pages.Data;
 using Podcast.Shared;
@@ -25,8 +26,19 @@ public static class MauiProgram
         {
             client.BaseAddress = new Uri(APIUrl);
         });
+
+#if WINDOWS
+        builder.Services.AddSingleton<INativeAudioService, Platforms.Windows.NativeAudioService>();
+#elif ANDROID
+        builder.Services.AddSingleton<INativeAudioService, Platforms.Android.Services.NativeAudioService>();
+#elif MACCATALYST
+        builder.Services.AddSingleton<INativeAudioService, Platforms.MacCatalyst.AudioService>();
+#elif IOS
+        builder.Services.AddSingleton<INativeAudioService, Platforms.iOS.AudioService>();
+#endif
+
         builder.Services.AddScoped<ThemeInterop>();
-        builder.Services.AddScoped<AudioInterop>();
+        builder.Services.AddScoped<IAudioInterop, AudioInteropService>();
         builder.Services.AddScoped<LocalStorageInterop>();
         builder.Services.AddScoped<ClipboardInterop>();
         builder.Services.AddScoped<SubscriptionsService>();
