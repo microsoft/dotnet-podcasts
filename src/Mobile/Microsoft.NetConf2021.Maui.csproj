@@ -17,7 +17,6 @@
     <ApplicationId>com.Microsoft.NetConf2021.Maui</ApplicationId>
     <ApplicationId Condition="$(TargetFramework.Contains('-windows'))">9C8A8C29-3AB6-4DD4-854C-313F379ABF70</ApplicationId>
 
-
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
@@ -25,12 +24,16 @@
     <!-- Required for C# Hot Reload -->
     <UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
 
-
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-ios'">14.2</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">14.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-android'">21.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</TargetPlatformMinVersion>
+  </PropertyGroup>
+
+  <!-- Support for iOS ARM64 devices -->    
+  <PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,12 +50,10 @@
     <MauiFont Include="Resources\Fonts\*" />
   </ItemGroup>
 
-
   <ItemGroup>
     <PackageReference Include="MonkeyCache.FileStore" Version="2.0.0-beta" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
   </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\Web\Components\Podcast.Components.csproj" />
