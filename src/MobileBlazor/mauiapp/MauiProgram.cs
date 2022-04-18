@@ -32,9 +32,9 @@ public static class MauiProgram
 #elif ANDROID
         builder.Services.AddSingleton<INativeAudioService, Platforms.Android.Services.NativeAudioService>();
 #elif MACCATALYST
-        builder.Services.AddSingleton<INativeAudioService, Platforms.MacCatalyst.AudioService>();
+        builder.Services.AddSingleton<INativeAudioService, Platforms.MacCatalyst.Services.NativeAudioService>();
 #elif IOS
-        builder.Services.AddSingleton<INativeAudioService, Platforms.iOS.AudioService>();
+        builder.Services.AddSingleton<INativeAudioService, Platforms.iOS.Services.NativeAudioService>();
 #endif
 
         builder.Services.AddScoped<ThemeInterop>();
