@@ -37,6 +37,10 @@ public static class MauiProgram
         builder.Services.AddScoped<ComponentStatePersistenceManager>();
         builder.Services.AddScoped<PersistentComponentState>(sp => sp.GetRequiredService<ComponentStatePersistenceManager>().State);
 
+#if DEBUG
+        builder.Services.AddBlazorWebViewDeveloperTools();
+#endif
+
         return builder.Build();
     }
 }
