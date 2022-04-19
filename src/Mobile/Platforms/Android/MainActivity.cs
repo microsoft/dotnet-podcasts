@@ -15,7 +15,6 @@ public class MainActivity : MauiAppCompatActivity
     internal static MainActivity instance;
     public MediaPlayerServiceBinder binder;
     MediaPlayerServiceConnection mediaPlayerServiceConnection;
-    private Intent mediaPlayerServiceIntent;
 
     public event StatusChangedEventHandler StatusChanged;
 
@@ -31,13 +30,13 @@ public class MainActivity : MauiAppCompatActivity
         instance = this;
         NotificationHelper.CreateNotificationChannel(ApplicationContext);
         if (mediaPlayerServiceConnection == null)
-            InitilizeMedia();
+            InitializeMedia();
     }
 
-    private void InitilizeMedia()
+    private void InitializeMedia()
     {
-        mediaPlayerServiceIntent = new Intent(ApplicationContext, typeof(MediaPlayerService));
         mediaPlayerServiceConnection = new MediaPlayerServiceConnection(this);
+        var mediaPlayerServiceIntent = new Intent(ApplicationContext, typeof(MediaPlayerService));
         BindService(mediaPlayerServiceIntent, mediaPlayerServiceConnection, Bind.AutoCreate);
     }
 
@@ -52,15 +51,15 @@ public class MainActivity : MauiAppCompatActivity
 
         public void OnServiceConnected(ComponentName name, IBinder service)
         {
-            if (service is MediaPlayerServiceBinder mediaPlayerServiceBinder)
+            if (service is MediaPlayerServiceBinder binder)
             {
-                var binder = (MediaPlayerServiceBinder)service;
                 instance.binder = binder;
 
-                binder.GetMediaPlayerService().CoverReloaded += (object sender, EventArgs e) => { instance.CoverReloaded?.Invoke(sender, e); };
-                binder.GetMediaPlayerService().StatusChanged += (object sender, EventArgs e) => { instance.StatusChanged?.Invoke(sender, e); };
-                binder.GetMediaPlayerService().Playing += (object sender, EventArgs e) => { instance.Playing?.Invoke(sender, e); };
-                binder.GetMediaPlayerService().Buffering += (object sender, EventArgs e) => { instance.Buffering?.Invoke(sender, e); };
+                var mediaPlayerService = binder.GetMediaPlayerService();
+                mediaPlayerService.CoverReloaded += (object sender, EventArgs e) => { instance.CoverReloaded?.Invoke(sender, e); };
+                mediaPlayerService.StatusChanged += (object sender, EventArgs e) => { instance.StatusChanged?.Invoke(sender, e); };
+                mediaPlayerService.Playing += (object sender, EventArgs e) => { instance.Playing?.Invoke(sender, e); };
+                mediaPlayerService.Buffering += (object sender, EventArgs e) => { instance.Buffering?.Invoke(sender, e); };
             }
         }
 

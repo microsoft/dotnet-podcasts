@@ -15,7 +15,7 @@ public class Episode : ObservableObject
         Url = new Uri(playerState.Episode.Url);
     }
 
-    public Episode(EpisodeResponse response)
+    public Episode(EpisodeResponse response, ListenLaterService listenLater)
     {
         Id = response.Id;
         Title = response.Title;
@@ -23,7 +23,7 @@ public class Episode : ObservableObject
         Published = response.Published;
         Duration = response.Duration;
         Url = response.Url;
-        listenLaterService = ServicesProvider.GetService<ListenLaterService>();
+        listenLaterService = listenLater;
         IsInListenLater = listenLaterService.IsInListenLater(this);
     }
 

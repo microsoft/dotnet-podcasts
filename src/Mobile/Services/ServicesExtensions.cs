@@ -6,16 +6,12 @@ public static class ServicesExtensions
 {
     public static MauiAppBuilder ConfigureServices(this MauiAppBuilder builder)
     {
-        builder.Services.AddBlazorWebView();
+        builder.Services.AddMauiBlazorWebView();
         builder.Services.AddSingleton<SubscriptionsService>();
-        builder.Services.AddHttpClient<ShowsService>(client => 
-        {
-            client.BaseAddress = new Uri(Config.APIUrl);
-        });
+        builder.Services.AddSingleton<ShowsService>();
         builder.Services.AddSingleton<ListenLaterService>();
 #if WINDOWS
         builder.Services.TryAddSingleton<IAudioService, Platforms.Windows.AudioService>();
-        builder.Services.TryAddTransient<IShareService, Platforms.Windows.ShareService>();
 #elif ANDROID
         builder.Services.TryAddSingleton<IAudioService, Platforms.Android.AudioService>();
 #elif MACCATALYST

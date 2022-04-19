@@ -1,0 +1,50 @@
+name: Podcast Mobile CI
+
+on:
+  push:
+    branches: [ main, maui/perf ]
+    paths:
+      - 'src/Mobile/**'
+      - '**/*build.props'      
+      - '.github/workflows/podcast-mobile.yml'
+  pull_request:
+    branches: [ main, maui/perf ]
+    paths:
+      - 'src/Mobile/**'
+      - '**/*build.props'      
+      - '.github/workflows/podcast-mobile.yml'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-mobile:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install .NET 6
+        shell: pwsh
+        run: |
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
+          .\dotnet-install.ps1 -Channel 6.0.3xx -Quality daily -InstallDir .
+
+      - name: Install MAUI workload
+        shell: pwsh
+        run: |
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/main/NuGet.config -OutFile maui-main-NuGet.config
+          & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/main.json --configfile maui-main-NuGet.config
+
+      - name: Build MAUI Mobile app
+        shell: pwsh
+        run: |
+          & .\dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
+
+      - name: Archive build log
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: '*.binlog'

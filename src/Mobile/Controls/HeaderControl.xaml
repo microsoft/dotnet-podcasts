@@ -17,7 +17,7 @@
                         <Label Text="See All Categories"
                                Style="{StaticResource BodyLLabelStyle}"
                                TextColor="{StaticResource Primary}"
-                               GridLayout.Row="1"
+                               Grid.Row="1"
                                HorizontalOptions="End"
                                Margin="0,0,30,0"
                                IsVisible="{Binding ShowSearchCategories, Source={x:Reference selfMediaElementView}}"
@@ -38,7 +38,7 @@
                                VerticalOptions="Center"
                                HorizontalOptions="Start" />
                         <Image Source="search.png"
-                               GridLayout.Column="1"
+                               Grid.Column="1"
                                VerticalOptions="Center"
                                HorizontalOptions="End"
                                HeightRequest="20"

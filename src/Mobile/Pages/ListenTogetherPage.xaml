@@ -9,7 +9,7 @@
              Shell.NavBarIsVisible="False"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
              x:Class="Microsoft.NetConf2021.Maui.Pages.ListenTogetherPage">
-    <Grid RowDefinitions="*,auto">
+    <Grid RowDefinitions="*,auto" Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <b:BlazorWebView x:Name="MyWebView"
                          Margin="10,0"
                          HostPage="wwwroot/index.html"
@@ -21,7 +21,7 @@
         </b:BlazorWebView>
 
         <controls:Player x:Name="player"
-                         GridLayout.Row="1"
+                         Grid.Row="1"
                          VerticalOptions="End">
         </controls:Player>
     </Grid>

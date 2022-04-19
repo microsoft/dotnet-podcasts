@@ -24,6 +24,8 @@ public static class NotificationHelper
         if (intentAction.Equals(MediaPlayerService.ActionStop))
             flags = PendingIntentFlags.CancelCurrent;
 
+        flags |= PendingIntentFlags.Mutable;
+
         PendingIntent pendingIntent = PendingIntent.GetService(context, 1, intent, flags);
 
         return new Notification.Action.Builder(icon, title, pendingIntent).Build();
@@ -67,7 +69,7 @@ public static class NotificationHelper
             context,
             0,
             new Intent(context, typeof(MainActivity)),
-            PendingIntentFlags.UpdateCurrent);
+            PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Mutable);
         MediaMetadata currentTrack = mediaMetadata;
 
         MediaStyle style = new MediaStyle();

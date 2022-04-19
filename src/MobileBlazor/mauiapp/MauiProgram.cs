@@ -18,10 +18,9 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .RegisterBlazorMauiWebView()
             .UseMauiApp<App>();
 
-        builder.Services.AddBlazorWebView();
+        builder.Services.AddMauiBlazorWebView();
         builder.Services.AddHttpClient<PodcastService>(client =>
         {
             client.BaseAddress = new Uri(APIUrl);
@@ -37,6 +36,10 @@ public static class MauiProgram
             new ListenTogetherHubClient(ListenTogetherUrl));
         builder.Services.AddScoped<ComponentStatePersistenceManager>();
         builder.Services.AddScoped<PersistentComponentState>(sp => sp.GetRequiredService<ComponentStatePersistenceManager>().State);
+
+#if DEBUG
+        builder.Services.AddBlazorWebViewDeveloperTools();
+#endif
 
         return builder.Build();
     }

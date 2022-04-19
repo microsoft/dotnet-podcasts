@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
-using MonkeyCache.FileStore;
+﻿using MonkeyCache.FileStore;
 
 namespace Microsoft.NetConf2021.Maui;
 
@@ -9,10 +8,10 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .RegisterBlazorMauiWebView()
             .UseMauiApp<App>()
             .ConfigureEssentials()
             .ConfigureServices()
+            .ConfigurePages()
             .ConfigureViewModels()
             .ConfigureFonts(fonts =>
             {
@@ -24,6 +23,7 @@ public static class MauiProgram
 
         Barrel.ApplicationId = "dotnetpodcasts";
 
+        builder.Services.AddMauiBlazorWebView();
         return builder.Build();
     }
 }

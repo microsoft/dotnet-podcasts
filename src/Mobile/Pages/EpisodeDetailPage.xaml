@@ -8,7 +8,7 @@
              Title="{Binding Episode.Title}"
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls">
-    <Grid>
+    <Grid Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <ScrollView>
             <VerticalStackLayout Padding="16"
                                  Spacing="8">
@@ -31,11 +31,11 @@
                             Command="{Binding PlayCommand}"
                             SemanticProperties.Hint="Play the episode"
                             Text="{x:Static res:AppResource.Play}" />
-                    <Label GridLayout.Column="1"
+                    <Label Grid.Column="1"
                            Style="{StaticResource BodySLabelStyle}"
                            Text="{Binding Episode.Duration, Converter={StaticResource DurationConverter}}"
                            VerticalOptions="Center" />
-                    <ImageButton GridLayout.Column="2"
+                    <ImageButton Grid.Column="2"
                                  HeightRequest="28"
                                  Aspect="AspectFill"
                                  Source="sare_button.png"
@@ -44,7 +44,7 @@
                                  Command="{Binding ShareCommand}"
                                  WidthRequest="28">
                     </ImageButton>
-                    <ImageButton GridLayout.Column="3"
+                    <ImageButton Grid.Column="3"
                                  HeightRequest="28"
                                  Aspect="AspectFill"
                                  Source="clockpink.png"

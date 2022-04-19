@@ -1,17 +1,20 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.NetConf2021.Maui.Models.Responses;
 using MonkeyCache.FileStore;
-using Newtonsoft.Json;
 
 namespace Microsoft.NetConf2021.Maui.Services;
 
 public class ShowsService
 {
     private readonly HttpClient httpClient;
+    private readonly ListenLaterService listenLaterService;
+    private bool firstLoad = true;
 
-    public ShowsService(HttpClient httpClient)
+    public ShowsService(ListenLaterService listenLaterService)
     {
-        this.httpClient = httpClient;
+        this.httpClient = new HttpClient() { BaseAddress = new Uri(Config.APIUrl) };
+        this.listenLaterService = listenLaterService;
     }
 
     public async Task<IEnumerable<Category>> GetAllCategories()
@@ -68,10 +71,28 @@ public class ShowsService
 
     private Show GetShow(ShowResponse response)
     {
-        return new Show(response);
+        return new Show(response, listenLaterService);
     }
 
-    private async Task<T> TryGetAsync<T>(string path)
+    private Task<T> TryGetAsync<T>(string path)
+    {
+        if (firstLoad)
+        {
+            firstLoad = false;
+
+            // On first load, it takes a significant amount of time to initialize
+            // the ShowsService. For example, Connectivity.NetworkAccess, Barrel.Current.Get,
+            // and HttpClient all take time to initialize.
+            //
+            // Don't block the UI thread while doing this initialization, so the app starts faster.
+            // Instead, run the first TryGet in a background thread to unblock the UI during startup.
+            return Task.Run(() => TryGetImplementationAsync<T>(path));
+        }
+
+        return TryGetImplementationAsync<T>(path);
+    }
+
+    private async Task<T> TryGetImplementationAsync<T>(string path)
     {
         var json = string.Empty;
 
@@ -95,7 +116,7 @@ public class ShowsService
             }
             else
             {
-                responseData = JsonConvert.DeserializeObject<T>(json);
+                responseData = JsonSerializer.Deserialize<T>(json);
             }
 
             if (responseData != null)
