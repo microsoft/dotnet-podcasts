@@ -71,7 +71,7 @@
                           RowDefinitions="auto,auto"
                           VerticalOptions="Center">
                         <Image WidthRequest="38"
-                               Source="{Binding Source, Source={x:Reference playButton}}"
+                               Source="{Binding Source, Source={x:Reference playPauseButton}}"
                                HeightRequest="38"
                                Aspect="AspectFit"
                                HorizontalOptions="Center"
