@@ -46,7 +46,7 @@ public partial class Player : ContentView
     {
         this.IsVisible = true;
 
-        this.playButton.Source = this.playerService.IsPlaying ? "player_pause.png" : "player_play.png";
+        this.playPauseButton.Source = this.playerService.IsPlaying ? "player_pause.png" : "player_play.png";
 
         epiosdeTitle.Text = this.playerService.CurrentEpisode.Title;
         authorText.Text = $"{this.playerService.CurrentShow?.Author} - {this.playerService.CurrentEpisode?.Published.ToString("MMM, d yyy")}";

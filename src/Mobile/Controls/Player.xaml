@@ -30,7 +30,7 @@
                                FontSize="Small"
                                TextColor="White" />
                     </VerticalStackLayout>
-                    <ImageButton x:Name="playButton"
+                    <ImageButton x:Name="playPauseButton"
                            WidthRequest="38"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
