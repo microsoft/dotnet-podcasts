@@ -37,6 +37,9 @@ app.UseSwaggerUI(c =>
 
 app.UseCors();
 
+/*
+    Gets all categories
+*/
 app.MapGet("v1/categories",
     async (PodcastDbContext podcastDbContext, CancellationToken cancellationToken) =>
     {
@@ -44,7 +47,9 @@ app.MapGet("v1/categories",
             .ToListAsync(cancellationToken);
         return categories;
     });
-
+/*
+    Gets an episode by its id
+*/
 app.MapGet("v1/episodes/{id}", async (PodcastDbContext podcastDbContext, Guid id,
     CancellationToken cancellationToken) =>
 {
