@@ -2,43 +2,68 @@
 using Foundation;
 using NetPodsMauiBlazor.Services;
 
-namespace NetPodsMauiBlazor.Platforms.iOS.Services
+namespace NetPodsMauiBlazor.Platforms.iOS.Services;
+
+internal class NativeAudioService : INativeAudioService
 {
-    internal class NativeAudioService : INativeAudioService
+    AVPlayer avPlayer;
+    string _uri;
+
+    public bool IsPlaying => avPlayer != null
+        ? avPlayer.TimeControlStatus == AVPlayerTimeControlStatus.Playing
+        : false;
+
+    public double CurrentPosition => avPlayer?.CurrentTime.Seconds ?? 0;
+
+    public async Task InitializeAsync(string audioURI)
     {
-        AVPlayer avPlayer;
-        string _uri;
+        _uri = audioURI;
+        NSUrl fileURL = new NSUrl(_uri.ToString());
 
-        public bool IsPlaying => avPlayer != null
-            ? avPlayer.TimeControlStatus == AVPlayerTimeControlStatus.Playing
-            : false; //TODO
-
-        public double CurrentPosition => avPlayer?.CurrentTime.Seconds ?? 0;
-
-        public async Task InitializeAsync(string audioURI)
+        if (avPlayer != null)
         {
-            _uri = audioURI;
-            NSUrl fileURL = new NSUrl(_uri.ToString());
-
-            if (avPlayer != null)
-            {
-                await PauseAsync();
-            }
-
-            avPlayer = new AVPlayer(fileURL);
+            await PauseAsync();
         }
 
-        public Task PauseAsync()
-        {
-            avPlayer?.Pause();
+        avPlayer = new AVPlayer(fileURL);
+    }
 
-            return Task.CompletedTask;
+    public Task PauseAsync()
+    {
+        avPlayer?.Pause();
+
+        return Task.CompletedTask;
+    }
+
+    public async Task PlayAsync(double position = 0)
+    {
+        await avPlayer.SeekAsync(new CoreMedia.CMTime((long)position, 1));
+        avPlayer?.Play();
+    }
+
+
+    public Task SetCurrentTime(double value)
+    {
+        return avPlayer.SeekAsync(new CoreMedia.CMTime((long)value, 1));
+    }
+
+    public Task SetMuted(bool value)
+    {
+        if (avPlayer != null)
+        {
+            avPlayer.Muted = value;
         }
 
-        public async Task PlayAsync(double position = 0)
+        return Task.CompletedTask;
+    }
+
+    public Task SetVolume(int value)
+    {
+        if (avPlayer != null)
         {
-            await avPlayer.SeekAsync(new CoreMedia.CMTime((long)position, 1));
-            avPlayer?.Play();
+            avPlayer.Volume = value;
         }
+
+        return Task.CompletedTask;
     }
 }
