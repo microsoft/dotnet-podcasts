@@ -1,8 +1,10 @@
 using Azure.Storage.Queues;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Podcast.API.Controllers;
 using Podcast.API.Models;
 using Podcast.Infrastructure.Data;
+using Podcast.Infrastructure.Http.Feeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
 
 var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
+builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 
 builder.Services.AddSwaggerGen(setup =>
 {
@@ -32,7 +35,6 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetPodcast Api v1");
-    c.RoutePrefix = string.Empty;
 });
 
 app.UseCors();
@@ -59,11 +61,7 @@ var feedIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngest
 
 if (feedIngestionEnabled)
 {
-    app.MapPost("v1/feeds", async (QueueClient queueClient, FeedDto feed, CancellationToken cancellationToken) =>
-    {
-        await queueClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
-        await queueClient.SendMessageAsync(new BinaryData(feed), cancellationToken: cancellationToken);
-    });
+    app.MapFeedEndpointRoutes();   
 }
 
 app.MapControllers();

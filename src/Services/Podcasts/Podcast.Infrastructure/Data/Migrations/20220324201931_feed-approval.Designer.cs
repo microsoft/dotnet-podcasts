@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Podcast.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using Podcast.Infrastructure.Data;
 namespace Podcast.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PodcastDbContext))]
-    partial class PodcastDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220324201931_feed-approval")]
+    partial class feedapproval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

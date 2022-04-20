@@ -14,10 +14,10 @@ COPY ["src/Services/ListenTogether/ListenTogether.Domain/ListenTogether.Domain.c
 RUN dotnet restore "src/Services/ListenTogether/ListenTogether.Hub/ListenTogether.Hub.csproj"
 COPY . .
 WORKDIR "/src/src/Services/ListenTogether/ListenTogether.Hub"
-RUN dotnet build "ListenTogether.Hub.csproj" -c Release -o /app/build
+RUN dotnet build "ListenTogether.Hub.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ListenTogether.Hub.csproj" -c Release -o /app/publish
+RUN dotnet publish "ListenTogether.Hub.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app
