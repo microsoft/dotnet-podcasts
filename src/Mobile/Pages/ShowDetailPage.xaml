@@ -7,7 +7,7 @@
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
              x:Name="this"
-             Title="{Binding Show.Show.Title}"
+             Title="{Binding Show.Title}"
              Style="{StaticResource DetailPageStyle}"
              x:DataType="viewmodels:ShowDetailViewModel">
     <Grid Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
@@ -59,13 +59,14 @@
                                Text="{Binding Title}" />
                         <ImageButton Aspect="AspectFill"
                                      Grid.Column="1"
+                                     Grid.RowSpan="2"
                                      HorizontalOptions="End"
                                      VerticalOptions="Center"
-                                     HeightRequest="24"
                                      Source="clockpink.png"
+                                     HeightRequest="28"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShowDetailViewModel}}, Path=AddToListenLaterCommand}"
                                      CommandParameter="{Binding}"
-                                     WidthRequest="24">
+                                     WidthRequest="28">
                             <ImageButton.IsVisible>
                                 <OnPlatform x:TypeArguments="x:Boolean">
                                     <On Platform="Android,iOS">false</On>
@@ -86,15 +87,15 @@
             </CollectionView.ItemTemplate>
             <CollectionView.Header>
                 <Grid Padding="{OnIdiom Default=30, Phone=22}"
-                      ColumnDefinitions="auto, *"
+                      ColumnDefinitions="auto, auto"
                       ColumnSpacing="{OnIdiom Default=22, Phone=10}"
-                      RowDefinitions="auto,auto,auto,auto,auto,auto"
+                      RowDefinitions="auto,auto,auto,auto,auto"
                       RowSpacing="{OnIdiom Default=10, Phone=6}">
 
                     <Image Aspect="AspectFit"
                            Grid.Column="0"
                            Grid.Row="0"
-                           Grid.RowSpan="{OnIdiom Default=5, Phone=3}"
+                           Grid.RowSpan="{OnIdiom Default=3, Phone=2}"
                            HeightRequest="{OnIdiom Default=230, Phone=156}"
                            Source="{Binding Show.Image, FallbackValue=default_podcast_image.png}"
                            WidthRequest="{OnIdiom Default=230, Phone=156}" />
@@ -109,7 +110,7 @@
                            Text="{Binding Show.Author}"
                            TextColor="{AppThemeBinding Light={StaticResource Grey7},Dark={StaticResource Grey4}}" />
                     <Label Grid.Column="{OnIdiom Default=1, Phone=0}"
-                           Grid.Row="{OnIdiom Default=2, Phone=4}"
+                           Grid.Row="{OnIdiom Default=2, Phone=3}"
                            Grid.ColumnSpan="{OnIdiom Default=1, Phone=2}"
                            TextColor="{AppThemeBinding Light={StaticResource Dark},Dark={StaticResource Grey1}}"
                            Style="{StaticResource BodyMLabelStyle}"
@@ -117,7 +118,7 @@
                     <Button BackgroundColor="{StaticResource Primary}"
                             Grid.Column="{OnIdiom Default=1,Phone=0}"
                             Grid.ColumnSpan="{OnIdiom Default=1, Phone=2}"
-                            Grid.Row="{OnIdiom Default=4, Phone=3}"
+                            Grid.Row="{OnIdiom Default=4, Phone=2}"
                             Command="{Binding SubscribeCommand}"
                             Text="{x:Static res:AppResource.Subscribe}">
                         <Button.Triggers>
