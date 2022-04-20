@@ -30,7 +30,7 @@ internal class AudioInteropService : IAudioInterop
 
     public async Task SetCurrentTime(ElementReference element, double value)
     {
-        await _nativeAudioService.PlayAsync(value);
+        await _nativeAudioService.SetCurrentTime(value);
     }
 
     public Task SetMuted(ElementReference element, bool value)

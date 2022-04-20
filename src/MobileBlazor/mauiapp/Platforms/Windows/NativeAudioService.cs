@@ -53,7 +53,12 @@ internal class NativeAudioService : INativeAudioService
 
     public Task SetCurrentTime(double value)
     {
-        throw new NotImplementedException();
+        if (this.mediaPlayer != null)
+        {
+            mediaPlayer.Position = TimeSpan.FromSeconds(value);
+        }
+
+        return Task.CompletedTask;
     }
 
     public Task SetMuted(bool value)
