@@ -501,6 +501,16 @@ public class MediaPlayerService : Service,
             MediaPlayerState == PlaybackStateCode.Playing);
     }
 
+    internal void SetMuted(bool value)
+    {
+        mediaPlayer.SetVolume(0, 0);
+    }
+    
+    internal void SetVolume(int value)
+    {
+        mediaPlayer.SetVolume(value, value);
+    }
+
     /// <summary>
     /// Updates the metadata on the lock screen
     /// </summary>

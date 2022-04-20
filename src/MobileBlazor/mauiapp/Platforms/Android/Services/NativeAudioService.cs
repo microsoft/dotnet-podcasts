@@ -44,5 +44,24 @@ namespace NetPodsMauiBlazor.Platforms.Android.Services
             await instance.binder.GetMediaPlayerService().Play();
             await instance.binder.GetMediaPlayerService().Seek((int)position * 1000);
         }
+
+        public Task SetMuted(bool value)
+        {
+            instance?.binder.GetMediaPlayerService().SetMuted(value);
+
+            return Task.CompletedTask;
+        }
+
+        public Task SetVolume(int value)
+        {
+            instance?.binder.GetMediaPlayerService().SetVolume(value);
+
+            return Task.CompletedTask;
+        }
+
+        public Task SetCurrentTime(double value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

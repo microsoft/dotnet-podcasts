@@ -35,7 +35,7 @@ internal class AudioInteropService : IAudioInterop
 
     public Task SetMuted(ElementReference element, bool value)
     {
-        return Task.CompletedTask;
+        return _nativeAudioService.SetMuted(value);
     }
 
     public void SetUri(string audioURI)
@@ -49,7 +49,7 @@ internal class AudioInteropService : IAudioInterop
 
     public Task SetVolume(ElementReference element, int value)
     {
-        return Task.CompletedTask;
+        return _nativeAudioService.SetVolume(value);
     }
 
     public Task Stop(ElementReference element)
