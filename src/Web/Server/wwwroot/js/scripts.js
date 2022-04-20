@@ -1,6 +1,11 @@
+/*
+    Shows a sticky header when the vertical scroll is greater than 50px,
+    and hides it when is lesser
+
+*/
 function onScroll() {
-    var scroll = window.scrollY;
-    var header = document.querySelector('#header');
+    const scroll = window.scrollY;
+    const header = document.querySelector('#header');
 
     if (scroll > 50) {
         header.classList.add("sticky");
@@ -12,12 +17,12 @@ function onScroll() {
 window.addEventListener('scroll', onScroll, { passive: true });
 
 function addClass() {
-    var element = document.getElementById("menu");
+    const element = document.getElementById("menu");
     element.classList.add("visible");
 }
 
 function removeClass() {
-    var element = document.getElementById("menu");
+    const element = document.getElementById("menu");
     element.classList.remove("visible");
 }
 
