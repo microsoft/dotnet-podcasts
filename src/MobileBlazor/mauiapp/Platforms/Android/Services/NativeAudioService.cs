@@ -23,7 +23,8 @@ namespace NetPodsMauiBlazor.Platforms.Android.Services
             }
             else
             {
-                await instance.binder.GetMediaPlayerService().Stop();
+                instance.binder.GetMediaPlayerService().isCurrentEpisode = false;
+                instance.binder.GetMediaPlayerService().UpdatePlaybackStateStopped();
             }
 
             instance.binder.GetMediaPlayerService().AudioUrl = audioURI;

@@ -57,6 +57,10 @@ public class MediaPlayerService : Service,
 
     public event BufferingEventHandler Buffering;
 
+    public string AudioUrl;
+
+    public bool isCurrentEpisode = true;
+
     private readonly Handler PlayingHandler;
     private readonly Java.Lang.Runnable PlayingHandlerRunnable;
 
@@ -88,7 +92,7 @@ public class MediaPlayerService : Service,
         });
 
         // On Status changed to PLAYING, start raising the Playing event
-        StatusChanged += (sender, e) =>
+        StatusChanged += async (sender, e) =>
         {
             if (MediaPlayerState == PlaybackStateCode.Playing)
             {
@@ -216,8 +220,6 @@ public class MediaPlayerService : Service,
         UpdatePlaybackState(PlaybackStateCode.Playing);
     }
 
-    public string AudioUrl;
-
     public int Position
     {
         get
@@ -302,11 +304,13 @@ public class MediaPlayerService : Service,
         if (mediaSession == null)
             InitMediaSession();
 
-        if (mediaPlayer.IsPlaying)
+        if (mediaPlayer.IsPlaying && isCurrentEpisode)
         {
             UpdatePlaybackState(PlaybackStateCode.Playing);
             return;
         }
+
+        isCurrentEpisode = true;
 
         await PrepareAndPlayMediaPlayerAsync();
     }
@@ -350,11 +354,7 @@ public class MediaPlayerService : Service,
         }
         catch (Exception ex)
         {
-            UpdatePlaybackState(PlaybackStateCode.Stopped);
-
-            mediaPlayer.Reset();
-            mediaPlayer.Release();
-            mediaPlayer = null;
+            UpdatePlaybackStateStopped();
 
             // Unable to start playback log error
             Console.WriteLine(ex);
@@ -453,6 +453,18 @@ public class MediaPlayerService : Service,
             ReleaseWifiLock();
             UnregisterMediaSessionCompat();
         });
+    }
+
+    public void UpdatePlaybackStateStopped()
+    {
+        UpdatePlaybackState(PlaybackStateCode.Stopped);
+
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.Reset();
+            mediaPlayer.Release();
+            mediaPlayer = null;
+        }
     }
 
     private void UpdatePlaybackState(PlaybackStateCode state)
