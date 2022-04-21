@@ -2,7 +2,7 @@
 
 We are happy to announce the release of .NET Podcast App: a sample application showcasing [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://docs.microsoft.com/dotnet/maui/what-is-maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), [Orleans](https://docs.microsoft.com/dotnet/orleans/overview), and more.
 
-You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor. You can also see a [live Orleans dashboard](https://dotnetpodcasts-listentogether-hub.azurewebsites.net/dashboard) for the Listen together mode!
+You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor.
 
 ![Logo](./docs/net-podcasts.png)
 
