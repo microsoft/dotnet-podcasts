@@ -1,6 +1,7 @@
 ﻿using ListenTogether.Application.Interfaces;
 using ListenTogether.Domain;
 using Microsoft.EntityFrameworkCore;
+using Orleans;
 
 namespace ListenTogether.Application.Rooms;
 
@@ -18,34 +19,17 @@ public class LeaveRoomRequest : IRequest<Room>
 
 public class LeaveRoomRequestHandler : IRequestHandler<LeaveRoomRequest, Room>
 {
-    private readonly IApplicationDbContext _dbContext;
+    private readonly IGrainFactory _grainFactory;
 
-    public LeaveRoomRequestHandler(IApplicationDbContext dbContext)
+    public LeaveRoomRequestHandler(IGrainFactory grainFactory)
     {
-        _dbContext = dbContext;
+        _grainFactory = grainFactory;
     }
 
     public async Task<Room> HandleAsync(LeaveRoomRequest request, CancellationToken cancellationToken)
     {
-        var room = await _dbContext.Rooms
-            .Include(room => room.Users)
-            .Include(room => room.Episode.Show)
-            .FirstOrDefaultAsync(room => room.Code == request.RoomCode, cancellationToken);
-
-        if (room == null)
-        {
-            throw new ArgumentNullException(nameof(Room));
-        }
-
-        var requestConnectionId = request.ConnectionId;
-        room.RemoveUser(requestConnectionId);
-
-        if (room.IsEmpty())
-        {
-            _dbContext.Rooms.Remove(room);
-        }
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        var roomGrain = _grainFactory.GetGrain<IRoomGrain>(request.RoomCode);
+        var room = await roomGrain.LeaveRoom(request.ConnectionId);
 
         return room;
     }

@@ -35,6 +35,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - NetPodcastApi__BaseAddress=http://podcast.api
       - ConnectionStrings__ListenTogetherDb=Server=podcast.db;Database=ListenTogether;User Id=sa;Password=Pass@word
+      - ConnectionStrings__OrleansStorage=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://azurite
     ports:
       - "5001:80"
 
@@ -43,6 +44,7 @@ services:
     ports:
       - "10000:10000"
       - "10001:10001"
+      - "10002:10002"
 
   podcast.web:
     environment:

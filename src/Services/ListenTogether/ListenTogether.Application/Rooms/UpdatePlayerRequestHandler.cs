@@ -1,6 +1,7 @@
 ﻿using ListenTogether.Application.Interfaces;
 using ListenTogether.Domain;
 using Microsoft.EntityFrameworkCore;
+using Orleans;
 
 namespace ListenTogether.Application.Rooms;
 
@@ -20,29 +21,19 @@ public class UpdatePlayerRequest : IRequest<Room>
 
 public class UpdatePlayerRequestHandler : IRequestHandler<UpdatePlayerRequest, Room>
 {
-    private readonly IApplicationDbContext _dbContext;
+    private readonly IGrainFactory _grainFactory;
 
-    public UpdatePlayerRequestHandler(IApplicationDbContext dbContext)
+    public UpdatePlayerRequestHandler(IGrainFactory grainFactory)
     {
-        _dbContext = dbContext;
+        _grainFactory = grainFactory;
     }
 
     public async Task<Room> HandleAsync(UpdatePlayerRequest request, CancellationToken cancellationToken)
     {
         var seconds = TimeSpan.FromSeconds(request.Progress);
 
-        var room = await _dbContext.Rooms
-            .Include(room => room.Users)
-            .Include(room => room.Episode.Show)
-            .FirstOrDefaultAsync(room => room.Code == request.RoomCode, cancellationToken);
-
-        if (room == null)
-        {
-            throw new ArgumentNullException(nameof(Room));
-        }
-
-        room.UpdatePlayerState(seconds, request.State);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        var roomGrain = _grainFactory.GetGrain<IRoomGrain>(request.RoomCode);
+        var room = await roomGrain.UpdatePlayerState(seconds, request.State);
 
         return room;
     }
