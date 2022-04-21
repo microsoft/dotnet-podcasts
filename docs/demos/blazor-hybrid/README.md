@@ -1,5 +1,7 @@
 ### Blazor Hybrid + .NET MAUI Setup
 
+The .NET MAUI & Blazor Hybrid apps are setup to run locally against the APIs running in Docker. If you are unable to deploy locally, you can use these pre-deployed services:
+
 Open `src/MobileBlazor/mauiapp/MauiProgram.cs` and enter
 
 ```csharp
