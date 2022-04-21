@@ -111,7 +111,7 @@
         },
         "OrleansStorage": {
           "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix=core.windows.net;AccountKey={1}', parameters('storageAccountName'), parameters('storageAccountKey'))]",
-          "type": "Storage"
+          "type": "Custom"
         }
       },
       "dependsOn": [
