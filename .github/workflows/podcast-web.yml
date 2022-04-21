@@ -46,7 +46,7 @@ jobs:
           inlineScript: |
             az extension add --name containerapp
             az provider register --namespace Microsoft.App
-            $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query configuration.ingress.fqdn)"
+            $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
             $listenTogetherHubUrl = "https://${{ secrets.HUB_WEBAPP_NAME }}.azurewebsites.net/listentogether"
             echo "PODCAST_API_URL=$apiUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
             echo "LISTEN_TOGETHER_HUB_URL=$listenTogetherHubUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
