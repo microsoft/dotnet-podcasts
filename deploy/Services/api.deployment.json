@@ -53,15 +53,17 @@
   },
   "functions": [],
   "variables": {
-    "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]",
-    "kubernetesEnvId": "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]",
+    "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]",
+    "kubernetesEnvId": "[resourceId('Microsoft.App/managedEnvironments/', parameters('kubernetesEnvName'))]",
     "kubernetesEnvLocation": "canadacentral",
     "podcastDbConnectionString": "[format('Server=tcp:{0}.database.windows.net,1433;Initial Catalog={1};Persist Security Info=False;User ID={2};Password={3};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('serverName'), parameters('sqlDBName'), parameters('administratorLogin'), parameters('administratorLoginPassword'))]",
     "podcastApiImage": "[format('{0}/podcastapi:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
     "podcastUpdaterImage": "[format('{0}/podcastupdaterworker:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
     "podcastIngestionWorkerImage": "[format('{0}/podcastingestionworker:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
     "imagesStorage": "[format('https://{0}.blob.core.windows.net/covers/', parameters('storageAccountName'))]",
-    "deployIngestion": true
+    "deployIngestion": true,
+    "appInsightsName": "[concat('appins-', parameters('workspaceName'))]",
+    "logAnalyticsWorkspaceName": "[concat('logs-', parameters('workspaceName'))]"
   },
   "resources": [
     {
@@ -129,13 +131,27 @@
       "name": "[parameters('workspaceName')]",
       "location": "[parameters('location')]",
       "properties": {
-        "sku": {
-          "name": "PerGB2018"
-        },
         "retentionInDays": 30,
         "features": {
           "searchVersion": 1
+        },
+        "sku": {
+          "name": "PerGB2018"
         }
+      }
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "[variables('appInsightsName')]",
+      "location": "[variables('kubernetesEnvLocation')]",
+      "kind": "web",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
+      ],
+      "properties": {
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
       }
     },
     {
@@ -143,18 +159,17 @@
       "apiVersion": "2022-01-01-preview",
       "name": "[parameters('kubernetesEnvName')]",
       "location": "[variables('kubernetesEnvLocation')]",
-      "tags": {},
       "properties": {
         "appLogsConfiguration": {
           "destination": "log-analytics",
           "logAnalyticsConfiguration": {
-            "customerId": "[reference(variables('workspaceId'), '2020-03-01-preview').customerId]",
-            "sharedKey": "[listKeys(variables('workspaceId'), '2020-03-01-preview').primarySharedKey]"
+            "customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName')), '2020-03-01-preview').customerId]",
+            "sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName')), '2020-03-01-preview').primarySharedKey]"
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
+        "[resourceId('Microsoft.Insights/components/', variables('appInsightsName'))]"
       ]
     },
     {
@@ -163,7 +178,7 @@
       "name": "podcastapica",
       "location": "[variables('kubernetesEnvLocation')]",
       "properties": {
-        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
+        "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', parameters('kubernetesEnvName'))]",
         "configuration": {
           "activeRevisionsMode": "single",
           "ingress": {
@@ -250,7 +265,7 @@
       "name": "podcastingestionca",
       "location": "[variables('kubernetesEnvLocation')]",
       "properties": {
-        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
+        "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', parameters('kubernetesEnvName'))]",
         "configuration": {
           "activeRevisionsMode": "single",
           "registries": [
@@ -334,7 +349,7 @@
       "name": "podcastupdaterca",
       "location": "[variables('kubernetesEnvLocation')]",
       "properties": {
-        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
+        "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', parameters('kubernetesEnvName'))]",
         "configuration": {
           "activeRevisionsMode": "single",
           "registries": [
