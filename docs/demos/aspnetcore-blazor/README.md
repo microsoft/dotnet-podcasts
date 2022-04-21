@@ -1,6 +1,6 @@
 ### Web (ASP.NET Core Razor & Blazor)
 
-The ASP.NET Core and Blaozr apps are setup to run locally against the APIs running in Docker. If you are unable to deploy locally, you can use these pre-deployed services:
+The ASP.NET Core and Blazor apps are setup to run locally against the APIs running in Docker. If you are unable to deploy locally, you can use these pre-deployed services:
 
 Open up ` src/Web/Server/appsettings.Development.json` and `src/Web/Client/wwwroot/appsettings.Development.json` enter this for both
 
