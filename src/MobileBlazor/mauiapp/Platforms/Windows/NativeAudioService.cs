@@ -12,7 +12,7 @@ internal class NativeAudioService : INativeAudioService
     public bool IsPlaying => mediaPlayer != null
         && mediaPlayer.CurrentState == MediaPlayerState.Playing;
 
-    public double CurrentPosition => (long)mediaPlayer?.Position.TotalSeconds;
+    public double CurrentPosition => mediaPlayer?.Position.TotalSeconds ?? 0;
 
     public async Task InitializeAsync(string audioURI)
     {
@@ -81,5 +81,11 @@ internal class NativeAudioService : INativeAudioService
         }
 
         return Task.CompletedTask;
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        mediaPlayer?.Dispose();
+        return ValueTask.CompletedTask;
     }
 }

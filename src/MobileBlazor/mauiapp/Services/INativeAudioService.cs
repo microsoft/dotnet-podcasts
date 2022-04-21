@@ -14,6 +14,8 @@ internal interface INativeAudioService
 
     Task SetCurrentTime(double value);
 
+    ValueTask DisposeAsync();
+
     bool IsPlaying { get; }
 
     double CurrentPosition { get; }

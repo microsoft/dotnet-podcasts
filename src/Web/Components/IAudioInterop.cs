@@ -4,7 +4,7 @@ namespace Podcast.Components;
 
 public interface IAudioInterop
 {
-    void SetUri(string audioURI);
+    void SetUri(string? audioURI);
 
     Task Play(ElementReference element);
 

@@ -1,20 +1,25 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Podcast.Components;
+using Podcast.Pages.Data;
+using System.Timers;
 
 namespace NetPodsMauiBlazor.Services;
 
 internal class AudioInteropService : IAudioInterop
 {
     private readonly INativeAudioService _nativeAudioService;
+    private readonly PlayerService _playerService;
+    private readonly System.Timers.Timer currentTimeTimer;
 
-    public AudioInteropService(INativeAudioService nativeAudioService)
+    public AudioInteropService(
+        INativeAudioService nativeAudioService,
+        PlayerService playerService)
     {
         _nativeAudioService = nativeAudioService;
-    }
+        _playerService = playerService;
 
-    public ValueTask DisposeAsync()
-    {
-        return new ValueTask();
+        currentTimeTimer = new System.Timers.Timer(TimeSpan.FromSeconds(1).TotalMilliseconds);
+        currentTimeTimer.Elapsed += OnCurrentTimeEvent;
     }
 
     public Task Pause(ElementReference element)
@@ -25,6 +30,7 @@ internal class AudioInteropService : IAudioInterop
     public async Task Play(ElementReference element)
     {
         await _nativeAudioService.PlayAsync(_nativeAudioService.CurrentPosition);
+        
     }
 
     public async Task SetCurrentTime(ElementReference element, double value)
@@ -42,6 +48,7 @@ internal class AudioInteropService : IAudioInterop
         if (audioURI != null)
         {
             _nativeAudioService.InitializeAsync(audioURI).Wait();
+            currentTimeTimer.Start();
         }
     }
 
@@ -53,5 +60,16 @@ internal class AudioInteropService : IAudioInterop
     public Task Stop(ElementReference element)
     {
         return _nativeAudioService.PauseAsync();
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        currentTimeTimer.Dispose();
+        return _nativeAudioService.DisposeAsync();
+    }
+
+    private void OnCurrentTimeEvent(Object source, ElapsedEventArgs e)
+    {
+        _playerService.CurrentTime = _nativeAudioService.CurrentPosition;
     }
 }

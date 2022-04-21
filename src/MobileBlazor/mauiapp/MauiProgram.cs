@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Infrastructure;
-using Microsoft.AspNetCore.Components.WebView.Maui;
 using NetPodsMauiBlazor.Services;
 using Podcast.Components;
 using Podcast.Pages.Data;

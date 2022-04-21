@@ -6,7 +6,6 @@ namespace Podcast.Components;
 public class AudioInterop : IAudioInterop ,IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> moduleTask;
-    private string url;
 
     public AudioInterop(IJSRuntime jsRuntime)
     {
@@ -59,8 +58,8 @@ public class AudioInterop : IAudioInterop ,IAsyncDisposable
         }
     }
 
-    public void SetUri(string audioURI)
+    public void SetUri(string? audioURI)
     {
-        url = audioURI;
+        //no action is necessary
     }
 }

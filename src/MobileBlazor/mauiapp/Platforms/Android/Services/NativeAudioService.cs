@@ -62,8 +62,14 @@ internal class NativeAudioService : INativeAudioService
         return Task.CompletedTask;
     }
 
-    public Task SetCurrentTime(double value)
+    public Task SetCurrentTime(double position)
     {
-        throw new NotImplementedException();
+        return instance.binder.GetMediaPlayerService().Seek((int)position * 1000);
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        instance.binder?.Dispose();
+        return ValueTask.CompletedTask;
     }
 }

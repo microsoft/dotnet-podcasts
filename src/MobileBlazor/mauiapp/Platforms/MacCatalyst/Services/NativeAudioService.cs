@@ -65,4 +65,10 @@ internal class NativeAudioService : INativeAudioService
 
         return Task.CompletedTask;
     }
+
+    public ValueTask DisposeAsync()
+    {
+        avPlayer?.Dispose();
+        return ValueTask.CompletedTask;
+    }
 }
