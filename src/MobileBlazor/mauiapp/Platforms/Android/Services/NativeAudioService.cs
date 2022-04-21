@@ -1,68 +1,69 @@
 ﻿using NetPodsMauiBlazor.Services;
 using Android.Media;
 
-namespace NetPodsMauiBlazor.Platforms.Android.Services
+namespace NetPodsMauiBlazor.Platforms.Android.Services;
+
+internal class NativeAudioService : INativeAudioService
 {
-    internal class NativeAudioService : INativeAudioService
+    MainActivity instance;
+
+    private MediaPlayer mediaPlayer => instance != null &&
+        instance.binder.GetMediaPlayerService() != null ?
+        instance.binder.GetMediaPlayerService().mediaPlayer : null;
+
+    public bool IsPlaying => mediaPlayer?.IsPlaying ?? false;
+
+    public double CurrentPosition => mediaPlayer?.CurrentPosition / 1000 ?? 0;
+
+    public Task InitializeAsync(string audioURI)
     {
-        MainActivity instance;
-
-        private MediaPlayer mediaPlayer => instance != null &&
-            instance.binder.GetMediaPlayerService() != null ?
-            instance.binder.GetMediaPlayerService().mediaPlayer : null;
-
-        public bool IsPlaying => mediaPlayer?.IsPlaying ?? false;
-
-        public double CurrentPosition => mediaPlayer?.CurrentPosition / 1000 ?? 0;
-
-        public async Task InitializeAsync(string audioURI)
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = MainActivity.instance;
-            }
-            else
-            {
-                instance.binder.GetMediaPlayerService().isCurrentEpisode = false;
-                instance.binder.GetMediaPlayerService().UpdatePlaybackStateStopped();
-            }
-
-            instance.binder.GetMediaPlayerService().AudioUrl = audioURI;
+            instance = MainActivity.instance;
+        }
+        else
+        {
+            instance.binder.GetMediaPlayerService().isCurrentEpisode = false;
+            instance.binder.GetMediaPlayerService().UpdatePlaybackStateStopped();
         }
 
-        public Task PauseAsync()
-        {
-            if (IsPlaying)
-            {
-                return instance.binder.GetMediaPlayerService().Pause();
-            }
+        instance.binder.GetMediaPlayerService().AudioUrl = audioURI;
 
-            return Task.CompletedTask;
+        return Task.CompletedTask;
+    }
+
+    public Task PauseAsync()
+    {
+        if (IsPlaying)
+        {
+            return instance.binder.GetMediaPlayerService().Pause();
         }
 
-        public async Task PlayAsync(double position = 0)
-        {
-            await instance.binder.GetMediaPlayerService().Play();
-            await instance.binder.GetMediaPlayerService().Seek((int)position * 1000);
-        }
+        return Task.CompletedTask;
+    }
 
-        public Task SetMuted(bool value)
-        {
-            instance?.binder.GetMediaPlayerService().SetMuted(value);
+    public async Task PlayAsync(double position = 0)
+    {
+        await instance.binder.GetMediaPlayerService().Play();
+        await instance.binder.GetMediaPlayerService().Seek((int)position * 1000);
+    }
 
-            return Task.CompletedTask;
-        }
+    public Task SetMuted(bool value)
+    {
+        instance?.binder.GetMediaPlayerService().SetMuted(value);
 
-        public Task SetVolume(int value)
-        {
-            instance?.binder.GetMediaPlayerService().SetVolume(value);
+        return Task.CompletedTask;
+    }
 
-            return Task.CompletedTask;
-        }
+    public Task SetVolume(int value)
+    {
+        instance?.binder.GetMediaPlayerService().SetVolume(value);
 
-        public Task SetCurrentTime(double value)
-        {
-            throw new NotImplementedException();
-        }
+        return Task.CompletedTask;
+    }
+
+    public Task SetCurrentTime(double value)
+    {
+        throw new NotImplementedException();
     }
 }

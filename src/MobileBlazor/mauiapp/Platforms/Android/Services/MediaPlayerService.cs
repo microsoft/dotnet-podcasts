@@ -18,7 +18,6 @@ using NetPodsMauiBlazor.Platforms;
 using NetPodsMauiBlazor.Platforms.Android;
 using NetPodsMauiBlazor.Platforms.Android.Services;
 */
-using Microsoft.Maui.Platform;
 
 namespace NetPodsMauiBlazor.Platforms.Android.Services;
 
@@ -92,7 +91,7 @@ public class MediaPlayerService : Service,
         });
 
         // On Status changed to PLAYING, start raising the Playing event
-        StatusChanged += async (sender, e) =>
+        StatusChanged += (sender, e) =>
         {
             if (MediaPlayerState == PlaybackStateCode.Playing)
             {

@@ -6,7 +6,6 @@ namespace NetPodsMauiBlazor.Services;
 internal class AudioInteropService : IAudioInterop
 {
     private readonly INativeAudioService _nativeAudioService;
-    private string url;
 
     public AudioInteropService(INativeAudioService nativeAudioService)
     {
@@ -42,7 +41,6 @@ internal class AudioInteropService : IAudioInterop
     {
         if (audioURI != null)
         {
-            url = audioURI;
             _nativeAudioService.InitializeAsync(audioURI).Wait();
         }
     }
