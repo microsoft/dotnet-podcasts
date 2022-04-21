@@ -147,7 +147,7 @@
       "location": "[variables('kubernetesEnvLocation')]",
       "kind": "web",
       "dependsOn": [
-        "[resourceId('Microsoft.Insights/components/', variables('appInsightsName'))]"
+        "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
       ],
       "properties": {
         "Application_Type": "web",
