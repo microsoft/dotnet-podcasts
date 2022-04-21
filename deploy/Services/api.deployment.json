@@ -121,7 +121,7 @@
     {
       "type": "Microsoft.OperationalInsights/workspaces",
       "apiVersion": "2020-03-01-preview",
-      "name": "[parameters('workspaceName')]",
+      "name": "[parameters('logAnalyticsWorkspaceName')]",
       "location": "[parameters('location')]",
       "properties": {
         "retentionInDays": 30,
