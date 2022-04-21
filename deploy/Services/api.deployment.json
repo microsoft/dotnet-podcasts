@@ -54,7 +54,7 @@
   "functions": [],
   "variables": {
     "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]",
-    "kubernetesEnvId": "[resourceId('Microsoft.Web/kubeEnvironments', parameters('kubernetesEnvName'))]",
+    "kubernetesEnvId": "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]",
     "kubernetesEnvLocation": "canadacentral",
     "podcastDbConnectionString": "[format('Server=tcp:{0}.database.windows.net,1433;Initial Catalog={1};Persist Security Info=False;User ID={2};Password={3};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;', parameters('serverName'), parameters('sqlDBName'), parameters('administratorLogin'), parameters('administratorLoginPassword'))]",
     "podcastApiImage": "[format('{0}/podcastapi:{1}', parameters('acrLoginServer'), parameters('imageTag'))]",
@@ -141,8 +141,8 @@
       }
     },
     {
-      "type": "Microsoft.Web/kubeEnvironments",
-      "apiVersion": "2021-03-01",
+      "type": "Microsoft.App/managedEnvironments",
+      "apiVersion": "2022-01-01-preview",
       "name": "[parameters('kubernetesEnvName')]",
       "location": "[variables('kubernetesEnvLocation')]",
       "tags": {},
@@ -161,13 +161,13 @@
       ]
     },
     {
-      "type": "Microsoft.Web/containerApps",
-      "apiVersion": "2021-03-01",
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-01-01-preview",
       "name": "podcastapica",
       "location": "[variables('kubernetesEnvLocation')]",
       "kind": "containerapp",
       "properties": {
-        "kubeEnvironmentId": "[variables('kubernetesEnvId')]",
+        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
         "configuration": {
           "activeRevisionsMode": "single",
           "ingress": {
@@ -242,20 +242,20 @@
       },
       "tags": {},
       "dependsOn": [
-        "[resourceId('Microsoft.Web/kubeEnvironments', parameters('kubernetesEnvName'))]",
+        "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]",
         "[resourceId('Microsoft.Sql/servers/databases', parameters('serverName'), parameters('sqlDBName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
     },
     {
       "condition": "[variables('deployIngestion')]",
-      "type": "Microsoft.Web/containerApps",
-      "apiVersion": "2021-03-01",
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-01-01-preview",
       "name": "podcastingestionca",
       "location": "[variables('kubernetesEnvLocation')]",
       "kind": "containerapp",
       "properties": {
-        "kubeEnvironmentId": "[variables('kubernetesEnvId')]",
+        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
         "configuration": {
           "activeRevisionsMode": "single",
           "registries": [
@@ -327,20 +327,20 @@
       },
       "tags": {},
       "dependsOn": [
-        "[resourceId('Microsoft.Web/kubeEnvironments', parameters('kubernetesEnvName'))]",
-        "[resourceId('Microsoft.Web/containerApps', 'podcastapica')]",
+        "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]",
+        "[resourceId('Microsoft.App/containerApps', 'podcastapica')]",
         "[resourceId('Microsoft.Sql/servers/databases', parameters('serverName'), parameters('sqlDBName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
     },
     {
-      "type": "Microsoft.Web/containerApps",
-      "apiVersion": "2021-03-01",
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-01-01-preview",
       "name": "podcastupdaterca",
       "location": "[variables('kubernetesEnvLocation')]",
       "kind": "containerapp",
       "properties": {
-        "kubeEnvironmentId": "[variables('kubernetesEnvId')]",
+        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
         "configuration": {
           "activeRevisionsMode": "single",
           "registries": [
@@ -393,8 +393,8 @@
       },
       "tags": {},
       "dependsOn": [
-        "[resourceId('Microsoft.Web/kubeEnvironments', parameters('kubernetesEnvName'))]",
-        "[resourceId('Microsoft.Web/containerApps', 'podcastapica')]",
+        "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]",
+        "[resourceId('Microsoft.App/containerApps', 'podcastapica')]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
       ]
     }
