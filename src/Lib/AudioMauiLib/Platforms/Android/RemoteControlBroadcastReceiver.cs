@@ -2,7 +2,7 @@
 using Android.Content;
 using Android.Views;
 
-namespace NetPodsMauiBlazor.Platforms.Android.Services;
+namespace AudioMauiLib.Platforms.Android;
 
 [BroadcastReceiver(Exported = true)]
 [IntentFilter(new[] { Intent.ActionMediaButton })]

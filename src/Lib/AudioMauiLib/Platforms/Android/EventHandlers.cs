@@ -1,4 +1,4 @@
-﻿namespace NetPodsMauiBlazor.Platforms.Android.Services;
+﻿namespace AudioMauiLib.Platforms.Android;
 
 public delegate void StatusChangedEventHandler(object sender, EventArgs e);
 

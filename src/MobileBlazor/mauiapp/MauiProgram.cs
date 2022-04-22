@@ -29,7 +29,7 @@ public static class MauiProgram
 #if WINDOWS
         builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.Windows.NativeAudioService>();
 #elif ANDROID
-        builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.Windows.NativeAudioService>();
+        builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.Android.NativeAudioService>();
 #elif MACCATALYST
         builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.MacCatalyst.NativeAudioService>();
 #elif IOS

@@ -8,7 +8,8 @@ using static Android.App.Notification;
 using static Android.Resource;
 using AndroidMedia = Android.Media;
 
-namespace Microsoft.NetConf2021.Maui.Platforms.Android.Services;
+
+namespace AudioMauiLib.Platforms.Android;
 
 public static class NotificationHelper
 {
@@ -37,7 +38,7 @@ public static class NotificationHelper
         nm.CancelAll();
     }
 
-    internal static void CreateNotificationChannel(Context context)
+    public static void CreateNotificationChannel(Context context)
     {
         if (Build.VERSION.SdkInt < BuildVersionCodes.O)
         {
@@ -59,50 +60,50 @@ public static class NotificationHelper
     }
 
     internal static void StartNotification(
-        Context context, 
+        Context context,
         MediaMetadata mediaMetadata,
         AndroidMedia.Session.MediaSession mediaSession,
-        Object largeIcon,
+        object largeIcon,
         bool isPlaying)
     {
         var pendingIntent = PendingIntent.GetActivity(
             context,
             0,
-            new Intent(context, typeof(MainActivity)),
+            new Intent(context, typeof(Activity)),
             PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Mutable);
         MediaMetadata currentTrack = mediaMetadata;
 
         MediaStyle style = new MediaStyle();
         style.SetMediaSession(mediaSession.SessionToken);
 
-        var builder = new Notification.Builder(context, CHANNEL_ID)
+        var builder = new Builder(context, CHANNEL_ID)
             .SetStyle(style)
             .SetContentTitle(currentTrack.GetString(MediaMetadata.MetadataKeyTitle))
             .SetContentText(currentTrack.GetString(MediaMetadata.MetadataKeyArtist))
             .SetSubText(currentTrack.GetString(MediaMetadata.MetadataKeyAlbum))
-            .SetSmallIcon(Resource.Drawable.player_play)
+            .SetSmallIcon(Resource.Drawable.abc_ab_share_pack_mtrl_alpha) //TODO player_play
             .SetLargeIcon(largeIcon as Bitmap)
             .SetContentIntent(pendingIntent)
             .SetShowWhen(false)
             .SetOngoing(isPlaying)
             .SetVisibility(NotificationVisibility.Public);
 
-        builder.AddAction(NotificationHelper.GenerateActionCompat(context, Drawable.IcMediaPrevious, "Previous", MediaPlayerService.ActionPrevious));
+        builder.AddAction(GenerateActionCompat(context, Drawable.IcMediaPrevious, "Previous", MediaPlayerService.ActionPrevious));
         AddPlayPauseActionCompat(builder, context, isPlaying);
-        builder.AddAction(NotificationHelper.GenerateActionCompat(context, Drawable.IcMediaNext, "Next", MediaPlayerService.ActionNext));
+        builder.AddAction(GenerateActionCompat(context, Drawable.IcMediaNext, "Next", MediaPlayerService.ActionNext));
         style.SetShowActionsInCompactView(0, 1, 2);
 
         NotificationManagerCompat.From(context).Notify(NotificationId, builder.Build());
     }
 
     private static void AddPlayPauseActionCompat(
-        Notification.Builder builder, 
+        Builder builder,
         Context context,
         bool isPlaying)
     {
         if (isPlaying)
-            builder.AddAction(NotificationHelper.GenerateActionCompat(context, Drawable.IcMediaPause, "Pause", MediaPlayerService.ActionPause));
+            builder.AddAction(GenerateActionCompat(context, Drawable.IcMediaPause, "Pause", MediaPlayerService.ActionPause));
         else
-            builder.AddAction(NotificationHelper.GenerateActionCompat(context, Drawable.IcMediaPlay, "Play", MediaPlayerService.ActionPlay));
+            builder.AddAction(GenerateActionCompat(context, Drawable.IcMediaPlay, "Play", MediaPlayerService.ActionPlay));
     }
 }

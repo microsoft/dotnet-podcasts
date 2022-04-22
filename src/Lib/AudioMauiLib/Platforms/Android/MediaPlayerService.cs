@@ -5,16 +5,15 @@ using Android.Net;
 using Android.Net.Wifi;
 using Android.OS;
 using Android.Media.Session;
-using Microsoft.NetConf2021.Maui.Platforms.Android.Receivers;
 using AndroidNet = Android.Net;
 using Android.Graphics;
-using Microsoft.Maui.Platform;
 
-namespace Microsoft.NetConf2021.Maui.Platforms.Android.Services;
+namespace AudioMauiLib.Platforms.Android;
+
 
 [Service(Exported = true)]
 [IntentFilter(new[] { ActionPlay, ActionPause, ActionStop, ActionTogglePlayback, ActionNext, ActionPrevious })]
-public class MediaPlayerService : Service, 
+public class MediaPlayerService : Service,
    AudioManager.IOnAudioFocusChangeListener,
    MediaPlayer.IOnBufferingUpdateListener,
    MediaPlayer.IOnCompletionListener,
@@ -46,6 +45,10 @@ public class MediaPlayerService : Service,
 
     public event BufferingEventHandler Buffering;
 
+    public string AudioUrl;
+
+    public bool isCurrentEpisode = true;
+
     private readonly Handler PlayingHandler;
     private readonly Java.Lang.Runnable PlayingHandlerRunnable;
 
@@ -55,9 +58,9 @@ public class MediaPlayerService : Service,
     {
         get
         {
-            return (mediaController.PlaybackState != null 
-                ? mediaController.PlaybackState.State 
-                : PlaybackStateCode.None);
+            return mediaController.PlaybackState != null
+                ? mediaController.PlaybackState.State
+                : PlaybackStateCode.None;
         }
     }
 
@@ -66,7 +69,8 @@ public class MediaPlayerService : Service,
         PlayingHandler = new Handler(Looper.MainLooper);
 
         // Create a runnable, restarting itself if the status still is "playing"
-        PlayingHandlerRunnable = new Java.Lang.Runnable(() => {
+        PlayingHandlerRunnable = new Java.Lang.Runnable(() =>
+        {
             OnPlaying(EventArgs.Empty);
 
             if (MediaPlayerState == PlaybackStateCode.Playing)
@@ -76,7 +80,8 @@ public class MediaPlayerService : Service,
         });
 
         // On Status changed to PLAYING, start raising the Playing event
-        StatusChanged += (object sender, EventArgs e) => {
+        StatusChanged += (sender, e) =>
+        {
             if (MediaPlayerState == PlaybackStateCode.Playing)
             {
                 PlayingHandler.PostDelayed(PlayingHandlerRunnable, 0);
@@ -131,7 +136,7 @@ public class MediaPlayerService : Service,
         {
             if (mediaSession == null)
             {
-                Intent nIntent = new Intent(ApplicationContext, typeof(MainActivity));
+                Intent nIntent = new Intent(ApplicationContext, typeof(Activity));
 
                 remoteComponentName = new ComponentName(PackageName, new RemoteControlBroadcastReceiver().ComponentName);
 
@@ -203,15 +208,13 @@ public class MediaPlayerService : Service,
         UpdatePlaybackState(PlaybackStateCode.Playing);
     }
 
-    public string AudioUrl ;
-
     public int Position
     {
         get
         {
             if (mediaPlayer == null
-                || (MediaPlayerState != PlaybackStateCode.Playing
-                    && MediaPlayerState != PlaybackStateCode.Paused))
+                || MediaPlayerState != PlaybackStateCode.Playing
+                    && MediaPlayerState != PlaybackStateCode.Paused)
                 return -1;
             else
                 return mediaPlayer.CurrentPosition;
@@ -223,8 +226,8 @@ public class MediaPlayerService : Service,
         get
         {
             if (mediaPlayer == null
-                || (MediaPlayerState != PlaybackStateCode.Playing
-                    && MediaPlayerState != PlaybackStateCode.Paused))
+                || MediaPlayerState != PlaybackStateCode.Playing
+                    && MediaPlayerState != PlaybackStateCode.Paused)
                 return 0;
             else
                 return mediaPlayer.Duration;
@@ -256,7 +259,7 @@ public class MediaPlayerService : Service,
         get
         {
             if (cover == null)
-                cover = BitmapFactory.DecodeResource(Resources, Resource.Drawable.player_play);
+                cover = BitmapFactory.DecodeResource(Resources, Resource.Drawable.abc_ab_share_pack_mtrl_alpha); //TODO player_play
             return cover;
         }
         private set
@@ -289,11 +292,13 @@ public class MediaPlayerService : Service,
         if (mediaSession == null)
             InitMediaSession();
 
-        if (mediaPlayer.IsPlaying)
+        if (mediaPlayer.IsPlaying && isCurrentEpisode)
         {
             UpdatePlaybackState(PlaybackStateCode.Playing);
             return;
         }
+
+        isCurrentEpisode = true;
 
         await PrepareAndPlayMediaPlayerAsync();
     }
@@ -330,18 +335,14 @@ public class MediaPlayerService : Service,
 
                 byte[] imageByteArray = metaRetriever.GetEmbeddedPicture();
                 if (imageByteArray == null)
-                    Cover = await BitmapFactory.DecodeResourceAsync(Resources, Resource.Drawable.player_play);
+                    Cover = await BitmapFactory.DecodeResourceAsync(Resources, Resource.Drawable.abc_ab_share_pack_mtrl_alpha); //TODO player_play
                 else
                     Cover = await BitmapFactory.DecodeByteArrayAsync(imageByteArray, 0, imageByteArray.Length);
             }
         }
         catch (Exception ex)
         {
-            UpdatePlaybackState(PlaybackStateCode.Stopped);
-
-            mediaPlayer.Reset();
-            mediaPlayer.Release();
-            mediaPlayer = null;
+            UpdatePlaybackStateStopped();
 
             // Unable to start playback log error
             Console.WriteLine(ex);
@@ -350,7 +351,8 @@ public class MediaPlayerService : Service,
 
     public async Task Seek(int position)
     {
-        await Task.Run(() => {
+        await Task.Run(() =>
+        {
             if (mediaPlayer != null)
             {
                 mediaPlayer.SeekTo(position);
@@ -396,7 +398,7 @@ public class MediaPlayerService : Service,
 
     public async Task PlayPause()
     {
-        if (mediaPlayer == null || (mediaPlayer != null && MediaPlayerState == PlaybackStateCode.Paused))
+        if (mediaPlayer == null || mediaPlayer != null && MediaPlayerState == PlaybackStateCode.Paused)
         {
             await Play();
         }
@@ -408,7 +410,8 @@ public class MediaPlayerService : Service,
 
     public async Task Pause()
     {
-        await Task.Run(() => {
+        await Task.Run(() =>
+        {
             if (mediaPlayer == null)
                 return;
 
@@ -421,7 +424,8 @@ public class MediaPlayerService : Service,
 
     public async Task Stop()
     {
-        await Task.Run(() => {
+        await Task.Run(() =>
+        {
             if (mediaPlayer == null)
                 return;
 
@@ -437,6 +441,18 @@ public class MediaPlayerService : Service,
             ReleaseWifiLock();
             UnregisterMediaSessionCompat();
         });
+    }
+
+    public void UpdatePlaybackStateStopped()
+    {
+        UpdatePlaybackState(PlaybackStateCode.Stopped);
+
+        if (mediaPlayer != null)
+        {
+            mediaPlayer.Reset();
+            mediaPlayer.Release();
+            mediaPlayer = null;
+        }
     }
 
     private void UpdatePlaybackState(PlaybackStateCode state)
@@ -483,6 +499,16 @@ public class MediaPlayerService : Service,
             mediaSession,
             Cover,
             MediaPlayerState == PlaybackStateCode.Playing);
+    }
+
+    internal void SetMuted(bool value)
+    {
+        mediaPlayer.SetVolume(0, 0);
+    }
+
+    internal void SetVolume(int value)
+    {
+        mediaPlayer.SetVolume(value, value);
     }
 
     /// <summary>
