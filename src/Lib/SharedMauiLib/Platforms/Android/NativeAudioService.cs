@@ -14,6 +14,7 @@ namespace SharedMauiLib.Platforms.Android
         public bool IsPlaying => mediaPlayer?.IsPlaying ?? false;
 
         public double CurrentPosition => mediaPlayer?.CurrentPosition / 1000 ?? 0;
+        public event EventHandler<bool> IsPlayingChanged;
 
         public Task InitializeAsync(string audioURI)
         {
@@ -27,6 +28,21 @@ namespace SharedMauiLib.Platforms.Android
                 instance.Binder.GetMediaPlayerService().isCurrentEpisode = false;
                 instance.Binder.GetMediaPlayerService().UpdatePlaybackStateStopped();
             }
+
+            this.instance.Binder.GetMediaPlayerService().PlayingChanged += (object sender, bool e) =>
+            {
+                Task.Run(async () => {
+                    if (e)
+                    {
+                        await this.PlayAsync();
+                    }
+                    else
+                    {
+                        await this.PauseAsync();
+                    }
+                });
+                IsPlayingChanged?.Invoke(this, e);
+            };
 
             instance.Binder.GetMediaPlayerService().AudioUrl = audioURI;
 

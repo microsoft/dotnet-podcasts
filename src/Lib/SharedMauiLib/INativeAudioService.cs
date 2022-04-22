@@ -19,4 +19,6 @@ public interface INativeAudioService
     bool IsPlaying { get; }
 
     double CurrentPosition { get; }
+
+    event EventHandler<bool> IsPlayingChanged;
 }

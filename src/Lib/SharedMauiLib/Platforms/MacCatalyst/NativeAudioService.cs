@@ -13,6 +13,7 @@ public class NativeAudioService : INativeAudioService
         : false;
 
     public double CurrentPosition => avPlayer?.CurrentTime.Seconds ?? 0;
+    public event EventHandler<bool> IsPlayingChanged;
 
     public async Task InitializeAsync(string audioURI)
     {

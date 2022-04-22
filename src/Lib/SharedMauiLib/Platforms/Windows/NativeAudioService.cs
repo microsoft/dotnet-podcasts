@@ -12,6 +12,7 @@ public class NativeAudioService : INativeAudioService
         && mediaPlayer.CurrentState == MediaPlayerState.Playing;
 
     public double CurrentPosition => mediaPlayer?.Position.TotalSeconds ?? 0;
+    public event EventHandler<bool> IsPlayingChanged;
 
     public async Task InitializeAsync(string audioURI)
     {

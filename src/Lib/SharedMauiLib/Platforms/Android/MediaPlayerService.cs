@@ -45,6 +45,8 @@ public class MediaPlayerService : Service,
 
     public event BufferingEventHandler Buffering;
 
+    public event PlayingChangedEventHandler PlayingChanged;
+
     public string AudioUrl;
 
     public bool isCurrentEpisode = true;
@@ -92,6 +94,11 @@ public class MediaPlayerService : Service,
     protected virtual void OnStatusChanged(EventArgs e)
     {
         StatusChanged?.Invoke(this, e);
+    }
+
+    protected virtual void OnPlayingChanged(bool e)
+    {
+        PlayingChanged?.Invoke(this, e);
     }
 
     protected virtual void OnCoverReloaded(EventArgs e)
@@ -688,13 +695,13 @@ public class MediaPlayerService : Service,
 
         public override async void OnPause()
         {
-            await mediaPlayerService.GetMediaPlayerService().Pause();
+            mediaPlayerService.GetMediaPlayerService().OnPlayingChanged(false);
             base.OnPause();
         }
 
         public override async void OnPlay()
         {
-            await mediaPlayerService.GetMediaPlayerService().Play();
+            mediaPlayerService.GetMediaPlayerService().OnPlayingChanged(true);
             base.OnPlay();
         }
 
