@@ -1,6 +1,6 @@
 ﻿using Android.App;
 
-namespace AudioMauiLib.Platforms.Android.CurrentActivity
+namespace SharedMauiLib.Platforms.Android.CurrentActivity
 {
     public class ActivityEventArgs : EventArgs
     {

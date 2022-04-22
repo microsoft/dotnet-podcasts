@@ -1,7 +1,7 @@
 ﻿using Android.Media;
 using AndroidApp = Android.App;
 
-namespace AudioMauiLib.Platforms.Android
+namespace SharedMauiLib.Platforms.Android
 {
     public class NativeAudioService : INativeAudioService
     {

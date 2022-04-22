@@ -8,7 +8,7 @@ using Android.Media.Session;
 using AndroidNet = Android.Net;
 using Android.Graphics;
 
-namespace AudioMauiLib.Platforms.Android;
+namespace SharedMauiLib.Platforms.Android;
 
 
 [Service(Exported = true)]

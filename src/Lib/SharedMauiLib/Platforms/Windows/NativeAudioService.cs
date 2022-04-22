@@ -1,7 +1,7 @@
 ﻿using Windows.Media.Core;
 using Windows.Media.Playback;
 
-namespace AudioMauiLib.Platforms.Windows;
+namespace SharedMauiLib.Platforms.Windows;
 
 public class NativeAudioService : INativeAudioService
 {

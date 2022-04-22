@@ -1,4 +1,4 @@
-﻿using AudioMauiLib;
+﻿using SharedMauiLib;
 using Microsoft.AspNetCore.Components;
 using Podcast.Components;
 using Podcast.Pages.Data;

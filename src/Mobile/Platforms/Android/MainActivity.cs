@@ -2,8 +2,8 @@
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using AudioMauiLib.Platforms.Android;
-using AudioMauiLib.Platforms.Android.CurrentActivity;
+using SharedMauiLib.Platforms.Android;
+using SharedMauiLib.Platforms.Android.CurrentActivity;
 
 namespace Microsoft.NetConf2021.Maui;
 

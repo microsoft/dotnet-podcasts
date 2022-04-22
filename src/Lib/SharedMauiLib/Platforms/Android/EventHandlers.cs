@@ -1,4 +1,4 @@
-﻿namespace AudioMauiLib.Platforms.Android;
+﻿namespace SharedMauiLib.Platforms.Android;
 
 public delegate void StatusChangedEventHandler(object sender, EventArgs e);
 

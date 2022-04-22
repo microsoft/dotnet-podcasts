@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AndroidApp = Android.App;
 
-namespace AudioMauiLib.Platforms.Android.CurrentActivity
+namespace SharedMauiLib.Platforms.Android.CurrentActivity
 {
 	/// <summary>
 	/// Implementation for Feature

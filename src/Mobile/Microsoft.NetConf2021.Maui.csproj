@@ -56,7 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lib\AudioMauiLib\AudioMauiLib.csproj" />
+    <ProjectReference Include="..\Lib\SharedMauiLib\SharedMauiLib.csproj" />
     <ProjectReference Include="..\Web\Components\Podcast.Components.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using AVFoundation;
 using Foundation;
 
-namespace AudioMauiLib.Platforms.iOS;
+namespace SharedMauiLib.Platforms.iOS;
 
 public class NativeAudioService : INativeAudioService
 {

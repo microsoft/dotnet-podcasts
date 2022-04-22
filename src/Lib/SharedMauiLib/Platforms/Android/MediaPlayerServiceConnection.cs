@@ -1,7 +1,7 @@
 ﻿using Android.Content;
 using Android.OS;
 
-namespace AudioMauiLib.Platforms.Android
+namespace SharedMauiLib.Platforms.Android
 {
     public class MediaPlayerServiceConnection : Java.Lang.Object, IServiceConnection
     {

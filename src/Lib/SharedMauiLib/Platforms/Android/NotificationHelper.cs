@@ -9,7 +9,7 @@ using static Android.Resource;
 using AndroidMedia = Android.Media;
 
 
-namespace AudioMauiLib.Platforms.Android;
+namespace SharedMauiLib.Platforms.Android;
 
 public static class NotificationHelper
 {

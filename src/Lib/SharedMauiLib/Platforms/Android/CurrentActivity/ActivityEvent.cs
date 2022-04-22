@@ -1,4 +1,4 @@
-﻿namespace AudioMauiLib.Platforms.Android.CurrentActivity
+﻿namespace SharedMauiLib.Platforms.Android.CurrentActivity
 {
     public enum ActivityEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace AudioMauiLib.Platforms.Android
+﻿namespace SharedMauiLib.Platforms.Android
 {
     public interface IAudioActivity
     {

@@ -1,7 +1,7 @@
 ﻿using AVFoundation;
 using Foundation;
 
-namespace AudioMauiLib.Platforms.MacCatalyst;
+namespace SharedMauiLib.Platforms.MacCatalyst;
 
 public class NativeAudioService : INativeAudioService
 {

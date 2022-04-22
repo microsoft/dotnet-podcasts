@@ -2,7 +2,7 @@
 using Android.OS;
 using AndroidApp = Android.App; 
 
-namespace AudioMauiLib.Platforms.Android.CurrentActivity
+namespace SharedMauiLib.Platforms.Android.CurrentActivity
 {
     /// <summary>
     /// Current Activity Interface

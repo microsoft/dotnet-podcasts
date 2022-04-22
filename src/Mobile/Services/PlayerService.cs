@@ -1,4 +1,4 @@
-﻿using AudioMauiLib;
+﻿using SharedMauiLib;
 
 namespace Microsoft.NetConf2021.Maui.Services;
 

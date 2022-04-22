@@ -27,13 +27,13 @@ public static class MauiProgram
         });
 
 #if WINDOWS
-        builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.Windows.NativeAudioService>();
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Windows.NativeAudioService>();
 #elif ANDROID
-        builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.Android.NativeAudioService>();
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Android.NativeAudioService>();
 #elif MACCATALYST
-        builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.MacCatalyst.NativeAudioService>();
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.MacCatalyst.NativeAudioService>();
 #elif IOS
-        builder.Services.AddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.iOS.NativeAudioService>();
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.iOS.NativeAudioService>();
 #endif
 
         builder.Services.AddScoped<ThemeInterop>();

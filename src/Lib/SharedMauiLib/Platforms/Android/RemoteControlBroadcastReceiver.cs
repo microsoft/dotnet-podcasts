@@ -2,7 +2,7 @@
 using Android.Content;
 using Android.Views;
 
-namespace AudioMauiLib.Platforms.Android;
+namespace SharedMauiLib.Platforms.Android;
 
 [BroadcastReceiver(Exported = true)]
 [IntentFilter(new[] { Intent.ActionMediaButton })]

@@ -1,4 +1,4 @@
-﻿namespace AudioMauiLib;
+﻿namespace SharedMauiLib;
 
 public interface INativeAudioService
 {
