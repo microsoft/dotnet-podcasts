@@ -1,10 +1,9 @@
-﻿using NetPodsMauiBlazor.Services;
-using Windows.Media.Core;
+﻿using Windows.Media.Core;
 using Windows.Media.Playback;
 
-namespace NetPodsMauiBlazor.Platforms.Windows;
+namespace AudioMauiLib.Platforms.Windows;
 
-internal class NativeAudioService : INativeAudioService
+public class NativeAudioService : INativeAudioService
 {
     string _uri;
     MediaPlayer mediaPlayer;
@@ -18,31 +17,31 @@ internal class NativeAudioService : INativeAudioService
     {
         _uri = audioURI;
 
-        if (this.mediaPlayer == null)
+        if (mediaPlayer == null)
         {
-            this.mediaPlayer = new MediaPlayer
+            mediaPlayer = new MediaPlayer
             {
                 Source = MediaSource.CreateFromUri(new Uri(_uri)),
                 AudioCategory = MediaPlayerAudioCategory.Media
             };
         }
-        if (this.mediaPlayer != null)
+        if (mediaPlayer != null)
         {
             await PauseAsync();
-            this.mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(_uri));
+            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(_uri));
         }
 
     }
 
     public Task PauseAsync()
     {
-        this.mediaPlayer?.Pause();
+        mediaPlayer?.Pause();
         return Task.CompletedTask;
     }
 
     public Task PlayAsync(double position = 0)
     {
-        if (this.mediaPlayer != null)
+        if (mediaPlayer != null)
         {
             mediaPlayer.Position = TimeSpan.FromSeconds(position);
             mediaPlayer.Play();
@@ -53,7 +52,7 @@ internal class NativeAudioService : INativeAudioService
 
     public Task SetCurrentTime(double value)
     {
-        if (this.mediaPlayer != null)
+        if (mediaPlayer != null)
         {
             mediaPlayer.Position = TimeSpan.FromSeconds(value);
         }
@@ -63,9 +62,9 @@ internal class NativeAudioService : INativeAudioService
 
     public Task SetMuted(bool value)
     {
-        if (this.mediaPlayer != null)
+        if (mediaPlayer != null)
         {
-            this.mediaPlayer.IsMuted = value;
+            mediaPlayer.IsMuted = value;
         }
 
         return Task.CompletedTask;
@@ -73,9 +72,9 @@ internal class NativeAudioService : INativeAudioService
 
     public Task SetVolume(int value)
     {
-        if (this.mediaPlayer != null)
+        if (mediaPlayer != null)
         {
-            this.mediaPlayer.Volume = value != 0
+            mediaPlayer.Volume = value != 0
                 ? value / 100d
                 : 0;
         }

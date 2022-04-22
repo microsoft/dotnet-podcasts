@@ -1,6 +1,6 @@
-﻿namespace NetPodsMauiBlazor.Services;
+﻿namespace AudioMauiLib;
 
-internal interface INativeAudioService
+public interface INativeAudioService
 {
     Task InitializeAsync(string audioURI);
 
