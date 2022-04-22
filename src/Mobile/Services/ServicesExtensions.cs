@@ -11,14 +11,14 @@ public static class ServicesExtensions
         builder.Services.AddSingleton<ShowsService>();
         builder.Services.AddSingleton<ListenLaterService>();
 #if WINDOWS
-        builder.Services.TryAddSingleton<IAudioService, Platforms.Windows.AudioService>();
+        builder.Services.TryAddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.Windows.NativeAudioService>();
 #elif ANDROID
-        builder.Services.TryAddSingleton<IAudioService, Platforms.Android.AudioService>();
+        builder.Services.TryAddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.Android.NativeAudioService>();
 #elif MACCATALYST
-        builder.Services.TryAddSingleton<IAudioService, Platforms.MacCatalyst.AudioService>();
+        builder.Services.TryAddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.MacCatalyst.NativeAudioService>();
         builder.Services.TryAddSingleton< Platforms.MacCatalyst.ConnectivityService>();
 #elif IOS
-        builder.Services.TryAddSingleton<IAudioService, Platforms.iOS.AudioService>();
+        builder.Services.TryAddSingleton<AudioMauiLib.INativeAudioService, AudioMauiLib.Platforms.iOS.NativeAudioService>();
 #endif
 
         builder.Services.TryAddTransient<WifiOptionsService>();

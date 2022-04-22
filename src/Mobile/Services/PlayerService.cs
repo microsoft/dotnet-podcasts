@@ -1,8 +1,10 @@
-﻿namespace Microsoft.NetConf2021.Maui.Services;
+﻿using AudioMauiLib;
+
+namespace Microsoft.NetConf2021.Maui.Services;
 
 public class PlayerService
 {
-    private readonly IAudioService audioService;
+    private readonly INativeAudioService audioService;
     private readonly WifiOptionsService wifiOptionsService;
 
     public Episode CurrentEpisode { get; set; }
@@ -14,7 +16,7 @@ public class PlayerService
     public event EventHandler NewEpisodeAdded;
     public event EventHandler IsPlayingChanged;
 
-    public PlayerService(IAudioService audioService, WifiOptionsService wifiOptionsService)
+    public PlayerService(INativeAudioService audioService, WifiOptionsService wifiOptionsService)
     {
         this.audioService = audioService;
         this.wifiOptionsService = wifiOptionsService;

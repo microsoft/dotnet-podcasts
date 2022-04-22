@@ -14,13 +14,4 @@
 		<TargetPlatformMinVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
-	<!--<ItemGroup>
-	  <Compile Remove="Platforms\Android\MediaPlayerService.cs" />
-	  <Compile Remove="Platforms\Android\NativeAudioService.cs" />
-	</ItemGroup>-->
-
-	<ItemGroup>
-	  <Folder Include="Platforms\Android\" />
-	</ItemGroup>
-
 </Project>
