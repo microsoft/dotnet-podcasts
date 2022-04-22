@@ -17,6 +17,7 @@ public class PodcastDbContext : DbContext
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Episode> Episodes => Set<Episode>();
     public DbSet<Feed> Feeds => Set<Feed>();
+    public DbSet<UserSubmittedFeed> UserSubmittedFeeds => Set<UserSubmittedFeed>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,6 +1,7 @@
 ﻿using ListenTogether.Application.Interfaces;
 using ListenTogether.Domain;
 using Microsoft.EntityFrameworkCore;
+using Orleans;
 
 namespace ListenTogether.Application.Rooms;
 
@@ -20,29 +21,17 @@ public class JoinRoomRequest : IRequest<Room>
 
 public class JoinRoomRequestHandler : IRequestHandler<JoinRoomRequest, Room>
 {
-    private readonly IApplicationDbContext _dbContext;
+    private readonly IGrainFactory _grainFactory;
 
-    public JoinRoomRequestHandler(IApplicationDbContext dbContext)
+    public JoinRoomRequestHandler(IGrainFactory grainFactory)
     {
-        _dbContext = dbContext;
+        _grainFactory = grainFactory;
     }
 
     public async Task<Room> HandleAsync(JoinRoomRequest request, CancellationToken cancellationToken)
     {
-        var room = await _dbContext.Rooms
-            .Include(room => room.Users)
-            .Include(room => room.Episode.Show)
-            .FirstOrDefaultAsync(room => room.Code == request.RoomCode, cancellationToken);
-
-        if (room == null)
-        {
-            throw new ArgumentNullException(nameof(Room));
-        }
-
-        var user = new User(request.ConnectionId, request.UserName);
-        room.AddUser(user);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        var roomGrain = _grainFactory.GetGrain<IRoomGrain>(request.RoomCode);
+        var room = await roomGrain.JoinRoom(request.ConnectionId, request.UserName);
 
         return room;
     }

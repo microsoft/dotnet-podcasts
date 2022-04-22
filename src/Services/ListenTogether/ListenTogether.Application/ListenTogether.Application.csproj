@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,6 +9,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.6.0" />
+	  <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.6.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.6.0" />
+	  <PackageReference Include="Microsoft.Orleans.Runtime.Abstractions" Version="3.6.0" />
   </ItemGroup>
 
   <ItemGroup>
