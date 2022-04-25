@@ -4,6 +4,7 @@
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              Title="{x:Static res:AppResource.Home}"
              x:Name="this"
+             xmlns:models="clr-namespace:Microsoft.NetConf2021.Maui.Models"
              xmlns:view="clr-namespace:Microsoft.NetConf2021.Maui.Views"
              xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
@@ -24,7 +25,59 @@
                                     SearchCommand="{Binding SearchCommand}"
                                     VerticalOptions="Start" />
         </StackLayout>
-        <CollectionView ItemsSource="{Binding PodcastsGroup}"
+
+        <!--Try use Flex without grouping-->
+        <ScrollView Orientation="Vertical"
+                    Margin="10,50,10,0">
+            <FlexLayout 
+                 BindableLayout.ItemsSource="{Binding TemporalPodcastsGroup}"
+                 Wrap="Wrap">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <view:ShowItemView 
+                              WidthRequest="{x:OnIdiom Phone=190, Default=270}"
+                              HeightRequest="{x:OnIdiom Default=270, Phone=190}"
+                              SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}}"
+                              SubscriptionCommandParameter="{Binding }" />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </ScrollView>
+
+        <!-- Trying to group with Flexlayout. It doesn't calculate the height properly.-->
+        <!--<ScrollView
+            Orientation="Vertical"
+            Margin="10,50,10,0">
+            <VerticalStackLayout
+                BindableLayout.ItemsSource="{Binding PodcastsGroup}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:ShowGroup">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Name}"
+                               Style="{StaticResource ListTitleStyle}"
+                               FontSize="32" />
+                            <FlexLayout 
+                                BindableLayout.ItemsSource="{Binding .}"
+                                Wrap="Wrap">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <view:ShowItemView 
+                                                WidthRequest="{x:OnIdiom Phone=190, Default=270}"
+                                                HeightRequest="{x:OnIdiom Default=270, Phone=190}"
+                                                SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}}"
+                                                SubscriptionCommandParameter="{Binding }" />
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </VerticalStackLayout>
+
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+        </ScrollView>-->
+        
+        <!-- OLD LISt-->
+        <!--<CollectionView ItemsSource="{Binding PodcastsGroup}"
                         Margin="10,50,10,0"
                         SelectionMode="None"
                         IsGrouped="True">
@@ -47,7 +100,7 @@
                            FontSize="32" />
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>           
-        </CollectionView>
+        </CollectionView>-->
 
         <controls:Player x:Name="player"
                          VerticalOptions="End">

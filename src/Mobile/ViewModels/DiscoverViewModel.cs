@@ -11,6 +11,7 @@ public class DiscoverViewModel : BaseViewModel
     private string text;
 
     public ObservableRangeCollection<ShowGroup> PodcastsGroup { get; private set; } = new ObservableRangeCollection<ShowGroup>();
+    public ObservableRangeCollection<ShowViewModel> TemporalPodcastsGroup { get; private set; } = new ObservableRangeCollection<ShowViewModel>();
 
     public ICommand SearchCommand { get; }
 
@@ -88,6 +89,7 @@ public class DiscoverViewModel : BaseViewModel
         };
 
         PodcastsGroup.ReplaceRange(list);
+        TemporalPodcastsGroup.ReplaceRange(listPodcasts);
     }
 
     private async Task OnSearchCommandAsync()
