@@ -16,24 +16,25 @@
                                Style="{StaticResource H5LabelStyle}"
                         Margin="14,-6,0,0"/>
             </StackLayout>
-            <CollectionView ItemsSource="{Binding Episodes}"
-                            Margin="10,0"
-                            Grid.Row="1">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
-                                     Span="{OnIdiom Phone=2, Tablet=4, Desktop=4}"
-                                     HorizontalItemSpacing="5"
-                                     VerticalItemSpacing="5" />
-                </CollectionView.ItemsLayout>
+            <ScrollView
+                Margin="10,0"
+                Orientation="Vertical"
+                Grid.Row="1">
+                <FlexLayout 
+                       BindableLayout.ItemsSource="{Binding Episodes}"
+                       Wrap="Wrap">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:EpisodeViewModel">
+                            <views:EpisodeItemView 
+                                WidthRequest="{x:OnIdiom Phone=190, Default=270}"
+                                HeightRequest="{x:OnIdiom Default=270, Phone=190}"
+                                RemoveListenLaterCommand="{Binding RemoveCommand, Source={RelativeSource AncestorType={x:Type viewmodels:ListenLaterViewModel}}}"
+                                RemoveListenLaterCommandParameter="{Binding }" />
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:EpisodeViewModel">
-                        <views:EpisodeItemView BindingContext="{Binding }"
-                                               RemoveListenLaterCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ListenLaterViewModel}}, Path=RemoveCommand}"
-                                               RemoveListenLaterCommandParameter="{Binding}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </ScrollView>
 
             <Grid IsVisible="{Binding HasNoData}"
                   RowDefinitions="*, auto"

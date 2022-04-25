@@ -12,7 +12,6 @@
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            this.subscribedPodcasts.SelectedItem = null;
             await viewModel.InitializeAsync();
             this.player.OnAppearing();
         }

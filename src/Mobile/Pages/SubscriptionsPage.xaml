@@ -19,24 +19,27 @@
                                Style="{StaticResource H5LabelStyle}"
                         Margin="14,-6,0,0" />
             </StackLayout>
-            <CollectionView x:Name="subscribedPodcasts"
-                            Grid.Row="1"
-                            Margin="10,0"
-                            SelectionMode="None"
-                            ItemsSource="{Binding SubscribedShows}">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
-                                     Span="{OnIdiom Phone=2, Tablet=4, Desktop=4}"
-                                     HorizontalItemSpacing="5"
-                                     VerticalItemSpacing="5" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="viewmodels:ShowViewModel">
-                        <views:ShowItemView BindingContext="{Binding }"
-                                            SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionsViewModel}}}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+
+            <ScrollView
+                Grid.Row="1"
+                Padding="10,0">
+                <FlexLayout 
+                       x:Name="subscribedPodcasts"
+                       BindableLayout.ItemsSource="{Binding SubscribedShows}"
+                       Wrap="Wrap">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:ShowViewModel">
+                            <views:ShowItemView
+                                WidthRequest="{x:OnIdiom Phone=190, Default=270}"
+                                HeightRequest="{x:OnIdiom Default=270, Phone=190}"
+                                BindingContext="{Binding }"
+                                SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionsViewModel}}}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </ScrollView>
+
+
             <Grid Grid.Row="1" IsVisible="{Binding HasNoData}" RowDefinitions="*, auto" Padding="{OnIdiom Desktop=200, Default=50}">
                 <Image Source="empty_collection.png" HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
