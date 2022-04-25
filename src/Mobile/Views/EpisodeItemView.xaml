@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <VerticalStackLayout  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                      x:Class="Microsoft.NetConf2021.Maui.Views.ShowItemView"
+                      x:Class="Microsoft.NetConf2021.Maui.Views.EpisodeItemView"
                       xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
-                      x:DataType="viewmodels:ShowViewModel"
-                      x:Name="self"
-                      >
+                      x:Name="self">
     <VerticalStackLayout.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding NavigateToDetailCommand}" />
     </VerticalStackLayout.GestureRecognizers>
@@ -19,19 +17,19 @@
                HorizontalOptions="Start"
                Margin="0,0,0,12" />
 
-        <Image Source="suscribed.png"
+        <Image Source="listenlaterfilled.png"
                HorizontalOptions="End"
                VerticalOptions="End"
                Margin="22"
-               IsVisible="{Binding IsSubscribed}"
+               SemanticProperties.Description="Episode marked for listening later"
                WidthRequest="24"
                HeightRequest="24">
             <Image.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding SubscriptionCommand, Source={x:Reference self}}" CommandParameter="{Binding }"/>
+                <TapGestureRecognizer Command="{Binding RemoveListenLaterCommand, Source={x:Reference self}}" CommandParameter="{Binding }"/>
             </Image.GestureRecognizers>
         </Image>
     </Grid>
-    <Label Text="{Binding Show.Title}"
+    <Label Text="{Binding Episode.Title}"
            MaxLines="1"
            HorizontalOptions="Start"
            LineBreakMode="TailTruncation"
@@ -42,4 +40,3 @@
            MaxLines="1"
            Style="{OnIdiom Default={StaticResource BodyMLabelStyle},Phone={StaticResource BodySLabelStyle}}" />
 </VerticalStackLayout>
-

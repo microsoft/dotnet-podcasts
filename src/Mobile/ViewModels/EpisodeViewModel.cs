@@ -22,6 +22,7 @@ public class EpisodeViewModel : BaseViewModel
     public Show Show { get; set; }
 
     public ICommand PlayEpisodeCommand => new AsyncCommand(PlayEpisodeCommandExecute);
+    public ICommand NavigateToDetailCommand => new AsyncCommand(NavigateToDetailCommandExecute);
 
     public EpisodeViewModel(Episode episode, Show show, ListenLaterService listen, PlayerService player)
     {
@@ -41,5 +42,10 @@ public class EpisodeViewModel : BaseViewModel
     private Task PlayEpisodeCommandExecute()
     {
         return playerService.PlayAsync(Episode, Show);
+    }
+
+    private Task NavigateToDetailCommandExecute()
+    {
+        return Shell.Current.GoToAsync($"{nameof(EpisodeDetailPage)}?Id={episode.Id}&ShowId={Show.Id}");
     }
 }
