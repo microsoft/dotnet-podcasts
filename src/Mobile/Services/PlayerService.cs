@@ -1,8 +1,10 @@
-﻿namespace Microsoft.NetConf2021.Maui.Services;
+﻿using SharedMauiLib;
+
+namespace Microsoft.NetConf2021.Maui.Services;
 
 public class PlayerService
 {
-    private readonly IAudioService audioService;
+    private readonly INativeAudioService audioService;
     private readonly WifiOptionsService wifiOptionsService;
 
     public Episode CurrentEpisode { get; set; }
@@ -14,10 +16,16 @@ public class PlayerService
     public event EventHandler NewEpisodeAdded;
     public event EventHandler IsPlayingChanged;
 
-    public PlayerService(IAudioService audioService, WifiOptionsService wifiOptionsService)
+    public PlayerService(INativeAudioService audioService, WifiOptionsService wifiOptionsService)
     {
         this.audioService = audioService;
         this.wifiOptionsService = wifiOptionsService;
+
+        this.audioService.IsPlayingChanged += (object sender, bool e) =>
+        {
+            IsPlaying = e;
+            IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+        };
     }
 
     public async Task PlayAsync(Episode episode, Show show, bool isPlaying, double position = 0)
@@ -39,27 +47,13 @@ public class PlayerService
 
             await audioService.InitializeAsync(CurrentEpisode.Url.ToString());
 
-            if (isPlaying)
-            {
-                await InternalPlayAsync(initializePlayer: false, position);
-            }
-            else
-            {
-                await InternalPauseAsync();
-            }
+            await InternalPlayPauseAsync(isPlaying, position);
 
             NewEpisodeAdded?.Invoke(this, EventArgs.Empty);
         }
         else
         {
-            if (isPlaying)
-            {
-                await InternalPlayAsync(initializePlayer: false, position);
-            }
-            else
-            {
-                await InternalPauseAsync();
-            }
+            await InternalPlayPauseAsync(isPlaying, position);
         }
 
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
@@ -75,24 +69,31 @@ public class PlayerService
         return PlayAsync(episode, show, isPlaying, position);
     }
 
+    private async Task InternalPlayPauseAsync(bool isPlaying, double position)
+    {
+        if (isPlaying)
+        {
+            await InternalPlayAsync(position);
+        }
+        else
+        {
+            await InternalPauseAsync();
+        }
+    }
+
     private async Task InternalPauseAsync()
     {
         await audioService.PauseAsync();
         IsPlaying = false;
     }
 
-    private async Task InternalPlayAsync(bool initializePlayer = false, double position = 0)
+    private async Task InternalPlayAsync(double position = 0)
     {
         var canPlay = await wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync();
 
         if (!canPlay)
         {
             return;
-        }
-
-        if (initializePlayer)
-        {
-            await audioService.InitializeAsync(CurrentEpisode.Url.ToString());
         }
 
         await audioService.PlayAsync(position);

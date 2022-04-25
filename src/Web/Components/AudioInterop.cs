@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 
 namespace Podcast.Components;
 
-public class AudioInterop : IAsyncDisposable
+public class AudioInterop : IAudioInterop ,IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
@@ -56,5 +56,10 @@ public class AudioInterop : IAsyncDisposable
             var module = await moduleTask.Value;
             await module.DisposeAsync();
         }
+    }
+
+    public void SetUri(string? audioURI)
+    {
+        //no action is necessary
     }
 }

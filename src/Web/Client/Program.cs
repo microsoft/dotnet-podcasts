@@ -10,7 +10,7 @@ builder.Services.AddHttpClient<PodcastService>(client =>
     client.BaseAddress = new Uri(builder.Configuration["PodcastApi:BaseAddress"]!);
 });
 builder.Services.AddScoped<ThemeInterop>();
-builder.Services.AddScoped<AudioInterop>();
+builder.Services.AddScoped<IAudioInterop, AudioInterop>();
 builder.Services.AddScoped<LocalStorageInterop>();
 builder.Services.AddScoped<ClipboardInterop>();
 builder.Services.AddScoped<SubscriptionsService>();
