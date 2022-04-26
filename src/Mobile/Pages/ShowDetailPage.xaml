@@ -15,6 +15,7 @@
             <controls:HeaderControl IsVisible="{OnIdiom Default=true, Phone=false}"
                                     ShowSearchCategories="False"
                                     VerticalOptions="Start"
+                                    SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Search}"
                                     TextToSearch="{Binding TextToSearch, Mode=OneWayToSource}"
                                     SearchCommand="{Binding SearchEpisodeCommand}" />
         </StackLayout>

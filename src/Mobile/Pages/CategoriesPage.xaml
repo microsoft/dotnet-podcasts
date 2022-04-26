@@ -29,7 +29,8 @@
                            Style="{StaticResource H5LabelStyle}" />
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding SelectedCommand, Source={RelativeSource AncestorType={x:Type viewmodels:CategoriesViewModel}}}"
-                                              CommandParameter="{Binding}" />
+                                              CommandParameter="{Binding}" 
+                                              SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Select}"/>
                     </Grid.GestureRecognizers>
                 </Grid>
             </DataTemplate>

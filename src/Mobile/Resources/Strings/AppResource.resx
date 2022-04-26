@@ -168,6 +168,30 @@
   <data name="Play" xml:space="preserve">
     <value>Play</value>
   </data>
+  <data name="See_All_Categories" xml:space="preserve">
+    <value>See All Categories</value>
+  </data>
+  <data name="Semantic_Description_Tap_Play_Episode" xml:space="preserve">
+    <value>Tap to play or pause an episode</value>
+  </data>
+  <data name="Semantic_Description_Tap_Search" xml:space="preserve">
+    <value>Tap to search text</value>
+  </data>
+  <data name="Semantic_Description_Tap_See_All_Categories" xml:space="preserve">
+    <value>Tap to see all categories</value>
+  </data>
+  <data name="Semantic_Description_Tap_Select" xml:space="preserve">
+    <value>Tap to select a category</value>
+  </data>
+  <data name="Semantic_Description_Tap_Subscribe_Podcast" xml:space="preserve">
+    <value>Tap to subscribe a podcast</value>
+  </data>
+  <data name="Semantic_Description_Toggle_Mode" xml:space="preserve">
+    <value>Enable or disable dark mode</value>
+  </data>
+  <data name="Semantic_Description_Toggle_Wifi" xml:space="preserve">
+    <value>Enable or disable wifi settings</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
