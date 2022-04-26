@@ -81,22 +81,27 @@ public class DiscoverViewModel : BaseViewModel
 
     private void UpdatePodcasts(IEnumerable<ShowViewModel> listPodcasts)
     {
-        var list = new ObservableRangeCollection<ShowGroup>
-        {
-            new ShowGroup(AppResource.Whats_New, listPodcasts.Take(3).ToList()),
-            new ShowGroup(AppResource.Specially_For_You, listPodcasts.Take(3..).ToList())
-        };
+        var groupedShows = listPodcasts
+            .GroupBy(podcasts => podcasts.Show.IsFeatured)
+            .Where(group => group.Any())
+            .ToDictionary(group => group.Key ? AppResource.Whats_New : AppResource.Specially_For_You, group => group.ToList())
+            .Select(dictionary => new ShowGroup(dictionary.Key, dictionary.Value));
 
-        PodcastsGroup.ReplaceRange(list);
+        PodcastsGroup.ReplaceRange(groupedShows);
     }
 
     private async Task OnSearchCommandAsync()
-    {     
-        var list = await showsService.SearchShowsAsync(Text);
+    {
+        IEnumerable<Show> list;
         if (string.IsNullOrWhiteSpace(Text))
         {
             list = await showsService.GetShowsAsync();
         }
+        else
+        {
+            list = await showsService.SearchShowsAsync(Text);
+        }
+
         if (list != null)
         {
             UpdatePodcasts(await ConvertToViewModels(list));
