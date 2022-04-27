@@ -24,6 +24,7 @@ public class Show : ObservableObject
         Updated = response.Updated;
         Episodes = response.Episodes?.Select(resp => new Episode(resp, listenLaterService));
         Categories = response.Categories?.Select(resp => new Category(resp));
+        IsFeatured = response.IsFeatured;
     }
 
     public Guid Id { get; set; }
@@ -41,4 +42,6 @@ public class Show : ObservableObject
     public IEnumerable<Episode> Episodes { get; set; }
 
     public IEnumerable<Category> Categories { get; set; }
+
+    public bool IsFeatured { get; set; }
 }

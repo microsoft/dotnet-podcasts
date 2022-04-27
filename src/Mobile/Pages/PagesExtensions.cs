@@ -16,7 +16,6 @@ public static class PagesExtensions
         builder.Services.AddTransient<CategoryPage>();
         builder.Services.AddTransient<EpisodeDetailPage>();
         builder.Services.AddTransient<ShowDetailPage>();
-        builder.Services.AddTransient<SubscriptionsPage>();        
 
         return builder;
     }
