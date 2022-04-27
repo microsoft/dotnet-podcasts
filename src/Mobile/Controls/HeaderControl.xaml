@@ -7,7 +7,8 @@
         <ContentView>
             <OnPlatform x:TypeArguments="View">
                 <On Platform="UWP, macOS">
-                    <Grid RowDefinitions="*, auto">
+                    <Grid 
+                        RowDefinitions="auto, auto">
                         <SearchBar x:Name="searchBar"
                                    HorizontalOptions="Start"
                                    WidthRequest="460"
@@ -30,7 +31,7 @@
                     </Grid>
                 </On>
                 <On Platform="Android,iOS">
-                    <Grid ColumnDefinitions="*,*"
+                    <Grid ColumnDefinitions="auto, *"
                           Margin="16,12">
                         <Image Source="{AppThemeBinding Light=logo_header_horizontal.png,Dark=logo_color_horizontal_darkmode.png}"
                                HeightRequest="34"
