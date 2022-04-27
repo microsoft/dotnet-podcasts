@@ -66,6 +66,18 @@ public class PlayerService
         var isPlaying = isOtherEpisode || !audioService.IsPlaying;
         var position = isOtherEpisode ? 0 : CurrentPosition;
 
+        if (CurrentEpisode != null)
+        {
+            if (isPlaying)
+            {
+                SemanticScreenReader.Announce(string.Format("Episode with title {0} will start playing", CurrentEpisode.Title));
+            }
+            else
+            {
+                SemanticScreenReader.Announce(string.Format("Episode with title {0} will be paused", CurrentEpisode.Title));
+            }
+        }
+
         return PlayAsync(episode, show, isPlaying, position);
     }
 

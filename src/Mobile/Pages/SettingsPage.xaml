@@ -13,6 +13,7 @@
         <Label Text="{x:Static res:AppResource.Download_Settings}"
                Margin="0,0,0,20"
                Style="{StaticResource H6LabelStyle}"
+               
                Grid.ColumnSpan="2"/>
         <Switch
             Grid.Row="1"
@@ -20,11 +21,13 @@
         <Label Text="{x:Static res:AppResource.Autodownload_Using_Data}" 
                Grid.Column="1"
                Grid.Row="1"
+               SemanticProperties.Description="{x:Static res:AppResource.Autodownload_Using_Data}"
                Style="{StaticResource BodySLabelStyle}"
                VerticalOptions="Center"/>
         <Label Text="{x:Static res:AppResource.Autodownload_Using_Data_Subtitle}" 
                Grid.Column="1" 
                Grid.Row="2" 
+               SemanticProperties.Description="{x:Static res:AppResource.Autodownload_Using_Data_Subtitle}"
                Style="{StaticResource BodySLabelStyle}"/>
         <Switch HorizontalOptions="Center"
                 Grid.Row="3"
@@ -32,27 +35,32 @@
         <Label Text="{x:Static res:AppResource.Delete_Played_Episodes}" 
                Grid.Column="1"
                Grid.Row="3" 
+               SemanticProperties.Description="{x:Static res:AppResource.Delete_Played_Episodes}"
                Margin="0,24,0,0"
                VerticalOptions="Center"
                Style="{StaticResource BodySLabelStyle}"/>
         <Switch HorizontalOptions="Center"
                 Grid.Row="4"
+                SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Toggle_Mode}"
                 IsToggled="{Binding IsDarkModeEnabled}"
                 Margin="0,24,0,0"/>
         <Label Text="{x:Static res:AppResource.Dark_Mode}" 
                Grid.Column="1"
                Grid.Row="4" 
+               SemanticProperties.Description="{x:Static res:AppResource.Dark_Mode}"
                Margin="0,24,0,0"
                VerticalOptions="Center"
                Style="{StaticResource BodySLabelStyle}"/>
         <Switch HorizontalOptions="Center"
                 Grid.Row="5"
+                SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Toggle_Wifi}"
                 IsVisible="{OnIdiom Default=false,Phone=true}"
                 IsToggled="{Binding IsWifiOnlyEnabled}"
                 Margin="0,24,0,0"/>
         <Label Text="{x:Static res:AppResource.Only_Wifi}" 
                Grid.Column="1"
                Grid.Row="5" 
+               SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Toggle_Wifi}"
                Margin="0,24,0,0"
                IsVisible="{OnIdiom Default=false,Phone=true}"
                VerticalOptions="Center"
@@ -60,6 +68,7 @@
         <Label
                Grid.ColumnSpan="2"
                Grid.Row="6" 
+               SemanticProperties.Description="{x:Static res:AppResource.Settings_Info}"
                Margin="0,48,0,0"
                VerticalOptions="Center"
                Text="{x:Static res:AppResource.Settings_Info}"
@@ -70,6 +79,7 @@
                Grid.Row="7"
                Margin="0,11,0,0"
                VerticalOptions="Center"
+               SemanticProperties.Description="{x:Static res:AppResource.Version}"
                Style="{StaticResource BodySLabelStyle}">
             <Label.FormattedText>
                 <FormattedString>
@@ -80,5 +90,5 @@
             </Label.FormattedText>
         </Label>
     </Grid>
-   
+
 </ContentPage>

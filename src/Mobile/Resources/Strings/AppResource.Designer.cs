@@ -212,6 +212,87 @@ namespace Microsoft.NetConf2021.Maui.Resources.Strings {
                 return ResourceManager.GetString("Play", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar See All Categories.
+        /// </summary>
+        internal static string See_All_Categories {
+            get {
+                return ResourceManager.GetString("See_All_Categories", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to listen later.
+        /// </summary>
+        internal static string Semantic_Description_Tap_Listen_Later {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Tap_Listen_Later", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to play or pause an episode.
+        /// </summary>
+        internal static string Semantic_Description_Tap_Play_Episode {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Tap_Play_Episode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to search text.
+        /// </summary>
+        internal static string Semantic_Description_Tap_Search {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Tap_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to see all categories.
+        /// </summary>
+        internal static string Semantic_Description_Tap_See_All_Categories {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Tap_See_All_Categories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to select a category.
+        /// </summary>
+        internal static string Semantic_Description_Tap_Select {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Tap_Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to subscribe a podcast.
+        /// </summary>
+        internal static string Semantic_Description_Tap_Subscribe_Podcast {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Tap_Subscribe_Podcast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable or disable dark mode.
+        /// </summary>
+        internal static string Semantic_Description_Toggle_Mode {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Toggle_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable or disable wifi settings.
+        /// </summary>
+        internal static string Semantic_Description_Toggle_Wifi {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Toggle_Wifi", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Settings.

@@ -7,6 +7,7 @@ public partial class Player : ContentView
     public Player()
     {
         InitializeComponent();
+        AutomationProperties.SetIsInAccessibleTree(this, true);
         this.IsVisible = false;
     }
 

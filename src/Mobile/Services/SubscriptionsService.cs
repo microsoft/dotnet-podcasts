@@ -21,9 +21,15 @@ public class SubscriptionsService
 
         if (IsSubscribed(show.Id))
         {
+            SemanticScreenReader.Announce(string.Format("Unsubscribe to show {0}", show.Title));
             await UnSubscribeFromShowAsync(show);
             return;
         }
+        else
+        {
+            SemanticScreenReader.Announce(string.Format("Subscribe to show {0}", show.Title));
+        }
+
 
         this.subscribedShows.Add(show);
     }
