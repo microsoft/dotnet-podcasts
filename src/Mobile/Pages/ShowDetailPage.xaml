@@ -88,7 +88,7 @@
             </CollectionView.ItemTemplate>
             <CollectionView.Header>
                 <Grid Padding="{OnIdiom Default=30, Phone=22}"
-                      ColumnDefinitions="auto, auto"
+                      ColumnDefinitions="auto, *"
                       ColumnSpacing="{OnIdiom Default=22, Phone=10}"
                       RowDefinitions="auto,auto,auto,auto,auto"
                       RowSpacing="{OnIdiom Default=10, Phone=6}">
