@@ -19,6 +19,8 @@
         public string Email { get; set; }
 
         public string Language { get; set; }
+
+        public bool IsFeatured { get; set; }
         
         public CategoryResponse[] Categories { get; set; }
 
