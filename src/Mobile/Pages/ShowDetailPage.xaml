@@ -15,6 +15,7 @@
             <controls:HeaderControl IsVisible="{OnIdiom Default=true, Phone=false}"
                                     ShowSearchCategories="False"
                                     VerticalOptions="Start"
+                                    SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Search}"
                                     TextToSearch="{Binding TextToSearch, Mode=OneWayToSource}"
                                     SearchCommand="{Binding SearchEpisodeCommand}" />
         </StackLayout>
@@ -38,6 +39,7 @@
                                      HeightRequest="38"
                                      Source="player_play.png"
                                      VerticalOptions="Center"
+                                     SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Play_Episode}"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShowDetailViewModel}}, Path=PlayEpisodeCommand}"
                                      CommandParameter="{Binding}"
                                      WidthRequest="38">
@@ -64,6 +66,7 @@
                                      VerticalOptions="Center"
                                      Source="clockpink.png"
                                      HeightRequest="28"
+                                     SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Listen_Later}"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShowDetailViewModel}}, Path=AddToListenLaterCommand}"
                                      CommandParameter="{Binding}"
                                      WidthRequest="28">

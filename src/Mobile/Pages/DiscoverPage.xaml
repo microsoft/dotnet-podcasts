@@ -22,6 +22,7 @@
         <StackLayout Margin="10,0">
             <controls:HeaderControl TextToSearch="{Binding Text, Mode=OneWayToSource}"
                                     SearchCommand="{Binding SearchCommand}"
+                                    SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Search}"
                                     VerticalOptions="Start" />
         </StackLayout>
         <CollectionView ItemsSource="{Binding PodcastsGroup}"
@@ -37,7 +38,8 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <view:ShowItemView SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}}"
-                                       SubscriptionCommandParameter="{Binding }" />
+                                       SubscriptionCommandParameter="{Binding }" 
+                                       SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Subscribe_Podcast}"/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
             <CollectionView.GroupHeaderTemplate>
