@@ -171,6 +171,9 @@
   <data name="See_All_Categories" xml:space="preserve">
     <value>See All Categories</value>
   </data>
+  <data name="Semantic_Description_Tap_Listen_Later" xml:space="preserve">
+    <value>Tap to listen later</value>
+  </data>
   <data name="Semantic_Description_Tap_Play_Episode" xml:space="preserve">
     <value>Tap to play or pause an episode</value>
   </data>

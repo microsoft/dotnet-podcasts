@@ -221,7 +221,16 @@ namespace Microsoft.NetConf2021.Maui.Resources.Strings {
                 return ResourceManager.GetString("See_All_Categories", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Tap to listen later.
+        /// </summary>
+        internal static string Semantic_Description_Tap_Listen_Later {
+            get {
+                return ResourceManager.GetString("Semantic_Description_Tap_Listen_Later", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Tap to play or pause an episode.
         /// </summary>
