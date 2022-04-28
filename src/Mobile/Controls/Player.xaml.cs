@@ -9,6 +9,12 @@ public partial class Player : ContentView
         InitializeComponent();
         AutomationProperties.SetIsInAccessibleTree(this, true);
         this.IsVisible = false;
+
+#if WINDOWS || MACCATALYST
+        this.HeightRequest = 90;
+#elif ANDROID || IOS
+        this.HeightRequest = 70;
+#endif
     }
 
     protected override void OnHandlerChanged()
