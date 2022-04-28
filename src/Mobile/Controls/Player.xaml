@@ -8,13 +8,6 @@
              xmlns:local="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              x:DataType="local:Player">
-    <ContentView.HeightRequest>
-        <OnPlatform x:TypeArguments="x:Double">
-            <On Platform="Android,iOS">70</On>
-            <On Platform="UWP,macOS">90</On>
-        </OnPlatform>
-    </ContentView.HeightRequest>
-
     <ContentView.Content>
         <OnPlatform x:TypeArguments="View">
             <On Platform="Android,iOS">
