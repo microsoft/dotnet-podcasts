@@ -12,6 +12,9 @@ public class DiscoverViewModel : BaseViewModel
 
     public ObservableRangeCollection<ShowGroup> PodcastsGroup { get; private set; } = new ObservableRangeCollection<ShowGroup>();
     public ObservableRangeCollection<ShowViewModel> TemporalPodcastsGroup { get; private set; } = new ObservableRangeCollection<ShowViewModel>();
+    public ObservableRangeCollection<ShowViewModel> WhatsNewList { get; private set; } = new ObservableRangeCollection<ShowViewModel>();
+    public ObservableRangeCollection<ShowViewModel> SpeciallyForYouList { get; private set; } = new ObservableRangeCollection<ShowViewModel>();
+
 
     public ICommand SearchCommand { get; }
 
@@ -90,6 +93,9 @@ public class DiscoverViewModel : BaseViewModel
 
         PodcastsGroup.ReplaceRange(groupedShows);
         TemporalPodcastsGroup.ReplaceRange(listPodcasts);
+
+        WhatsNewList.ReplaceRange(listPodcasts);
+        SpeciallyForYouList.ReplaceRange(listPodcasts);
 
     }
 

@@ -30,19 +30,41 @@
         <!--Try use Flex without grouping-->
         <ScrollView Orientation="Vertical"
                     Margin="10,50,10,0">
-            <FlexLayout 
-                 BindableLayout.ItemsSource="{Binding TemporalPodcastsGroup}"
+            <VerticalStackLayout>
+                <Label Text="{x:Static res:AppResource.Whats_New}"
+                               Style="{StaticResource ListTitleStyle}"
+                               FontSize="32" />
+                <FlexLayout
+                 BindableLayout.ItemsSource="{Binding WhatsNewList}"
                  Wrap="Wrap">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate>
-                        <view:ShowItemView 
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <view:ShowItemView 
                               WidthRequest="{x:OnIdiom Phone=190, Default=270}"
                               HeightRequest="{x:OnIdiom Default=270, Phone=190}"
                               SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}}"
                               SubscriptionCommandParameter="{Binding }" />
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+                <Label Text="{x:Static res:AppResource.Specially_For_You}"
+                               Style="{StaticResource ListTitleStyle}"
+                               FontSize="32" />
+                <FlexLayout
+                 BindableLayout.ItemsSource="{Binding SpeciallyForYouList}"
+                 Wrap="Wrap">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <view:ShowItemView 
+                              WidthRequest="{x:OnIdiom Phone=190, Default=270}"
+                              HeightRequest="{x:OnIdiom Default=270, Phone=190}"
+                              SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}}"
+                              SubscriptionCommandParameter="{Binding }" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </VerticalStackLayout>
+
         </ScrollView>
 
         <!-- Trying to group with Flexlayout. It doesn't calculate the height properly.-->
@@ -76,7 +98,7 @@
                 </BindableLayout.ItemTemplate>
             </VerticalStackLayout>
         </ScrollView>-->
-        
+
         <!-- OLD LISt-->
         <!--<CollectionView ItemsSource="{Binding PodcastsGroup}"
                         Margin="10,50,10,0"
