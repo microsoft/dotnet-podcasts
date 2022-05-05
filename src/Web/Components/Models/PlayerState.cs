@@ -1,3 +1,7 @@
 ﻿namespace Podcast.Components;
 
-public enum PlayerState { Paused, Playing };
+public enum PlayerState
+{
+    Paused,
+    Playing
+};
