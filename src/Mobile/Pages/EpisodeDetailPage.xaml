@@ -63,7 +63,6 @@
                     </ImageButton>
                 </Grid>
                 <Label Style="{StaticResource BodySLabelStyle}"
-                       TextType="Html"
                        Text="{Binding Episode.Description}" />
             </VerticalStackLayout>
         </ScrollView>
