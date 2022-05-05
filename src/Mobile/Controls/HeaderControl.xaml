@@ -7,7 +7,7 @@
     <ContentView.Content>
         <ContentView>
             <OnPlatform x:TypeArguments="View">
-                <On Platform="UWP, macOS">
+                <On Platform="UWP, MacCatalyst">
                     <Grid 
                         RowDefinitions="auto, auto">
                         <SearchBar x:Name="searchBar"
