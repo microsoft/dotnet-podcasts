@@ -11,7 +11,7 @@ public sealed class LocalStorageInterop
     {
         _jsRuntime = jsRuntime;
     }
-    
+
     public ValueTask Clear() =>
         _jsRuntime.InvokeVoidAsync("localStorage.clear");
 
