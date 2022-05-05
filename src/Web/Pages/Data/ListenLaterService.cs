@@ -7,10 +7,10 @@ public class ListenLaterService
 {
     private const string ListenLaterKey = "ListenLater";
     private readonly LocalStorageInterop _localStorage;
+    private readonly SemaphoreSlim _semaphore = new(1);
 
-    private List<EpisodeInfo> _episodes = default!;
+    private HashSet<EpisodeInfo> _episodes = default!;
     private bool _isInitialized = false;
-    private SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
     public event Action<ICollection<EpisodeInfo>>? EpisodesChanged;
 
@@ -19,39 +19,45 @@ public class ListenLaterService
         _localStorage = localStorage;
     }
 
-    public async Task Initialize()
+    public async Task InitializeAsync()
     {
         if (!_isInitialized)
         {
-            await _semaphore.WaitAsync();
-            if (!_isInitialized)
+            try
             {
-                var episodes = await _localStorage.GetItem<EpisodeInfo[]>(ListenLaterKey);
-                _episodes = episodes?.ToList() ?? new List<EpisodeInfo>();
-                _isInitialized = true;
+                await _semaphore.WaitAsync();
+                if (!_isInitialized)
+                {
+                    var episodes = await _localStorage.GetItem<EpisodeInfo[]>(ListenLaterKey);
+                    _episodes = episodes?.ToHashSet() ?? new();
+                    _isInitialized = true;
+                }
             }
-            _semaphore.Release();
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 
-    public async Task<ICollection<EpisodeInfo>> GetEpisodes()
+    public async Task<ICollection<EpisodeInfo>> GetEpisodesAsync()
     {
-        await Initialize();
+        await InitializeAsync();
         return _episodes;
     }
 
-    public async Task<bool> IsListenLaterEpisode(Guid episodeId)
+    public async Task<bool> IsListenLaterEpisodeAsync(Guid episodeId)
     {
-        await Initialize();
+        await InitializeAsync();
         return _episodes?.Any(s => s.Id == episodeId) ?? false;
     }
 
-    public Task ToggleListenLaterEpisode(EpisodeInfo episode, bool isListenLater) =>
-        isListenLater ? AddListenLaterEpisode(episode) : RemoveListenLaterEpisode(episode.Id);
+    public Task ToggleListenLaterEpisodeAsync(EpisodeInfo episode, bool isListenLater) =>
+        isListenLater ? AddListenLaterEpisodeAsync(episode) : RemoveListenLaterEpisodeAsync(episode.Id);
 
-    public async Task AddListenLaterEpisode(EpisodeInfo episode)
+    public async Task AddListenLaterEpisodeAsync(EpisodeInfo episode)
     {
-        await Initialize();
+        await InitializeAsync();
         if (!_episodes.Any(s => s.Id == episode.Id))
         {
             _episodes.Add(episode);
@@ -60,9 +66,9 @@ public class ListenLaterService
         }
     }
 
-    public async Task RemoveListenLaterEpisode(Guid episodeId)
+    public async Task RemoveListenLaterEpisodeAsync(Guid episodeId)
     {
-        await Initialize();
+        await InitializeAsync();
         var episode = _episodes.FirstOrDefault(s => s.Id == episodeId);
         if (episode != null)
         {

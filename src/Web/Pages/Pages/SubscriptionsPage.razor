@@ -42,7 +42,7 @@ else
     {
         if (firstRender)
         {
-            showSubscriptions = await SubscriptionsService.GetShowSubscriptions();
+            showSubscriptions = await SubscriptionsService.GetShowSubscriptionsAsync();
             StateHasChanged();
         }
     }

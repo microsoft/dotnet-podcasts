@@ -12,77 +12,49 @@ public class PlayerService
     public event Action<double?>? CurrentTimeChanged;
     public event Action<double?>? TimeSought;
 
-    private EpisodeInfo? episode;
+    private EpisodeInfo? _episode;
     public EpisodeInfo? Episode
     {
-        get => episode;
-        set
-        {
-            episode = value;
-            EpisodeChanged?.Invoke(value);
-        }
+        get => _episode;
+        set => EpisodeChanged?.Invoke(_episode = value);
     }
 
-    private bool isPlaying = false;
+    private bool _isPlaying = false;
     public bool IsPlaying
     {
-        get => isPlaying;
-        set
-        {
-            isPlaying = value;
-            PlayingChanged?.Invoke(value);
-        }
+        get => _isPlaying;
+        set => PlayingChanged?.Invoke(_isPlaying = value);
     }
 
-    private bool isMuted = false;
+    private bool _isMuted = false;
     public bool IsMuted
     {
-        get => isMuted;
-        set
-        {
-            isMuted = value;
-            MutedChanged?.Invoke(value);
-        }
+        get => _isMuted;
+        set => MutedChanged?.Invoke(_isMuted = value);
     }
 
-    private int volume = 50;
+    private int _volume = 50;
     public int Volume
     {
-        get => volume;
-        set
-        {
-            volume = value;
-            VolumeChanged?.Invoke(value);
-        }
+        get => _volume;
+        set => VolumeChanged?.Invoke(_volume = value);
     }
 
-    private double? duration;
+    private double? _duration;
     public double? Duration
     {
-        get => duration;
-        set
-        {
-            duration = value;
-            DurationChanged?.Invoke(value);
-        }
+        get => _duration;
+        set => DurationChanged?.Invoke(_duration = value);
     }
 
-    private double? currentTime;
+    private double? _currentTime;
     public double? CurrentTime
     {
-        get => currentTime;
-        set
-        {
-            currentTime = value;
-            CurrentTimeChanged?.Invoke(value);
-        }
+        get => _currentTime;
+        set => CurrentTimeChanged?.Invoke(_currentTime = value);
     }
 
-    public void SeekTime(double time)
-    {
-        currentTime = time;
-        TimeSought?.Invoke(time);
-    }
+    public void SeekTime(double time) => TimeSought?.Invoke(_currentTime = time);
 
     public void Play(EpisodeInfo episode)
     {
@@ -90,13 +62,7 @@ public class PlayerService
         IsPlaying = true;
     }
 
-    public void Resume()
-    {
-        IsPlaying = true;
-    }
+    public void Resume() => IsPlaying = true;
 
-    public void Pause()
-    {
-        IsPlaying = false;
-    }
+    public void Pause() => IsPlaying = false;
 }
