@@ -8,9 +8,9 @@ public class ListenLaterViewModel : BaseViewModel
     private readonly ListenLaterService listenLaterService;
     private readonly PlayerService playerService;
 
-    private ObservableCollection<EpisodeViewModel> episodes;
+    private ObservableRangeCollection<EpisodeViewModel> episodes;
 
-    public ObservableCollection<EpisodeViewModel> Episodes
+    public ObservableRangeCollection<EpisodeViewModel> Episodes
     {
         get { return episodes; }
         set {  SetProperty(ref episodes, value); }  
@@ -22,20 +22,21 @@ public class ListenLaterViewModel : BaseViewModel
     {
         listenLaterService = listen;
         playerService = player;
-        Episodes = new ObservableCollection<EpisodeViewModel>();
+        Episodes = new ObservableRangeCollection<EpisodeViewModel>();
     }
 
     internal async Task InitializeAsync()
     {
         var episodes = listenLaterService.GetEpisodes();
-        Episodes.Clear();
+        var list = new List<EpisodeViewModel>();
         foreach (var episode in episodes)
         {
             var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, listenLaterService, playerService);
             await episodeVM.InitializeAsync();
 
-            Episodes.Add(episodeVM);
+            list.Add(episodeVM);
         }
+        Episodes.ReplaceRange(list);
         OnPropertyChanged(nameof(HasData));
         OnPropertyChanged(nameof(HasNoData));
     }
