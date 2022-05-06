@@ -19,11 +19,11 @@
                                Style="{StaticResource H5LabelStyle}"
                         Margin="14,-6,0,0" />
             </StackLayout>
-            <CollectionView x:Name="subscribedPodcasts"
-                            Grid.Row="1"
-                            Margin="10,0"
-                            SelectionMode="None"
-                            ItemsSource="{Binding SubscribedShows}">
+            <CollectionView 
+                Grid.Row="1"
+                Margin="10,0"
+                SelectionMode="None"
+                ItemsSource="{Binding SubscribedShows}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
                                      Span="{OnIdiom Phone=2, Tablet=4, Desktop=4}"
@@ -36,23 +36,31 @@
                                             SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionsViewModel}}}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <Grid 
+                        RowDefinitions="*, auto" 
+                        Padding="{OnIdiom Desktop=200, Default=50}">
+                        <Image 
+                            Source="empty_collection.png" HorizontalOptions="Center"
+                            VerticalOptions="Center"/>
+                        <StackLayout 
+                            HorizontalOptions="CenterAndExpand"
+                            VerticalOptions="CenterAndExpand"
+                            Grid.Row="1"
+                            Spacing="20">
+                            <Label 
+                                Text="You haven't subscribed to any channel yet."
+                                Style="{StaticResource BodySLabelStyle}"
+                                HorizontalTextAlignment="Center" />
+                            <Label 
+                                Text="Discover content according to your interests."
+                                Style="{StaticResource BodySLabelStyle}"
+                                HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </Grid>
+                </CollectionView.EmptyView>
             </CollectionView>
-            <Grid Grid.Row="1" IsVisible="{Binding HasNoData}" RowDefinitions="*, auto" Padding="{OnIdiom Desktop=200, Default=50}">
-                <Image Source="empty_collection.png" HorizontalOptions="Center"
-                                   VerticalOptions="Center"/>
-                <StackLayout HorizontalOptions="CenterAndExpand"
-                                         VerticalOptions="CenterAndExpand"
-                                         Grid.Row="1"
-                                         Spacing="20">
-                    <Label Text="You haven't subscribed to any channel yet."
-                            Style="{StaticResource BodySLabelStyle}"
-                                       HorizontalOptions="Center" />
-                    <Label Text="Discover content according to your interests."
-                            Style="{StaticResource BodySLabelStyle}"
-                                       HorizontalOptions="Center" />
-
-                </StackLayout>
-            </Grid>
+            
             <controls:Player x:Name="player"
                              VerticalOptions="End"
                              Grid.Row="1"/>

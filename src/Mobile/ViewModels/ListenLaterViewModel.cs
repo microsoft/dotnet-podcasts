@@ -2,9 +2,6 @@
 
 public class ListenLaterViewModel : BaseViewModel
 {
-    public bool HasData => Episodes?.Any() ?? false;
-    public bool HasNoData => !HasData;
-
     private readonly ListenLaterService listenLaterService;
     private readonly PlayerService playerService;
 
@@ -37,8 +34,6 @@ public class ListenLaterViewModel : BaseViewModel
             list.Add(episodeVM);
         }
         Episodes.ReplaceRange(list);
-        OnPropertyChanged(nameof(HasData));
-        OnPropertyChanged(nameof(HasNoData));
     }
 
     private void RemoveCommandExecute(EpisodeViewModel episode)
@@ -49,8 +44,6 @@ public class ListenLaterViewModel : BaseViewModel
             listenLaterService.Remove(episode.Episode);
             Episodes.Remove(episodeToRemove);
         }
-        OnPropertyChanged(nameof(HasData));
-        OnPropertyChanged(nameof(HasNoData));
     }
 }
 
