@@ -6,8 +6,14 @@
              x:DataType="viewmodels:EpisodeDetailViewModel"
              Style="{StaticResource DetailPageStyle}"
              Title="{Binding Episode.Title}"
+             xmlns:converters="clr-namespace:Microsoft.NetConf2021.Maui.Converters"
              xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:TextToTypeTextConverter x:Key="TextToTypeTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
         <ScrollView>
             <VerticalStackLayout Padding="16"
@@ -63,8 +69,8 @@
                     </ImageButton>
                 </Grid>
                 <Label Style="{StaticResource BodySLabelStyle}"
-                       TextType="Html"
-                       Text="{Binding Episode.Description}" />
+                       Text="{Binding Episode.Description}"
+                       TextType="{Binding Episode.Description,Converter={StaticResource TextToTypeTextConverter}}"/>
             </VerticalStackLayout>
         </ScrollView>
 

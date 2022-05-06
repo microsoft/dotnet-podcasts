@@ -72,8 +72,8 @@
                                      WidthRequest="28">
                             <ImageButton.IsVisible>
                                 <OnPlatform x:TypeArguments="x:Boolean">
-                                    <On Platform="Android,iOS">false</On>
-                                    <On Platform="UWP,macOS">true</On>
+                                    <On Platform="Android, iOS">false</On>
+                                    <On Platform="UWP, MacCatalyst">true</On>
                                 </OnPlatform>
                             </ImageButton.IsVisible>
                             <ImageButton.Triggers>

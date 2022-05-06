@@ -36,26 +36,34 @@
                                 SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionsViewModel}}}" />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
+                    <BindableLayout.EmptyView>
+                        <Grid 
+                            RowDefinitions="*, auto" 
+                            Padding="{OnIdiom Desktop=200, Default=50}">
+                            <Image 
+                                Source="empty_collection.png" HorizontalOptions="Center"
+                                VerticalOptions="Center"/>
+                            <StackLayout 
+                                HorizontalOptions="CenterAndExpand"
+                                VerticalOptions="CenterAndExpand"
+                                Grid.Row="1"
+                                Spacing="20">
+                                <Label 
+                                    Text="You haven't subscribed to any channel yet."
+                                    Style="{StaticResource BodySLabelStyle}"
+                                    MaxLines="4"
+                                    HorizontalTextAlignment="Center" />
+                                <Label 
+                                    Text="Discover content according to your interests."
+                                    Style="{StaticResource BodySLabelStyle}"
+                                    MaxLines="4"
+                                    HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </Grid>
+                    </BindableLayout.EmptyView>
                 </FlexLayout>
             </ScrollView>
 
-
-            <Grid Grid.Row="1" IsVisible="{Binding HasNoData}" RowDefinitions="*, auto" Padding="{OnIdiom Desktop=200, Default=50}">
-                <Image Source="empty_collection.png" HorizontalOptions="Center"
-                                   VerticalOptions="Center"/>
-                <StackLayout HorizontalOptions="CenterAndExpand"
-                                         VerticalOptions="CenterAndExpand"
-                                         Grid.Row="1"
-                                         Spacing="20">
-                    <Label Text="You haven't subscribed to any channel yet."
-                            Style="{StaticResource BodySLabelStyle}"
-                                       HorizontalOptions="Center" />
-                    <Label Text="Discover content according to your interests."
-                            Style="{StaticResource BodySLabelStyle}"
-                                       HorizontalOptions="Center" />
-
-                </StackLayout>
-            </Grid>
             <controls:Player x:Name="player"
                              VerticalOptions="End"
                              Grid.Row="1"/>

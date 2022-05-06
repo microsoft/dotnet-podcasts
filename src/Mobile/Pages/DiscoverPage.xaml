@@ -105,10 +105,14 @@
                         SelectionMode="None"
                         IsGrouped="True">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical"
+                <OnPlatform x:TypeArguments="ItemsLayout">
+                    <On Platform="Android,iOS,UWP">
+                        <GridItemsLayout Orientation="Vertical"
                                  Span="{OnIdiom Phone=2, Tablet=3, Desktop=3, Default=3}"
                                  HorizontalItemSpacing="5"
                                  VerticalItemSpacing="5" />
+                    </On>
+                </OnPlatform>
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>

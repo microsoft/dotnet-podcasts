@@ -2,15 +2,12 @@
 
 public class SubscriptionsViewModel : BaseViewModel
 {
-    public bool HasData => SubscribedShows?.Any() ?? false;
-    public bool HasNoData => !HasData;
-
     private readonly SubscriptionsService subscriptionsService;
 
-    private ObservableCollection<ShowViewModel> subscribedShows;
+    private ObservableRangeCollection<ShowViewModel> subscribedShows;
 
     public ICommand NavigateToDiscoverCommand { get; internal set; }
-    public ObservableCollection<ShowViewModel> SubscribedShows
+    public ObservableRangeCollection<ShowViewModel> SubscribedShows
     {
         get
         {
@@ -27,7 +24,7 @@ public class SubscriptionsViewModel : BaseViewModel
     public SubscriptionsViewModel(SubscriptionsService subs)
     {
         subscriptionsService = subs;
-        subscribedShows = new ObservableCollection<ShowViewModel>();
+        subscribedShows = new ObservableRangeCollection<ShowViewModel>();
         NavigateToDiscoverCommand = new AsyncCommand(NavigateToDiscoverCommandExecute);
     }
 
@@ -40,15 +37,14 @@ public class SubscriptionsViewModel : BaseViewModel
     {
         var podcasts = subscriptionsService.GetSubscribedShows();
 
-        SubscribedShows.Clear();
+        var list = new List<ShowViewModel>();
         foreach (var podcast in podcasts)
         {
             var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
             await podcastViewModel.InitializeAsync();
-            SubscribedShows.Add(podcastViewModel);
+            list.Add(podcastViewModel);
         }
-        OnPropertyChanged(nameof(HasData));
-        OnPropertyChanged(nameof(HasNoData));
+        SubscribedShows.ReplaceRange(list);
     }
 
     private async Task SubscribeCommandExecute(ShowViewModel vm)
