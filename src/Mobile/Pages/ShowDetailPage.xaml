@@ -92,36 +92,33 @@
                 <Grid Padding="{OnIdiom Default=30, Phone=22}"
                       ColumnDefinitions="auto, *"
                       ColumnSpacing="{OnIdiom Default=22, Phone=10}"
-                      RowDefinitions="auto,auto,auto,auto,auto"
+                      RowDefinitions="auto,auto,auto,*"
                       RowSpacing="{OnIdiom Default=10, Phone=6}">
 
-                    <Image Aspect="AspectFit"
-                           Grid.Column="0"
-                           Grid.Row="0"
-                           Grid.RowSpan="{OnIdiom Default=3, Phone=2}"
-                           HeightRequest="{OnIdiom Default=230, Phone=156}"
-                           Source="{Binding Show.Image, FallbackValue=default_podcast_image.png}"
-                           WidthRequest="{OnIdiom Default=230, Phone=156}" />
                     <Label Grid.Column="1"
                            Grid.Row="0"
                            HorizontalOptions="Start"
                            Style="{OnIdiom Default={StaticResource H4LabelStyle}, Phone={StaticResource H6LabelStyle}}"
                            Text="{Binding Show.Title}" />
+
                     <Label Grid.Column="1"
                            Grid.Row="1"
                            Style="{StaticResource BodyMLabelStyle}"
                            Text="{Binding Show.Author}"
                            TextColor="{AppThemeBinding Light={StaticResource Grey7},Dark={StaticResource Grey4}}" />
-                    <Label Grid.Column="{OnIdiom Default=1, Phone=0}"
-                           Grid.Row="{OnIdiom Default=2, Phone=3}"
+
+                    <Label 
+                           Grid.Column="{OnIdiom Default=1, Phone=0}"
                            Grid.ColumnSpan="{OnIdiom Default=1, Phone=2}"
+                           Grid.Row="{OnIdiom Default=2, Phone=3}"
                            TextColor="{AppThemeBinding Light={StaticResource Dark},Dark={StaticResource Grey1}}"
                            Style="{StaticResource BodyMLabelStyle}"
                            Text="{Binding Show.Description}" />
+
                     <Button BackgroundColor="{StaticResource Primary}"
                             Grid.Column="{OnIdiom Default=1,Phone=0}"
                             Grid.ColumnSpan="{OnIdiom Default=1, Phone=2}"
-                            Grid.Row="{OnIdiom Default=4, Phone=2}"
+                            Grid.Row="{OnIdiom Default=3, Phone=2}"
                             Command="{Binding SubscribeCommand}"
                             Text="{x:Static res:AppResource.Subscribe}">
                         <Button.Triggers>
@@ -133,6 +130,14 @@
                             </DataTrigger>
                         </Button.Triggers>
                     </Button>
+
+                    <Image Aspect="AspectFit"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           Grid.RowSpan="{OnIdiom Default=3, Phone=2}"
+                           HeightRequest="{OnIdiom Default=230, Phone=156}"
+                           Source="{Binding Show.Image, FallbackValue=default_podcast_image.png}"
+                           WidthRequest="{OnIdiom Default=230, Phone=156}" />
                 </Grid>
             </CollectionView.Header>
             <CollectionView.Footer>
