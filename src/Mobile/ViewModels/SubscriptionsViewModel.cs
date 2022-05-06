@@ -2,9 +2,6 @@
 
 public class SubscriptionsViewModel : BaseViewModel
 {
-    public bool HasData => SubscribedShows?.Any() ?? false;
-    public bool HasNoData => !HasData;
-
     private readonly SubscriptionsService subscriptionsService;
 
     private ObservableRangeCollection<ShowViewModel> subscribedShows;
@@ -48,8 +45,6 @@ public class SubscriptionsViewModel : BaseViewModel
             list.Add(podcastViewModel);
         }
         SubscribedShows.ReplaceRange(list);
-        OnPropertyChanged(nameof(HasData));
-        OnPropertyChanged(nameof(HasNoData));
     }
 
     private async Task SubscribeCommandExecute(ShowViewModel vm)

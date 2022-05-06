@@ -16,9 +16,10 @@
                                Style="{StaticResource H5LabelStyle}"
                         Margin="14,-6,0,0"/>
             </StackLayout>
-            <CollectionView ItemsSource="{Binding Episodes}"
-                            Margin="10,0"
-                            Grid.Row="1">
+            <CollectionView 
+                ItemsSource="{Binding Episodes}"
+                Margin="10,0"
+                Grid.Row="1">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
                                      Span="{OnIdiom Phone=2, Tablet=4, Desktop=4}"
@@ -33,28 +34,31 @@
                                                RemoveListenLaterCommandParameter="{Binding}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <Grid IsVisible="{Binding HasNoData}"
-                  RowDefinitions="*, auto"
-                  Grid.Row="1"
-                  Padding="{OnIdiom Desktop=200, Default=50}">
-                <Image Source="empty_collection.png"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center" />
-                <StackLayout HorizontalOptions="CenterAndExpand"
+                <CollectionView.EmptyView>
+                    <Grid
+                        RowDefinitions="*, auto"
+                        Padding="{OnIdiom Desktop=200, Default=50}">
+                        <Image 
+                            Source="empty_collection.png"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" />
+                        <StackLayout HorizontalOptions="CenterAndExpand"
                              VerticalOptions="CenterAndExpand"
                              Grid.Row="1"
                              Spacing="20">
-                    <Label Text="You don't have any episodes saved yet."
-                           Style="{StaticResource BodySLabelStyle}"
-                           HorizontalOptions="Center" />
-                    <Label Text="Discover podcasts episodes and save them to listen later.."
-                           Style="{StaticResource BodySLabelStyle}"
-                           HorizontalOptions="Center" />
+                            <Label 
+                                Text="You don't have any episodes saved yet."
+                                Style="{StaticResource BodySLabelStyle}"
+                                HorizontalTextAlignment="Center" />
+                            <Label 
+                                Text="Discover podcasts episodes and save them to listen later.."
+                                Style="{StaticResource BodySLabelStyle}"
+                                HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                    </Grid>
+                </CollectionView.EmptyView>
+            </CollectionView>
 
-                </StackLayout>
-            </Grid>
             <controls:Player x:Name="player"
                              Grid.Row="1"
                              VerticalOptions="End" />
