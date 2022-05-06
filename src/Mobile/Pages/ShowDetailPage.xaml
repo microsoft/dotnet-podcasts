@@ -95,6 +95,14 @@
                       RowDefinitions="auto,auto,auto,*"
                       RowSpacing="{OnIdiom Default=10, Phone=6}">
 
+                    <Image Aspect="AspectFit"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           Grid.RowSpan="{OnIdiom Default=3, Phone=2}"
+                           HeightRequest="{OnIdiom Default=230, Phone=156}"
+                           Source="{Binding Show.Image, FallbackValue=default_podcast_image.png}"
+                           WidthRequest="{OnIdiom Default=230, Phone=156}" />
+                    
                     <Label Grid.Column="1"
                            Grid.Row="0"
                            HorizontalOptions="Start"
@@ -131,13 +139,6 @@
                         </Button.Triggers>
                     </Button>
 
-                    <Image Aspect="AspectFit"
-                           Grid.Column="0"
-                           Grid.Row="0"
-                           Grid.RowSpan="{OnIdiom Default=3, Phone=2}"
-                           HeightRequest="{OnIdiom Default=230, Phone=156}"
-                           Source="{Binding Show.Image, FallbackValue=default_podcast_image.png}"
-                           WidthRequest="{OnIdiom Default=230, Phone=156}" />
                 </Grid>
             </CollectionView.Header>
             <CollectionView.Footer>
