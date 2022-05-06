@@ -31,10 +31,10 @@
                         IsGrouped="True">
             <CollectionView.ItemsLayout>
                 <OnPlatform x:TypeArguments="ItemsLayout">
-                    <!-- On MacOS does not load any items with IsGrouped=True + GridItemsLayout -->
+                    <!-- On MacOS and iOS does not load any items with IsGrouped=True + GridItemsLayout -->
                     <!-- https://github.com/dotnet/maui/issues/6848 -->
-                    <!-- Temporary workaround: On MacOS, not to use GridItemLayout-->
-                    <On Platform="Android,iOS,UWP">
+                    <!-- Temporary workaround: On MacOS and iOS, not to use GridItemLayout-->
+                    <On Platform="Android,UWP">
                         <GridItemsLayout Orientation="Vertical"
                                  Span="{OnIdiom Phone=2, Tablet=3, Desktop=3, Default=3}"
                                  HorizontalItemSpacing="5"
