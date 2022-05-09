@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class ShowViewModel : BaseViewModel
+public class ShowViewModel : ObservableObject
 {
     public Show Show { get; set; }
 
@@ -8,16 +8,13 @@ public class ShowViewModel : BaseViewModel
 
     private bool isSuscribed;
 
-    public bool IsSubscribed
-    {
-        get
-        {
-            return isSuscribed;
-        }
-
+    public bool IsSubscribed 
+    { 
+        get => isSuscribed;
         set
         {
-            SetProperty(ref isSuscribed, value);
+            isSuscribed = value;
+            OnPropertyChanged();
         }
     }
 
@@ -27,27 +24,19 @@ public class ShowViewModel : BaseViewModel
 
     public string Author { get => Show?.Author; }
 
-    public new string Title { get => Show?.Title; }
+    public string Title { get => Show?.Title; }
 
     public string Description { get => Show?.Description; }
 
-    public ICommand SubscribeCommand { get; internal set; }
-    public ICommand NavigateToDetailCommand => new AsyncCommand(NavigateToDetailCommandExecute);
+    public ICommand NavigateToDetailCommand { get; set; }
 
     public ShowViewModel(Show show, SubscriptionsService subs)
     {
         Show = show;
         subscriptionsService = subs;
+        NavigateToDetailCommand = new AsyncCommand(NavigateToDetailCommandExecute);
+        isSuscribed = subs.IsSubscribed(show.Id);
     }
 
-    internal Task InitializeAsync()
-    {
-        IsSubscribed = subscriptionsService.IsSubscribed(Show.Id);
-        return Task.CompletedTask;
-    }
-
-    private Task NavigateToDetailCommandExecute()
-    {
-        return Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");
-    }
+    private Task NavigateToDetailCommandExecute() => Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");
 }

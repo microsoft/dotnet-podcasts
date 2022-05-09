@@ -33,7 +33,7 @@ public class SubscriptionsViewModel : BaseViewModel
         return Shell.Current.GoToAsync($"{nameof(DiscoverPage)}");
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
         var podcasts = subscriptionsService.GetSubscribedShows();
 
@@ -41,21 +41,26 @@ public class SubscriptionsViewModel : BaseViewModel
         foreach (var podcast in podcasts)
         {
             var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
-            await podcastViewModel.InitializeAsync();
             list.Add(podcastViewModel);
         }
         SubscribedShows.ReplaceRange(list);
+
+        return Task.CompletedTask;
     }
 
     private async Task SubscribeCommandExecute(ShowViewModel vm)
     {
-        var podcastToRemove = SubscribedShows.Where(pod => pod.Show.Id == vm.Show.Id).FirstOrDefault();
+        var podcastToRemove = SubscribedShows
+            .FirstOrDefault(pod => pod.Show.Id == vm.Show.Id);
 
         if (podcastToRemove != null)
         {
-            await subscriptionsService.UnSubscribeFromShowAsync(vm.Show); 
-            SubscribedShows.Remove(podcastToRemove);
-            MessagingCenter.Instance.Send<string>(".NET Pods", "UnSubscribe");
+            var isUnsubscribe = await subscriptionsService.UnSubscribeFromShowAsync(vm.Show); 
+            if (isUnsubscribe)
+            {
+                SubscribedShows.Remove(podcastToRemove);
+                vm.IsSubscribed = false;
+            }
         }
     }
 }

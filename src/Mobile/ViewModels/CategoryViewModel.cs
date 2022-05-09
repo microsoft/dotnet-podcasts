@@ -33,23 +33,25 @@ public class CategoryViewModel : BaseViewModel
         }
     }
 
-    public ICommand SubscribeCommand => new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
-    public ICommand SearchCommand => new MvvmHelpers.Commands.Command(OnSearchCommand);
+    public ICommand SubscribeCommand {get; set;}
+    public ICommand SearchCommand { get; set; }
 
     public CategoryViewModel(ShowsService shows, SubscriptionsService subs)
     {
         showsService = shows;
         subscriptionsService = subs;
+
+        SubscribeCommand = new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
+        SearchCommand = new MvvmHelpers.Commands.Command(OnSearchCommand);
     }
 
 
     public async Task InitializeAsync()
     {
         await LoadCategoryAsync();
-        var showList = new List<ShowViewModel>();
         var shows = await showsService.GetShowsByCategoryAsync(new Guid(Id));
 
-        Shows = await LoadShows(shows);
+        Shows = LoadShows(shows);
     }
 
     private async Task LoadCategoryAsync()
@@ -61,16 +63,16 @@ public class CategoryViewModel : BaseViewModel
     private async Task SubscribeCommandExecute(ShowViewModel vm)
     {
         await subscriptionsService.UnSubscribeFromShowAsync(vm.Show);
-        vm.IsSubscribed = subscriptionsService.IsSubscribed(vm.Show.Id);
+        OnPropertyChanged(nameof(vm.IsSubscribed));
     }
 
     private async void OnSearchCommand()
     {
         var shows = await showsService.SearchShowsAsync(new Guid(Id), Text);
-        Shows = await LoadShows(shows);
+        Shows = LoadShows(shows);
     }
 
-    private async Task<List<ShowViewModel>> LoadShows(IEnumerable<Show> shows)
+    private List<ShowViewModel> LoadShows(IEnumerable<Show> shows)
     {
         var showList = new List<ShowViewModel>();
         if (shows == null)
@@ -81,10 +83,9 @@ public class CategoryViewModel : BaseViewModel
         foreach (var show in shows)
         {
             var showVM = new ShowViewModel(show, subscriptionsService);
-            await showVM.InitializeAsync();
             showList.Add(showVM);
         }
-        
+
         return showList;
     }
 }

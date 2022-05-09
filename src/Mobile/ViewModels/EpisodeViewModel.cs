@@ -5,47 +5,48 @@ public class EpisodeViewModel : BaseViewModel
     private readonly ListenLaterService listenLaterService;
     private readonly PlayerService playerService;
     private Episode episode;
-    private bool isForListenLater;
 
-    public bool IsForListenLater
+    public bool IsInListenLater
     {
-        get { return isForListenLater; }
-        set { SetProperty(ref isForListenLater, value); }   
-    }    
+        get
+        {
+            return episode.IsInListenLater;
+        }
+        set
+        {
+            episode.IsInListenLater = value;
+            OnPropertyChanged();
+        }
+    }
 
     public Episode Episode
     {
         get { return episode; }
-        set {  SetProperty(ref episode, value); }
+        set { SetProperty(ref episode, value); }
     }
 
     public Show Show { get; set; }
 
-    public ICommand PlayEpisodeCommand => new AsyncCommand(PlayEpisodeCommandExecute);
-    public ICommand NavigateToDetailCommand => new AsyncCommand(NavigateToDetailCommandExecute);
+    public ICommand PlayEpisodeCommand { get; set; }
 
-    public EpisodeViewModel(Episode episode, Show show, ListenLaterService listen, PlayerService player)
+    public ICommand NavigateToDetailCommand { get; set; }
+
+    public EpisodeViewModel(
+        Episode episode,
+        Show show,
+        ListenLaterService listen,
+        PlayerService player)
     {
         listenLaterService = listen;
         playerService = player;
 
         Episode = episode;
         Show = show;
+        PlayEpisodeCommand = new AsyncCommand(PlayEpisodeCommandExecute);
+        NavigateToDetailCommand = new AsyncCommand(NavigateToDetailCommandExecute);
     }
 
-    internal Task InitializeAsync()
-    {
-        this.IsForListenLater = listenLaterService.IsInListenLater(episode);
-        return Task.CompletedTask;
-    }
+    private Task PlayEpisodeCommandExecute() => playerService.PlayAsync(Episode, Show);
 
-    private Task PlayEpisodeCommandExecute()
-    {
-        return playerService.PlayAsync(Episode, Show);
-    }
-
-    private Task NavigateToDetailCommandExecute()
-    {
-        return Shell.Current.GoToAsync($"{nameof(EpisodeDetailPage)}?Id={episode.Id}&ShowId={Show.Id}");
-    }
+    private Task NavigateToDetailCommandExecute() => Shell.Current.GoToAsync($"{nameof(EpisodeDetailPage)}?Id={episode.Id}&ShowId={Show.Id}");
 }
