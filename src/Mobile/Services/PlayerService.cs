@@ -81,6 +81,15 @@ public class PlayerService
         return PlayAsync(episode, show, isPlaying, position);
     }
 
+    public async Task resumeEpisode(double position)
+    {
+        await audioService.InitializeAsync(CurrentEpisode.Url.ToString());
+
+        await InternalPlayPauseAsync(true, position);
+
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     private async Task InternalPlayPauseAsync(bool isPlaying, double position)
     {
         if (isPlaying)
