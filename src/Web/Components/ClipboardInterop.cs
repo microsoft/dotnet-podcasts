@@ -11,13 +11,9 @@ public class ClipboardInterop
         _jsRuntime = jsRuntime;
     }
 
-    public ValueTask<string> ReadTextAsync()
-    {
-        return _jsRuntime.InvokeAsync<string>("navigator.clipboard.readText");
-    }
+    public ValueTask<string> ReadTextAsync() =>
+        _jsRuntime.InvokeAsync<string>("navigator.clipboard.readText");
 
-    public ValueTask WriteTextAsync(string text)
-    {
-        return _jsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
-    }
+    public ValueTask WriteTextAsync(string text) =>
+        _jsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
 }

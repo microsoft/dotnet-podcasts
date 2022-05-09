@@ -55,7 +55,7 @@
     private async void OnEpisodeChanged(EpisodeInfo? episode)
     {
         isListenLater = episode != null
-            ? await ListenLaterService.IsListenLaterEpisode(episode.Id)
+            ? await ListenLaterService.IsListenLaterEpisodeAsync(episode.Id)
             : false;
         await InvokeAsync(StateHasChanged);
     }
@@ -67,14 +67,14 @@
     private async Task ChangeListenLater(bool value)
     {
         isListenLater = value;
-        await ListenLaterService.ToggleListenLaterEpisode(PlayerService.Episode!, value);
+        await ListenLaterService.ToggleListenLaterEpisodeAsync(PlayerService.Episode!, value);
     }
 
     private async void UpdateListenLater(IEnumerable<EpisodeInfo> episodes)
     {
         if (PlayerService.Episode != null)
         {
-            var newValue = await ListenLaterService.IsListenLaterEpisode(PlayerService.Episode.Id);
+            var newValue = await ListenLaterService.IsListenLaterEpisodeAsync(PlayerService.Episode.Id);
             if (isListenLater != newValue)
             {
                 isListenLater = newValue;

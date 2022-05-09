@@ -77,7 +77,7 @@ else
         if (show != null && episodes == null)
         {
             episodes = show.Episodes.Select(e => new EpisodeInfo(show, e)).ToList();
-            isSubscribed = await SubscriptionsService.IsSubscribedShow(show.Id);
+            isSubscribed = await SubscriptionsService.IsSubscribedShowAsync(show.Id);
             StateHasChanged();
         }
     }
@@ -85,7 +85,7 @@ else
     private async Task ChangeShowSubscription()
     {
         isSubscribed = !isSubscribed;
-        await SubscriptionsService.ToggleShowSubscription(new ShowInfo(show!), isSubscribed);
+        await SubscriptionsService.ToggleShowSubscriptionAsync(new ShowInfo(show!), isSubscribed);
     }
 
 

@@ -1,30 +1,40 @@
 const Theme = {
-    Dark: 'Dark',
-    Light: 'Light'
+    dark: 'Dark',
+    light: 'Light',
+    system: 'System'
 };
+const themeKey = 'theme';
+const dataThemeKey = 'data-theme';
 
-export function getTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
+export const registerForSystemThemeChanged = (dotnetObj, callbackMethodName) => {
+    const media = matchMedia('(prefers-color-scheme: dark)');
+    if (media && dotnetObj) {
+        media.onchange = args => {
+            dotnetObj.invokeMethod(callbackMethodName, args.matches);
+        }
+    }
+}
+
+export const getSystemTheme = () =>
+    matchMedia('(prefers-color-scheme: dark)').matches
+        ? Theme.dark : Theme.light;
+
+export const getTheme = () => {
+    const savedTheme = localStorage.getItem(themeKey);
+    if (savedTheme && savedTheme !== Theme.system) {
         return savedTheme;
     }
-    return matchMedia('(prefers-color-scheme: dark)').matches ? Theme.Dark : Theme.Light;
+    return getSystemTheme();
 }
 
-export function applyTheme(value) {
-    if (value === Theme.Dark) {
-        document.body.setAttribute('data-theme', value);
+const applyTheme = (theme) => {
+    if (theme === Theme.dark) {
+        document.body.setAttribute(dataThemeKey, theme);
     } else {
-        document.body.removeAttribute('data-theme');
+        document.body.removeAttribute(dataThemeKey);
     }
+    return theme;
 }
 
-export function setTheme(value) {
-    applyTheme(value);
-    localStorage.setItem('theme', value);
-}
-
-export function initializeTheme() {
-    const value = getTheme();
-    applyTheme(value);
-}
+export const setTheme = (theme) =>
+    localStorage.setItem(themeKey, applyTheme(theme));
