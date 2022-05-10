@@ -13,36 +13,40 @@ public class ListenLaterViewModel : BaseViewModel
         set {  SetProperty(ref episodes, value); }  
     }
 
-    public ICommand RemoveCommand => new MvvmHelpers.Commands.Command<EpisodeViewModel>(RemoveCommandExecute);
+    public ICommand RemoveCommand { get; private set; }
 
     public ListenLaterViewModel(ListenLaterService listen, PlayerService player)
     {
         listenLaterService = listen;
         playerService = player;
         Episodes = new ObservableRangeCollection<EpisodeViewModel>();
+        RemoveCommand = new MvvmHelpers.Commands.Command<EpisodeViewModel>(RemoveCommandExecute);
     }
 
-    internal async Task InitializeAsync()
+    internal Task InitializeAsync()
     {
         var episodes = listenLaterService.GetEpisodes();
         var list = new List<EpisodeViewModel>();
         foreach (var episode in episodes)
         {
-            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, listenLaterService, playerService);
-            await episodeVM.InitializeAsync();
+            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, playerService);
 
             list.Add(episodeVM);
         }
         Episodes.ReplaceRange(list);
+
+        return Task.CompletedTask;
     }
 
     private void RemoveCommandExecute(EpisodeViewModel episode)
     {
-        var episodeToRemove = Episodes.Where(ep => ep.Episode.Id == episode.Episode.Id).FirstOrDefault();
+        var episodeToRemove = Episodes
+            .FirstOrDefault(ep => ep.Episode.Id == episode.Episode.Id);
         if(episodeToRemove != null)
         {
             listenLaterService.Remove(episode.Episode);
             Episodes.Remove(episodeToRemove);
+            episode.IsInListenLater = false;
         }
     }
 }
