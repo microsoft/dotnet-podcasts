@@ -1,10 +1,10 @@
-﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
+﻿using MvvmHelpers.Interfaces;
+
+namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 public class ShowViewModel : ObservableObject
 {
     public Show Show { get; set; }
-
-    private readonly SubscriptionsService subscriptionsService;
 
     private bool isSuscribed;
 
@@ -28,14 +28,13 @@ public class ShowViewModel : ObservableObject
 
     public string Description { get => Show?.Description; }
 
-    public ICommand NavigateToDetailCommand { get; set; }
+    public IAsyncCommand NavigateToDetailCommand { get; set; }
 
-    public ShowViewModel(Show show, SubscriptionsService subs)
+    public ShowViewModel(Show show, bool isSubscribed)
     {
         Show = show;
-        subscriptionsService = subs;
         NavigateToDetailCommand = new AsyncCommand(NavigateToDetailCommandExecute);
-        isSuscribed = subs.IsSubscribed(show.Id);
+        isSuscribed = isSubscribed;
     }
 
     private Task NavigateToDetailCommandExecute() => Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");

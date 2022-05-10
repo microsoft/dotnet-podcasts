@@ -1,4 +1,5 @@
 ﻿using Microsoft.NetConf2021.Maui.Resources.Strings;
+using MvvmHelpers.Interfaces;
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
@@ -27,9 +28,9 @@ public class ShowDetailViewModel : BaseViewModel
         set => SetProperty(ref episodeForPlaying, value);
     }
 
-    private ObservableCollection<Episode> episodes;
+    private ObservableRangeCollection<Episode> episodes;
 
-    public ObservableCollection<Episode> Episodes
+    public ObservableRangeCollection<Episode> Episodes
     {
         get => episodes;
         set => SetProperty(ref episodes, value);
@@ -53,18 +54,18 @@ public class ShowDetailViewModel : BaseViewModel
         }
     }
 
-    public ICommand PlayEpisodeCommand { get; set; }
-    public ICommand TapEpisodeCommand { get; set; }
-    public ICommand SubscribeCommand { get; set; }
-    public ICommand AddToListenLaterCommand { get; set; }
-    public ICommand SearchEpisodeCommand { get; set; }
+    public IAsyncCommand<Episode> PlayEpisodeCommand { get; private set; }
+    public IAsyncCommand<Episode> TapEpisodeCommand { get; private set; }
+    public IAsyncCommand SubscribeCommand { get; private set; }
+    public IAsyncCommand<Episode> AddToListenLaterCommand { get; private set; }
+    public ICommand SearchEpisodeCommand { get; private set; }
 
     private void OnSearchCommand()
     {
         var episodesList = show.Episodes
             .Where(ep => ep.Title.Contains(TextToSearch, StringComparison.InvariantCultureIgnoreCase))
             .ToList();
-        Episodes = new ObservableCollection<Episode>(episodesList);
+        Episodes.ReplaceRange(episodesList);
     }
 
     public ShowDetailViewModel(ShowsService shows, PlayerService player, SubscriptionsService subs, ListenLaterService later)
@@ -73,6 +74,7 @@ public class ShowDetailViewModel : BaseViewModel
         playerService = player;
         subscriptionsService = subs;
         listenLaterService = later;
+        episodes = new ObservableRangeCollection<Episode>();
 
         PlayEpisodeCommand = new AsyncCommand<Episode>(PlayEpisodeCommandExecute);
         TapEpisodeCommand = new AsyncCommand<Episode>(TapEpisodeCommandExecute);
@@ -83,14 +85,11 @@ public class ShowDetailViewModel : BaseViewModel
 
     internal async Task InitializeAsync()
     {
-        if (Show != null)
+        if (Id != null)
         {
-            OnPropertyChanged(nameof(Show));
-            OnPropertyChanged(nameof(Episodes));
-            return;
+            showId = new Guid(Id);
         }
-
-        showId = new Guid(Id);
+        
         await FetchAsync();
     }
 
@@ -108,10 +107,10 @@ public class ShowDetailViewModel : BaseViewModel
             return;
         }
 
-        var showVM = new ShowViewModel(show, subscriptionsService);
+        var showVM = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
 
         Show = showVM;
-        Episodes = new ObservableCollection<Episode>(show.Episodes.ToList());
+        Episodes.ReplaceRange(show.Episodes.ToList());
     }
 
     private async Task TapEpisodeCommandExecute(Episode episode)

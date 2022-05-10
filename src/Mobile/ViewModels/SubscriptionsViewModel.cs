@@ -1,4 +1,6 @@
-﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
+﻿using MvvmHelpers.Interfaces;
+
+namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 public class SubscriptionsViewModel : BaseViewModel
 {
@@ -6,7 +8,6 @@ public class SubscriptionsViewModel : BaseViewModel
 
     private ObservableRangeCollection<ShowViewModel> subscribedShows;
 
-    public ICommand NavigateToDiscoverCommand { get; internal set; }
     public ObservableRangeCollection<ShowViewModel> SubscribedShows
     {
         get
@@ -19,13 +20,16 @@ public class SubscriptionsViewModel : BaseViewModel
         }
     }
 
-    public ICommand SubscribeCommand => new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
+    public IAsyncCommand<ShowViewModel> SubscribeCommand { get; private set; }
+
+    public IAsyncCommand NavigateToDiscoverCommand { get; private set; }
 
     public SubscriptionsViewModel(SubscriptionsService subs)
     {
         subscriptionsService = subs;
         subscribedShows = new ObservableRangeCollection<ShowViewModel>();
         NavigateToDiscoverCommand = new AsyncCommand(NavigateToDiscoverCommandExecute);
+        SubscribeCommand = new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
     }
 
     private Task NavigateToDiscoverCommandExecute()
@@ -35,31 +39,31 @@ public class SubscriptionsViewModel : BaseViewModel
 
     public Task InitializeAsync()
     {
-        var podcasts = subscriptionsService.GetSubscribedShows();
+        var shows = subscriptionsService.GetSubscribedShows();
 
         var list = new List<ShowViewModel>();
-        foreach (var podcast in podcasts)
+        foreach (var show in shows)
         {
-            var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
-            list.Add(podcastViewModel);
+            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+            list.Add(showViewModel);
         }
         SubscribedShows.ReplaceRange(list);
 
         return Task.CompletedTask;
     }
 
-    private async Task SubscribeCommandExecute(ShowViewModel vm)
+    private async Task SubscribeCommandExecute(ShowViewModel showViewModel)
     {
         var podcastToRemove = SubscribedShows
-            .FirstOrDefault(pod => pod.Show.Id == vm.Show.Id);
+            .FirstOrDefault(pod => pod.Show.Id == showViewModel.Show.Id);
 
         if (podcastToRemove != null)
         {
-            var isUnsubscribe = await subscriptionsService.UnSubscribeFromShowAsync(vm.Show); 
+            var isUnsubscribe = await subscriptionsService.UnSubscribeFromShowAsync(showViewModel.Show); 
             if (isUnsubscribe)
             {
                 SubscribedShows.Remove(podcastToRemove);
-                vm.IsSubscribed = false;
+                showViewModel.IsSubscribed = false;
             }
         }
     }

@@ -1,8 +1,9 @@
-﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
+﻿using MvvmHelpers.Interfaces;
+
+namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 public class EpisodeViewModel : BaseViewModel
 {
-    private readonly ListenLaterService listenLaterService;
     private readonly PlayerService playerService;
     private Episode episode;
 
@@ -27,17 +28,15 @@ public class EpisodeViewModel : BaseViewModel
 
     public Show Show { get; set; }
 
-    public ICommand PlayEpisodeCommand { get; set; }
+    public IAsyncCommand PlayEpisodeCommand { get; private set; }
 
-    public ICommand NavigateToDetailCommand { get; set; }
+    public IAsyncCommand NavigateToDetailCommand { get; private set; }
 
     public EpisodeViewModel(
         Episode episode,
         Show show,
-        ListenLaterService listen,
         PlayerService player)
     {
-        listenLaterService = listen;
         playerService = player;
 
         Episode = episode;

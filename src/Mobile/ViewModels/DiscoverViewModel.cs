@@ -66,13 +66,13 @@ public class DiscoverViewModel : BaseViewModel
         UpdatePodcasts(shows);
     }
 
-    private List<ShowViewModel> ConvertToViewModels(IEnumerable<Show> podcasts)
+    private List<ShowViewModel> ConvertToViewModels(IEnumerable<Show> shows)
     {
         var viewmodels = new List<ShowViewModel>();
-        foreach (var podcast in podcasts)
+        foreach (var show in shows)
         {
-            var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
-            viewmodels.Add(podcastViewModel);
+            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+            viewmodels.Add(showViewModel);
         }
 
         return viewmodels;

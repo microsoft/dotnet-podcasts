@@ -29,7 +29,7 @@ public class ListenLaterViewModel : BaseViewModel
         var list = new List<EpisodeViewModel>();
         foreach (var episode in episodes)
         {
-            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, listenLaterService, playerService);
+            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, playerService);
 
             list.Add(episodeVM);
         }

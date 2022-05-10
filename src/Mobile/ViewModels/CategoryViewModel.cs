@@ -82,7 +82,7 @@ public class CategoryViewModel : BaseViewModel
 
         foreach (var show in shows)
         {
-            var showVM = new ShowViewModel(show, subscriptionsService);
+            var showVM = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
             showList.Add(showVM);
         }
 
