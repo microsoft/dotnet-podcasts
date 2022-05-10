@@ -1,23 +1,6 @@
-export function play(element) {
-    element.play();
-}
-
-export function pause(element) {
-    element.pause();
-}
-
-export function stop(element) {
-    element.stop();
-}
-
-export function setMuted(element, value) {
-    element.muted = value;
-}
-
-export function setVolume(element, value) {
-    element.volume = value;
-}
-
-export function setCurrentTime(element, value) {
-    element.currentTime = value;
-}
+export const play = (element) => element.play();
+export const pause = (element) => element.pause();
+export const stop = (element) => element.stop();
+export const setMuted = (element, value) => element.muted = value;
+export const setVolume = (element, value) => element.volume = value;
+export const setCurrentTime = (element, value) => element.currentTime = value;

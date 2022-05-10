@@ -39,7 +39,7 @@ else
     {
         if (firstRender)
         {
-            listenLaterEpisodes = await ListenLaterService.GetEpisodes();
+            listenLaterEpisodes = await ListenLaterService.GetEpisodesAsync();
             StateHasChanged();
         }
     }

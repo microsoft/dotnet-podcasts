@@ -7,10 +7,10 @@ public class SubscriptionsService
 {
     private const string ShowSubscriptionsKey = "ShowSubscriptions";
     private readonly LocalStorageInterop _localStorage;
+    private readonly SemaphoreSlim _semaphore = new(1);
 
-    private List<ShowInfo> _shows = default!;
+    private HashSet<ShowInfo> _shows = default!;
     private bool _isInitialized = false;
-    private SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
     public event Action<IEnumerable<ShowInfo>>? SubscriptionsChanged;
 
@@ -19,39 +19,45 @@ public class SubscriptionsService
         _localStorage = localStorage;
     }
 
-    public async Task Initialize()
+    public async Task InitializeAsync()
     {
         if (!_isInitialized)
         {
-            await _semaphore.WaitAsync();
-            if (!_isInitialized)
+            try
             {
-                var subscriptions = await _localStorage.GetItem<ShowInfo[]>(ShowSubscriptionsKey);
-                _shows = subscriptions?.ToList() ?? new List<ShowInfo>();
-                _isInitialized = true;
+                await _semaphore.WaitAsync();
+                if (!_isInitialized)
+                {
+                    var subscriptions = await _localStorage.GetItem<ShowInfo[]>(ShowSubscriptionsKey);
+                    _shows = subscriptions?.ToHashSet() ?? new();
+                    _isInitialized = true;
+                }
             }
-            _semaphore.Release();
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 
-    public async Task<IEnumerable<ShowInfo>> GetShowSubscriptions()
+    public async Task<IEnumerable<ShowInfo>> GetShowSubscriptionsAsync()
     {
-        await Initialize();
+        await InitializeAsync();
         return _shows;
     }
 
-    public async Task<bool> IsSubscribedShow(Guid showId)
+    public async Task<bool> IsSubscribedShowAsync(Guid showId)
     {
-        await Initialize();
+        await InitializeAsync();
         return _shows?.Any(s => s.Id == showId) ?? false;
     }
 
-    public Task ToggleShowSubscription(ShowInfo show, bool isSubscribed) =>
-        isSubscribed ? SubscribeShow(show) : UnsubscribeShow(show);
+    public Task ToggleShowSubscriptionAsync(ShowInfo show, bool isSubscribed) =>
+        isSubscribed ? SubscribeShowAsync(show) : UnsubscribeShowAsync(show);
 
-    public async Task SubscribeShow(ShowInfo show)
+    public async Task SubscribeShowAsync(ShowInfo show)
     {
-        await Initialize();
+        await InitializeAsync();
         if (!_shows.Any(s => s.Id == show.Id))
         {
             _shows.Add(show);
@@ -60,9 +66,9 @@ public class SubscriptionsService
         }
     }
 
-    public async Task UnsubscribeShow(ShowInfo show)
+    public async Task UnsubscribeShowAsync(ShowInfo show)
     {
-        await Initialize();
+        await InitializeAsync();
         var subscription = _shows.FirstOrDefault(s => s.Id == show.Id);
         if (subscription != null)
         {

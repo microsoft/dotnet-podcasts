@@ -23,28 +23,3 @@ public class PodcastService
     public Task<Show?> GetShow(Guid id) =>
         _httpClient.GetFromJsonAsync<Show>($"v1/shows/{id}");
 }
-
-public record Category(Guid Id, string Genre);
-
-public record Episode(
-    Guid Id,
-    string Title,
-    string Description,
-    string Explicit,
-    DateTime Published,
-    TimeSpan? Duration,
-    string Url);
-
-public record Show(
-    Guid Id,
-    string Title,
-    string Author,
-    string Description,
-    string Image,
-    DateTime Updated,
-    string Link,
-    string Email,
-    string Language,
-    IEnumerable<Category> Categories,
-    IEnumerable<Episode> Episodes,
-    bool IsFeatured);
