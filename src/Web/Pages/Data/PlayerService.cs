@@ -11,6 +11,7 @@ public class PlayerService
     public event Action<double?>? DurationChanged;
     public event Action<double?>? CurrentTimeChanged;
     public event Action<double?>? TimeSought;
+    public event Action<double?>? PlaybackRateChanged;
 
     private EpisodeInfo? _episode;
     public EpisodeInfo? Episode
@@ -52,6 +53,13 @@ public class PlayerService
     {
         get => _currentTime;
         set => CurrentTimeChanged?.Invoke(_currentTime = value);
+    }
+
+    private double? _playbackRate;
+    public double PlaybackRate
+    {
+        get => _playbackRate ?? 1;
+        set => PlaybackRateChanged?.Invoke(_playbackRate = value);
     }
 
     public void SeekTime(double time) => TimeSought?.Invoke(_currentTime = time);

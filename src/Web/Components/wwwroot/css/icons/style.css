@@ -174,3 +174,9 @@
 .icon-true-crime:before {
   content: "\e92a";
 }
+.icon-circle-up:before {
+    content: "\ea41";
+}
+.icon-circle-down:before {
+    content: "\ea43";
+}
