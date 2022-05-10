@@ -100,6 +100,7 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
                 listenLaterService.Add(episode, show);
 
             IsInListenLater = listenLaterService.IsInListenLater(episode);
+            Show.Episodes.FirstOrDefault(x => x.Id == episode.Id).IsInListenLater = IsInListenLater;
             return Task.CompletedTask;
         }
 
