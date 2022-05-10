@@ -11,3 +11,10 @@ Blazor.registerCustomEventType('customtimeupdate', {
         currentTime: event.srcElement.currentTime
     })
 });
+
+Blazor.registerCustomEventType('playbackratechange', {
+    browserEventName: 'playbackratechange',
+    createEventArgs: event => ({
+        playbackRate: event.srcElement.playbackRate
+    })
+});

@@ -19,6 +19,7 @@
                     OnListenLater="@ChangeListenLater"
                     OnPlay="@PlayerService.Resume"
                     OnPause="@PlayerService.Pause"
+                    OnPlaybackRateChange="@((value) => PlayerService.PlaybackRate = value)"
                     OnVolumeChange="@((value) => PlayerService.Volume = value)"
                     OnMutedChange="@((value) => PlayerService.IsMuted = value)"
                     OnSeek="@((value) => PlayerService.SeekTime(value))"
