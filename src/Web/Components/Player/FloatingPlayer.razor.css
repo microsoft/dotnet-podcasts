@@ -128,38 +128,12 @@
         line-height: var(--text-s-lh);
     }
 
-.playback-speed-point-five:before {
-    content: "0.5x";
-}
-
-.playback-speed-normal:before {
-    content: "1.0x";
-}
-
-.playback-speed-one-point-five:before {
-    content: "1.5x";
-}
-
-.playback-speed-two-times:before {
-    content: "2.0x";
-}
-
 .player-actions {
     display: flex;
     justify-content: right;
     align-items: center;
     gap: 12px;
 }
-
-    .player-actions [class^="playback-speed"] {
-        cursor: pointer !important;
-        border-radius: 3rem;
-    }
-
-    .player-actions .is-active {
-        color: var(--c-primary);
-        font-weight: bold;
-    }
 
 .player-actions-share,
 .player-actions-later {
@@ -174,11 +148,11 @@
     margin-right: 12px;
 }
 
-    .player-actions-share:hover,
-    .player-actions-later:hover,
-    .player-actions-volume:hover {
-        cursor: pointer;
-    }
+.player-actions-share:hover,
+.player-actions-later:hover,
+.player-actions-volume:hover {
+    cursor: pointer;
+}
 
 .player-volume-bar {
     width: 150px;
@@ -238,9 +212,9 @@ input[type="range"]:hover {
     cursor: pointer;
 }
 
-    input[type="range"]:hover:before {
-        background-color: var(--c-primary-light);
-    }
+input[type="range"]:hover:before {
+    background-color: var(--c-primary-light);
+}
 
 input[type=range]:hover::-webkit-slider-thumb {
     display: block;
@@ -311,16 +285,8 @@ input[type="range"]:hover::-moz-range-progress {
     }
 }
 
-#playbackRate {
-    margin: auto;
-}
-
 @media screen and (min-width: 1366px) {
     .player-actions-volume {
-        margin-left: 40px;
-    }
-
-    .player-actions-share {
         margin-left: 40px;
     }
 }
