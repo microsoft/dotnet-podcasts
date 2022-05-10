@@ -9,13 +9,3 @@ namespace Podcast.Pages.Events;
 public static class EventHandlers
 {
 }
-
-public class DurationChangeEventArgs : EventArgs
-{
-    public double Duration { get; set; }
-}
-
-public class TimeUpdateEventArgs : EventArgs
-{
-    public double CurrentTime { get; set; }
-}

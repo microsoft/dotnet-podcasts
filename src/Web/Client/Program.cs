@@ -5,10 +5,9 @@ using Podcast.Shared;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Services.AddHttpClient<PodcastService>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["PodcastApi:BaseAddress"]!);
-});
+builder.Services.AddHttpClient<PodcastService>(
+    client => client.BaseAddress = new Uri(
+        builder.Configuration["PodcastApi:BaseAddress"]!));
 builder.Services.AddScoped<ThemeInterop>();
 builder.Services.AddScoped<IAudioInterop, AudioInterop>();
 builder.Services.AddScoped<LocalStorageInterop>();

@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Podcast.Components;
 
-public class LocalStorageInterop
+public sealed class LocalStorageInterop
 {
     private readonly IJSRuntime _jsRuntime;
 
