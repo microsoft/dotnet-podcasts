@@ -5,8 +5,6 @@ namespace Microsoft.NetConf2021.Maui.Models;
 
 public class Episode : ObservableObject
 {
-    private readonly ListenLaterService listenLaterService;
-
     public Episode(RoomPlayerState playerState)
     {
         Id = playerState.Episode.Id;
@@ -17,7 +15,7 @@ public class Episode : ObservableObject
         Url = new Uri(playerState.Episode.Url);
     }
 
-    public Episode(EpisodeResponse response, ListenLaterService listenLater)
+    public Episode(EpisodeResponse response, bool isListenLater)
     {
         Id = response.Id;
         Title = response.Title;
@@ -25,8 +23,7 @@ public class Episode : ObservableObject
         Published = response.Published;
         Duration = response.Duration;
         Url = response.Url;
-        listenLaterService = listenLater;
-        isInListenLater = listenLaterService.IsInListenLater(this);
+        isInListenLater = isListenLater;
     }
 
     public Guid Id { get; set; }
