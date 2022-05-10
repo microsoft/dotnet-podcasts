@@ -29,7 +29,8 @@
                 <button class="buttonIcon" title="Back 15 seconds" @onclick="Back">
                     <span class="player-controls-jump icon-back-15" />
                 </button>
-                <button class="buttonIcon player-controls-action" title="@(IsPlaying ? "Pause" : "Play")" @onclick="TogglePlay">
+                <button class="buttonIcon player-controls-action"
+                    title="@(IsPlaying ? "Pause" : "Play")" @onclick="TogglePlay">
                     <span class="@(IsPlaying ? "icon-pause" : "icon-play")"></span>
                 </button>
                 <button class="buttonIcon" title="Forward 15 seconds" @onclick="Forward">
@@ -37,7 +38,6 @@
                 </button>
             </div>
             <div class="player-duration-bar">
-
                 <span>@TimeSpan.FromSeconds(currentTime).ToDurationString()</span>
                 <input type="range"
                    min="0"
@@ -53,6 +53,18 @@
     </div>
 
     <div class="player-actions">
+        <button class="buttonIcon" title="Increase playback rate by 0.25."
+            @onclick="IncreasePlaybackRate" disabled=@(canIncrease is false)>
+            <span class="icon-circle-up"></span>
+        </button>
+        <label id="playbackRate" class="is-active" 
+            title="The current playback rate is @playbackRateString">
+            @playbackRateString
+        </label>
+        <button class="buttonIcon" title="Decrease playback rate by 0.25."
+            @onclick="DecreasePlaybackRate" disabled=@(canDecrease is false)>
+            <span class="icon-circle-down"></span>
+        </button>
         <button class="buttonIcon player-actions-share" title="Listen Together" @onclick="ListenTogether">
             <span class="icon-listen-together"></span>
         </button>
@@ -127,9 +139,22 @@
     [Parameter]
     public EventCallback OnListenTogether { get; set; }
 
+    [Parameter]
+    public EventCallback<double> OnPlaybackRateChange { get; set; }
+
     private int currentVolume => IsMuted ? 0 : Volume;
     private double? seekingTime;
     private double currentTime => seekingTime ?? CurrentTime ?? 0;
+    private double min = .5;
+    private double max = 3;
+    private double step = .25;
+    private double playbackRate = 1;
+    private string playbackRateString => $"{playbackRate:#,0.0#}x";
+    private bool canIncrease => playbackRate + step <= max;
+    private bool canDecrease => playbackRate - step >= min;
+
+    private string GetActivePlaybackRateClass(double value) =>
+        playbackRate == value ? "is-active" : "";
 
     private Task TogglePlay() => IsPlaying ? OnPause.InvokeAsync() : OnPlay.InvokeAsync();
     private Task ToggleMuted() => OnMutedChange.InvokeAsync(!IsMuted);
@@ -139,6 +164,17 @@
     private Task SetCurrentTime(int time) => OnSeek.InvokeAsync(time);
     private Task Back() => SetCurrentTime((int)CurrentTime! - 15);
     private Task Forward() => SetCurrentTime((int)CurrentTime! + 15);
+
+    private Task IncreasePlaybackRate() => canIncrease 
+        ? OnPlaybackRateChanged(playbackRate + step)
+        : Task.CompletedTask;
+
+    private Task DecreasePlaybackRate() => canDecrease
+        ? OnPlaybackRateChanged(playbackRate - step)
+        : Task.CompletedTask;
+
+    private Task OnPlaybackRateChanged(double value) =>
+        OnPlaybackRateChange.InvokeAsync(playbackRate = value);
 
     private async Task ChangeVolume(ChangeEventArgs e)
     {
