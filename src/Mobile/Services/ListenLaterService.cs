@@ -36,4 +36,9 @@ public class ListenLaterService
     {
         return episodes.Any(ep => ep.Item1.Id == episode.Id);
     }
+    
+    public bool IsInListenLater(Guid id)
+    {
+        return episodes.Any(ep => ep.Item1.Id == id);
+    }
 }

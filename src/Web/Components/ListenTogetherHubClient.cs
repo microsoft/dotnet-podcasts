@@ -2,17 +2,11 @@
 
 namespace Podcast.Components;
 
-public enum PlayerState { Paused, Playing };
-public record RoomShow(Guid Id, string Title, string Author, string Image);
-public record RoomEpisode(Guid Id, string Title, string Description, string Url, DateTime Published, TimeSpan? Duration, RoomShow Show);
-public record User(string Name);
-public record Room(TimeSpan Progress, PlayerState PlayerState, string Code, RoomEpisode Episode, List<User> Users);
-
 public class ListenTogetherHubClient : IAsyncDisposable
 {
-    private string _hubUrl;
+    private readonly string _hubUrl;
     private bool _initialized = false;
-    private HubConnection? _hubConnection;
+    private HubConnection _hubConnection = null!;
 
     public event Action<string, string>? MessageReceived;
     public event Action<Room>? PlayerStateUpdated;
@@ -30,6 +24,7 @@ public class ListenTogetherHubClient : IAsyncDisposable
         {
             _hubConnection = new HubConnectionBuilder()
                 .WithUrl(_hubUrl)
+                .WithAutomaticReconnect()
                 .Build();
 
             _hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
@@ -51,23 +46,23 @@ public class ListenTogetherHubClient : IAsyncDisposable
     }
 
     public Task OpenRoom(string user, Guid episodeId) =>
-        _hubConnection!.SendAsync(nameof(OpenRoom), user, episodeId);
+        _hubConnection.SendAsync(nameof(OpenRoom), user, episodeId);
 
     public Task JoinRoom(string user, string room) =>
-       _hubConnection!.InvokeAsync(nameof(JoinRoom), user, room);
+       _hubConnection.InvokeAsync(nameof(JoinRoom), user, room);
 
     public Task LeaveRoom(string room) =>
-       _hubConnection!.SendAsync(nameof(LeaveRoom), room);
+       _hubConnection.SendAsync(nameof(LeaveRoom), room);
 
     public Task SendMessage(string user, string message, string room) =>
-       _hubConnection!.SendAsync(nameof(SendMessage), user, message, room);
+       _hubConnection.SendAsync(nameof(SendMessage), user, message, room);
 
     public Task UpdatePlayerState(long progress, bool isPlaying, string room) =>
-       _hubConnection!.SendAsync(nameof(UpdatePlayerState), progress, isPlaying ? PlayerState.Playing : PlayerState.Paused, room);
+       _hubConnection.SendAsync(nameof(UpdatePlayerState), progress, isPlaying ? PlayerState.Playing : PlayerState.Paused, room);
 
     public async ValueTask DisposeAsync()
     {
-        if (_hubConnection != null)
+        if (_hubConnection is not null)
         {
             await _hubConnection.DisposeAsync();
             _initialized = false;

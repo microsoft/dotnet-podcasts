@@ -1,6 +1,7 @@
-function onScroll() {
-    var scroll = window.scrollY;
-    var header = document.querySelector('#header');
+const onScroll = () => {
+    const scroll = window.scrollY;
+    const header = document.querySelector('#header');
+    if (!header) return;
 
     if (scroll > 50) {
         header.classList.add("sticky");
@@ -11,14 +12,14 @@ function onScroll() {
 
 window.addEventListener('scroll', onScroll, { passive: true });
 
-function addClass() {
-    var element = document.getElementById("menu");
-    element.classList.add("visible");
+const addClass = () => {
+    const element = document.getElementById("menu");
+    if (element) element.classList.add("visible");
 }
 
-function removeClass() {
-    var element = document.getElementById("menu");
-    element.classList.remove("visible");
+const removeClass = () => {
+    const element = document.getElementById("menu");
+    if (element) element.classList.remove("visible");
 }
 
 onScroll();
