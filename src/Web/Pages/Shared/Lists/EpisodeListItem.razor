@@ -70,7 +70,7 @@
     {
         if (firstRender)
         {
-            isListenLater = await ListenLaterService.IsListenLaterEpisode(Episode.Id);
+            isListenLater = await ListenLaterService.IsListenLaterEpisodeAsync(Episode.Id);
             StateHasChanged();
         }
     }
@@ -103,7 +103,7 @@
 
     private async void UpdateListenLater(IEnumerable<EpisodeInfo> episodes)
     {
-        var newValue = await ListenLaterService.IsListenLaterEpisode(Episode.Id);
+        var newValue = await ListenLaterService.IsListenLaterEpisodeAsync(Episode.Id);
         if (isListenLater != newValue)
         {
             isListenLater = newValue;
@@ -127,7 +127,7 @@
     private async Task ToggleListenLater()
     {
         isListenLater = !isListenLater;
-        await ListenLaterService.ToggleListenLaterEpisode(Episode, isListenLater);
+        await ListenLaterService.ToggleListenLaterEpisodeAsync(Episode, isListenLater);
     }
 
     private void CreateListenTogetherRoom()

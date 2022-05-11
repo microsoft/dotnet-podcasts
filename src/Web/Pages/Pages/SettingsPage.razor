@@ -17,11 +17,19 @@ else
         <div class="contentWrapper">
             <SubtitlePage Label="Download settings" />
             <div class="settings-content">
-                <ToggleSwitch Name="autodownload" Label="Autodownload using data" Description="Turn on to allow to download over cellular data if wifi is unavailable." />
+                <ToggleSwitch Name="autodownload" Label="Autodownload using data" 
+                    Description="Turn on to allow downloads using cellular data if WiFi is unavailable." />
+                    
+                <ToggleSwitch Name="deleteplayed" Label="Delete played episodes"
+                    Description="Turn on to delete episodes after they've been played." />
 
-                <ToggleSwitch Name="deleteplayed" Label="Delete played episodes" />
+                <ToggleSwitch Name="systemtheme" Label=@($"Use System Theme ({systemTheme})") Checked="@isSystemTheme"
+                    Description="Turn on to follow the system theme."
+                    OnChange="@OnUseSystemTheme" />
 
-                <ToggleSwitch Name="darkmode" Label="Dark Mode" Checked="@isDarkMode" OnChange="@ChangeDarkMode" />
+                <ToggleSwitch Name="darktheme" Label="Dark Theme" Checked="@isDarkMode"
+                    Description="Turn on to use a dark theme (disabled when using system theme)." IsDisabled="@isSystemTheme"
+                    OnChange="@OnDarkThemeChanged" />
             </div>
             <p class="settings-developed">Podcasts demo website developed in Blazor</p>
         </div>
@@ -31,21 +39,43 @@ else
 
 @code {
     private bool isLoading = true;
+    private bool isSystemTheme = false;
     private bool isDarkMode = false;
+
+    private Theme desiredTheme;
+    private Theme systemTheme;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            isDarkMode = await ThemeInterop.GetTheme() == Theme.Dark;
+            desiredTheme = await ThemeInterop.GetThemeAsync();
+            systemTheme = await ThemeInterop.GetSystemThemeAsync();
+            isDarkMode = desiredTheme is Theme.Dark;
             isLoading = false;
+            ThemeInterop.SystemThemeChanged = async theme =>
+            {
+                systemTheme = theme;
+                if (isSystemTheme)
+                {
+                    await OnDarkThemeChanged(systemTheme is Theme.Dark);
+                }
+                StateHasChanged();
+            };
+            await ThemeInterop.RegisterForSystemThemeChangedAsync();
             StateHasChanged();
         }
     }
 
-    private async Task ChangeDarkMode(bool value)
+    private async Task OnUseSystemTheme(bool value)
+    {
+        isSystemTheme = value;
+        await ThemeInterop.SetThemeAsync(isSystemTheme ? systemTheme : desiredTheme);
+    }
+
+    private async Task OnDarkThemeChanged(bool value)
     {
         isDarkMode = value;
-        await ThemeInterop.SetTheme(isDarkMode ? Theme.Dark : Theme.Light);
+        await ThemeInterop.SetThemeAsync(isDarkMode ? Theme.Dark : Theme.Light);
     }
 }
