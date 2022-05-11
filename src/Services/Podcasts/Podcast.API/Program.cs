@@ -1,11 +1,3 @@
-using Azure.Storage.Queues;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Podcast.API.Controllers;
-using Podcast.API.Models;
-using Podcast.Infrastructure.Data;
-using Podcast.Infrastructure.Http.Feeds;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("PodcastDb");
@@ -69,6 +61,7 @@ app.Run();
 
 static async Task EnsureDbAsync(IServiceProvider sp)
 {
-    await using var db = sp.CreateScope().ServiceProvider.GetRequiredService<PodcastDbContext>();
+    using var scope = sp.CreateScope();
+    await using var db = scope.ServiceProvider.GetRequiredService<PodcastDbContext>();
     await db.Database.MigrateAsync();
 }

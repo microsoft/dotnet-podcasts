@@ -135,10 +135,19 @@
     gap: 12px;
 }
 
+    .player-actions .is-active {
+        color: var(--c-primary);
+        font-weight: bold;
+    }
+
 .player-actions-share,
 .player-actions-later {
     color: var(--c-neutral-white);
     font-size: 24px;
+}
+
+.player-actions-share {
+    margin-left: 20px;
 }
 
 .player-actions-volume {
@@ -287,6 +296,10 @@ input[type="range"]:hover::-moz-range-progress {
 
 @media screen and (min-width: 1366px) {
     .player-actions-volume {
+        margin-left: 40px;
+    }
+
+    .player-actions-share {
         margin-left: 40px;
     }
 }

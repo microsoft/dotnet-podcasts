@@ -1,7 +1,4 @@
-﻿using ListenTogether.Domain;
-using Orleans;
-
-namespace ListenTogether.Application.Interfaces;
+﻿namespace ListenTogether.Application.Interfaces;
 
 public interface IRoomGrain : IGrainWithStringKey
 {

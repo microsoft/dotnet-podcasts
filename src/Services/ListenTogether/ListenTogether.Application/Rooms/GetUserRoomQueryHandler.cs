@@ -1,28 +1,13 @@
-﻿using ListenTogether.Application.Interfaces;
-using ListenTogether.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿namespace ListenTogether.Application.Rooms;
 
-namespace ListenTogether.Application.Rooms;
-public class GetUserRoomQuery : IRequest<Room>
-{
-    public string ConnectionId { get; }
-
-    public GetUserRoomQuery(string connectionId)
-    {
-        ConnectionId = connectionId;
-    }
-}
-
-public class GetUserRoomQueryHandler : IRequestHandler<GetUserRoomQuery, Room?>
+public class GetUserRoomQueryHandler : IRequestHandler<GetUserRoomQueryRequest, Room?>
 {
     private readonly IApplicationDbContext _dbContext;
 
-    public GetUserRoomQueryHandler(IApplicationDbContext dbContext)
-    {
+    public GetUserRoomQueryHandler(IApplicationDbContext dbContext) =>
         _dbContext = dbContext;
-    }
 
-    public async Task<Room?> HandleAsync(GetUserRoomQuery request, CancellationToken cancellationToken)
+    public async Task<Room?> HandleAsync(GetUserRoomQueryRequest request, CancellationToken cancellationToken)
     {
         var room = await _dbContext.Rooms
             .Include(room => room.Users)

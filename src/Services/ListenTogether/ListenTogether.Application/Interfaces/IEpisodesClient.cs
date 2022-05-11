@@ -1,6 +1,4 @@
-﻿using ListenTogether.Domain;
-
-namespace ListenTogether.Application.Interfaces;
+﻿namespace ListenTogether.Application.Interfaces;
 
 public interface IEpisodesClient
 {

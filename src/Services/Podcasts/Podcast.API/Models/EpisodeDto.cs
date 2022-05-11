@@ -1,8 +1,6 @@
-﻿using Podcast.Infrastructure.Data.Models;
+﻿namespace Podcast.API.Models;
 
-namespace Podcast.API.Models;
-
-public record EpisodeDto
+public sealed record EpisodeDto
 {
     public EpisodeDto(Episode episode)
     {
@@ -23,6 +21,4 @@ public record EpisodeDto
     public string? Duration { get; set; }
     public string Description { get; set; }
     public ShowDetailDto Show { get; }
-
-    public record ShowDetailDto(Guid Id, string Title, string Author, string Image);
 }

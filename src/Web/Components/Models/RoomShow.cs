@@ -1,6 +1,6 @@
 ﻿namespace Podcast.Components;
 
-public record RoomShow(
+public readonly record struct RoomShow(
     Guid Id,
     string Title, 
     string Author, 

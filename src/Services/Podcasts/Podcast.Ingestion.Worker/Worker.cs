@@ -20,8 +20,7 @@ internal sealed class Worker : BackgroundService
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
             var retrievedMessage = await _queueClient.ReceiveMessageAsync(cancellationToken: stoppingToken);
-
-            if (retrievedMessage.Value != null)
+            if (retrievedMessage.Value is not null)
             {
                 using var scope = _serviceProvider.CreateScope();
                 var handler = scope.ServiceProvider.GetRequiredService<IPodcastIngestionHandler>();
@@ -33,15 +32,16 @@ internal sealed class Worker : BackgroundService
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Worker failed with exception: {exception} at: {time}", ex.Message,
-                        DateTimeOffset.Now);
+                    _logger.LogError(
+                        "Worker failed with exception: {exception} at: {time}", 
+                        ex.Message, DateTimeOffset.Now);
                 }
 
                 await _queueClient.DeleteMessageAsync(retrievedMessage.Value.MessageId,
                     retrievedMessage.Value.PopReceipt, stoppingToken);
             }
 
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(TimeSpan.FromMilliseconds(1_000), stoppingToken);
         }
     }
 }

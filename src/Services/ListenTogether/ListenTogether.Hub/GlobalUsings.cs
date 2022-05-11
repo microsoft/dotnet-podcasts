@@ -1,3 +1,11 @@
-﻿global using ListenTogether.Hub.Hubs;
+﻿global using ListenTogether.Application;
+global using ListenTogether.Application.Interfaces;
+global using ListenTogether.Application.Requests;
+global using ListenTogether.Domain;
+global using ListenTogether.Hub;
+global using ListenTogether.Hub.Hubs;
+global using ListenTogether.Infrastructure;
+global using ListenTogether.Infrastructure.Data;
 global using Microsoft.AspNetCore.SignalR;
+global using Microsoft.EntityFrameworkCore;
 global using System;

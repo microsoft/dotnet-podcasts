@@ -6,7 +6,7 @@ public class Room
     private const string ValidCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private readonly Random _randGenerator = Random.Shared;
 
-    public Room () 
+    public Room()
     {
         Code = GenerateRoomCode();
     }
@@ -38,29 +38,21 @@ public class Room
         PlayerState = state;
     }
 
-    private string GenerateRoomCode()
-    {
-        return new string(Enumerable.Repeat(ValidCharacters, Length)
+    private string GenerateRoomCode() =>
+        new(Enumerable.Repeat(ValidCharacters, Length)
             .Select(s => s[_randGenerator.Next(s.Length)])
             .ToArray());
-    }
 
     public void RemoveUser(string connectionId)
     {
-        var user = Users.FirstOrDefault(u => u.ConnectionId == connectionId);
-        if (user != null)
+        if (Users.FirstOrDefault(u => u.ConnectionId == connectionId) 
+            is { } user)
         {
             Users.Remove(user);
         }
     }
 
-    public bool IsEmpty()
-    {
-        return Users.Count == 0;
-    }
+    public bool IsEmpty() => Users.Count == 0;
 
-    public void AddUser(User user)
-    {
-        Users.Add(user);
-    }
+    public void AddUser(User user) => Users.Add(user);
 }

@@ -1,3 +1,3 @@
 ﻿namespace Podcast.Shared;
 
-public record Category(Guid Id, string Genre);
+public readonly record struct Category(Guid Id, string Genre);

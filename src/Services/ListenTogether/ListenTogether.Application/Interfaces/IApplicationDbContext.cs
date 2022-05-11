@@ -1,7 +1,4 @@
-﻿using ListenTogether.Domain;
-using Microsoft.EntityFrameworkCore;
-
-namespace ListenTogether.Application.Interfaces;
+﻿namespace ListenTogether.Application.Interfaces;
 
 public interface IApplicationDbContext
 {

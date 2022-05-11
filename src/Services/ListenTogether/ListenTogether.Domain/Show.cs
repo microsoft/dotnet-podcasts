@@ -2,7 +2,9 @@
 
 public class Show
 {
-    protected Show() {}
+    protected Show()
+    {
+    }
 
     public Show(Guid id, string title, string author, string image)
     {

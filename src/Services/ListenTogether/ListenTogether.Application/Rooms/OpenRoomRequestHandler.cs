@@ -1,24 +1,9 @@
-﻿using ListenTogether.Application.Interfaces;
-using ListenTogether.Domain;
-using Orleans;
-
-namespace ListenTogether.Application.Rooms;
-
-public class OpenRoomRequest : IRequest<Room>
-{
-    public OpenRoomRequest(Guid episodeId)
-    {
-        EpisodeId = episodeId;
-    }
-
-    public Guid EpisodeId { get; set; }
-}
+﻿namespace ListenTogether.Application.Rooms;
 
 public class OpenRoomRequestHandler : IRequestHandler<OpenRoomRequest, Room>
 {
     private readonly IEpisodesClient _episodesClient;
     private readonly IGrainFactory _grainFactory;
-    private readonly IRoomGrain _roomGrain;
 
     public OpenRoomRequestHandler(IEpisodesClient episodesClient, IGrainFactory grainFactory)
     {

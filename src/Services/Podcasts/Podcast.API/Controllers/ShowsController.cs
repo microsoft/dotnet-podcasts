@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Podcast.API.Models;
-using Podcast.Infrastructure.Data;
 
 namespace Podcast.API.Controllers;
 

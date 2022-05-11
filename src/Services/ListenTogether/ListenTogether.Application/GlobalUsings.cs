@@ -1,0 +1,9 @@
+﻿global using ListenTogether.Application.Interfaces;
+global using ListenTogether.Application.Requests;
+global using ListenTogether.Application.Rooms;
+global using ListenTogether.Domain;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Orleans;
+global using Orleans.Runtime;

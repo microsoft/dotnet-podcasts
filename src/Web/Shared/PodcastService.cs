@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 
 namespace Podcast.Shared;
 
-public class PodcastService
+public sealed class PodcastService
 {
     private readonly HttpClient _httpClient;
 
@@ -21,5 +21,5 @@ public class PodcastService
     _httpClient.GetFromJsonAsync<Show[]>($"/v1/shows?limit={limit}&term={term}&categoryId={categoryId}");
 
     public Task<Show?> GetShow(Guid id) =>
-        _httpClient.GetFromJsonAsync<Show>($"v1/shows/{id}");
+        _httpClient.GetFromJsonAsync<Show?>($"v1/shows/{id}");
 }

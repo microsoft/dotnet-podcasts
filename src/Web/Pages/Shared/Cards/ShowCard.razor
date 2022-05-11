@@ -88,6 +88,7 @@
     private async Task ToggleSubscribed()
     {
         isSubscribed = !isSubscribed;
-        await SubscriptionsService.ToggleShowSubscriptionAsync(new ShowInfo(Id, Title, Author, Image), isSubscribed);
+        await SubscriptionsService.ToggleShowSubscriptionAsync(
+            new ShowInfo(Id, Title, Author, Image), isSubscribed);
     }
 }

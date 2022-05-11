@@ -2,7 +2,9 @@
 
 public class User
 {
-    protected User() { }
+    protected User() 
+    {
+    }
 
     public User(string connectionId, string name)
     {

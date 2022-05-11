@@ -30,10 +30,12 @@ public class PodcastUpdateHandler : IPodcastUpdateHandler
             try
             {
                 var show = await _feedClient.GetShowAsync(feed, cancellationToken);
+                if (show.Episodes.Count is 0)
+                {
+                    continue;
+                }
 
-                if (!show.Episodes.Any()) continue;
-
-                if (feed.Show == null)
+                if (feed.Show is null)
                 {
                     feed.Show = show;
                 }

@@ -11,7 +11,7 @@ internal static class Seed
         new(new Guid("5ebb45a0-5fff-49ac-a5d5-691e6314ce71"), "https://thedotnetcorepodcast.libsyn.com/rss" ),
         new(new Guid("71a2df8c-cb34-4203-b045-375695439b8b"), "https://devchat.tv/podcasts/adventures-in-dotnet/feed/" ),
         new(new Guid("5fb313f5-ca48-49cd-a9bd-7ea830cfa984"), "https://feeds.simplecast.com/gvtxUiIf" ),
-        new(new Guid("54179124-9094-4091-9891-f29868298575"), "http://feeds.gimletcreative.com/dotfuture" , true ),
+        new(new Guid("54179124-9094-4091-9891-f29868298575"), "https://feeds.gimletcreative.com/dotfuture" , true ),
         new(new Guid("bc2cab2b-d6f4-48ae-9602-3041a55ee6be"), "https://feeds.fireside.fm/gonemobile/rss" ),
         new(new Guid("c843a675-02a4-46c7-aea1-a78fd98d7c7a"), "https://feeds.fireside.fm/xamarinpodcast/rss", true ),
         new(new Guid("6d6b95a4-88f8-4e52-bacd-362c0024362c"), "https://microsoftmechanics.libsyn.com/rss" ),
@@ -23,9 +23,9 @@ internal static class Seed
         new(new Guid("57da3b70-bdfc-454e-81f0-fb4ee7ba68d3"), "https://s.ch9.ms/Shows/Hello-World/feed/mp3", true ),
         new(new Guid("89a51256-4674-4a11-8f2a-bd44ce325d14"), "https://listenbox.app/f/NRGnlt0wQqB7" ),
         new(new Guid("7dd803ce-d834-4ae2-8f37-6f6e0d1977cc"), "https://nullpointers.io/feed/podcast.rss" ),
-        new(new Guid("76c2dd2f-7232-4842-9808-f6a389de510e"), "http://awayfromthekeyboard.com/feed/" ),
+        new(new Guid("76c2dd2f-7232-4842-9808-f6a389de510e"), "https://awayfromthekeyboard.com/feed/" ),
         new(new Guid("da5fb742-7ceb-40cc-ac17-2d46253de3f9"), "https://feeds.buzzsprout.com/978640.rss" ),
-        new(new Guid("a8791dd6-0ad8-48b7-b66e-8c6d67719626"), "http://feeds.feedburner.com/NoDogmaPodcast" ),
+        new(new Guid("a8791dd6-0ad8-48b7-b66e-8c6d67719626"), "https://feeds.feedburner.com/NoDogmaPodcast" ),
         new(new Guid("e2a825f2-1a5e-4b54-94dd-1544511349ab"), "https://feeds.soundcloud.com/users/soundcloud:users:941029057/sounds.rss")
     };
 

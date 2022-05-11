@@ -1,6 +1,6 @@
 ﻿namespace Podcast.Components;
 
-public record Room(
+public readonly record struct Room(
     TimeSpan Progress,
     PlayerState PlayerState,
     string Code,

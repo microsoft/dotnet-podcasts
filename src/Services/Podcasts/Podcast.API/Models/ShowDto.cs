@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Podcast.Infrastructure.Data.Models;
+﻿namespace Podcast.API.Models;
 
-namespace Podcast.API.Models;
-
-public record ShowDto
+public partial record ShowDto
 {
     public ShowDto(Show show)
     {
@@ -38,8 +33,4 @@ public record ShowDto
     public bool IsFeatured { get; set; }
     public List<CategoryDto> Categories { get; }
     public List<EpisodeDetailDto> Episodes { get; set; }
-
-    public record EpisodeDetailDto(Guid Id, string Title, DateTime Published, string Url,
-        string Description,
-        string? Duration);
 }

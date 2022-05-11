@@ -1,10 +1,4 @@
-﻿using Azure.Storage.Queues;
-using Microsoft.EntityFrameworkCore;
-using Podcast.API.Models;
-using Podcast.Infrastructure.Data;
-using Podcast.Infrastructure.Http.Feeds;
-
-namespace Microsoft.AspNetCore.Builder;
+﻿namespace Microsoft.AspNetCore.Builder;
 
 public static class FeedEndpointsWebApplicationExtensions
 {

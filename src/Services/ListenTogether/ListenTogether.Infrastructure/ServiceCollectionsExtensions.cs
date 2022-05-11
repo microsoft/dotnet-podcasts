@@ -4,21 +4,21 @@ using ListenTogether.Infrastructure.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ListenTogether.Infrastructure
-{
-    public static class ServiceCollectionsExtensions
-    {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection serviceCollection, IConfiguration configuration)
-        {
-            var connectionString = configuration.GetConnectionString("ListenTogetherDb");
-            serviceCollection.AddSqlServer<ListenTogetherDbContext>(connectionString);
-            serviceCollection.AddScoped<IApplicationDbContext, ListenTogetherDbContext>();
-            serviceCollection.AddHttpClient<IEpisodesClient, EpisodesHttpClient>(opt =>
-            {
-                opt.BaseAddress = new Uri(configuration["NetPodcastApi:BaseAddress"]);
-            });
+namespace ListenTogether.Infrastructure;
 
-            return serviceCollection;
-        }
+public static class ServiceCollectionsExtensions
+{
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("ListenTogetherDb");
+        serviceCollection.AddSqlServer<ListenTogetherDbContext>(connectionString);
+        serviceCollection.AddScoped<IApplicationDbContext, ListenTogetherDbContext>();
+        serviceCollection.AddHttpClient<IEpisodesClient, EpisodesHttpClient>(opt =>
+        {
+            opt.BaseAddress = new Uri(configuration["NetPodcastApi:BaseAddress"]);
+        });
+
+        return serviceCollection;
     }
 }

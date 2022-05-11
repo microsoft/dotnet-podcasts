@@ -1,6 +1,6 @@
 ﻿namespace Podcast.Shared;
 
-public record Episode(
+public readonly record struct Episode(
     Guid Id,
     string Title,
     string Description,

@@ -38,13 +38,12 @@ public class FeedClient : IFeedClient
             .Where(category => feedCategories.Any(feedCategory => feedCategory == category.Genre))
             .ToListAsync(cancellationToken);
 
-        foreach (var category in categories)
-            feed.Categories.Add(new FeedCategory(category.Id, feed.Id));
+        categories.ForEach(
+            category => feed.Categories.Add(new(category.Id, feed.Id)));
 
         try
         {
-            var show = await GetShowAsync(feed, cancellationToken);
-            feed.Show = show;
+            feed.Show = await GetShowAsync(feed, cancellationToken);
         }
         catch (Exception ex)
         {

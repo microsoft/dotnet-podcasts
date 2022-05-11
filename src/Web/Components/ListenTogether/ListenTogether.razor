@@ -16,10 +16,10 @@
                 </Modal>
             }
         }
-        else if (currentRoom != null && user != null)
+        else if (currentRoom.HasValue && user != null)
         {
             <ListenTogetherRoom User="@user"
-                            CurrentRoom="@currentRoom"
+                            CurrentRoom="@currentRoom.Value"
                             OnLeaveRoom="@(() => LeaveRoom())" />
         }
         else
@@ -192,9 +192,9 @@
 
     private async Task LeaveRoom(bool fireEvents = true)
     {
-        if (currentRoom != null)
+        if (currentRoom.HasValue)
         {
-            await ListenTogetherHubClient.LeaveRoom(currentRoom.Code);
+            await ListenTogetherHubClient.LeaveRoom(currentRoom.Value.Code);
             isRoomHost = false;
             currentRoom = null;
             if (fireEvents)

@@ -8,13 +8,13 @@ public class EpisodesHttpClient : IEpisodesClient
 {
     private readonly HttpClient _httpClient;
 
-    public EpisodesHttpClient(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
+    public EpisodesHttpClient(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<Episode> GetEpisodeByIdAsync(Guid episodeId, CancellationToken cancellationToken)
+    public async Task<Episode> GetEpisodeByIdAsync(
+        Guid episodeId, CancellationToken cancellationToken)
     {
-        return (await _httpClient.GetFromJsonAsync<Episode>($"v1/episodes/{episodeId}", cancellationToken))!;
+        var episode = await _httpClient.GetFromJsonAsync<Episode>(
+            $"v1/episodes/{episodeId}", cancellationToken);
+       return episode!;
     }
 }

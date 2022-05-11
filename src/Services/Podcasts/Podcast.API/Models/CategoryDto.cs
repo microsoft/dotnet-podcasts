@@ -1,3 +1,3 @@
 ﻿namespace Podcast.API.Models;
 
-public record CategoryDto(Guid Id, string Genre);
+public sealed record CategoryDto(Guid Id, string Genre);

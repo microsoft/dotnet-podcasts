@@ -5,7 +5,7 @@
 @inject SubscriptionsService SubscriptionsService
 @inject PersistentComponentState ApplicationState
 
-<PageTitle>.NET Podcasts - @(show == null ? "Show": show.Title)</PageTitle>
+<PageTitle>.NET Podcasts - @(show.HasValue ? show.Value.Title : "Show")</PageTitle>
 
 <div class="titleWrapper">
     <button class="appLink" onclick="history.go(-1)">
@@ -21,13 +21,13 @@
 else
 {
     <div class="containerPage">
-        <ShowResume Title="@show.Title"
-                Author="@show.Author"
-                Description="@show.Description"
-                Image="@show.Image"
-                IsSubscribed="@isSubscribed"
-                Categories="@showCategories"
-                OnSubscriptionChange="@ChangeShowSubscription" />
+        <ShowResume Title="@show.Value.Title"
+            Author="@show.Value.Author"
+            Description="@show.Value.Description"
+            Image="@show.Value.Image"
+            IsSubscribed="@isSubscribed"
+            Categories="@showCategories"
+            OnSubscriptionChange="@ChangeShowSubscription" />
 
         <div class="showEpisodes">
             @if (episodes == null)
@@ -74,10 +74,10 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (show != null && episodes == null)
+        if (show.HasValue && episodes == null)
         {
-            episodes = show.Episodes.Select(e => new EpisodeInfo(show, e)).ToList();
-            isSubscribed = await SubscriptionsService.IsSubscribedShowAsync(show.Id);
+            episodes = show.Value.Episodes.Select(e => new EpisodeInfo(show.Value, e)).ToList();
+            isSubscribed = await SubscriptionsService.IsSubscribedShowAsync(show.Value.Id);
             StateHasChanged();
         }
     }
@@ -85,13 +85,14 @@ else
     private async Task ChangeShowSubscription()
     {
         isSubscribed = !isSubscribed;
-        await SubscriptionsService.ToggleShowSubscriptionAsync(new ShowInfo(show!), isSubscribed);
+        await SubscriptionsService.ToggleShowSubscriptionAsync(
+            new ShowInfo(show!.Value), isSubscribed);
     }
 
 
     private Task PersistShow()
     {
-        ApplicationState.PersistAsJson("show", show);
+        ApplicationState.PersistAsJson("show", show!.Value);
         return Task.CompletedTask;
     }
 

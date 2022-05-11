@@ -1,3 +1,3 @@
 ﻿namespace Podcast.Components;
 
-public record User(string Name);
+public readonly record struct User(string Name);
