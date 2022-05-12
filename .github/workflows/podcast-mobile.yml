@@ -5,12 +5,14 @@ on:
     branches: [ main, maui/perf ]
     paths:
       - 'src/Mobile/**'
-      - '**/*build.props'      
+      - 'src/Web/Components/**'
+      - '**/*build.props'  
       - '.github/workflows/podcast-mobile.yml'
   pull_request:
     branches: [ main, maui/perf ]
     paths:
       - 'src/Mobile/**'
+      - 'src/Web/Components/**'
       - '**/*build.props'      
       - '.github/workflows/podcast-mobile.yml'
 
