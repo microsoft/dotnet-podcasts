@@ -43,4 +43,4 @@ jobs:
       - name: Build MAUI Blazor Mobile app
         shell: pwsh
         run: |
-          & .\dotnet build src/MobileBlazor/NetPodsMauiBlazor.csproj -bl:mobile.binlog
+          & .\dotnet build src/MobileBlazor/mauiapp/NetPodsMauiBlazor.csproj -bl:mobile.binlog
