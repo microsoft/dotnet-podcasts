@@ -23,23 +23,23 @@ internal class AudioInteropService : IAudioInterop
         currentTimeTimer.Elapsed += OnCurrentTimeEvent;
     }
 
-    public Task Pause(ElementReference element)
+    public Task PauseAsync(ElementReference element)
     {
         return _nativeAudioService.PauseAsync();
     }
 
-    public async Task Play(ElementReference element)
+    public async Task PlayAsync(ElementReference element)
     {
         await _nativeAudioService.PlayAsync(_nativeAudioService.CurrentPosition);
         
     }
 
-    public async Task SetCurrentTime(ElementReference element, double value)
+    public async Task SetCurrentTimeAsync(ElementReference element, double value)
     {
         await _nativeAudioService.SetCurrentTime(value);
     }
 
-    public Task SetMuted(ElementReference element, bool value)
+    public Task SetMutedAsync(ElementReference element, bool value)
     {
         return _nativeAudioService.SetMuted(value);
     }
@@ -53,12 +53,12 @@ internal class AudioInteropService : IAudioInterop
         }
     }
 
-    public Task SetVolume(ElementReference element, int value)
+    public Task SetVolumeAsync(ElementReference element, int value)
     {
         return _nativeAudioService.SetVolume(value);
     }
 
-    public Task Stop(ElementReference element)
+    public Task StopAsync(ElementReference element)
     {
         return _nativeAudioService.PauseAsync();
     }
@@ -72,5 +72,11 @@ internal class AudioInteropService : IAudioInterop
     private void OnCurrentTimeEvent(Object source, ElapsedEventArgs e)
     {
         _playerService.CurrentTime = _nativeAudioService.CurrentPosition;
+    }
+
+    public Task SetPlaybackRateAsync(ElementReference element, double value)
+    {
+        Console.WriteLine($"{nameof(AudioInterop)}.{nameof(SetPlaybackRateAsync)} is not implemented for this platform.");
+        return Task.CompletedTask;
     }
 }

@@ -16,56 +16,56 @@
     line-height: var(--text-l-lh);
 }
 
-.buttonApp:hover:not(:disabled) {
-    cursor: pointer;
-}
+    .buttonApp:hover:not(:disabled) {
+        cursor: pointer;
+    }
 
-.buttonApp.primary {
-    background: var(--c-primary);
-    background: var(--gradient-final);
-}
+    .buttonApp.primary {
+        background: var(--c-primary);
+        background: var(--gradient-final);
+    }
 
-.buttonApp.primary,
-.buttonApp.primary > span {
-    color: var(--c-neutral-white);
-}
+        .buttonApp.primary,
+        .buttonApp.primary > span {
+            color: var(--c-neutral-white);
+        }
 
-.buttonApp.primary:hover:not(:disabled) {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.05);
-}
+            .buttonApp.primary:hover:not(:disabled) {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.05);
+            }
 
-.buttonApp.primary:disabled {
-    background: var(--c-neutral-grey3);
-}
+            .buttonApp.primary:disabled {
+                background: var(--c-neutral-grey3);
+            }
 
-.buttonApp.primary:disabled,
-.buttonApp.primary:disabled > span {
-    color: var(--c-neutral-grey6);
-}
+                .buttonApp.primary:disabled,
+                .buttonApp.primary:disabled > span {
+                    color: var(--c-neutral-grey6);
+                }
 
-.buttonApp.secondary {
-    background: var(--c-neutral-white-featured);
-    border-color: var(--c-primary);
-}
+    .buttonApp.secondary {
+        background: var(--c-neutral-white-featured);
+        border-color: var(--c-primary);
+    }
 
-.buttonApp.secondary {
-    color: var(--c-primary);
-}
+    .buttonApp.secondary {
+        color: var(--c-primary);
+    }
 
-.buttonApp.secondary:hover:not(:disabled) {
-    color: var(--c-primary-light);
-    border-color: var(--c-primary-light);
-}
+        .buttonApp.secondary:hover:not(:disabled) {
+            color: var(--c-primary-light);
+            border-color: var(--c-primary-light);
+        }
 
-.buttonApp.secondary:active {
-    color: var(--c-primary-dark);
-    border-color: var(--c-primary-dark);
-}
+        .buttonApp.secondary:active {
+            color: var(--c-primary-dark);
+            border-color: var(--c-primary-dark);
+        }
 
-.buttonApp.secondary:disabled {
-    color: var(--c-neutral-grey6);
-    border-color: var(--c-neutral-grey6);
-}
+        .buttonApp.secondary:disabled {
+            color: var(--c-neutral-grey6);
+            border-color: var(--c-neutral-grey6);
+        }
 
 .buttonApp-icon {
     font-size: 24px;
@@ -78,6 +78,13 @@
     transform-origin: center;
 }
 
-.buttonIcon:hover {
-    transform: scale(1.1);
-}
+    .buttonIcon:hover:not(:disabled) {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+    .buttonIcon:disabled {
+        color: var(--c-neutral-grey6);
+        border-color: var(--c-neutral-grey6);
+        cursor: not-allowed;
+    }
