@@ -9,7 +9,8 @@ on:
       - '**/*build.props'  
       - '.github/workflows/podcast-dotnet-maui-blazor-ci.yml'
   pull_request:
-    branches: [ main ]
+    branches: 
+      - '**'
     paths:
       - 'src/MobileBlazor/**'
       - 'src/Web/Components/**'

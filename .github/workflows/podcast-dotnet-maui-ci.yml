@@ -9,7 +9,8 @@ on:
       - '**/*build.props'  
       - '.github/workflows/podcast-dotnet-maui-ci.yml'
   pull_request:
-    branches: [ main ]
+    branches:
+      - '**'
     paths:
       - 'src/Mobile/**'
       - 'src/Web/Components/**'
