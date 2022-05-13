@@ -1,0 +1,133 @@
+name: Podcast .NET MAUI CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/Mobile/**'
+      - '**/*build.props'      
+      - '.github/workflows/podcast-mobile-cd.yml'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  ROOT_PATH: src/Mobile/
+  CSPROJ_PATH: src/Mobile/Microsoft.NetConf2021.Maui.csproj
+  ENCRYPTED_KEYSTORE_PATH: android-keystore-test.jks.gpg # RELATIVE TO github.workspace
+  KEYSTORE_PATH: android-keystore-test.keystore # RELATIVE TO github.workspace
+  ARTIFACTS_PATH: artifacts # RELATIVE TO github.workspace
+  ARTIFACTS_MACOS_PATH: artifacts_macos # RELATIVE TO github.workspace
+
+jobs:
+  windows-build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui --source https://api.nuget.org/v3/index.json
+
+      # BUILD
+      - name: Restore dependencies
+        shell: pwsh
+        run: |
+          dotnet restore ${{ env.CSPROJ_PATH }}
+
+      - name: Build Maui WinUI project
+        shell: pwsh
+        run: |
+          msbuild "${{ env.CSPROJ_PATH }}" -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041.0
+
+      #POST-BUILD
+      - name: Publish build artifacts
+        uses: actions/upload-artifact@v2
+        with:     
+          name: "WinUI .NET MAUI artifacts" 
+          path: "${{ env.ROOT_PATH }}/bin/Release"
+          if-no-files-found: error
+          retention-days: 90
+
+  macos-build-android-macos-ios:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Decrypt keystore
+        shell: pwsh
+        run: |
+          cd ${{ github.workspace }}
+          gpg --quiet --batch --yes --decrypt --passphrase=${{ secrets.ANDROID_KEYSTORE_GPG_PASSWORD }} --output ${{env.ROOT_PATH}}${{ env.KEYSTORE_PATH }} ${{ env.ENCRYPTED_KEYSTORE_PATH }}
+
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'microsoft'
+          java-version: '11'     
+
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui --source https://api.nuget.org/v3/index.json
+
+      # BUILD
+      - name: Restore dependencies
+        shell: pwsh
+        run: |
+          dotnet restore ${{ env.CSPROJ_PATH }}
+
+      - name: Build MacCatalyst App
+        shell: bash
+        run: |
+          dotnet build ${{ env.CSPROJ_PATH }} -f net6.0-maccatalyst -c Release
+          dotnet publish ${{ env.CSPROJ_PATH }} -f net6.0-maccatalyst -c Release -p:BuildIpa=True  
+
+      - name: Build MAUI Android
+        shell: pwsh
+        run: |
+          dotnet publish ${{ env.CSPROJ_PATH }} -c Release -f net6.0-android --no-restore /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=${{ env.KEYSTORE_PATH }} /p:AndroidSigningStorePass=${{ secrets.ANDROID_SIGNING_STORE_PASS }} /p:AndroidSigningKeyAlias=${{ secrets.ANDROID_SIGNING_KEY_ALIAS }} /p:AndroidSigningKeyPass=${{ secrets.ANDROID_SIGNING_KEY_PASS }}
+
+      #POST-BUILD
+      - name: Create artifacts folder
+        shell: pwsh
+        run: |
+           cd ${{ github.workspace }}
+           mkdir -p ${{ env.ARTIFACTS_MACOS_PATH }}
+
+      #TODO add filter and only upload signed artifacts      
+      - name: Copy APKs
+        shell: pwsh 
+        run: |
+           Get-Childitem –Path ${{ github.workspace }} -Include *.apk -File -Recurse | Copy-Item -Destination ${{ env.ARTIFACTS_MACOS_PATH }}
+
+      - name: Copy AABs
+        shell: pwsh
+        run: |
+           Get-Childitem –Path ${{ github.workspace }} -Include *.aab -File -Recurse | Copy-Item -Destination ${{ env.ARTIFACTS_MACOS_PATH }}
+
+      - name: Copy MacOS package
+        shell: pwsh
+        run: |
+           Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination ${{ env.ARTIFACTS_MACOS_PATH }}
+
+      - name: Publish build artifacts
+        uses: actions/upload-artifact@v2
+        with:     
+          name: "Podcast MacOS artifacts" 
+          path: "${{ env.ARTIFACTS_MACOS_PATH }}/*"
+          if-no-files-found: error
+          retention-days: 90
