@@ -6,7 +6,7 @@ on:
     paths:
       - 'src/MobileBlazor/**'
       - '**/*build.props'      
-      - '.github/workflows/podcast-mobile-cd.yml'
+      - '.github/workflows/podcast-dotnet-maui-blazor-cd.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
