@@ -19,20 +19,42 @@
         </Grid>
     </Shell.FlyoutHeader>
 
-    <ShellContent Title="{Binding Discover.Title}"
-                  Icon="{AppThemeBinding Light=discover.png, Dark=discover_dark.png}"
-                  ContentTemplate="{DataTemplate pages:DiscoverPage}"/>
-    <ShellContent Title="{Binding Subscriptions.Title}"
-                  Icon="{AppThemeBinding Light=subscriptions.png, Dark=subscriptions_dark.png}"
-                  ContentTemplate="{DataTemplate pages:SubscriptionsPage}" />
-    <ShellContent Title="{Binding ListenLater.Title}"
-                  Icon="{AppThemeBinding Light=clock.png, Dark=clock_dark.png}"
-                  ContentTemplate="{DataTemplate pages:ListenLaterPage}" />
-    <ShellContent Title="{Binding ListenTogether.Title}"
-                  Icon="{AppThemeBinding Light=listentogether.png, Dark=listentogether_dark.png}"
-                  FlyoutItemIsVisible="{x:Static root:Config.ListenTogetherIsVisible}"
-                  ContentTemplate="{DataTemplate pages:ListenTogetherPage}" />
-    <ShellContent Title="{Binding Settings.Title}"
-                  Icon="{AppThemeBinding Light=settings.png, Dark=settings_dark.png}"
-                  ContentTemplate="{DataTemplate pages:SettingsPage}" />
+    <FlyoutItem Title="{Binding Discover.Title}"
+                Icon="{AppThemeBinding Light=discover.png, Dark=discover_dark.png}">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate pages:DiscoverPage}"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="{Binding Subscriptions.Title}"
+                Icon="{AppThemeBinding Light=subscriptions.png, Dark=subscriptions_dark.png}">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate pages:SubscriptionsPage}" />
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="{Binding ListenLater.Title}"
+                Icon="{AppThemeBinding Light=clock.png, Dark=clock_dark.png}">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate pages:ListenLaterPage}" />
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="{Binding ListenTogether.Title}"
+                Icon="{AppThemeBinding Light=listentogether.png, Dark=listentogether_dark.png}"
+                FlyoutItemIsVisible="{x:Static root:Config.ListenTogetherIsVisible}">
+        <Tab>
+            <ShellContent 
+                          ContentTemplate="{DataTemplate pages:ListenTogetherPage}" />
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="{Binding Settings.Title}"
+                Icon="{AppThemeBinding Light=settings.png, Dark=settings_dark.png}">
+        <Tab>
+            <ShellContent 
+                ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        </Tab>
+    </FlyoutItem>
+
 </Shell>
