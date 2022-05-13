@@ -44,17 +44,23 @@
                 Icon="{AppThemeBinding Light=listentogether.png, Dark=listentogether_dark.png}"
                 FlyoutItemIsVisible="{x:Static root:Config.ListenTogetherIsVisible}">
         <Tab>
-            <ShellContent 
-                          ContentTemplate="{DataTemplate pages:ListenTogetherPage}" />
+            <ShellContent ContentTemplate="{DataTemplate pages:ListenTogetherPage}" />
         </Tab>
     </FlyoutItem>
 
     <FlyoutItem Title="{Binding Settings.Title}"
                 Icon="{AppThemeBinding Light=settings.png, Dark=settings_dark.png}">
         <Tab>
-            <ShellContent 
-                ContentTemplate="{DataTemplate pages:SettingsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
         </Tab>
     </FlyoutItem>
 
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <StackLayout Orientation="Horizontal">
+                <Image Margin="6,10" Source="{Binding Icon}"/>
+                <Label Margin="6,10" Text="{Binding Title}"/>
+            </StackLayout>
+        </DataTemplate>
+    </Shell.ItemTemplate>
 </Shell>
