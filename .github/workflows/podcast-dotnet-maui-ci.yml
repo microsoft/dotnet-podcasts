@@ -1,18 +1,21 @@
-name: Podcast Mobile CI
+name: Podcast .NET MAUI CI
 
 on:
   push:
-    branches: [ main, maui/perf ]
+    branches: [ main ]
     paths:
       - 'src/Mobile/**'
-      - '**/*build.props'      
-      - '.github/workflows/podcast-mobile.yml'
+      - 'src/Web/Components/**'
+      - '**/*build.props'  
+      - '.github/workflows/podcast-dotnet-maui-ci.yml'
   pull_request:
-    branches: [ main, maui/perf ]
+    branches:
+      - '**'
     paths:
       - 'src/Mobile/**'
+      - 'src/Web/Components/**'
       - '**/*build.props'      
-      - '.github/workflows/podcast-mobile.yml'
+      - '.github/workflows/podcast-dotnet-maui-ci.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
