@@ -62,18 +62,17 @@ public class DiscoverViewModel : BaseViewModel
         }
 
         await CategoriesVM.InitializeAsync();
-        shows = await ConvertToViewModels(podcastsModels);
+        shows = ConvertToViewModels(podcastsModels);
         UpdatePodcasts(shows);
     }
 
-    private async Task<List<ShowViewModel>> ConvertToViewModels(IEnumerable<Show> podcasts)
+    private List<ShowViewModel> ConvertToViewModels(IEnumerable<Show> shows)
     {
         var viewmodels = new List<ShowViewModel>();
-        foreach (var podcast in podcasts)
+        foreach (var show in shows)
         {
-            var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
-            await podcastViewModel.InitializeAsync();
-            viewmodels.Add(podcastViewModel);
+            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+            viewmodels.Add(showViewModel);
         }
 
         return viewmodels;
@@ -81,32 +80,36 @@ public class DiscoverViewModel : BaseViewModel
 
     private void UpdatePodcasts(IEnumerable<ShowViewModel> listPodcasts)
     {
-        var list = new ObservableRangeCollection<ShowGroup>
-        {
-            new ShowGroup(AppResource.Whats_New, listPodcasts.Take(3).ToList()),
-            new ShowGroup(AppResource.Specially_For_You, listPodcasts.Take(3..).ToList())
-        };
+        var groupedShows = listPodcasts
+            .GroupBy(podcasts => podcasts.Show.IsFeatured)
+            .Where(group => group.Any())
+            .ToDictionary(group => group.Key ? AppResource.Whats_New : AppResource.Specially_For_You, group => group.ToList())
+            .Select(dictionary => new ShowGroup(dictionary.Key, dictionary.Value));
 
-        PodcastsGroup.ReplaceRange(list);
+        PodcastsGroup.ReplaceRange(groupedShows);
     }
 
     private async Task OnSearchCommandAsync()
-    {     
-        var list = await showsService.SearchShowsAsync(Text);
+    {
+        IEnumerable<Show> list;
         if (string.IsNullOrWhiteSpace(Text))
         {
             list = await showsService.GetShowsAsync();
         }
+        else
+        {
+            list = await showsService.SearchShowsAsync(Text);
+        }
+
         if (list != null)
         {
-            UpdatePodcasts(await ConvertToViewModels(list));
+            UpdatePodcasts(ConvertToViewModels(list));
         }
     }
 
-    private async Task SubscribeCommandExecute(ShowViewModel vm)
+    private async Task SubscribeCommandExecute(ShowViewModel showViewModel)
     {
-        await subscriptionsService.UnSubscribeFromShowAsync(vm.Show);
-        vm.IsSubscribed = subscriptionsService.IsSubscribed(vm.Show.Id);
+        showViewModel.IsSubscribed = await subscriptionsService.UnSubscribeFromShowAsync(showViewModel.Show);
     }
 
     private Task SeeAllCategoriesCommandExecute()

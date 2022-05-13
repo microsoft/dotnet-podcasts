@@ -43,6 +43,7 @@ public partial class HeaderControl : ContentView
 
     public HeaderControl()
     {
+        AutomationProperties.SetIsInAccessibleTree(this, true);
         InitializeComponent();
     }
 

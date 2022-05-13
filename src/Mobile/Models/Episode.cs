@@ -15,7 +15,7 @@ public class Episode : ObservableObject
         Url = new Uri(playerState.Episode.Url);
     }
 
-    public Episode(EpisodeResponse response, ListenLaterService listenLater)
+    public Episode(EpisodeResponse response, bool isListenLater)
     {
         Id = response.Id;
         Title = response.Title;
@@ -23,8 +23,7 @@ public class Episode : ObservableObject
         Published = response.Published;
         Duration = response.Duration;
         Url = response.Url;
-        listenLaterService = listenLater;
-        IsInListenLater = listenLaterService.IsInListenLater(this);
+        isInListenLater = isListenLater;
     }
 
     public Guid Id { get; set; }
@@ -39,18 +38,17 @@ public class Episode : ObservableObject
 
     public Uri Url { get; set; }
 
-    private readonly ListenLaterService listenLaterService;
-    private bool isInLisenLater;
-
+    private bool isInListenLater;
     public bool IsInListenLater
     {
         get
         {
-            return isInLisenLater;
+            return isInListenLater;
         }
         set
         {
-            SetProperty(ref isInLisenLater, value);
+            isInListenLater = value;
+            OnPropertyChanged();
         }
     }
 }

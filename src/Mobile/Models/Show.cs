@@ -22,8 +22,9 @@ public class Show : ObservableObject
         Description = response.Description;
         Image = response.Image;
         Updated = response.Updated;
-        Episodes = response.Episodes?.Select(resp => new Episode(resp, listenLaterService));
-        Categories = response.Categories?.Select(resp => new Category(resp));
+        Episodes = response.Episodes?.Select(episode => new Episode(episode, listenLaterService.IsInListenLater(episode.Id)));
+        Categories = response.Categories?.Select(category => new Category(category));
+        IsFeatured = response.IsFeatured;
     }
 
     public Guid Id { get; set; }
@@ -41,4 +42,6 @@ public class Show : ObservableObject
     public IEnumerable<Episode> Episodes { get; set; }
 
     public IEnumerable<Category> Categories { get; set; }
+
+    public bool IsFeatured { get; set; }
 }

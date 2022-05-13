@@ -1,16 +1,14 @@
-﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
+﻿using MvvmHelpers.Interfaces;
+
+namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 public class SubscriptionsViewModel : BaseViewModel
 {
-    public bool HasData => SubscribedShows?.Any() ?? false;
-    public bool HasNoData => !HasData;
-
     private readonly SubscriptionsService subscriptionsService;
 
-    private ObservableCollection<ShowViewModel> subscribedShows;
+    private ObservableRangeCollection<ShowViewModel> subscribedShows;
 
-    public ICommand NavigateToDiscoverCommand { get; internal set; }
-    public ObservableCollection<ShowViewModel> SubscribedShows
+    public ObservableRangeCollection<ShowViewModel> SubscribedShows
     {
         get
         {
@@ -22,13 +20,16 @@ public class SubscriptionsViewModel : BaseViewModel
         }
     }
 
-    public ICommand SubscribeCommand => new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
+    public IAsyncCommand<ShowViewModel> SubscribeCommand { get; private set; }
+
+    public IAsyncCommand NavigateToDiscoverCommand { get; private set; }
 
     public SubscriptionsViewModel(SubscriptionsService subs)
     {
         subscriptionsService = subs;
-        subscribedShows = new ObservableCollection<ShowViewModel>();
+        subscribedShows = new ObservableRangeCollection<ShowViewModel>();
         NavigateToDiscoverCommand = new AsyncCommand(NavigateToDiscoverCommandExecute);
+        SubscribeCommand = new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
     }
 
     private Task NavigateToDiscoverCommandExecute()
@@ -36,30 +37,34 @@ public class SubscriptionsViewModel : BaseViewModel
         return Shell.Current.GoToAsync($"{nameof(DiscoverPage)}");
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
-        var podcasts = subscriptionsService.GetSubscribedShows();
+        var shows = subscriptionsService.GetSubscribedShows();
 
-        SubscribedShows.Clear();
-        foreach (var podcast in podcasts)
+        var list = new List<ShowViewModel>();
+        foreach (var show in shows)
         {
-            var podcastViewModel = new ShowViewModel(podcast, subscriptionsService);
-            await podcastViewModel.InitializeAsync();
-            SubscribedShows.Add(podcastViewModel);
+            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+            list.Add(showViewModel);
         }
-        OnPropertyChanged(nameof(HasData));
-        OnPropertyChanged(nameof(HasNoData));
+        SubscribedShows.ReplaceRange(list);
+
+        return Task.CompletedTask;
     }
 
-    private async Task SubscribeCommandExecute(ShowViewModel vm)
+    private async Task SubscribeCommandExecute(ShowViewModel showViewModel)
     {
-        var podcastToRemove = SubscribedShows.Where(pod => pod.Show.Id == vm.Show.Id).FirstOrDefault();
+        var podcastToRemove = SubscribedShows
+            .FirstOrDefault(pod => pod.Show.Id == showViewModel.Show.Id);
 
         if (podcastToRemove != null)
         {
-            await subscriptionsService.UnSubscribeFromShowAsync(vm.Show); 
-            SubscribedShows.Remove(podcastToRemove);
-            MessagingCenter.Instance.Send<string>(".NET Pods", "UnSubscribe");
+            var isUnsubscribe = await subscriptionsService.UnSubscribeFromShowAsync(showViewModel.Show); 
+            if (isUnsubscribe)
+            {
+                SubscribedShows.Remove(podcastToRemove);
+                showViewModel.IsSubscribed = false;
+            }
         }
     }
 }

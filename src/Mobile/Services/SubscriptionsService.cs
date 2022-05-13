@@ -14,22 +14,18 @@ public class SubscriptionsService
         return this.subscribedShows;
     }
 
-    public async Task SubscribeToShowAsync(Show show)
+    public void SubscribeToShow(Show show)
     {
         if (show == null)
-            return;
+            return ;
 
-        if (IsSubscribed(show.Id))
-        {
-            await UnSubscribeFromShowAsync(show);
-            return;
-        }
-
+        SemanticScreenReader.Announce(string.Format("Subscribe to show {0}", show.Title));
         this.subscribedShows.Add(show);
     }
 
-    public async Task UnSubscribeFromShowAsync(Show podcast)
+    public async Task<bool> UnSubscribeFromShowAsync(Show podcast)
     {
+        var isUnsubcribed = false;
         var userWantUnsubscribe = await App.Current.MainPage.DisplayAlert(
                     $"Do you want to unsubscribe from {podcast.Title} ?",
                     string.Empty,
@@ -38,12 +34,16 @@ public class SubscriptionsService
 
         if (userWantUnsubscribe)
         {
-            var showToRemove = this.subscribedShows.FirstOrDefault(p => p.Id == podcast.Id);
+            var showToRemove = this.subscribedShows
+                .FirstOrDefault(p => p.Id == podcast.Id);
             if (showToRemove != null)
             {
                 this.subscribedShows.Remove(showToRemove);
+                isUnsubcribed = true;
             }
         }
+
+        return isUnsubcribed;
     }
 
     internal bool IsSubscribed(Guid id)

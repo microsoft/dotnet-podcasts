@@ -1,6 +1,6 @@
 ﻿@implements IDisposable
 @inject PlayerService PlayerService
-@inject AudioInterop AudioJsInterop
+@inject IAudioInterop AudioJsInterop
 
 <audio @ref="AudioElementRef"
        src="@url"
@@ -27,6 +27,7 @@
         PlayerService.PlaybackRateChanged += OnPlaybackRateChanged;
 
         url = PlayerService.Episode?.Url;
+        AudioJsInterop.SetUri(url);
     }
 
     public void Dispose()
@@ -122,7 +123,7 @@
         {
             url = newValue;
             loadingUrl = true;
-
+            AudioJsInterop.SetUri(url);
             await InvokeAsync(StateHasChanged);
         }
     }

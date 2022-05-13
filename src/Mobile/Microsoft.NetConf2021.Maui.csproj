@@ -34,6 +34,7 @@
   <!-- Support for iOS ARM64 devices -->    
   <PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
     <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+    <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lib\SharedMauiLib\SharedMauiLib.csproj" />
     <ProjectReference Include="..\Web\Components\Podcast.Components.csproj" />
   </ItemGroup>
 
