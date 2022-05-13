@@ -29,7 +29,7 @@ public class SettingsViewModel : BaseViewModel
         }
     }
 
-    public static string AppVersion { get => AppInfo.VersionString; }
+    public string AppVersion { get => AppInfo.VersionString; }
 
     public SettingsViewModel()
     {

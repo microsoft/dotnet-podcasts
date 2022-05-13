@@ -5,6 +5,7 @@
              xmlns:view="clr-namespace:Microsoft.NetConf2021.Maui.Views"
              Style="{StaticResource DetailPageStyle}"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
+             xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              x:Class="Microsoft.NetConf2021.Maui.Pages.CategoryPage">
     <CollectionView ItemsSource="{Binding Shows}"
                     Margin="10"
@@ -33,7 +34,8 @@
         <CollectionView.ItemTemplate>
             <DataTemplate>
                 <view:ShowItemView SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:CategoryViewModel}}}"
-                                   SubscriptionCommandParameter="{Binding }" />
+                                   SubscriptionCommandParameter="{Binding }"
+                                   SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Select}"/>
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>

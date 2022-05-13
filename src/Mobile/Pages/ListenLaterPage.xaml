@@ -6,6 +6,7 @@
              xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
              xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
              Style="{StaticResource MainSectionStyle}"
+             xmlns:views="clr-namespace:Microsoft.NetConf2021.Maui.Views"
              x:Class="Microsoft.NetConf2021.Maui.Pages.ListenLaterPage">
     <ContentPage.Content>
         <Grid RowDefinitions="auto,*" Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
@@ -15,114 +16,49 @@
                                Style="{StaticResource H5LabelStyle}"
                         Margin="14,-6,0,0"/>
             </StackLayout>
-            <CollectionView ItemsSource="{Binding Episodes}"
-                            Margin="10,0"
-                            Grid.Row="1">
+            <CollectionView 
+                ItemsSource="{Binding Episodes}"
+                Margin="10,0"
+                Grid.Row="1">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
-                                     Span="1"
+                                     Span="{OnIdiom Phone=2, Tablet=4, Desktop=4}"
+                                     HorizontalItemSpacing="5"
                                      VerticalItemSpacing="5" />
                 </CollectionView.ItemsLayout>
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:EpisodeViewModel">
-                        <Grid ColumnDefinitions="auto,*,auto"
-                              RowDefinitions="auto, auto"
-                              RowSpacing="5">
-                            <StackLayout>
-                                <ImageButton Aspect="AspectFill"
-                                             HeightRequest="38"
-                                             Source="player_play.png"
-                                             SemanticProperties.Description="Tap to play the episode"
-                                             HorizontalOptions="Center"
-                                             Command="{Binding PlayEpisodeCommand}"
-                                             WidthRequest="38">
-                                </ImageButton>
-                                <Label HorizontalOptions="Center"
-                                       Style="{StaticResource BodySLabelStyle}"
-                                       Text="{Binding Episode.Duration }"
-                                       TextColor="{StaticResource Grey7}" />
-                            </StackLayout>
-                            <StackLayout Grid.Column="1">
-                                <StackLayout Orientation="Horizontal"
-                                             HorizontalOptions="StartAndExpand"
-                                             Spacing="5">
-                                    <Image Aspect="AspectFit"
-                                           HeightRequest="76"
-                                           Source="{Binding Show.Image}"
-                                           SemanticProperties.Description="Image associated with the episode"
-                                           WidthRequest="76" />
-                                    <Grid HorizontalOptions="FillAndExpand"
-                                          RowDefinitions="auto,auto,auto">
-                                        <Label Text="{Binding Episode.Title}"
-                                               Grid.Row="0"
-                                               HorizontalOptions="FillAndExpand"
-                                               Style="{StaticResource LinkLLabelStyle}" />
-                                        <Label Text="{Binding Show.Title}"
-                                               HorizontalOptions="FillAndExpand"
-                                               Style="{OnIdiom Desktop={StaticResource H4LabelStyle}, Phone={StaticResource H6LabelStyle}}"
-                                               Grid.Row="1" />
-                                        <Label Text="{Binding Episode.Published, StringFormat='{0:MMM dd, yyyy}'}"
-                                               HorizontalOptions="FillAndExpand"
-                                               Style="{StaticResource BodySLabelStyle}"
-                                               TextColor="{StaticResource Grey7}"
-                                               Grid.Row="2" />
-                                    </Grid>
-                                </StackLayout>
-                                <Label Text="{Binding Episode.Description}"
-                                       MaxLines="3"
-                                       LineBreakMode="TailTruncation"
-                                       Style="{StaticResource BodySLabelStyle}"
-                                       TextColor="{StaticResource Grey7}"
-                                       HorizontalOptions="Start" />
-                            </StackLayout>
-
-                            <Image Aspect="AspectFit"
-                                   Grid.Column="2"
-                                   VerticalOptions="Center"
-                                   HeightRequest="24"
-                                   Source="listenlaterfilled.png"
-                                   SemanticProperties.Description="Episode marked for listening later"
-                                   HorizontalOptions="Center"
-                                   WidthRequest="24"
-                                   Margin="0,0,20,0">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ListenLaterViewModel}}, Path=RemoveCommand}"
-                                                          CommandParameter="{Binding}" />
-                                </Image.GestureRecognizers>
-                            </Image>
-                            <StackLayout VerticalOptions="End"
-                                         Grid.Row="1"
-                                         Margin="0,5"
-                                         Grid.ColumnSpan="3"
-                                         BackgroundColor="{StaticResource Grey4}">
-                                <BoxView HeightRequest="1" />
-                            </StackLayout>
-
-                        </Grid>
+                        <views:EpisodeItemView BindingContext="{Binding }"
+                                               RemoveListenLaterCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ListenLaterViewModel}}, Path=RemoveCommand}"
+                                               RemoveListenLaterCommandParameter="{Binding}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <Grid IsVisible="{Binding HasNoData}"
-                  RowDefinitions="*, auto"
-                  Grid.Row="1"
-                  Padding="{OnIdiom Desktop=200, Default=50}">
-                <Image Source="empty_collection.png"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center" />
-                <StackLayout HorizontalOptions="CenterAndExpand"
+                <CollectionView.EmptyView>
+                    <Grid
+                        RowDefinitions="*, auto"
+                        Padding="{OnIdiom Desktop=200, Default=50}">
+                        <Image 
+                            Source="empty_collection.png"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" />
+                        <StackLayout HorizontalOptions="CenterAndExpand"
                              VerticalOptions="CenterAndExpand"
                              Grid.Row="1"
                              Spacing="20">
-                    <Label Text="You don't have any episodes saved yet."
-                           Style="{StaticResource BodySLabelStyle}"
-                           HorizontalOptions="Center" />
-                    <Label Text="Discover podcasts episodes and save them to listen later.."
-                           Style="{StaticResource BodySLabelStyle}"
-                           HorizontalOptions="Center" />
+                            <Label 
+                                Text="You don't have any episodes saved yet."
+                                Style="{StaticResource BodySLabelStyle}"
+                                HorizontalTextAlignment="Center" />
+                            <Label 
+                                Text="Discover podcasts episodes and save them to listen later.."
+                                Style="{StaticResource BodySLabelStyle}"
+                                HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                    </Grid>
+                </CollectionView.EmptyView>
+            </CollectionView>
 
-                </StackLayout>
-            </Grid>
             <controls:Player x:Name="player"
                              Grid.Row="1"
                              VerticalOptions="End" />

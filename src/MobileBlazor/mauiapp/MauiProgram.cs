@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Infrastructure;
-using Microsoft.AspNetCore.Components.WebView.Maui;
+using NetPodsMauiBlazor.Services;
 using Podcast.Components;
 using Podcast.Pages.Data;
 using Podcast.Shared;
@@ -11,7 +11,7 @@ public static class MauiProgram
 {
     public static string BaseWeb = $"{Base}:5002/listentogether";
     public static string Base = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2" : "http://localhost";
-    public static string APIUrl = $"{Base}:5000/v1/";
+    public static string APIUrl = $"{Base}:5000/";
     public static string ListenTogetherUrl = $"{Base}:5001/listentogether";
 
     public static MauiApp CreateMauiApp()
@@ -25,8 +25,19 @@ public static class MauiProgram
         {
             client.BaseAddress = new Uri(APIUrl);
         });
+
+#if WINDOWS
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Windows.NativeAudioService>();
+#elif ANDROID
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Android.NativeAudioService>();
+#elif MACCATALYST
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.MacCatalyst.NativeAudioService>();
+#elif IOS
+        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.iOS.NativeAudioService>();
+#endif
+
         builder.Services.AddScoped<ThemeInterop>();
-        builder.Services.AddScoped<AudioInterop>();
+        builder.Services.AddScoped<IAudioInterop, AudioInteropService>();
         builder.Services.AddScoped<LocalStorageInterop>();
         builder.Services.AddScoped<ClipboardInterop>();
         builder.Services.AddScoped<SubscriptionsService>();

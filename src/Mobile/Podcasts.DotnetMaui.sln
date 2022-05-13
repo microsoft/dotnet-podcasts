@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Components", "..\Web\Components\Podcast.Components.csproj", "{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedMauiLib", "..\Lib\SharedMauiLib\SharedMauiLib.csproj", "{772830C6-56B3-4A57-A8E1-50A715F149F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39AD8B68-B8D3-43D4-86D4-3589E4AE81AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{772830C6-56B3-4A57-A8E1-50A715F149F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{772830C6-56B3-4A57-A8E1-50A715F149F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{772830C6-56B3-4A57-A8E1-50A715F149F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{772830C6-56B3-4A57-A8E1-50A715F149F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,54 +2,52 @@
 
 public class ListenLaterViewModel : BaseViewModel
 {
-    public bool HasData => Episodes?.Any() ?? false;
-    public bool HasNoData => !HasData;
-
     private readonly ListenLaterService listenLaterService;
     private readonly PlayerService playerService;
 
-    private ObservableCollection<EpisodeViewModel> episodes;
+    private ObservableRangeCollection<EpisodeViewModel> episodes;
 
-    public ObservableCollection<EpisodeViewModel> Episodes
+    public ObservableRangeCollection<EpisodeViewModel> Episodes
     {
         get { return episodes; }
         set {  SetProperty(ref episodes, value); }  
     }
 
-    public ICommand RemoveCommand => new MvvmHelpers.Commands.Command<EpisodeViewModel>(RemoveCommandExecute);
+    public ICommand RemoveCommand { get; private set; }
 
     public ListenLaterViewModel(ListenLaterService listen, PlayerService player)
     {
         listenLaterService = listen;
         playerService = player;
-        Episodes = new ObservableCollection<EpisodeViewModel>();
+        Episodes = new ObservableRangeCollection<EpisodeViewModel>();
+        RemoveCommand = new MvvmHelpers.Commands.Command<EpisodeViewModel>(RemoveCommandExecute);
     }
 
-    internal async Task InitializeAsync()
+    internal Task InitializeAsync()
     {
         var episodes = listenLaterService.GetEpisodes();
-        Episodes.Clear();
+        var list = new List<EpisodeViewModel>();
         foreach (var episode in episodes)
         {
-            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, listenLaterService, playerService);
-            await episodeVM.InitializeAsync();
+            var episodeVM = new EpisodeViewModel(episode.Item1, episode.Item2, playerService);
 
-            Episodes.Add(episodeVM);
+            list.Add(episodeVM);
         }
-        OnPropertyChanged(nameof(HasData));
-        OnPropertyChanged(nameof(HasNoData));
+        Episodes.ReplaceRange(list);
+
+        return Task.CompletedTask;
     }
 
     private void RemoveCommandExecute(EpisodeViewModel episode)
     {
-        var episodeToRemove = Episodes.Where(ep => ep.Episode.Id == episode.Episode.Id).FirstOrDefault();
+        var episodeToRemove = Episodes
+            .FirstOrDefault(ep => ep.Episode.Id == episode.Episode.Id);
         if(episodeToRemove != null)
         {
             listenLaterService.Remove(episode.Episode);
             Episodes.Remove(episodeToRemove);
+            episode.IsInListenLater = false;
         }
-        OnPropertyChanged(nameof(HasData));
-        OnPropertyChanged(nameof(HasNoData));
     }
 }
 

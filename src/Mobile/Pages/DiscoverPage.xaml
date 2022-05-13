@@ -22,22 +22,31 @@
         <StackLayout Margin="10,0">
             <controls:HeaderControl TextToSearch="{Binding Text, Mode=OneWayToSource}"
                                     SearchCommand="{Binding SearchCommand}"
+                                    SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Search}"
                                     VerticalOptions="Start" />
         </StackLayout>
         <CollectionView ItemsSource="{Binding PodcastsGroup}"
-                        Margin="10,50,10,0"
+                        Margin="{OnIdiom Desktop='10,60,10,0', Phone='10,50,10,0'}"
                         SelectionMode="None"
                         IsGrouped="True">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical"
+                <OnPlatform x:TypeArguments="ItemsLayout">
+                    <!-- On MacOS and iOS does not load any items with IsGrouped=True + GridItemsLayout -->
+                    <!-- https://github.com/dotnet/maui/issues/6848 -->
+                    <!-- Temporary workaround: On MacOS and iOS, not to use GridItemLayout-->
+                    <On Platform="Android,UWP">
+                        <GridItemsLayout Orientation="Vertical"
                                  Span="{OnIdiom Phone=2, Tablet=3, Desktop=3, Default=3}"
                                  HorizontalItemSpacing="5"
                                  VerticalItemSpacing="5" />
+                    </On>
+                </OnPlatform>
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <view:ShowItemView SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}}"
-                                       SubscriptionCommandParameter="{Binding }" />
+                                       SubscriptionCommandParameter="{Binding }" 
+                                       SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Subscribe_Podcast}"/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
             <CollectionView.GroupHeaderTemplate>
