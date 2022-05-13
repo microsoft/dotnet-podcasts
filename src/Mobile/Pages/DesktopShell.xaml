@@ -58,7 +58,7 @@
     <Shell.ItemTemplate>
         <DataTemplate>
             <StackLayout Orientation="Horizontal">
-                <Image Margin="6,10" Source="{Binding Icon}"/>
+                <Image Margin="6,10" WidthRequest="18" HeightRequest="18" Source="{Binding Icon}"/>
                 <Label Margin="6,10" Text="{Binding Title}"/>
             </StackLayout>
         </DataTemplate>
