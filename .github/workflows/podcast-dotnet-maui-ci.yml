@@ -1,20 +1,20 @@
-name: Podcast .NET MAUI Blazor CI
+name: Podcast .NET MAUI CI
 
 on:
   push:
-    branches: [ main, maui/perf ]
+    branches: [ main ]
     paths:
       - 'src/Mobile/**'
       - 'src/Web/Components/**'
       - '**/*build.props'  
-      - '.github/workflows/podcast-dotnet-maui-blazor.yml'
+      - '.github/workflows/podcast-dotnet-maui-ci.yml'
   pull_request:
-    branches: [ main, maui/perf ]
+    branches: [ main ]
     paths:
       - 'src/Mobile/**'
       - 'src/Web/Components/**'
       - '**/*build.props'      
-      - '.github/workflows/podcast-dotnet-maui-blazor.yml'
+      - '.github/workflows/podcast-dotnet-maui-ci.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -40,7 +40,13 @@ jobs:
           Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/main/NuGet.config -OutFile maui-main-NuGet.config
           & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/main.json --configfile maui-main-NuGet.config
 
-      - name: Build MAUI Blazor Mobile app
+      - name: Build MAUI Mobile app
         shell: pwsh
         run: |
-          & .\dotnet build src/MobileBlazor/mauiapp/NetPodsMauiBlazor.csproj -bl:mobile.binlog
+          & .\dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
+
+      - name: Archive build log
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: '*.binlog'
