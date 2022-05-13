@@ -6,14 +6,8 @@
              BackgroundColor="{StaticResource Grey9}"
              IsVisible="false"
              xmlns:local="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
+             xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
              x:DataType="local:Player">
-    <ContentView.HeightRequest>
-        <OnPlatform x:TypeArguments="x:Double">
-            <On Platform="Android,iOS">70</On>
-            <On Platform="UWP,macOS">90</On>
-        </OnPlatform>
-    </ContentView.HeightRequest>
-
     <ContentView.Content>
         <OnPlatform x:TypeArguments="View">
             <On Platform="Android,iOS">
@@ -42,7 +36,7 @@
 
                 </Grid>
             </On>
-            <On Platform="UWP, macOS">
+            <On Platform="UWP, MacCatalyst">
                 <Grid ColumnDefinitions="auto, *, auto">
                     <Grid ColumnDefinitions="auto, auto"
                           RowDefinitions="auto,auto"
@@ -74,6 +68,7 @@
                                Source="{Binding Source, Source={x:Reference playButton}}"
                                HeightRequest="38"
                                Aspect="AspectFit"
+                               SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Select}"
                                HorizontalOptions="Center"
                                >
                             <Image.GestureRecognizers>
