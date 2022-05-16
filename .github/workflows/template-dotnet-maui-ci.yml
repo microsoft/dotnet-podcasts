@@ -12,24 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install .NET 6
-        shell: pwsh
-        run: |
-          $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
-          .\dotnet-install.ps1 -Channel 6.0.3xx -Quality daily -InstallDir .
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
 
-      - name: Install MAUI workload
-        shell: pwsh
+      - name: Install MAUI Workloads
         run: |
-          $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/main/NuGet.config -OutFile maui-main-NuGet.config
-          & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/main.json --configfile maui-main-NuGet.config
+          dotnet workload install maui --source https://api.nuget.org/v3/index.json          
 
       - name: Build MAUI Mobile app
         shell: pwsh
         run: |
-          & .\dotnet build ${{inputs.csproj}} -bl:mobile.binlog
+          dotnet build ${{inputs.csproj}} -bl:mobile.binlog
 
       - name: Archive build log
         uses: actions/upload-artifact@v2
