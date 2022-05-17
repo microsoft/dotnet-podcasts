@@ -18,7 +18,6 @@ jobs:
     with:
       csproj: src/MobileBlazor/mauiapp/NetPodsMauiBlazor.csproj
       root_path: src/MobileBlazor/mauiapp/
-      artifacts_macos_path: artifacts_macos
       encrypted_keystore_path: android-keystore-test.jks.gpg
       keystore_path: android-keystore-test.keystore
     secrets:

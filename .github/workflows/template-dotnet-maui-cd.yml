@@ -7,9 +7,6 @@ on:
       root_path:
         required: true
         type: string 
-      artifacts_macos_path:
-        required: true
-        type: string   
       encrypted_keystore_path:
         required: true
         type: string  
@@ -54,14 +51,25 @@ jobs:
       - name: Build Maui WinUI project
         shell: pwsh
         run: |
-          msbuild "${{ inputs.csproj }}" -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041.0
+          dotnet publish ${{ inputs.csproj }} -c Release -f net6.0-windows10.0.19041.0
+
+      - name: Create artifacts folder
+        shell: pwsh
+        run: |
+           cd ${{ github.workspace }}
+           mkdir -p artifacts_windows
+
+      - name: Copy WinUI msix package
+        shell: pwsh
+        run: |
+           Get-Childitem –Path ${{ github.workspace }} -Include *.msix -File -Recurse | Copy-Item -Destination artifacts_windows
 
       #POST-BUILD
       - name: Publish build artifacts
         uses: actions/upload-artifact@v2
         with:     
           name: "WinUI .NET MAUI artifacts" 
-          path: "${{ inputs.root_path }}/bin/Release"
+          path: "artifacts_windows/*"
           if-no-files-found: error
           retention-days: 90
 
@@ -113,28 +121,28 @@ jobs:
         shell: pwsh
         run: |
            cd ${{ github.workspace }}
-           mkdir -p ${{ inputs.artifacts_macos_path }}
+           mkdir -p artifacts_macos
 
       #TODO add filter and only upload signed artifacts      
       - name: Copy APKs
         shell: pwsh 
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.apk -File -Recurse | Copy-Item -Destination ${{ inputs.artifacts_macos_path }}
+           Get-Childitem –Path ${{ github.workspace }} -Include *.apk -File -Recurse | Copy-Item -Destination artifacts_macos
 
       - name: Copy AABs
         shell: pwsh
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.aab -File -Recurse | Copy-Item -Destination ${{ inputs.artifacts_macos_path }}
+           Get-Childitem –Path ${{ github.workspace }} -Include *.aab -File -Recurse | Copy-Item -Destination artifacts_macos
 
       - name: Copy MacOS package
         shell: pwsh
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination ${{ inputs.artifacts_macos_path }}
+           Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination artifacts_macos
 
       - name: Publish build artifacts
         uses: actions/upload-artifact@v2
         with:     
           name: "Podcast MacOS artifacts" 
-          path: "${{ inputs.artifacts_macos_path }}/*"
+          path: "artifacts_macos/*"
           if-no-files-found: error
           retention-days: 90
