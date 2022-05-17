@@ -1,3 +1,20 @@
+---
+page_type: sample
+description: ".NET 6 reference application shown at .NET Conf 2021 featuring ASP.NET Core, Blazor, .NET MAUI, Microservices, and more!"
+languages:
+- csharp
+products:
+- dotnet-core
+- ef-core
+- blazor
+- xamarin
+- azure-sql-database
+- azure-storage
+- azure-container-apps
+- azure-container-registry
+- azure-app-service-web
+---
+
 # .NET Podcasts - Sample Application
 
 The .NET Podcast app is a sample application showcasing [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://dotnet.microsoft.com/apps/maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), [Orleans](https://docs.microsoft.com/dotnet/orleans/overview), and more.
