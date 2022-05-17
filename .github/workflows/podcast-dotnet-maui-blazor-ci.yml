@@ -1,0 +1,29 @@
+name: Podcast .NET MAUI Blazor CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/MobileBlazor/**'
+      - 'src/Web/Components/**'
+      - '**/*build.props'  
+      - '.github/workflows/podcast-dotnet-maui-blazor-ci.yml'
+      - '.github/workflows/template-dotnet-maui-ci.yml'      
+  pull_request:
+    branches: 
+      - '**'
+    paths:
+      - 'src/MobileBlazor/**'
+      - 'src/Web/Components/**'
+      - '**/*build.props'      
+      - '.github/workflows/podcast-dotnet-maui-blazor-ci.yml'
+      - '.github/workflows/template-dotnet-maui-ci.yml'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-mobile:
+    uses: ./.github/workflows/template-dotnet-maui-ci.yml
+    with:
+      csproj: src/MobileBlazor/mauiapp/NetPodsMauiBlazor.csproj
