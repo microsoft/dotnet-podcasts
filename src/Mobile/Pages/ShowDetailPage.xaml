@@ -36,13 +36,13 @@
                         <ImageButton Aspect="AspectFill"
                                      Grid.Column="0"
                                      Grid.Row="0"
-                                     HeightRequest="38"
+                                     HeightRequest="{OnIdiom Default=38, Phone=44}"
                                      Source="player_play.png"
                                      VerticalOptions="Center"
                                      SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Play_Episode}"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ShowDetailViewModel}}, Path=PlayEpisodeCommand}"
                                      CommandParameter="{Binding}"
-                                     WidthRequest="38">
+                                     WidthRequest="{OnIdiom Default=38, Phone=44}">
                         </ImageButton>
 
                         <Label Grid.Column="0"
@@ -127,6 +127,7 @@
                             Grid.Column="{OnIdiom Default=1,Phone=0}"
                             Grid.ColumnSpan="{OnIdiom Default=1, Phone=2}"
                             Grid.Row="{OnIdiom Default=3, Phone=2}"
+                            HeightRequest="44"
                             Command="{Binding SubscribeCommand}"
                             Text="{x:Static res:AppResource.Subscribe}">
                         <Button.Triggers>
