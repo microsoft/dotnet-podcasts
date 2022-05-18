@@ -43,7 +43,7 @@ For this sample application, we build an app to listen all you favorite .NET pod
 
 - [Mobile & Desktop:](src/Mobile) Native .NET MAUI Application for iOS, Android, macOS, and Windows
 - [Website:](src/Web) Blazor WebAssembly app and ASP.NET Core Razor Marketing website
-- [Backend API:](src/Services) ASP.NET Core Web APIs & Minimal APIs, injestion worker, and podcast update worker
+- [Backend API:](src/Services) ASP.NET Core Web APIs & Minimal APIs, ingestion worker, and podcast update worker
 - [Blazor Hybrid App:](src/MobileBlazor) Sample hybrid application of .NET MAUI with Blazor.
 
 ## Full Deployment with GitHub Actions
