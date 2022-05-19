@@ -22,6 +22,7 @@
         <Image Source="suscribed.png"
                HorizontalOptions="End"
                VerticalOptions="End"
+               SemanticProperties.Description="Suscribed icon"
                Margin="22"
                IsVisible="{Binding IsSubscribed}"
                WidthRequest="24"

@@ -33,7 +33,8 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:ShowViewModel">
                         <views:ShowItemView BindingContext="{Binding }"
-                                            SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionsViewModel}}}" />
+                                            SubscriptionCommand="{Binding SubscribeCommand, Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionsViewModel}}}"
+                                            SemanticProperties.Description="{x:Static res:AppResource.Semantic_Description_Tap_Subscribe_Podcast}"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.EmptyView>
