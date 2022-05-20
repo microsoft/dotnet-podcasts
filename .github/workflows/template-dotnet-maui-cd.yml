@@ -23,6 +23,11 @@ on:
       android_signing_key_pass:  
         required: true
 
+env:
+  MACOS_ARTIFACTS_PATH: "artifacts_macos"
+  ANDROID_ARTIFACTS_PATH: "artifacts_android"
+  WINDOWS_ARTIFACTS_PATH: "artifacts_windows"
+
 jobs:
   windows-build-windows:
     runs-on: windows-latest
@@ -57,19 +62,19 @@ jobs:
         shell: pwsh
         run: |
            cd ${{ github.workspace }}
-           mkdir -p artifacts_windows
+           mkdir -p ${{ env.WINDOWS_ARTIFACTS_PATH }}
 
       - name: Copy WinUI msix package
         shell: pwsh
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.msix -File -Recurse | Copy-Item -Destination artifacts_windows
+           Get-Childitem –Path ${{ github.workspace }} -Include *.msix -File -Recurse | Copy-Item -Destination ${{ env.WINDOWS_ARTIFACTS_PATH }}
 
       #POST-BUILD
       - name: Publish build artifacts
         uses: actions/upload-artifact@v2
         with:     
           name: "WinUI .NET MAUI artifacts" 
-          path: "artifacts_windows/*"
+          path: "${{ env.WINDOWS_ARTIFACTS_PATH }}/*"
           if-no-files-found: error
           retention-days: 90
 
@@ -121,28 +126,37 @@ jobs:
         shell: pwsh
         run: |
            cd ${{ github.workspace }}
-           mkdir -p artifacts_macos
+           mkdir -p ${{ MACOS_ARTIFACTS_PATH }}
+           mkdir -p ${{ ANDROID_ARTIFACTS_PATH }}
 
       #TODO add filter and only upload signed artifacts      
-      - name: Copy APKs
+      - name: Copy signed APKs
         shell: pwsh 
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.apk -File -Recurse | Copy-Item -Destination artifacts_macos
+           Get-Childitem –Path ${{ github.workspace }} -Include *Signed.apk -File -Recurse | Copy-Item -Destination ${{ ANDROID_ARTIFACTS_PATH }}
 
-      - name: Copy AABs
+      - name: Copy signed AABs
         shell: pwsh
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.aab -File -Recurse | Copy-Item -Destination artifacts_macos
+           Get-Childitem –Path ${{ github.workspace }} -Include *Signed.aab -File -Recurse | Copy-Item -Destination ${{ ANDROID_ARTIFACTS_PATH }}
 
-      - name: Copy MacOS package
+      - name: Copy MacOS packages
         shell: pwsh
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination artifacts_macos
+           Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination ${{ MACOS_ARTIFACTS_PATH }}
 
-      - name: Publish build artifacts
+      - name: Publish Android build artifacts
         uses: actions/upload-artifact@v2
         with:     
-          name: "Podcast MacOS artifacts" 
-          path: "artifacts_macos/*"
+          name: "Android artifacts" 
+          path: "${{ ANDROID_ARTIFACTS_PATH }}/*"
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Publish macOS build artifacts
+        uses: actions/upload-artifact@v2
+        with:     
+          name: "macOS artifacts" 
+          path: "${{ MACOS_ARTIFACTS_PATH }}/*"
           if-no-files-found: error
           retention-days: 90
