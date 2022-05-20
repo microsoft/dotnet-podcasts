@@ -10,12 +10,15 @@
         <TapGestureRecognizer Command="{Binding NavigateToDetailCommand}" />
     </VerticalStackLayout.GestureRecognizers>
     <Grid>
+        <ActivityIndicator WidthRequest="50" HeightRequest="50" IsRunning="{Binding IsLoading, Source={x:Reference self}}"/>
+
         <Image Aspect="AspectFit"
                MinimumWidthRequest="{x:OnIdiom Phone=180, Default=264}"
                MinimumHeightRequest="{x:OnIdiom Default=264, Phone=180}"
                MaximumHeightRequest="{x:OnIdiom Phone=190, Default=264}"
                MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
                Source="{Binding Show.Image}"
+               Loaded="Image_Loaded"
                HorizontalOptions="Start"
                Margin="0,0,0,12" />
 
