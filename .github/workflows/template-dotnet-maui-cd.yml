@@ -126,30 +126,30 @@ jobs:
         shell: pwsh
         run: |
            cd ${{ github.workspace }}
-           mkdir -p ${{ MACOS_ARTIFACTS_PATH }}
-           mkdir -p ${{ ANDROID_ARTIFACTS_PATH }}
+           mkdir -p ${{ env.MACOS_ARTIFACTS_PATH }}
+           mkdir -p ${{ env.ANDROID_ARTIFACTS_PATH }}
 
       #TODO add filter and only upload signed artifacts      
       - name: Copy signed APKs
         shell: pwsh 
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *Signed.apk -File -Recurse | Copy-Item -Destination ${{ ANDROID_ARTIFACTS_PATH }}
+           Get-Childitem –Path ${{ github.workspace }} -Include *Signed.apk -File -Recurse | Copy-Item -Destination ${{ env.ANDROID_ARTIFACTS_PATH }}
 
       - name: Copy signed AABs
         shell: pwsh
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *Signed.aab -File -Recurse | Copy-Item -Destination ${{ ANDROID_ARTIFACTS_PATH }}
+           Get-Childitem –Path ${{ github.workspace }} -Include *Signed.aab -File -Recurse | Copy-Item -Destination ${{ env.ANDROID_ARTIFACTS_PATH }}
 
       - name: Copy MacOS packages
         shell: pwsh
         run: |
-           Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination ${{ MACOS_ARTIFACTS_PATH }}
+           Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination ${{ env.MACOS_ARTIFACTS_PATH }}
 
       - name: Publish Android build artifacts
         uses: actions/upload-artifact@v2
         with:     
           name: "Android artifacts" 
-          path: "${{ ANDROID_ARTIFACTS_PATH }}/*"
+          path: "${{ env.ANDROID_ARTIFACTS_PATH }}/*"
           if-no-files-found: error
           retention-days: 90
 
@@ -157,6 +157,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:     
           name: "macOS artifacts" 
-          path: "${{ MACOS_ARTIFACTS_PATH }}/*"
+          path: "${{ env.MACOS_ARTIFACTS_PATH }}/*"
           if-no-files-found: error
           retention-days: 90
