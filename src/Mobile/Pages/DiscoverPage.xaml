@@ -26,7 +26,7 @@
                                     VerticalOptions="Start" />
         </StackLayout>
         <CollectionView ItemsSource="{Binding PodcastsGroup}"
-                        Margin="{OnIdiom Desktop='10,60,10,0', Phone='10,50,10,0'}"
+                        Margin="{OnIdiom Desktop='10,60,10,0', Phone='10,50,10,0', Default='10,50,10,0'}"
                         SelectionMode="None"
                         IsGrouped="True">
             <CollectionView.ItemsLayout>
