@@ -39,7 +39,7 @@ You can browse a [live running version of the .NET Podcasts app](https://dotnetp
 
 ## Repositories
 
-For this sample application, we build an app to listen all you favorite .NET podcasts for all the ecosystems: Web, Android, iOS, macOS and Windows. You can find the different apps separated by folders in this repo:
+For this sample application, we build an app to listen all your favorite .NET podcasts for all the ecosystems: Web, Android, iOS, macOS and Windows. You can find the different apps separated by folders in this repo:
 
 - [Mobile & Desktop:](src/Mobile) Native .NET MAUI Application for iOS, Android, macOS, and Windows
 - [Website:](src/Web) Blazor WebAssembly app and ASP.NET Core Razor Marketing website
