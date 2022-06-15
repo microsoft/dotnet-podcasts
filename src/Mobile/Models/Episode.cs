@@ -5,6 +5,7 @@ namespace Microsoft.NetConf2021.Maui.Models;
 
 public class Episode : ObservableObject
 {
+    public Episode() { }
     public Episode(RoomPlayerState playerState)
     {
         Id = playerState.Episode.Id;
