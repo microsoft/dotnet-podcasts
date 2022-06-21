@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-Podcast.Ingestion.Worker-3B4533BC-B8E2-4B9F-8E9F-ABAE3667C2D6</UserSecretsId>
