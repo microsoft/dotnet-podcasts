@@ -7,7 +7,7 @@ products:
 - dotnet-core
 - ef-core
 - blazor
-- xamarin
+- dotnet-maui
 - azure-sql-database
 - azure-storage
 - azure-container-apps
