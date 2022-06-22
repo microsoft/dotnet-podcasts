@@ -24,15 +24,6 @@ You can browse a [live running version of the .NET Podcasts app](https://dotnetp
 ![Logo](./docs/net-podcasts.png)
 
 
-## Build Status
-
-| Project | Status |
-| --- | --- |
-|Website|![Build status](/../../actions/workflows/podcast-web.yml/badge.svg)|
-|Web API|![Services Build status](/../../actions/workflows/podcast-api.yml/badge.svg)|
-|Listen Together Hub| ![Services Build status](/../../actions/workflows/podcast-hub.yml/badge.svg) |
-
-
 ## Application Architecture Diagram
 
 ![.NET Podcast Application Diagram](docs/arch_diagram_podcast.png)
