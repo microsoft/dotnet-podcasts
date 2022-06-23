@@ -27,14 +27,14 @@ jobs:
         run: |
           $ProgressPreference = 'SilentlyContinue'
           Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
-          .\dotnet-install.ps1 -Channel 6.0.3xx -Quality daily -InstallDir .
+          .\dotnet-install.ps1 -Channel 7.0.1xx -Quality daily -InstallDir .
 
       - name: install MAUI workload
         shell: pwsh
         run: |
           $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/main/NuGet.config -OutFile maui-main-NuGet.config
-          & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/main.json --configfile maui-main-NuGet.config
+          Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/net7.0/NuGet.config -OutFile maui-main-NuGet.config
+          & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/net7.0.json --configfile maui-main-NuGet.config
 
       - name: build Microsoft.NetConf2021.Maui.csproj
         shell: pwsh
