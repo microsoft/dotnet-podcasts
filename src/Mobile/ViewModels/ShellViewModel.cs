@@ -2,7 +2,7 @@
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class ShellViewModel : BaseViewModel
+public class ShellViewModel : ViewModelBase
 {
     public AppSection Discover { get; set; }
     public AppSection Subscriptions { get; set; }

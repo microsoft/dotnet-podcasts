@@ -1,26 +1,20 @@
-﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
+﻿using MvvmHelpers;
 
-public class ListenLaterViewModel : BaseViewModel
+namespace Microsoft.NetConf2021.Maui.ViewModels;
+
+public partial class ListenLaterViewModel : ViewModelBase
 {
-    private readonly ListenLaterService listenLaterService;
-    private readonly PlayerService playerService;
+    readonly ListenLaterService listenLaterService;
+    readonly PlayerService playerService;
 
-    private ObservableRangeCollection<EpisodeViewModel> episodes;
-
-    public ObservableRangeCollection<EpisodeViewModel> Episodes
-    {
-        get { return episodes; }
-        set {  SetProperty(ref episodes, value); }  
-    }
-
-    public ICommand RemoveCommand { get; private set; }
+    [ObservableProperty]
+    ObservableRangeCollection<EpisodeViewModel> episodes;
 
     public ListenLaterViewModel(ListenLaterService listen, PlayerService player)
     {
         listenLaterService = listen;
         playerService = player;
         Episodes = new ObservableRangeCollection<EpisodeViewModel>();
-        RemoveCommand = new MvvmHelpers.Commands.Command<EpisodeViewModel>(RemoveCommandExecute);
     }
 
     internal Task InitializeAsync()
@@ -38,7 +32,8 @@ public class ListenLaterViewModel : BaseViewModel
         return Task.CompletedTask;
     }
 
-    private void RemoveCommandExecute(EpisodeViewModel episode)
+    [RelayCommand]
+    void Remove(EpisodeViewModel episode)
     {
         var episodeToRemove = Episodes
             .FirstOrDefault(ep => ep.Episode.Id == episode.Episode.Id);

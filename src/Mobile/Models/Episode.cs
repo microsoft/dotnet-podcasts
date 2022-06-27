@@ -3,7 +3,7 @@ using static Podcast.Components.ListenTogether.ListenTogether;
 
 namespace Microsoft.NetConf2021.Maui.Models;
 
-public class Episode : ObservableObject
+public partial class Episode : ObservableObject
 {
     public Episode() { }
     public Episode(RoomPlayerState playerState)
@@ -39,17 +39,6 @@ public class Episode : ObservableObject
 
     public Uri Url { get; set; }
 
+    [ObservableProperty]
     private bool isInListenLater;
-    public bool IsInListenLater
-    {
-        get
-        {
-            return isInListenLater;
-        }
-        set
-        {
-            isInListenLater = value;
-            OnPropertyChanged();
-        }
-    }
 }

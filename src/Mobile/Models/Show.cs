@@ -3,7 +3,7 @@ using static Podcast.Components.ListenTogether.ListenTogether;
 
 namespace Microsoft.NetConf2021.Maui.Models;
 
-public class Show : ObservableObject
+public class Show
 {
 
     public Show(RoomPlayerState playerState)
