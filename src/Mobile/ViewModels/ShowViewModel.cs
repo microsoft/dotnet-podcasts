@@ -6,14 +6,14 @@ public class ShowViewModel : ObservableObject
 {
     public Show Show { get; set; }
 
-    private bool isSuscribed;
+    private bool isSubscribed;
 
     public bool IsSubscribed 
     { 
-        get => isSuscribed;
+        get => isSubscribed;
         set
         {
-            isSuscribed = value;
+            isSubscribed = value;
             OnPropertyChanged();
         }
     }
@@ -34,7 +34,7 @@ public class ShowViewModel : ObservableObject
     {
         Show = show;
         NavigateToDetailCommand = new AsyncCommand(NavigateToDetailCommandExecute);
-        isSuscribed = isSubscribed;
+        this.isSubscribed = isSubscribed;
     }
 
     private Task NavigateToDetailCommandExecute() => Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");

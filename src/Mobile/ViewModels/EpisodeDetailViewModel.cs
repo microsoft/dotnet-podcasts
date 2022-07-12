@@ -16,17 +16,17 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
             set => SetProperty(ref episode, value);
         }
 
-        private bool isInLisenLater;
+        private bool isInListenLater;
 
         public bool IsInListenLater
         {
             get
             {
-                return isInLisenLater;
+                return isInListenLater;
             }
             set
             {
-                SetProperty(ref isInLisenLater, value);
+                SetProperty(ref isInListenLater, value);
             }
         }
 

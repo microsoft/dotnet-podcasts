@@ -25,11 +25,11 @@ public class SubscriptionsService
 
     public async Task<bool> UnSubscribeFromShowAsync(Show podcast)
     {
-        var isUnsubcribed = false;
+        var isUnsubscribed = false;
         var userWantUnsubscribe = await App.Current.MainPage.DisplayAlert(
                     $"Do you want to unsubscribe from {podcast.Title} ?",
                     string.Empty,
-                    "Yes, unsubcribe",
+                    "Yes, unsubscribe",
                     "Cancel");
 
         if (userWantUnsubscribe)
@@ -39,11 +39,11 @@ public class SubscriptionsService
             if (showToRemove != null)
             {
                 this.subscribedShows.Remove(showToRemove);
-                isUnsubcribed = true;
+                isUnsubscribed = true;
             }
         }
 
-        return isUnsubcribed;
+        return isUnsubscribed;
     }
 
     internal bool IsSubscribed(Guid id)
