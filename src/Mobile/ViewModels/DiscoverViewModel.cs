@@ -1,44 +1,28 @@
 ﻿using Microsoft.NetConf2021.Maui.Resources.Strings;
+using MvvmHelpers;
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class DiscoverViewModel : BaseViewModel
+public partial class DiscoverViewModel : ViewModelBase
 {
-    private readonly ShowsService showsService;
-    private readonly SubscriptionsService subscriptionsService;
-    private IEnumerable<ShowViewModel> shows;
-    private CategoriesViewModel categoriesVM;
-    private string text;
+    readonly ShowsService showsService;
+    readonly SubscriptionsService subscriptionsService;
+    IEnumerable<ShowViewModel> shows;
 
-    public ObservableRangeCollection<ShowGroup> PodcastsGroup { get; private set; } = new ObservableRangeCollection<ShowGroup>();
+    [ObservableProperty]
+    CategoriesViewModel categoriesVM;
 
-    public ICommand SearchCommand { get; }
+    [ObservableProperty]
+    string text;
 
-    public ICommand SubscribeCommand => new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
-
-    public ICommand SeeAllCategoriesCommand => new AsyncCommand(SeeAllCategoriesCommandExecute);
-
-    public string Text
-    {
-        get { return text; }
-        set 
-        {
-            SetProperty(ref text, value);
-        }
-    }  
-
-    public CategoriesViewModel CategoriesVM
-    {
-        get { return categoriesVM; }      
-        set {  SetProperty(ref categoriesVM, value); }
-    }
+    [ObservableProperty]
+    ObservableRangeCollection<ShowGroup> podcastsGroup;
 
     public DiscoverViewModel(ShowsService shows, SubscriptionsService subs, CategoriesViewModel categories)
     {
         showsService = shows;
         subscriptionsService = subs;
-
-        SearchCommand = new AsyncCommand(OnSearchCommandAsync);
+        PodcastsGroup = new ObservableRangeCollection<ShowGroup>();
         categoriesVM = categories;
     }
 
@@ -89,7 +73,8 @@ public class DiscoverViewModel : BaseViewModel
         PodcastsGroup.ReplaceRange(groupedShows);
     }
 
-    private async Task OnSearchCommandAsync()
+    [RelayCommand]
+    async Task Search()
     {
         IEnumerable<Show> list;
         if (string.IsNullOrWhiteSpace(Text))
@@ -107,13 +92,10 @@ public class DiscoverViewModel : BaseViewModel
         }
     }
 
-    private async Task SubscribeCommandExecute(ShowViewModel showViewModel)
-    {
+    [RelayCommand]
+    async Task Subscribe(ShowViewModel showViewModel) => 
         showViewModel.IsSubscribed = await subscriptionsService.UnSubscribeFromShowAsync(showViewModel.Show);
-    }
 
-    private Task SeeAllCategoriesCommandExecute()
-    {
-        return Shell.Current.GoToAsync($"{nameof(CategoriesPage)}");
-    }
+    [RelayCommand]
+    Task SeeAllCategories() => Shell.Current.GoToAsync($"{nameof(CategoriesPage)}");
 }

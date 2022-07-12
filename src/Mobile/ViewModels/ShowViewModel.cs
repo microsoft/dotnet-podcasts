@@ -1,41 +1,28 @@
-﻿using MvvmHelpers.Interfaces;
+﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-namespace Microsoft.NetConf2021.Maui.ViewModels;
-
-public class ShowViewModel : ObservableObject
+public partial class ShowViewModel : ObservableObject
 {
     public Show Show { get; set; }
 
-    private bool isSuscribed;
+    [ObservableProperty]
+    bool isSubscribed;
 
-    public bool IsSubscribed 
-    { 
-        get => isSuscribed;
-        set
-        {
-            isSuscribed = value;
-            OnPropertyChanged();
-        }
-    }
+    public IEnumerable<Episode> Episodes => Show?.Episodes;
 
-    public IEnumerable<Episode> Episodes { get => Show?.Episodes; }
+    public Uri Image => Show?.Image;
 
-    public Uri Image { get => Show?.Image; }
+    public string Author => Show?.Author;
 
-    public string Author { get => Show?.Author; }
+    public string Title => Show?.Title;
 
-    public string Title { get => Show?.Title; }
-
-    public string Description { get => Show?.Description; }
-
-    public IAsyncCommand NavigateToDetailCommand { get; set; }
+    public string Description => Show?.Description;
 
     public ShowViewModel(Show show, bool isSubscribed)
     {
         Show = show;
-        NavigateToDetailCommand = new AsyncCommand(NavigateToDetailCommandExecute);
-        isSuscribed = isSubscribed;
+        IsSubscribed = isSubscribed;
     }
 
-    private Task NavigateToDetailCommandExecute() => Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");
+    [RelayCommand]
+    Task NavigateToDetail() => Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");
 }
