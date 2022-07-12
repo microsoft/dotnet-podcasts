@@ -1,72 +1,36 @@
 ﻿using Microsoft.NetConf2021.Maui.Resources.Strings;
+using MvvmHelpers;
 using MvvmHelpers.Interfaces;
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 [QueryProperty(nameof(Id), nameof(Id))]
-public class ShowDetailViewModel : BaseViewModel
+public partial class ShowDetailViewModel : ViewModelBase
 {
     public string Id { get; set; }
-    private Guid showId;
+    Guid showId;
 
-    private readonly PlayerService playerService;
-    private readonly SubscriptionsService subscriptionsService;
-    private readonly ListenLaterService listenLaterService;
-    private readonly ShowsService showsService;
+    readonly PlayerService playerService;
+    readonly SubscriptionsService subscriptionsService;
+    readonly ListenLaterService listenLaterService;
+    readonly ShowsService showsService;
 
-    private ShowViewModel show;
-    public ShowViewModel Show
-    {
-        get => show;
-        set => SetProperty(ref show, value);
-    }
+    [ObservableProperty]
+    ShowViewModel show;
 
-    private Episode episodeForPlaying;
-    public Episode EpisodeForPlaying
-    {
-        get => episodeForPlaying;
-        set => SetProperty(ref episodeForPlaying, value);
-    }
+    [ObservableProperty]
+    Episode episodeForPlaying;
 
-    private ObservableRangeCollection<Episode> episodes;
+    [ObservableProperty]
+    ObservableRangeCollection<Episode> episodes;
 
-    public ObservableRangeCollection<Episode> Episodes
-    {
-        get => episodes;
-        set => SetProperty(ref episodes, value);
-    }
 
+    [ObservableProperty]
     bool isPlaying;
-    private string textToSearch;
 
-    public bool IsPlaying
-    {
-        get => isPlaying;
-        set => SetProperty(ref isPlaying, value);
-    }
+    [ObservableProperty]
+    string textToSearch;
 
-    public string TextToSearch
-    {
-        get { return textToSearch; }
-        set
-        {
-            SetProperty(ref textToSearch, value);
-        }
-    }
-
-    public IAsyncCommand<Episode> PlayEpisodeCommand { get; private set; }
-    public IAsyncCommand<Episode> TapEpisodeCommand { get; private set; }
-    public IAsyncCommand SubscribeCommand { get; private set; }
-    public IAsyncCommand<Episode> AddToListenLaterCommand { get; private set; }
-    public ICommand SearchEpisodeCommand { get; private set; }
-
-    private void OnSearchCommand()
-    {
-        var episodesList = show.Episodes
-            .Where(ep => ep.Title.Contains(TextToSearch, StringComparison.InvariantCultureIgnoreCase))
-            .ToList();
-        Episodes.ReplaceRange(episodesList);
-    }
 
     public ShowDetailViewModel(ShowsService shows, PlayerService player, SubscriptionsService subs, ListenLaterService later)
     {
@@ -75,12 +39,6 @@ public class ShowDetailViewModel : BaseViewModel
         subscriptionsService = subs;
         listenLaterService = later;
         episodes = new ObservableRangeCollection<Episode>();
-
-        PlayEpisodeCommand = new AsyncCommand<Episode>(PlayEpisodeCommandExecute);
-        TapEpisodeCommand = new AsyncCommand<Episode>(TapEpisodeCommandExecute);
-        SubscribeCommand = new AsyncCommand(SubscribeCommandExecute);
-        AddToListenLaterCommand = new AsyncCommand<Episode>(AddToListenLaterCommandExecute);
-        SearchEpisodeCommand = new MvvmHelpers.Commands.Command(OnSearchCommand);
     }
 
     internal async Task InitializeAsync()
@@ -93,7 +51,7 @@ public class ShowDetailViewModel : BaseViewModel
         await FetchAsync();
     }
 
-    private async Task FetchAsync()
+    async Task FetchAsync()
     {
         var show = await showsService.GetShowByIdAsync(showId);
 
@@ -113,12 +71,20 @@ public class ShowDetailViewModel : BaseViewModel
         Episodes.ReplaceRange(show.Episodes.ToList());
     }
 
-    private async Task TapEpisodeCommandExecute(Episode episode)
+    [RelayCommand]
+    void SearchEpisode()
     {
-        await Shell.Current.GoToAsync($"{nameof(EpisodeDetailPage)}?Id={episode.Id}&ShowId={showId}");
+        var episodesList = show.Episodes
+            .Where(ep => ep.Title.Contains(TextToSearch, StringComparison.InvariantCultureIgnoreCase))
+            .ToList();
+        Episodes.ReplaceRange(episodesList);
     }
 
-    private async Task SubscribeCommandExecute()
+    [RelayCommand]
+    Task TapEpisode(Episode episode) => Shell.Current.GoToAsync($"{nameof(EpisodeDetailPage)}?Id={episode.Id}&ShowId={showId}");
+
+    [RelayCommand]
+    async Task Subscribe()
     {
         if (Show.IsSubscribed)
         {
@@ -132,12 +98,11 @@ public class ShowDetailViewModel : BaseViewModel
         }
     }
 
-    private async Task PlayEpisodeCommandExecute(Episode episode)
-    {
-        await playerService.PlayAsync(episode, Show.Show);
-    }
+    [RelayCommand]
+    Task PlayEpisode(Episode episode) => playerService.PlayAsync(episode, Show.Show);
 
-    private Task AddToListenLaterCommandExecute(Episode episode)
+    [RelayCommand]
+    Task AddToListenLater(Episode episode)
     {
         var itemHasInListenLaterList = listenLaterService.IsInListenLater(episode);
         if (itemHasInListenLaterList)

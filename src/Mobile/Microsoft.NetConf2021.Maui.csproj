@@ -52,7 +52,7 @@
     <MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#C00CC0" />
 
     <!-- Splash Screen -->
-    <MauiSplashScreen Include="Resources\splash.svg" Color="#C00CC0" BaseSize="128,128"/>
+    <MauiSplashScreen Include="Resources\splash.svg" Color="#C00CC0" BaseSize="128,128" />
 
     <!-- Images -->
     <MauiImage Include="Resources\Images\*" />
@@ -62,6 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview4" />
     <PackageReference Include="MonkeyCache.FileStore" Version="2.0.0-beta" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
   </ItemGroup>

@@ -1,35 +1,19 @@
 ﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class SettingsViewModel : BaseViewModel
+public partial class SettingsViewModel : ViewModelBase
 {
-    private bool isDarkModeEnabled;
-    private bool isWifiOnlyEnabled;
+    [ObservableProperty]
+    bool isDarkModeEnabled;
 
-    public bool IsDarkModeEnabled
-    {
-        get => isDarkModeEnabled;
-        set
-        {
-            if (SetProperty(ref isDarkModeEnabled, value))
-            {
-                ChangeUserAppTheme(value);
-            }
-        }
-    }
-    
-    public bool IsWifiOnlyEnabled
-    {
-        get => isWifiOnlyEnabled;
-        set
-        {
-            if (SetProperty(ref isWifiOnlyEnabled, value))
-            {
-                Settings.IsWifiOnlyEnabled = value;
-            }
-        }
-    }
+    [ObservableProperty]
+    bool isWifiOnlyEnabled;
 
-    public string AppVersion { get => AppInfo.VersionString; }
+    partial void OnIsDarkModeEnabledChanged(bool value) => 
+        ChangeUserAppTheme(value);
+    partial void OnIsWifiOnlyEnabledChanged(bool value) =>
+        Settings.IsWifiOnlyEnabled = value;
+
+    public string AppVersion => AppInfo.VersionString;
 
     public SettingsViewModel()
     {
@@ -37,7 +21,7 @@ public class SettingsViewModel : BaseViewModel
         isWifiOnlyEnabled = Settings.IsWifiOnlyEnabled;
     }
 
-    private void ChangeUserAppTheme(bool activateDarkMode)
+    void ChangeUserAppTheme(bool activateDarkMode)
     {
         Settings.Theme = activateDarkMode 
             ? AppTheme.Dark

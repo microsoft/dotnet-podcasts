@@ -1,40 +1,19 @@
-﻿using MvvmHelpers.Interfaces;
+﻿using MvvmHelpers;
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class SubscriptionsViewModel : BaseViewModel
+public partial class SubscriptionsViewModel : ViewModelBase
 {
-    private readonly SubscriptionsService subscriptionsService;
+    readonly SubscriptionsService subscriptionsService;
 
-    private ObservableRangeCollection<ShowViewModel> subscribedShows;
+    [ObservableProperty]
+    ObservableRangeCollection<ShowViewModel> subscribedShows;
 
-    public ObservableRangeCollection<ShowViewModel> SubscribedShows
-    {
-        get
-        {
-            return this.subscribedShows;
-        }
-        set
-        {
-            this.SetProperty(ref this.subscribedShows, value);
-        }
-    }
-
-    public IAsyncCommand<ShowViewModel> SubscribeCommand { get; private set; }
-
-    public IAsyncCommand NavigateToDiscoverCommand { get; private set; }
 
     public SubscriptionsViewModel(SubscriptionsService subs)
     {
         subscriptionsService = subs;
-        subscribedShows = new ObservableRangeCollection<ShowViewModel>();
-        NavigateToDiscoverCommand = new AsyncCommand(NavigateToDiscoverCommandExecute);
-        SubscribeCommand = new AsyncCommand<ShowViewModel>(SubscribeCommandExecute);
-    }
-
-    private Task NavigateToDiscoverCommandExecute()
-    {
-        return Shell.Current.GoToAsync($"{nameof(DiscoverPage)}");
+        SubscribedShows = new ObservableRangeCollection<ShowViewModel>();
     }
 
     public Task InitializeAsync()
@@ -52,7 +31,12 @@ public class SubscriptionsViewModel : BaseViewModel
         return Task.CompletedTask;
     }
 
-    private async Task SubscribeCommandExecute(ShowViewModel showViewModel)
+    [RelayCommand]
+    Task NavigateToDiscover() => Shell.Current.GoToAsync($"{nameof(DiscoverPage)}");
+
+
+    [RelayCommand]
+    async Task Subscribe(ShowViewModel showViewModel)
     {
         var podcastToRemove = SubscribedShows
             .FirstOrDefault(pod => pod.Show.Id == showViewModel.Show.Id);
