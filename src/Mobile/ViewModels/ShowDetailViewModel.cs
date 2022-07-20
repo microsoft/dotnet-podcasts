@@ -86,6 +86,9 @@ public partial class ShowDetailViewModel : ViewModelBase
     [RelayCommand]
     async Task Subscribe()
     {
+        if (Show is null || subscriptionsService is null)
+            return;
+
         if (Show.IsSubscribed)
         {
             var isUnsubcribe = await subscriptionsService.UnSubscribeFromShowAsync(Show.Show);
