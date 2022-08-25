@@ -11,13 +11,18 @@ public partial class EpisodeDetailViewModel : ViewModelBase
 
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsInListenLater))]
     Episode episode;
+
 
     public bool IsInListenLater
     {
-        get => episode.IsInListenLater;
+        get => episode?.IsInListenLater ?? false;
         set
         {
+            if (episode is null)
+                return;
+
             episode.IsInListenLater = value;
             OnPropertyChanged();
         }
