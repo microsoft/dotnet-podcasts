@@ -4,7 +4,7 @@ description:
 engineInstances: 1
 env:
 - name: domain
-  value: dotnetpodcasts.azurewebsites.net
+  value: nikita-podcastwebapp.azurewebsites.net
 - name: protocol
   value: https
 - name: path
@@ -15,3 +15,6 @@ env:
   value: 0
 - name: duration_in_sec
   value: 120
+failureCriteria:
+  - Homepage: avg(response_time_ms) > 500
+  - avg(requests_per_sec) < 20
