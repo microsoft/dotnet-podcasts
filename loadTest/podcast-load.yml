@@ -1,4 +1,4 @@
-testName: Get_dotnetpodcasts.azurewebsites.net
+testName: PodcastLoadTest
 testPlan: quick_test.jmx
 description: 
 engineInstances: 1
