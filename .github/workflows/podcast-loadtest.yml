@@ -1,0 +1,58 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Podcast Load Test
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+env:
+  LOAD_TEST_RESOURCE: "podcast-alt"
+  LOAD_TEST_RESOURCE_GROUP: "podcast-alt-rg"
+  LOAD_TEST_LOCATION: "East US"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  loadTest:
+    name: Load Test
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Actions 
+        uses: actions/checkout@v2
+          
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Create Resource Group
+        uses: azure/powershell@v1
+        continue-on-error: false
+        with:
+          inlineScript: |
+            az group create --name "${{ env.LOAD_TEST_RESOURCE_GROUP }}" --location "${{ env.LOAD_TEST_LOCATION }}"
+          azPSVersion: "latest"      
+          
+      - name: Create Azure Load Testing resource
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+          template: ./ARMTemplates/template.json
+          parameters: ./ARMTemplates/parameters.json name=${{ env.LOAD_TEST_RESOURCE }} location="${{ env.LOAD_TEST_LOCATION }}"
+        
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        with:
+          loadTestConfigFile: 'loadTest/podcast-load.yml'
+          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
+          resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+
+
+    # publish artifacts  
+      - uses: actions/upload-artifact@v2
+        with:
+          name: loadTestResults
+          path: ${{ github.workspace }}/loadTest
