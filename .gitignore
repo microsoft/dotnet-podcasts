@@ -349,3 +349,8 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 *.DS_Store
+
+# Playwright tests
+src/Web/E2E/test-results/
+src/Web/E2E/playwright-report/
+src/Web/E2E/playwright/.cache/
