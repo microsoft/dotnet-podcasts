@@ -1,5 +1,5 @@
 testName: PodcastLoadTest
-testPlan: 'loadTest/podcast.jmx'
+testPlan: 'script/podcast.jmx'
 description: 
 engineInstances: 1
 env:
