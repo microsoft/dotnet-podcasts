@@ -144,5 +144,5 @@ jobs:
       if: always()
       with:
         name: playwright-report
-        path: playwright-report/
+        path: src/Web/E2E/playwright-report/
         retention-days: 30
