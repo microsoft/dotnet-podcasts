@@ -55,13 +55,7 @@ const config: PlaywrightTestConfig = {
       use: {
         channel: 'msedge',
       },
-    },    
-    {
-       name: 'Pixel 5',
-       use: {
-         ...devices['Pixel 5'],
-       },
-     },    
+    },  
 
     /* Test against mobile viewports. */
     // {
