@@ -1,0 +1,24 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "String"
+        },
+        "location": {
+            "type": "String"
+        },
+        "tags": {
+            "type": "Object"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.LoadTestService/loadtests",
+            "apiVersion": "2021-12-01-preview",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "tags": "[parameters('tags')]"
+        }
+    ]
+}
