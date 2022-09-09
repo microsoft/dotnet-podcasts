@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout GitHub Actions 
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
           
       - name: Login to Azure
         uses: azure/login@v1
@@ -46,7 +46,7 @@ jobs:
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
-          loadTestConfigFile: 'loadTest/podcast-load.yml'
+          loadTestConfigFile: './loadTest/podcast-load.yml'
           loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
           resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
 
