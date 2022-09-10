@@ -16,5 +16,5 @@ env:
 - name: duration_in_sec
   value: 240
 failureCriteria:
-  - Homepage: avg(response_time_ms) > 300
-  - avg(requests_per_sec) < 20
+  - Homepage: avg(response_time_ms) > 100
+  - Homepage: avg(requests_per_sec) < 20
