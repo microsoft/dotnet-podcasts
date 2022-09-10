@@ -10,11 +10,11 @@ env:
 - name: path
   value: ''
 - name: threads_per_engine
-  value: 5
+  value: 100
 - name: ramp_up_time
   value: 0
 - name: duration_in_sec
   value: 240
 failureCriteria:
   - Homepage: avg(response_time_ms) > 100
-  - Homepage: avg(requests_per_sec) < 20
+  - Homepage: avg(requests_per_sec) < 50
