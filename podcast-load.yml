@@ -14,7 +14,7 @@ env:
 - name: ramp_up_time
   value: 0
 - name: duration_in_sec
-  value: 120
+  value: 240
 failureCriteria:
-  - Homepage: avg(response_time_ms) > 500
+  - Homepage: avg(response_time_ms) > 300
   - avg(requests_per_sec) < 20
