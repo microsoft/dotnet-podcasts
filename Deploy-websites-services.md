@@ -56,7 +56,7 @@ and also Microsoft.App
 az provider register --namespace Microsoft.App
 ```
 
-> If you see errors similar to "The subscription is not registered to use namespace 'Microsoft.<ProviderName>'", execute the command az provider register --namespace 'Microsoft.<ProviderName>' in Azure CLI and re-run the failed jobs again.
+> If you see errors similar to "The subscription is not registered to use namespace `'Microsoft.<ProviderName>'`", execute the command az provider register --namespace 'Microsoft.<ProviderName>' in Azure CLI and re-run the failed jobs again.
 
 ### Configure Azure Credentials in GitHub Secrets
 
