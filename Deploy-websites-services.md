@@ -35,19 +35,25 @@ First, you need to create an Azure Resource group within your subscription. If y
 To create the resource group, run the following command in the terminal:
 
 ```console
-az group create --name podcastrg --location westus2
+az group create --name podcastrg --location canadacentral
 ```
 
 The above resource group name will be added to the GitHub secrets in a later step. If you decide to use your own resource group name, be sure to update the same later.
 
 Checkout [Azure CLI](https://docs.microsoft.com/azure/azure-resource-manager/management/manage-resource-groups-cli) or [Azure Cloud Shell](https://docs.microsoft.com/azure/cloud-shell/quickstart#create-a-resource-group) if you need additional help to set up a resource group.
 
-### Register Microsoft.ContainerRegistry
+### Register Subscription dependencies
 
-Run the following command to ensure Microsoft.ContanierRegister is registered for the subscription:
+Run the following command to ensure the following dependencies 
 
-```cli
+```console
 az provider register --namespace Microsoft.ContainerRegistry
+```
+
+and also Microsoft.App
+
+```console
+az provider register --namespace Microsoft.App
 ```
 
 ### Configure Azure Credentials in GitHub Secrets
