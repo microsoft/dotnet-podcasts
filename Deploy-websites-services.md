@@ -113,7 +113,9 @@ Go to the GitHub actions tab, and enable the workflows.
 
 ## Run the Podcast API CICD first
 
-The backend services need to be run first to set up all necessary dependencies, databases, and blob storage.  You can manually run this from the `Actions` tab, click on `Select workflow` -> `Podcast API CICD` -> `Run workflow`. 
+> IMPORTANT: The backend services need to be run first to set up all necessary dependencies, databases, and blob storage.  
+
+You can manually run this from the `Actions` tab, click on `Select workflow` -> `Podcast API CICD` -> `Run workflow`. 
 
 Wait for the workflow run to complete and execute the next steps. The first time you run this it will take a bit longer as it creates all of the Azure resources.
 
@@ -121,7 +123,11 @@ Wait for the workflow run to complete and execute the next steps. The first time
 
 Next we will wanto to deploy the listen together hub and the web app.
 
-You can manually run the Hub action from the `Actions` tab, click on `Select workflow` -> `Podcast Hub CICD` -> `Run workflow`. Then run the web action with `Select workflow` -> `Podcast Web CICD` -> `Run workflow`
+You can manually run the Hub action from the `Actions` tab, click on: 
+* `Select workflow` -> `Podcast Hub CICD` -> `Run workflow`. 
+ 
+Then run the web action with:
+* `Select workflow` -> `Podcast Web CICD` -> `Run workflow`
 
 Once all the runs are complete, you'll see something like this under the Actions tab.
 
