@@ -56,6 +56,8 @@ and also Microsoft.App
 az provider register --namespace Microsoft.App
 ```
 
+> If you see errors similar to "The subscription is not registered to use namespace 'Microsoft.<ProviderName>'", execute the command az provider register --namespace 'Microsoft.<ProviderName>' in Azure CLI and re-run the failed jobs again.
+
 ### Configure Azure Credentials in GitHub Secrets
 
 To connect GitHub Actions, you will create a secret named `AZURE_CREDENTIALS` that you can use to authenticate with Azure.
@@ -139,6 +141,8 @@ Next we will wanto to deploy the listen together hub and the web app.
 
 You can manually run the Hub action from the `Actions` tab, click on: 
 * `Select workflow` -> `Podcast Hub CICD` -> `Run workflow`. 
+
+> Note: If deploy fails, re-run as it may be a timing issue.
  
 Then run the web action with:
 * `Select workflow` -> `Podcast Web CICD` -> `Run workflow`
