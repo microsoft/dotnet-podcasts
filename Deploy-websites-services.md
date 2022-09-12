@@ -72,7 +72,7 @@ To connect GitHub Actions, you will create a secret named `AZURE_CREDENTIALS` th
 
     ![Select Settings in the navigation](docs/github-repo-settings.png)
 
-1. Select **Secrets** and then **New Secret**.
+1. Under **Security** Select **Secrets** -> **Actions** and then **New repository secret**.
 
     ![Choose to add a secret](docs/select-secrets.png)
 
