@@ -42,6 +42,14 @@ The above resource group name will be added to the GitHub secrets in a later ste
 
 Checkout [Azure CLI](https://docs.microsoft.com/azure/azure-resource-manager/management/manage-resource-groups-cli) or [Azure Cloud Shell](https://docs.microsoft.com/azure/cloud-shell/quickstart#create-a-resource-group) if you need additional help to set up a resource group.
 
+### Register Microsoft.ContainerRegistry
+
+Run the following command to ensure Microsoft.ContanierRegister is registered for the subscription:
+
+```cli
+az provider register --namespace Microsoft.ContainerRegistry
+```
+
 ### Configure Azure Credentials in GitHub Secrets
 
 To connect GitHub Actions, you will create a secret named `AZURE_CREDENTIALS` that you can use to authenticate with Azure.
