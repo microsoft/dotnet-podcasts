@@ -24,8 +24,3 @@ test.describe('Listen Together', () => {
     await page.locator('text=Leave the room').click();
   });
 });
-
-
-
-
-

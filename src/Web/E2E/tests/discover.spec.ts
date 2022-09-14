@@ -29,8 +29,3 @@ test.describe('Discover', () => {
     expect(page.locator('.main')).not.toContain('no results');
   });
 });
-
-
-
-
-
