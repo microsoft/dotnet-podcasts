@@ -141,7 +141,8 @@ jobs:
       run: npm ci
 
     - name: Run Playwright tests
-      run: npx playwright test
+      run: |
+        HOME=/root npx playwright test
 
     - name: Create test summary
       uses: test-summary/action@dist
