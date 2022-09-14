@@ -147,7 +147,7 @@ jobs:
       uses: test-summary/action@dist
       if: always()
       with:
-        paths: test-results/junit.xml  
+        paths: src/Web/E2E/test-results/junit.xml  
 
     - name: Upload HTML report
       uses: actions/upload-artifact@v2

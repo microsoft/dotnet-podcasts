@@ -52,11 +52,17 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
-      name: 'Microsoft Edge',
+      name: 'firefox',
       use: {
-        channel: 'msedge',
+        ...devices['Desktop Firefox'],
       },
-    },  
+    },
+    {
+      name: 'webkit',
+      use: {
+        ...devices['Desktop Safari'],
+      },
+    },      
 
     /* Test against mobile viewports. */
     // {
