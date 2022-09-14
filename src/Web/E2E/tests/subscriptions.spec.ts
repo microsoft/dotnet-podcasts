@@ -1,5 +1,3 @@
-/* eslint-disable notice/notice */
-
 import { test, expect, Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
@@ -19,8 +17,3 @@ test.describe('Subscriptions', () => {
     expect(page.locator('.main')).not.toContain('You haven’t subscribed to any channel yet.');
   });
 });
-
-
-
-
-

@@ -1,5 +1,3 @@
-/* eslint-disable notice/notice */
-
 import { test, expect, Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
@@ -16,7 +14,7 @@ test.describe('Listen Together', () => {
     await page.locator('text=ListenTogether').click();
     await expect(page).toHaveURL('/listen-together');
     // assert Create new room button isn't disabled
-    expect(page.locator('.buttonApp.primary >> text=Create new room')).toBeEnabled    
+    expect(page.locator('.buttonApp.primary >> text=Create new room')).toBeEnabled
     // create new room
     await page.locator('.buttonApp.primary >> text=Create new room').click();
     await page.locator('[placeholder="Your name"]').fill('test');
