@@ -10,7 +10,7 @@ test.describe('Login', () => {
     await page.locator('text=Sign In').click();
     // assert discover page is shown
     await expect(page).toHaveURL('/discover');
-    expect(page).toHaveTitle('.NET Podcasts - Discover')
+    expect(page).toHaveTitle('.NET Podcasts')
   });
 });
 
