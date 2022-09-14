@@ -13,7 +13,7 @@ test.describe('Discover', () => {
       // click on the category
       await page.locator('.tags-item >> text=' + category).click();
       // assert category is selected
-      await expect(page).toHaveTitle('.NET Podcasts - Category ' + category);
+      await expect(page.locator('.titlePage')).toHaveText(category);
       // navigate back to discover page
       await page.locator('button:has-text("Back")').click();
     }
