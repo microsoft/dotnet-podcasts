@@ -8,16 +8,15 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Subscriptions', () => {
   test('should allow me to subscribe', async ({ page }) => {
-    // Click first podcast in list
+    // click first podcast in list
     await page.locator('.item-primary-action').first().click();
-
-    // Click subscribe
+    // click subscribe
     await page.locator('button:has-text("Subscribe")').click();
-
-    // View subscriptions
-    await page.locator('text=Subscriptions').click();
+    // view subscriptions
+    await page.locator('.navbarApp-item >> text=subscriptions').click();
     await expect(page).toHaveURL('/subscriptions');
-    expect(page.locator('.item-primary-action')).toHaveLength(1);
+    // assert subscriptions are shown
+    expect(page.locator('.main')).not.toContain('You haven’t subscribed to any channel yet.');
   });
 });
 

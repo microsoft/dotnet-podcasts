@@ -8,24 +8,21 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Listen Together', () => {
   test('should allow me to listen together', async ({ page }) => {
-    // Click first podcast in list
+    // click first podcast in list
     await page.locator('.item-primary-action').first().click();
-    
-    // Click play
+    // click play
     await page.locator('.icon-play').first().click();
-
-    // Click go to listen together page
+    // click go to listen together page
     await page.locator('text=ListenTogether').click();
     await expect(page).toHaveURL('/listen-together');
-
-    // Create new room
-    await page.locator('button:has-text("Create new room")').click();
+    // assert Create new room button isn't disabled
+    expect(page.locator('.buttonApp.primary >> text=Create new room')).toBeEnabled    
+    // create new room
+    await page.locator('.buttonApp.primary >> text=Create new room').click();
     await page.locator('[placeholder="Your name"]').fill('test');
-
-    // Open room
+    // open room
     await page.locator('button:has-text("Open room")').click();
-
-    // Leave the room
+    // leave the room
     await page.locator('text=Leave the room').click();
   });
 });

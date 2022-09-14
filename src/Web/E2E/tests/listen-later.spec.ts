@@ -8,15 +8,15 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Listen Later', () => {
   test('should allow me to listen to podcast later', async ({ page }) => {
-    // Click first podcast in list
+    // click first podcast in list
     await page.locator('.item-primary-action').first().click();
-
-    // Click first listen later button
+    // click first listen later button
     await page.locator('button.buttonIcon.episode-actions-later').first().click();
-
-    // View listen later tab
-    await page.locator('text=ListenLater').click();
-    await expect(page).toHaveURL('/listen-later');    
+    // view listen later tab
+    await page.locator('.navbarApp-item >> text=ListenLater').click();
+    await expect(page).toHaveURL('/listen-later');
+    // assert no results page isn't shown
+    expect(page.locator('.main')).not.toContain('no results');
   });
 });
 

@@ -8,8 +8,11 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Login', () => {
   test('should allow me to login', async ({ page }) => {
+    // click sign in
     await page.locator('text=Sign In').click();
-    await expect(page).toHaveURL('/discover');  
+    // assert discover page is shown
+    await expect(page).toHaveURL('/discover');
+    expect(page).toHaveTitle('.NET Podcasts - Discover')
   });
 });
 

@@ -3,26 +3,19 @@
 import { test, expect, Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/discover');
+  await page.goto('/settings');
 });
 
 test.describe('Settings', () => {
   test('should allow me to toggle settings', async ({ page }) => {
-    // Click text=Settings
-    await page.locator('text=Settings').click();
-    await expect(page).toHaveURL('/settings');
-
-    // Toggle autodownload
-    await page.locator('input[name="autodownload"]').check();
-
-    // Toggle deleteplayed
-    await page.locator('input[name="deleteplayed"]').check();
-
-    // Toggle systemtheme
-    await page.locator('input[name="systemtheme"]').check();
-    });
+    // loop through each setting
+    for (const setting of ['autodownload', 'deleteplayed', 'systemtheme', 'darktheme']) {   
+      // toggle setting
+      await page.locator('input[name="' + setting + '"]').check();
+      await page.locator('input[name="' + setting + '"]').uncheck();
+    }
+  });
 });
-
 
 
 
