@@ -35,12 +35,28 @@ First, you need to create an Azure Resource group within your subscription. If y
 To create the resource group, run the following command in the terminal:
 
 ```console
-az group create --name podcastrg --location westus2
+az group create --name podcastrg --location canadacentral
 ```
 
 The above resource group name will be added to the GitHub secrets in a later step. If you decide to use your own resource group name, be sure to update the same later.
 
 Checkout [Azure CLI](https://docs.microsoft.com/azure/azure-resource-manager/management/manage-resource-groups-cli) or [Azure Cloud Shell](https://docs.microsoft.com/azure/cloud-shell/quickstart#create-a-resource-group) if you need additional help to set up a resource group.
+
+### Register Subscription dependencies
+
+Run the following command to ensure the following dependencies 
+
+```console
+az provider register --namespace Microsoft.ContainerRegistry
+```
+
+and also Microsoft.App
+
+```console
+az provider register --namespace Microsoft.App
+```
+
+> If you see errors similar to "The subscription is not registered to use namespace `'Microsoft.<ProviderName>'`", execute the command az provider register --namespace `'Microsoft.<ProviderName>'` in Azure CLI and re-run the failed jobs again.
 
 ### Configure Azure Credentials in GitHub Secrets
 
@@ -72,7 +88,7 @@ To connect GitHub Actions, you will create a secret named `AZURE_CREDENTIALS` th
 
     ![Select Settings in the navigation](docs/github-repo-settings.png)
 
-1. Select **Secrets** and then **New Secret**.
+1. Under **Security** Select **Secrets** -> **Actions** and then **New repository secret**.
 
     ![Choose to add a secret](docs/select-secrets.png)
 
@@ -113,7 +129,9 @@ Go to the GitHub actions tab, and enable the workflows.
 
 ## Run the Podcast API CICD first
 
-The backend services need to be run first to set up all necessary dependencies, databases, and blob storage.  You can manually run this from the `Actions` tab, click on `Select workflow` -> `Podcast API CICD` -> `Run workflow`. 
+> IMPORTANT: The backend services need to be run first to set up all necessary dependencies, databases, and blob storage.  
+
+You can manually run this from the `Actions` tab, click on `Select workflow` -> `Podcast API CICD` -> `Run workflow`. 
 
 Wait for the workflow run to complete and execute the next steps. The first time you run this it will take a bit longer as it creates all of the Azure resources.
 
@@ -121,7 +139,13 @@ Wait for the workflow run to complete and execute the next steps. The first time
 
 Next we will wanto to deploy the listen together hub and the web app.
 
-You can manually run the Hub action from the `Actions` tab, click on `Select workflow` -> `Podcast Hub CICD` -> `Run workflow`. Then run the web action with `Select workflow` -> `Podcast Web CICD` -> `Run workflow`
+You can manually run the Hub action from the `Actions` tab, click on: 
+* `Select workflow` -> `Podcast Hub CICD` -> `Run workflow`. 
+
+> Note: If deploy fails, re-run as it may be a timing issue.
+ 
+Then run the web action with:
+* `Select workflow` -> `Podcast Web CICD` -> `Run workflow`
 
 Once all the runs are complete, you'll see something like this under the Actions tab.
 
