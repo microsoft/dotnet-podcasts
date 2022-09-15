@@ -9,15 +9,15 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MarcusFelling/dotnet-podcasts.git"
+    "url": "git+https://github.com/Microsoft/dotnet-podcasts.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MarcusFelling/dotnet-podcasts/issues"
+    "url": "https://github.com/Microsoft/dotnet-podcasts/issues"
   },
-  "homepage": "https://github.com/MarcusFelling/dotnet-podcasts#readme",
+  "homepage": "https://github.com/Microsoft/dotnet-podcasts#readme",
   "devDependencies": {
     "@playwright/test": "^1.25.2"
   }
