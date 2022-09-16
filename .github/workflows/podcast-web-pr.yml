@@ -1,0 +1,152 @@
+name: Podcast Web CICD
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/Web/**"
+      - ".github/workflows/podcast-web.yml"
+      - "deploy/Web/web.deployment.json"
+  workflow_dispatch:
+
+env:
+  API_RESOURCE_NAME: podcastapica
+
+jobs:
+  build:
+    environment:
+      name: staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Install wasm-tools
+        run: dotnet workload install wasm-tools
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set backend env variables
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            az extension add --name containerapp
+            $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
+            $listenTogetherHubUrl = "https://${{ secrets.HUB_WEBAPP_NAME }}.azurewebsites.net/listentogether"
+            echo "PODCAST_API_URL=$apiUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+            echo "LISTEN_TOGETHER_HUB_URL=$listenTogetherHubUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+
+      - name: Set Blazor WASM app settings
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: "src/Web/Client/wwwroot/appsettings.json"
+        env:
+          PodcastApi.BaseAddress: ${{ env.PODCAST_API_URL }}
+          ListenTogetherHub: ${{ env.LISTEN_TOGETHER_HUB_URL }}
+
+      - name: Build
+        run: dotnet build src/Web/Server --configuration Release
+
+      - name: Publish
+        run: dotnet publish --configuration Release src/Web/Server --output web
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: drop
+          path: web
+
+    outputs:
+      PodcastApiUrl: ${{ env.PODCAST_API_URL }}
+      ListenTogetherHubUrl: ${{ env.LISTEN_TOGETHER_HUB_URL }}
+
+  deploy:
+    needs: build
+    environment:
+      name: staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy ARM
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "3.1.0"
+          inlineScript: |
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME_STAGING}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+
+      - name: Download web artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: drop
+          path: web
+
+      - name: Update App Service app settings variables
+        uses: Azure/appservice-settings@v1
+        with:
+          app-name: ${{ secrets.WEBAPP_NAME_STAGING }}
+          app-settings-json: |
+            [
+                {
+                    "name": "PodcastApi__BaseAddress",
+                    "value": "${{ needs.build.outputs.PodcastApiUrl }}"
+                },
+                {
+                    "name": "ListenTogetherHub",
+                    "value": "${{ needs.build.outputs.ListenTogetherHubUrl }}"
+                }
+            ]
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.WEBAPP_NAME_STAGING }}
+          package: web
+
+  test:
+    needs: deploy
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.25.2-focal
+    env:
+      BASEURL: https://${{secrets.WEBAPP_NAME_STAGING}}.azurewebsites.net # sets value for URL to test
+    defaults:
+      run:
+        working-directory: src/Web/E2E
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Playwright tests
+        run: |
+          HOME=/root npx playwright test
+
+      - name: Create test summary
+        uses: test-summary/action@dist
+        if: always()
+        with:
+          paths: src/Web/E2E/test-results/junit.xml
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: playwright-report
+          path: src/Web/E2E/playwright-report/
+          retention-days: 30
