@@ -1,4 +1,4 @@
-name: Podcast Web CICD
+name: Podcast Web CICD - Staging
 
 on:
   pull_request:
@@ -84,7 +84,7 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME_STAGING}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master
@@ -95,7 +95,8 @@ jobs:
       - name: Update App Service app settings variables
         uses: Azure/appservice-settings@v1
         with:
-          app-name: ${{ secrets.WEBAPP_NAME_STAGING }}
+          app-name: ${{ secrets.WEBAPP_NAME }}
+          slot-name: staging
           app-settings-json: |
             [
                 {
@@ -111,7 +112,8 @@ jobs:
       - name: Azure WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.WEBAPP_NAME_STAGING }}
+          app-name: ${{ secrets.WEBAPP_NAME }}
+          slot-name: staging
           package: web
 
   test:
