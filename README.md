@@ -18,7 +18,7 @@ products:
 # .NET Podcasts - Sample Application
 
 The .NET Podcast app is a sample application showcasing [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://dotnet.microsoft.com/apps/maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), [Orleans](https://docs.microsoft.com/dotnet/orleans/overview), and more.
-In addition, an internal [Power App](https://docs.microsoft.com/en-us/power-apps/) was built to handle incoming podcast requests.
+In addition, we created a [Power App](https://docs.microsoft.com/en-us/power-apps/) to handle incoming podcast requests.
 
 You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor.
 
@@ -38,9 +38,9 @@ For this sample application, we build an app to listen to all your favorite .NET
 - [Backend API:](src/Services) ASP.NET Core Web APIs & Minimal APIs, ingestion worker, and podcast update worker
 - [Blazor Hybrid App:](src/MobileBlazor) Sample hybrid application of .NET MAUI with Blazor.
 
-Additionally, we build an application using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to allow users to reject or accept incoming podcast requests.
+Additionally, we build an application using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to allow us to reject or accept incoming podcast requests.
 
-- [Microsoft Power Apps:](src/PowerApps) Power Apps sample to handle incoming podcast requests.
+- [Microsoft Power Apps:](src/PowerApps) Power Apps sample to handle incoming podcast requests. [Follow these guidelines](src/PowerApps) on how to import the Power App into your own Power Platform envrionment.
 
 ## Full Deployment with GitHub Actions
 
