@@ -1,6 +1,6 @@
 # Testing with Playwright
 
-The .NET Podcast app is set up to automatically run e2e tests using Playwright in GitHub Actions. The URL of the site to test is set via an environment variable `BASEURL`. In GitHub Actions, this variable is set using the value of `WEBAPP_NAME` e.g. <https://dotnetpodcasts.azurewebsites.net>
+The .NET Podcast app is set up to automatically run e2e tests using Playwright in [GitHub Actions](../../../.github/workflows/podcast-web.yml). The URL of the site to test is set via an environment variable `BASEURL`. In GitHub Actions, this variable is set using the value of `WEBAPP_NAME` e.g. <https://dotnetpodcasts.azurewebsites.net>
 
 To run tests locally, you can use the cross-platform CLI, or our VS code extension.
 
