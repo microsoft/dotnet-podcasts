@@ -3,7 +3,7 @@
 Before getting started, ensure that you have access to [Microsoft Power Platform](https://make.powerapps.com/) and the latest version of the [Microsoft Power Platform CLI](https://docs.microsoft.com/de-de/power-platform/developer/cli/introduction). Or sign up for the [Power Apps Developer Plan](https://docs.microsoft.com/en-us/power-apps/maker/developer-plan).
 
 The solution folder is located in **/src/PowerApps/Solution.zip**. Please download this zip file.
-Before building the Power App, we need to import the app solution into our [Power Platform environment](https://docs.microsoft.com/en-us/power-platform/admin/environments-overview):
+Before building the Power App, we need to import the solution into our [Power Platform environment](https://docs.microsoft.com/en-us/power-platform/admin/environments-overview):
 
 # Importing Power Apps solution
 
