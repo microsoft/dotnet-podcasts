@@ -1,4 +1,4 @@
-# Podcast Approval App using Microsoft Power Apps
+# Connecting APIs to the Microsoft Power Platform
 
 Before getting started, ensure that you have successfully imported the Approval App into your Power Apps environment. Follow the detailed guidelines [here](https://github.com/user/repo/src/PowerApps/README.md)
 

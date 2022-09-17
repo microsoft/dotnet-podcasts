@@ -1,4 +1,4 @@
-# Podcast Approval application using Microsoft Power Apps
+# Podcast Approval App using Microsoft Power Apps
 
 Before getting started, ensure that you have access to [Microsoft Power Platform](https://make.powerapps.com/) and the latest version of the [Microsoft Power Platform CLI](https://docs.microsoft.com/de-de/power-platform/developer/cli/introduction). Or sign up for the [Power Apps Developer Plan](https://docs.microsoft.com/en-us/power-apps/maker/developer-plan).
 
