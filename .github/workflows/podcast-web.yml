@@ -20,8 +20,6 @@ env:
 
 jobs:
   build:
-    environment: 
-      name: prod
     runs-on: ubuntu-latest
 
     steps:
