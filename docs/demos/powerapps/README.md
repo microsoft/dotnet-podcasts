@@ -22,6 +22,7 @@ You will see a lot of error messages within your Power App:
 To fix these, we will have to add the custom connector to your app via the data tab:
 
 ![customconnector](./assets/customconnector.jpg)
+
 *Note: Search for the name of your custom connector created via API Management. If you have enabled subscription keys. You can find the subscription key within the Azure Portal in your API Management instance under Subscriptions.*
 
 # Modify your Power App
