@@ -6,13 +6,13 @@ on:
     paths:
       - "src/Web/**"
       - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.deployment.json"
+      - "deploy/Web/web.bicep"
   pull_request:
     branches: [main]
     paths:
       - "src/Web/**"
       - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.deployment.json"
+      - "deploy/Web/web.bicep"
   workflow_dispatch:
 
 env:
@@ -86,12 +86,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy ARM
+      - name: Deploy Bicep template
         uses: azure/powershell@v1
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master

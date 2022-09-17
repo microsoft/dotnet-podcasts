@@ -53,7 +53,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
-      - name: Deploy ARM
+      - name: Bicep template
         uses: azure/powershell@v1
         with:
             azPSVersion: '3.1.0'
