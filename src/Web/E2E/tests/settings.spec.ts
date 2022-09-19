@@ -1,11 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('/settings');
-});
-
 test.describe('Settings', () => {
   test('should allow me to toggle settings', async ({ page }) => {
+    await page.goto('/settings');
     // loop through each setting
     for (const setting of ['autodownload', 'deleteplayed', 'systemtheme', 'darktheme']) {
       // toggle setting
