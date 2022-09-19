@@ -38,7 +38,7 @@ For this sample application, we build an app to listen to all your favorite .NET
 - [Backend API:](src/Services) ASP.NET Core Web APIs & Minimal APIs, ingestion worker, and podcast update worker
 - [Blazor Hybrid App:](src/MobileBlazor) Sample hybrid application of .NET MAUI with Blazor.
 
-Additionally, we build an application using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to allow us to reject or accept incoming podcast requests.
+Additionally, we build an application using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to allow us to reject or accept incoming podcast requests:
 
 - [Microsoft Power Apps:](src/PowerApps) Power Apps sample to handle incoming podcast requests. [Follow these guidelines](src/PowerApps) on how to import the Approval Power App into your own Power Platform environment or [check out how to connect your API](docs/demos/powerapps) with the Microsoft Power Platform.
 
