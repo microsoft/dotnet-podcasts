@@ -1,18 +1,12 @@
-name: Podcast Web CICD
+name: Podcast Web CICD - Staging
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "src/Web/**"
-      - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.bicep"
   pull_request:
     branches: [main]
     paths:
       - "src/Web/**"
       - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.bicep"
+      - "deploy/Web/web.deployment.json"
   workflow_dispatch:
 
 env:
@@ -20,6 +14,8 @@ env:
 
 jobs:
   build:
+    environment:
+      name: staging
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +70,7 @@ jobs:
   deploy:
     needs: build
     environment:
-      name: prod
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -83,12 +79,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy Bicep template
+      - name: Deploy ARM
         uses: azure/powershell@v1
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master
@@ -100,6 +96,7 @@ jobs:
         uses: Azure/appservice-settings@v1
         with:
           app-name: ${{ secrets.WEBAPP_NAME }}
+          slot-name: staging
           app-settings-json: |
             [
                 {
@@ -116,6 +113,7 @@ jobs:
         uses: Azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.WEBAPP_NAME }}
+          slot-name: staging
           package: web
 
   test:
@@ -124,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.25.2-focal
     env:
-      BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
+      BASEURL: https://${{secrets.WEBAPP_NAME_STAGING}}.azurewebsites.net # sets value for URL to test
     defaults:
       run:
         working-directory: src/Web/E2E

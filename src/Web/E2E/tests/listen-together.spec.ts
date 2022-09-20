@@ -1,11 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('/discover');
-});
-
 test.describe('Listen Together', () => {
   test('should allow me to listen together', async ({ page }) => {
+    await page.goto('/discover');
     // click first podcast in list
     await page.locator('.item-primary-action').first().click();
     // click play
