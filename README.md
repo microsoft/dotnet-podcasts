@@ -13,6 +13,7 @@ products:
 - azure-container-apps
 - azure-container-registry
 - azure-app-service-web
+- playwright
 ---
 
 # .NET Podcasts - Sample Application
