@@ -90,11 +90,10 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
   }
 }
 
-resource kubernetesEnv 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
+resource kubernetesEnv 'Microsoft.App/managedEnvironments@2022-03-01' = {
   name: kubernetesEnvName
   location: location
-  tags: {
-  }
+  
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
@@ -106,7 +105,7 @@ resource kubernetesEnv 'Microsoft.App/managedEnvironments@2022-01-01-preview' = 
   }
 }
 
-resource apiContainerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
+resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: 'podcastapica'
   location: location
   properties: {
@@ -183,7 +182,7 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   ]
 }
 
-resource ingestionContainerApp 'Microsoft.App/containerApps@2022-01-01-preview' = if (deployIngestion) {
+resource ingestionContainerApp 'Microsoft.App/containerApps@2022-03-01' = if (deployIngestion) {
   name: 'podcastingestionca'
   location: location
   properties: {
@@ -260,7 +259,7 @@ resource ingestionContainerApp 'Microsoft.App/containerApps@2022-01-01-preview' 
   ]
 }
 
-resource updaterContainerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
+resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: 'podcastupdaterca'
   location: location
   properties: {
