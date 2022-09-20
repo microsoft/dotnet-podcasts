@@ -4,8 +4,8 @@ This folder contains additional scripts needed for testing the Azure Container A
 
 You must first enable the _feeds_ injestion API by turning it on in the `api.bicep` file on [line 27](https://github.com/microsoft/dotnet-podcasts/blob/main/deploy/Services/api.bicep#L27). 
 
-```
-"deployIngestion": true
+```bicep
+var deployIngestion = true
 ```
 
 ## Demo steps:
