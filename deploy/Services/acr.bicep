@@ -17,7 +17,7 @@ param location string = resourceGroup().location
 ])
 param acrSku string = 'Basic'
 
-resource acr 'Microsoft.ContainerRegistry/registries@2019-12-01-preview' = {
+resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   name: acrName
   location: location
   tags: {

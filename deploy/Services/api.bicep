@@ -26,7 +26,7 @@ var storageEnv = environment().suffixes.storage
 var imagesStorage = 'https://${storageAccountName}.blob.${storageEnv}/covers/'
 var deployIngestion = false
 
-resource sqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
+resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
   name: serverName
   location: location
   properties: {
@@ -35,7 +35,7 @@ resource sqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   }
 }
 
-resource sqlDB 'Microsoft.Sql/servers/databases@2020-08-01-preview' = {
+resource sqlDB 'Microsoft.Sql/servers/databases@2021-11-01' = {
   parent: sqlServer
   name: sqlDBName
   location: location
@@ -67,14 +67,14 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   }
 }
 
-resource feedQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-06-01' = {
+resource feedQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2022-05-01' = {
   name: '${storageAccountName}/default/feed-queue'
   dependsOn: [
     storageAccount
   ]
 }
 
-resource workspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
   location: location
   properties: {
@@ -93,7 +93,6 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
 resource kubernetesEnv 'Microsoft.App/managedEnvironments@2022-03-01' = {
   name: kubernetesEnvName
   location: location
-  
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
@@ -111,6 +110,9 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   properties: {
     managedEnvironmentId: kubernetesEnvId
     configuration: {
+      dapr: {
+        enabled: false
+      }
       activeRevisionsMode: 'single'
       ingress: {
         external: true
@@ -175,8 +177,6 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
       }
     }
   }
-  tags: {
-  }
   dependsOn: [
     sqlDB
   ]
@@ -188,6 +188,9 @@ resource ingestionContainerApp 'Microsoft.App/containerApps@2022-03-01' = if (de
   properties: {
     managedEnvironmentId: kubernetesEnvId
     configuration: {
+      dapr: {
+        enabled: false
+      }
       activeRevisionsMode: 'single'
       registries: [
         {
@@ -265,6 +268,9 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   properties: {
     managedEnvironmentId: kubernetesEnvId
     configuration: {
+      dapr: {
+        enabled: false
+      }
       activeRevisionsMode: 'single'
       registries: [
         {
@@ -310,8 +316,6 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
         maxReplicas: 1
       }
     }
-  }
-  tags: {
   }
   dependsOn: [
     apiContainerApp
