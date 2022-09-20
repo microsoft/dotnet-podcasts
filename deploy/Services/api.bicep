@@ -18,7 +18,7 @@ param workspaceName string
 var workspaceId = workspace.id
 var kubernetesEnvId = kubernetesEnv.id
 var sqlServerHostname = environment().suffixes.sqlServerHostname
-var podcastDbConnectionString = 'Server=tcp:${serverName}.${sqlServerHostname},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+var podcastDbConnectionString = 'Server=tcp:${serverName}${sqlServerHostname},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 var podcastApiImage = '${acrLoginServer}/podcastapi:${imageTag}'
 var podcastUpdaterImage = '${acrLoginServer}/podcastupdaterworker:${imageTag}'
 var podcastIngestionWorkerImage = '${acrLoginServer}/podcastingestionworker:${imageTag}'
