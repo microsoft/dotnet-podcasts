@@ -1,7 +1,7 @@
-name: Podcast Web CICD
+name: Podcast Web CICD - Staging
 
 on:
-  push:
+  pull_request:
     branches: [main]
     paths:
       - "src/Web/**"
@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     environment:
-      name: prod
+      name: staging
     runs-on: ubuntu-latest
 
     steps:
@@ -70,7 +70,7 @@ jobs:
   deploy:
     needs: build
     environment:
-      name: prod
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -96,6 +96,7 @@ jobs:
         uses: Azure/appservice-settings@v1
         with:
           app-name: ${{ secrets.WEBAPP_NAME }}
+          slot-name: staging
           app-settings-json: |
             [
                 {
@@ -112,4 +113,42 @@ jobs:
         uses: Azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.WEBAPP_NAME }}
+          slot-name: staging
           package: web
+
+  test:
+    needs: deploy
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.25.2-focal
+    env:
+      BASEURL: https://${{secrets.WEBAPP_NAME_STAGING}}.azurewebsites.net # sets value for URL to test
+    defaults:
+      run:
+        working-directory: src/Web/E2E
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Playwright tests
+        run: |
+          HOME=/root npx playwright test
+
+      - name: Create test summary
+        uses: test-summary/action@dist
+        if: always()
+        with:
+          paths: src/Web/E2E/test-results/junit.xml
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: playwright-report
+          path: src/Web/E2E/playwright-report/
+          retention-days: 30
