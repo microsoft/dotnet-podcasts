@@ -158,6 +158,10 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
               name: 'ConnectionStrings__PodcastDb'
               secretRef: 'podcastdb'
             }
+            {
+              name: 'Features__FeedIngestion'
+              value: '${deployIngestion}'
+            }            
           ]
         }
       ]
