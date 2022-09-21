@@ -161,7 +161,7 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
             {
               name: 'Features__FeedIngestion'
               value: '${deployIngestion}'
-            }            
+            }
           ]
         }
       ]

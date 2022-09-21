@@ -6,7 +6,7 @@
 
 With the following ARM template you can automate the creation of the resources for this website.
 
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/microsoft/dotnet-podcasts/main/deploy/Web/web.bicep)
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/microsoft/dotnet-podcasts/main/deploy/Web/web.json)
 
 ## Run website locally
 
