@@ -62,6 +62,7 @@ jobs:
       ListenTogetherHubUrl: ${{ env.LISTEN_TOGETHER_HUB_URL }}
 
   deployStaging:
+    name: Deploy to staging
     needs: build
     environment:
       name: staging
@@ -109,6 +110,7 @@ jobs:
           package: web
 
   testE2E:
+    name: Run Playwright E2E tests
     needs: deployStaging
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -175,6 +177,7 @@ jobs:
       #      ]
             
   deployProd:
+    name: Deploy to production
     needs: testLoad
     environment:
       name: prod
