@@ -163,7 +163,7 @@ jobs:
       #- name: "Podcast Load Test"
       #  uses: azure/load-testing@v1
       # with:
-      #    loadTestConfigFile: "load-tests/home-page.yaml"
+      #    loadTestConfigFile: "src/Web/LoadTests/load-test.yaml"
       #    loadTestResource: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}-loadtest
       #    resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
       #    env: |

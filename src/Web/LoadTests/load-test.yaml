@@ -1,0 +1,8 @@
+version: v0.1
+testName: LoadTest
+testPlan: load-test.jmx
+description: 'Podcast Load Test'
+engineInstances: 3
+failureCriteria: 
+- avg(response_time_ms) > 2400
+- percentage(error) > 1
