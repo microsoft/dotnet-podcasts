@@ -1,18 +1,8 @@
 name: Podcast Web CICD
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "src/Web/**"
-      - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.deployment.json"
   pull_request:
     branches: [main]
-    paths:
-      - "src/Web/**"
-      - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.deployment.json"
   workflow_dispatch:
 
 env:
