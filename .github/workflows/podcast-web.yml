@@ -164,19 +164,19 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      #- name: "Podcast Load Test"
-      #  uses: azure/load-testing@v1
-      # with:
-      #    loadTestConfigFile: "src/Web/LoadTests/load-test.yaml"
-      #    loadTestResource: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}-loadtest
-      #    resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
-      #    env: |
-      #      [
-      #          {
-      #          "name": "HOMEPAGE_URL",
-      #          "value": "https://${{secrets.WEBAPP_NAME}}.azurewebsites.net"
-      #          }
-      #      ]
+      - name: "Podcast Load Test"
+        uses: azure/load-testing@v1
+        with:
+            loadTestConfigFile: "src/Web/LoadTests/load-test.yaml"
+            loadTestResource: TestPodcastLoadTestQT1
+            resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+            env: |
+              [
+                  {
+                  "name": "HOMEPAGE_URL",
+                  "value": "https://testpodcastwebapp.azurewebsites.net"
+                  }
+              ]
             
   deployProd:
     name: Deploy to production

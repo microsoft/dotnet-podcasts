@@ -1,6 +1,6 @@
 version: v0.1
 testName: LoadTest
-testPlan: load-test.jmx
+testPlan: quick_test.jmx
 description: 'Podcast Load Test'
 engineInstances: 3
 failureCriteria: 
