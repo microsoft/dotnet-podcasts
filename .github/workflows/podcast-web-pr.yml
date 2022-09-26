@@ -120,7 +120,7 @@ jobs:
     needs: deploy
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.25.2-focal
+    container: mcr.microsoft.com/playwright:v1.26.0-focal
     env:
       BASEURL: https://${{secrets.WEBAPP_NAME_STAGING}}.azurewebsites.net # sets value for URL to test
     defaults:
