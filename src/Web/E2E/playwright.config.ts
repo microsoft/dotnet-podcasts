@@ -37,21 +37,9 @@ const config: PlaywrightTestConfig = {
 
   projects: [
     {
-      name: 'chromium',
+      name: 'Microsoft Edge',
       use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
+        channel: 'msedge',
       },
     },
   ],

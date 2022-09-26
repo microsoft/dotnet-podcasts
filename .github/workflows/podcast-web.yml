@@ -79,7 +79,7 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}}-2x4f2 servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master
@@ -90,7 +90,7 @@ jobs:
       - name: Update App Service app settings variables
         uses: Azure/appservice-settings@v1
         with:
-          app-name: ${{ secrets.WEBAPP_NAME }}-2x4f2
+          app-name: ${{ secrets.WEBAPP_NAME }}
           app-settings-json: |
             [
                 {
@@ -106,7 +106,7 @@ jobs:
       - name: Azure WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.WEBAPP_NAME }}-2x4f2
+          app-name: ${{ secrets.WEBAPP_NAME }}
           package: web
 
   testE2E:
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.25.2-focal
     env:
-      BASEURL: https://${{secrets.WEBAPP_NAME}}-2x4f2.azurewebsites.net # sets value for URL to test
+      BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
     defaults:
       run:
         working-directory: src/Web/E2E
@@ -127,7 +127,9 @@ jobs:
           node-version: "14.x"
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npx playwright install msedge
 
       - name: Run Playwright tests
         run: |
@@ -172,7 +174,7 @@ jobs:
       #      [
       #          {
       #          "name": "HOMEPAGE_URL",
-      #          "value": "https://${{secrets.WEBAPP_NAME}}-2x4f2.azurewebsites.net"
+      #          "value": "https://${{secrets.WEBAPP_NAME}}.azurewebsites.net"
       #          }
       #      ]
             
@@ -194,7 +196,7 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}}-2x4f2 servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master
@@ -205,7 +207,7 @@ jobs:
       - name: Update App Service app settings variables
         uses: Azure/appservice-settings@v1
         with:
-          app-name: ${{ secrets.WEBAPP_NAME }}-2x4f2
+          app-name: ${{ secrets.WEBAPP_NAME }}
           app-settings-json: |
             [
                 {
@@ -221,5 +223,5 @@ jobs:
       - name: Azure WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.WEBAPP_NAME }}-2x4f2
+          app-name: ${{ secrets.WEBAPP_NAME }}
           package: web
