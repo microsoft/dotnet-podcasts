@@ -11,7 +11,7 @@ To run tests locally, you can use the cross-platform CLI, or our VS code extensi
 
 ## CLI
 
-By default tests will be run on all 3 browsers, chromium, firefox and webkit. This can be configured in the [playwright.config](../../../src/Web/E2E/playwright.config.ts) file. Tests are run in headless mode meaning no browser will open up when running the tests. Results of the tests will be shown in the terminal and the HTML report. The HTML report automatically opens if there are are failures.
+By default tests will be run on Microsoft Edge. This can be configured in the [playwright.config](../../../src/Web/E2E/playwright.config.ts) file. Tests are run in headless mode meaning no browser will open up when running the tests. Results of the tests will be shown in the terminal and the HTML report. The HTML report automatically opens if there are are failures.
 
 1. Open your favorite terminal.
 1. Set environment variable `BASEURL` to the url of your site:

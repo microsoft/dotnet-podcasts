@@ -33,25 +33,14 @@ const config: PlaywrightTestConfig = {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on',
     video: 'on',
+    screenshot: 'only-on-failure',
   },
 
   projects: [
     {
-      name: 'chromium',
+      name: 'Microsoft Edge',
       use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
+        channel: 'msedge',
       },
     },
   ],
