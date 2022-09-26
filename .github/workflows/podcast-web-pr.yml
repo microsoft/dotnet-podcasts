@@ -133,7 +133,9 @@ jobs:
           node-version: "14.x"
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npx playwright install msedge
 
       - name: Run Playwright tests
         run: |
