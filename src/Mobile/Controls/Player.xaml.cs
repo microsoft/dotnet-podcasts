@@ -69,7 +69,10 @@ public partial class Player : ContentView
 
     internal void OnDisappearing()
     {
-        this.playerService?.IsPlayingChanged -= PlayerService_IsPlayingChanged;
+        if (this.playerService != null)
+        {
+            this.playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
+        }
     }
 }
 
