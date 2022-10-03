@@ -1,12 +1,8 @@
 name: Podcast Web CICD
 
 on:
-  push:
+  pull_request:
     branches: [main]
-    paths:
-      - "src/Web/**"
-      - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.deployment.json"
   workflow_dispatch:
 
 env:
@@ -14,10 +10,8 @@ env:
 
 jobs:
   build:
-    environment:
-      name: prod
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -67,10 +61,11 @@ jobs:
       PodcastApiUrl: ${{ env.PODCAST_API_URL }}
       ListenTogetherHubUrl: ${{ env.LISTEN_TOGETHER_HUB_URL }}
 
-  deploy:
+  deployStaging:
+    name: Deploy to staging
     needs: build
     environment:
-      name: prod
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -79,7 +74,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy ARM
+      - name: Deploy ARM template
         uses: azure/powershell@v1
         with:
           azPSVersion: "3.1.0"
@@ -113,3 +108,81 @@ jobs:
         with:
           app-name: ${{ secrets.WEBAPP_NAME }}
           package: web
+
+  testE2E:
+    name: Run Playwright E2E tests
+    needs: deployStaging
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.25.2-focal
+    env:
+      BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
+    defaults:
+      run:
+        working-directory: src/Web/E2E
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npx playwright install msedge
+
+      - name: Run Playwright tests
+        run: |
+          HOME=/root npx playwright test
+
+      - name: Create test summary
+        uses: test-summary/action@dist
+        if: always()
+        with:
+          paths: src/Web/E2E/test-results/junit.xml
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: playwright-report
+          path: src/Web/E2E/playwright-report/
+          retention-days: 30
+
+  testLoad:
+    name: Run Load Tests
+    needs: testE2E
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENTNAME: test
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Azure authentication
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Podcast Load Test"
+        uses: azure/load-testing@v1
+        with:
+            loadTestConfigFile: "src/Web/LoadTests/load-test.yaml"
+            loadTestResource: TestPodcastLoadTestQT1
+            resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+            env: |
+              [
+                  {
+                  "name": "HOMEPAGE_URL",
+                  "value": "https://testpodcastwebapp.azurewebsites.net"
+                  }
+              ]
+            
+  deployProd:
+    name: Deploy to production
+    needs: testLoad
+    environment:
+      name: prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
