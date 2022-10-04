@@ -133,7 +133,7 @@ jobs:
 
       - name: Run Playwright tests
         run: |
-          HOME=/root npx playwright test
+          HOME=/root npx playwright test --update-snapshots
 
       - name: Create test summary
         uses: test-summary/action@dist
