@@ -13,6 +13,8 @@ test.describe('Discover', () => {
         await page.locator('.tags-item >> text=' + category).click();
         // assert category is selected
         await expect(page.locator('.titlePage')).toHaveText(category);
+        // use visual comparison to check all images display
+        await expect(page).toHaveScreenshot();        
     });
   }
 
