@@ -28,10 +28,7 @@ test.describe('Discover', () => {
 
   test('should display all podcast images', async ({ page }) => {
     // use large viewport to display all images for snapshot
-    await page.setViewportSize({
-      width: 3840,
-      height: 2160,
-    });
+    await page.setViewportSize({ width: 1920, height: 1080 });   
     // use visual comparison to check all images display
     await expect(page).toHaveScreenshot();
   });  
