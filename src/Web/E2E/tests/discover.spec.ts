@@ -13,6 +13,8 @@ test.describe('Discover', () => {
         await page.locator('.tags-item >> text=' + category).click();
         // assert category is selected
         await expect(page.locator('.titlePage')).toHaveText(category);
+        // use visual comparison to check all images display
+        await expect(page).toHaveScreenshot();        
     });
   }
 
@@ -25,11 +27,4 @@ test.describe('Discover', () => {
     // assert no results page isn't shown
     expect(page.locator('.main')).not.toContain('no results');
   });
-
-  test('should display all podcast images', async ({ page }) => {
-    // use large viewport to display all images for snapshot
-    await page.setViewportSize({ width: 1920, height: 1080 });   
-    // use visual comparison to check all images display
-    await expect(page).toHaveScreenshot();
-  });  
 });
