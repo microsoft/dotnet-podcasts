@@ -25,4 +25,9 @@ test.describe('Discover', () => {
     // assert no results page isn't shown
     expect(page.locator('.main')).not.toContain('no results');
   });
+
+  test('should display all podcast images', async ({ page }) => {
+    // use visual comparison to check all images display
+    await expect(page).toHaveScreenshot();
+  });  
 });
