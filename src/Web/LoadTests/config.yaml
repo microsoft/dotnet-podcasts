@@ -1,7 +1,7 @@
 testName: loadtest
 testPlan: load-test.jmx
 description: 
-engineInstances: 1
+engineInstances: 2
 env:
 - name: domain
   value: testpodcastwebapp.azurewebsites.net
@@ -10,7 +10,7 @@ env:
 - name: path
   value: discover
 - name: threads_per_engine
-  value: 5
+  value: 25
 - name: ramp_up_time
   value: 0
 - name: duration_in_sec
