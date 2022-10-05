@@ -1,0 +1,17 @@
+testName: Get_testpodcastwebapp.azurewebsites.net
+testPlan: load-test.jmx
+description: 
+engineInstances: 1
+env:
+- name: domain
+  value: testpodcastwebapp.azurewebsites.net
+- name: protocol
+  value: https
+- name: path
+  value: discover
+- name: threads_per_engine
+  value: 5
+- name: ramp_up_time
+  value: 0
+- name: duration_in_sec
+  value: 120
