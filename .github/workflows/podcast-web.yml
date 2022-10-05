@@ -170,9 +170,7 @@ jobs:
             loadTestConfigFile: "src/Web/LoadTests/config.yaml"
             loadTestResource: TestPodcastLoadTestQT1
             resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
-            failureCriteria: |
-                - avg(response_time_ms) > 300
-                - percentage(error) > 90          
+   
   deployProd:
     name: Deploy to production
     needs: testLoad
