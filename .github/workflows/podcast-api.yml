@@ -7,6 +7,7 @@ on:
       - 'src/Services/Podcasts/**'
       - 'deploy/Services/api.deployment.json'
       - '.github/workflows/podcast-api.yml'
+      - 'deploy/Images/Covers/**'
   pull_request:
     branches: [ main ]
     paths:
