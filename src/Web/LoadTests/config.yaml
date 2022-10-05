@@ -16,5 +16,5 @@ env:
 - name: duration_in_sec
   value: 120
 failureCriteria: 
-- avg(response_time_ms) > 300
+- avg(response_time_ms) > 900
 - percentage(error) > 90
