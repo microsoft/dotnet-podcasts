@@ -164,7 +164,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: "Podcast CI/CD Load Test"
+      - name: "Podcast CICD Load Test"
         uses: azure/load-testing@v1
         with:
             loadTestConfigFile: "src/Web/LoadTests/config.yaml"
