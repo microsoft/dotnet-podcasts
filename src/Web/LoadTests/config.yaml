@@ -1,4 +1,4 @@
-testName: Gettestpodcastwebapp.azurewebsites.net
+testName: loadtest
 testPlan: load-test.jmx
 description: 
 engineInstances: 1
