@@ -81,7 +81,7 @@
         if (PlayerService.Episode?.Id != episode.Id)
         {
             var show = new ShowInfo(episode.Show.Id, episode.Show.Title, episode.Show.Author, episode.Show.Image);
-            PlayerService.Episode = new EpisodeInfo(episode.Id, episode.Title, episode.Description, episode.Url, episode.Published, episode.Duration, show);
+            PlayerService.Episode = new EpisodeInfo(episode.Id, episode.Title, episode.Description, episode.Url, episode.Image, episode.Published, episode.Duration, show);
         }
         if (PlayerService.CurrentTime != progress.TotalSeconds)
         {

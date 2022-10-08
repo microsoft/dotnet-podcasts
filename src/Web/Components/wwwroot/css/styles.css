@@ -39,7 +39,7 @@
 }
 
 body {
-    --c-primary: #c00cc0;
+    --c-primary: #6eb543;
     --c-primary-dark: #8b0995;
     --c-primary-light: #dd0eb3;
     --c-primary-xlight: #fcf2f7;
@@ -67,8 +67,8 @@ body {
     --c-category: #f3f2f1;
     --gradient-primary-color: #c00cc0;
     --gradient-secondary-color: #e10890;
-    --gradient-final: radial-gradient( 101.22% 790.99% at 0% 3.41%, #c00cc0 0%, #e10890 100% );
-    --gradient-splash: linear-gradient(114.18deg, #bf26f5 0%, #e2068c 100%);
+    --gradient-final: radial-gradient( 101.22% 790.99% at 0% 3.41%, #6eb543 0%, #6eb543 100% );
+    --gradient-splash: linear-gradient(114.18deg, #6eb543 0%, #6eb543 100%);
     --ff-light: "Segoe UI Light";
     --ff-semilight: "Segoe UI Semilight";
     --ff-regular: "Segoe UI";

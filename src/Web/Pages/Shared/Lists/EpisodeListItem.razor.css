@@ -1,4 +1,14 @@
-﻿.episode-play {
+﻿.episode-image {
+    display: flex;
+    flex-direction: column;
+}
+
+.episode-image img {
+    min-width: 120px;
+    max-width: 130px;
+}
+
+.episode-play {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,8 +28,9 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 16px 32px;
-    padding: 28px 2px;
+    padding: 12px 2px;
     grid-template-areas:
+        'image resumeTitle'
         'play resumeTitle'
         'play actions';
     border-bottom: 1px solid var(--c-neutral-grey4);
@@ -51,11 +62,11 @@
     grid-area: resumeTitle;
 }
 
-.episode-resumeTitle ::deep picture {
-    margin-right: 12px;
-    min-width: 70px;
-    width: 70px;
-}
+    .episode-resumeTitle ::deep picture {
+        margin-right: 12px;
+        min-width: 70px;
+        width: 70px;
+    }
 
 .episode-resumeTitle-title {
     color: var(--c-neutral-grey8);
@@ -96,22 +107,22 @@
     text-overflow: ellipsis;
 }
 
-.episode-description ::deep a {
-    color: var(--c-primary);
-    font-family: var(--ff-semibold);
-    font-size: var(--text-m-fs);
-    line-height: var(--text-m-lh);
-}
+    .episode-description ::deep a {
+        color: var(--c-primary);
+        font-family: var(--ff-semibold);
+        font-size: var(--text-m-fs);
+        line-height: var(--text-m-lh);
+    }
 
-.episode-description ::deep a:hover {
-    color: var(--c-primary-light);
-    text-decoration: underline;
-}
+        .episode-description ::deep a:hover {
+            color: var(--c-primary-light);
+            text-decoration: underline;
+        }
 
-.episode-description ::deep a:active {
-    color: var(--c-primary-dark);
-    text-decoration: none;
-}
+        .episode-description ::deep a:active {
+            color: var(--c-primary-dark);
+            text-decoration: none;
+        }
 
 .episode-actions {
     display: flex;
@@ -129,10 +140,10 @@
 
 @media screen and (min-width: 768px) {
     .episode {
-        gap: 16px 48px;
+        gap: 10px 20px;
         grid-template-areas:
-            'play resumeTitle actions'
-            'play resumeDescription actions';
+            'play image resumeTitle actions'
+            'play .     resumeDescription actions';
         grid-template-columns: auto 1fr auto;
     }
 

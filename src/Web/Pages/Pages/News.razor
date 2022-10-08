@@ -1,0 +1,25 @@
+﻿@page "/news"
+@implements IDisposable
+@inject ListenLaterService ListenLaterService
+
+<PageTitle>IDBC - News</PageTitle>
+
+<div class="containerPage">
+    <div class="titleWrapper">
+        <TitlePage Label="Újdonságok" />
+    </div>
+
+    <h4 class="news-item">Első meetup</h4>
+    <img class="news-item-img" src="https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/309122587_8465626976811495_3278531022537133194_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5cd70e&_nc_ohc=-6iwHlxiPMYAX_bd8pi&_nc_ht=scontent-vie1-1.xx&oh=00_AT_oSG4fR55OAEbyDrjRJDpO0gEbYXFofqtZE5otxkz7Cg&oe=634458AC" />
+</div>
+
+
+@code {
+    protected override void OnInitialized()
+    {
+    }
+
+    public void Dispose()
+    {
+    }
+}

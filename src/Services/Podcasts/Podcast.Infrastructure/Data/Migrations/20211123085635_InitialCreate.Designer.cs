@@ -77,6 +77,9 @@ namespace Podcast.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Order")
+                       .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -101,6 +104,10 @@ namespace Podcast.Infrastructure.Data.Migrations
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                         .IsRequired()
+                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

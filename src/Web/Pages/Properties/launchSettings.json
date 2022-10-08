@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Podcast.Pages": {
+      "commandName": "Project"
+    },
+    "MauiDebug": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Own\\IDBC_Podcast\\src\\src\\Web\\Server\\bin\\Debug\\net6.0\\Podcast.Server.exe"
+    }
+  }
+}

@@ -3,7 +3,7 @@
 @inject ListenLaterService ListenLaterService
 @inject NavigationManager NavigationManager
 
-<article class="episode">
+<article class="episode">    
     <div class="episode-sound">
         <button class="buttonIcon episode-play" title="@(isCurrentEpisode && isPlaying ? "Pause" : "Play")" @onclick="TogglePlay">
             <span class="@(isCurrentEpisode && isPlaying ? "icon-pause" : "icon-play")"></span>
@@ -16,12 +16,10 @@
 
         <span class="episode-length">@(Math.Round(Episode.Duration?.TotalMinutes ?? 0, 0)) min</span>
     </div>
+    <div class="episode-image">
+        <img src="@Episode.Image" alt="@Episode.Title" loading="lazy" />
+    </div>
     <div class="episode-resumeTitle">
-        @if (IsShowVisible)
-        {
-            <Picture Title="@Episode.Show.Title" Image="@Episode.Show.Image" />
-        }
-
         <div>
             <h3 class="episode-resumeTitle-title @(isCurrentEpisode ? "is-playing" : "")">@Episode.Title</h3>
             @if (IsShowVisible)
@@ -34,7 +32,7 @@
     <p class="episode-description">
         @((MarkupString)(Episode.Description ?? ""))
     </p>
-    <div class="episode-actions">
+    <div class="episode-actions">        
         <button class="buttonIcon episode-actions-share" title="Listen Together" @onclick="CreateListenTogetherRoom">
             <span class="icon-listen-together"></span>
         </button>
@@ -116,6 +114,10 @@
         isPlaying = !isCurrentEpisode || !isPlaying;
         if (isPlaying)
         {
+            PlayerService.Play(Episode);
+
+            Thread.Sleep(1);
+
             PlayerService.Play(Episode);
         }
         else

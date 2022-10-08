@@ -7,4 +7,5 @@ public record Episode(
     string Explicit,
     DateTime Published,
     TimeSpan? Duration,
-    string Url);
+    string Url,
+    string Image);

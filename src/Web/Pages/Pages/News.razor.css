@@ -1,0 +1,11 @@
+﻿.news-item {
+    color: var(--c-neutral-grey8);
+    font-family: var(--ff-semibold);
+    font-size: var(--text-m-fs);
+    line-height: var(--text-m-lh);
+    padding: 20px;
+}
+
+.news-item-img {
+    padding: 20px;
+}

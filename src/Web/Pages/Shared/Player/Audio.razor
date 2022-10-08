@@ -94,7 +94,15 @@
     {
         if (play)
         {
-            await AudioJsInterop.PlayAsync(AudioElementRef);
+            try
+            {
+                await AudioJsInterop.PlayAsync(AudioElementRef);
+            }
+            catch (Exception)
+            {
+                await Task.Delay(2000);
+                await AudioJsInterop.PlayAsync(AudioElementRef);
+            }
         }
         else
         {
