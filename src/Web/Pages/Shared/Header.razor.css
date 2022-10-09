@@ -7,7 +7,7 @@
 
     .header ::deep .header__logo img,
     .header ::deep .header__logo svg {
-        width: 100%;
+        width: 70%;
         height: auto;
     }
 

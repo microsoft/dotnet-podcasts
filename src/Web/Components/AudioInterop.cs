@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 
 namespace Podcast.Components;
 
-public sealed class AudioInterop : IAudioInterop , IAsyncDisposable
+public sealed class AudioInterop : IAudioInterop, IAsyncDisposable
 {
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 

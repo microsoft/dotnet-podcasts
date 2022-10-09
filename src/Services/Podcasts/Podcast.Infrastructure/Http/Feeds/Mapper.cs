@@ -30,7 +30,7 @@ internal static class Mapper
         var pubDate = RssHelper.ConvertDateTime(item.PubDate).GetValueOrDefault();
         var url = item.Enclosure!.Url ?? throw new ArgumentNullException(nameof(Enclosure.Url));
 
-        var episode = new Episode(description, duration, @explicit, pubDate, item.Title, url);
+        var episode = new Episode(description, duration, @explicit, pubDate, item.Title, url, string.Empty, 0);
         return episode;
     }
 

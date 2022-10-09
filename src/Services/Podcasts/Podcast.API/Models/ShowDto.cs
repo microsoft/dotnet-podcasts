@@ -20,9 +20,19 @@ public record ShowDto
         Language = show.Language;
         IsFeatured = show.Feed!.IsFeatured;
         Categories = show.Feed.Categories
-            .Select(category => new CategoryDto(category.Category!.Id, category.Category.Genre)).ToList();
-        Episodes = show.Episodes.Select(episode =>
-            new EpisodeDetailDto(episode.Id, episode.Title, episode.Published, episode.Url, episode.Description,
+            .Select(category => 
+            new CategoryDto(
+                category.Category!.Id, 
+                category.Category.Genre)).ToList();
+        Episodes = show.Episodes
+            .Select(episode =>
+            new EpisodeDetailDto(
+                episode.Id, 
+                episode.Title, 
+                episode.Published, 
+                episode.Url, 
+                episode.Image,
+                episode.Description,
                 episode.Duration?.ToString())).ToList();
     }
 
@@ -39,7 +49,12 @@ public record ShowDto
     public List<CategoryDto> Categories { get; }
     public List<EpisodeDetailDto> Episodes { get; set; }
 
-    public record EpisodeDetailDto(Guid Id, string Title, DateTime Published, string Url,
+    public record EpisodeDetailDto(
+        Guid Id, 
+        string Title, 
+        DateTime Published, 
+        string Url,
+        string Image,
         string Description,
         string? Duration);
 }
