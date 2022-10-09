@@ -68,7 +68,7 @@
       "type": "Microsoft.Sql/servers",
       "apiVersion": "2020-02-02-preview",
       "name": "[parameters('serverName')]",
-      "location": "[parameters('location')]",
+      "location": "[West Europe]",
       "properties": {
         "administratorLogin": "[parameters('administratorLogin')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
@@ -78,7 +78,7 @@
       "type": "Microsoft.Sql/servers/databases",
       "apiVersion": "2020-08-01-preview",
       "name": "[format('{0}/{1}', parameters('serverName'), parameters('sqlDBName'))]",
-      "location": "[parameters('location')]",
+      "location": "[West Europe]",
       "sku": {
         "name": "Basic",
         "tier": "Basic",
@@ -93,7 +93,7 @@
       "type": "Microsoft.Sql/servers/firewallrules",
       "apiVersion": "2014-04-01-preview",
       "name": "[format('{0}/{1}', parameters('serverName'), 'AllowAllWindowsAzureIps')]",
-      "location": "[resourceGroup().location]",
+      "location": "[West Europe]",
       "properties": {
         "endIpAddress": "0.0.0.0",
         "startIpAddress": "0.0.0.0"
