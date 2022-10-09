@@ -18,7 +18,7 @@
     },
     "location": {
       "type": "string",
-      "defaultValue": "[parameters('location')]",
+      "defaultValue": "canadacentral",
       "metadata": {
         "description": "Location for all resources."
       }
