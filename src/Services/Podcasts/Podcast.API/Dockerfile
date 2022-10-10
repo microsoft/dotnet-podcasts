@@ -10,7 +10,6 @@ WORKDIR /src
 COPY ["src/Services/Podcasts/Podcast.API/Podcast.API.csproj", "src/Services/Podcasts/Podcast.API/"]
 COPY ["src/Services/Podcasts/Podcast.Infrastructure/Podcast.Infrastructure.csproj", "src/Services/Podcasts/Podcast.Infrastructure/"]
 RUN dotnet restore "src/Services/Podcasts/Podcast.API/Podcast.API.csproj"
-RUN dotnet restore "src/Services/Podcasts/Podcast.Infrastructure/Podcast.Infrastructure.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Podcasts/Podcast.API"
 RUN dotnet build "Podcast.API.csproj" -c Release -o /app/build
