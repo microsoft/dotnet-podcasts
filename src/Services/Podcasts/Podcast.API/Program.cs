@@ -18,12 +18,14 @@ builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 builder.Services.AddSwaggerGen(setup =>
 {
     setup.SwaggerDoc("v1",
-        new OpenApiInfo { Description = "NetPodcast API", Title = ".NetConf2021", Version = "v1" });
+        new OpenApiInfo { Description = "IDBC Podcast Api", Title = "IDBC Sample app", Version = "v1" });
 });
-builder.Services.AddCors(setup =>
+//services cors
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
-    setup.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-});
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
@@ -37,7 +39,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetPodcast Api v1");
 });
 
-app.UseCors();
+app.UseCors("corsapp");
 
 app.MapGet("v1/categories",
     async (PodcastDbContext podcastDbContext, CancellationToken cancellationToken) =>
