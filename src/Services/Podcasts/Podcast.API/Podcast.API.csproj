@@ -21,9 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Podcast.Infrastructure">
-      <HintPath>..\Podcast.Infrastructure\bin\Debug\net6.0\Podcast.Infrastructure.dll</HintPath>
-    </Reference>
+   <ProjectReference Include="..\Podcast.Infrastructure\Podcast.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
