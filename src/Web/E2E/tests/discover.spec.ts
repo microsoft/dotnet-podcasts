@@ -1,7 +1,14 @@
 import { test, expect, Page } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
+  // Go to discover page
   await page.goto('/discover');
+  // Log in
+  await page.locator('[placeholder="Email\\, phone\\, or Skype"]').fill(process.env.AADUSERNAME);
+  await page.locator('[placeholder="Email\\, phone\\, or Skype"]').press('Enter');
+  await page.locator('[placeholder="Password"]').fill(process.env.AADPASSWORD);
+  await page.locator('input:has-text("Sign in")').click();
+  await page.locator('text=No').click();  
 });
 
 test.describe('Discover', () => {
