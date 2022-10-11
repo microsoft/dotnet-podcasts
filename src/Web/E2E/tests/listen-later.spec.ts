@@ -4,11 +4,13 @@ test.beforeEach(async ({ page }) => {
   // Go to discover page
   await page.goto('/discover');
   // Log in
-  await page.locator('[placeholder="Email\\, phone\\, or Skype"]').fill(process.env.AADUSERNAME);
-  await page.locator('[placeholder="Email\\, phone\\, or Skype"]').press('Enter');
-  await page.locator('[placeholder="Password"]').fill(process.env.AADPASSWORD);
+  await page.getByPlaceholder("Email\\, phone\\, or Skype").fill(process.env.AADUSERNAME);
+  await page.getByPlaceholder("Email\\, phone\\, or Skype").press('Enter');
+  await page.getByPlaceholder("Password").fill(process.env.AADPASSWORD);
   await page.locator('input:has-text("Sign in")').click();
-  await page.locator('text=No').click();  
+  await page.getByText('No').click();  
+  await expect(page).toHaveURL('/discover');
+  await expect(page).toHaveTitle('.NET Podcasts');
 });
 
 test.describe('Listen Later', () => {
