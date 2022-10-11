@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('Listen Together', () => {
-  test('should allow me to listen together', async ({ page }) => {s
+  test('should allow me to listen together', async ({ page }) => {
     // click first podcast in list
     await page.locator('.item-primary-action').first().click();
     // click play
