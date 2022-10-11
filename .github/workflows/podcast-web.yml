@@ -117,6 +117,8 @@ jobs:
     container: mcr.microsoft.com/playwright:v1.25.2-focal
     env:
       BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
+      AADUSERNAME: ${{secrets.AADUSERNAME}} # sets value for AAD creds
+      AADPASSWORD: ${{secrets.AADPASSWORD}}
     defaults:
       run:
         working-directory: src/Web/E2E
