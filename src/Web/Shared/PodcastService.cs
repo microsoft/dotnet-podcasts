@@ -12,14 +12,14 @@ public class PodcastService
     }
 
     public Task<Category[]?> GetCategories() =>
-        _httpClient.GetFromJsonAsync<Category[]>("v1/categories");
+        _httpClient.GetFromJsonAsync<Category[]>("categories");
 
     public Task<Show[]?> GetShows(int limit, string? term = null) =>
-        _httpClient.GetFromJsonAsync<Show[]>($"/v1/shows?limit={limit}&term={term}");
+        _httpClient.GetFromJsonAsync<Show[]>($"shows?limit={limit}&term={term}");
 
     public Task<Show[]?> GetShows(int limit, string? term = null, Guid? categoryId = null) =>
-    _httpClient.GetFromJsonAsync<Show[]>($"/v1/shows?limit={limit}&term={term}&categoryId={categoryId}");
+        _httpClient.GetFromJsonAsync<Show[]>($"shows?limit={limit}&term={term}&categoryId={categoryId}");
 
     public Task<Show?> GetShow(Guid id) =>
-        _httpClient.GetFromJsonAsync<Show>($"v1/shows/{id}");
+        _httpClient.GetFromJsonAsync<Show>($"shows/{id}");
 }
