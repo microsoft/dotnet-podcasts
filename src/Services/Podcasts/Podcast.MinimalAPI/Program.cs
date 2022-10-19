@@ -11,21 +11,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Database and storage related-services
 var connectionString = builder.Configuration.GetConnectionString("PodcastDb");
 builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
-
 var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 
+// Authentication and authorization-related services
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 
+// OpenAPI and versioning-related services
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(setup =>
-{
-    setup.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiVersioning(options =>
 {
@@ -34,6 +32,12 @@ builder.Services.AddApiVersioning(options =>
     options.AssumeDefaultVersionWhenUnspecified = true;
 });
 
+builder.Services.AddCors(setup =>
+{
+    setup.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
+// Rate-limiting and output caching-related services
 builder.Services.AddRateLimiter(options => options.AddFixedWindowLimiter("feeds", options =>
 {
     options.PermitLimit = 5;
@@ -48,13 +52,13 @@ var app = builder.Build();
 
 await EnsureDbAsync(app.Services);
 
+// Register required middlewares
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetPodcast Api v1");
 });
 app.UseCors();
-
 app.UseRateLimiter();
 app.UseOutputCache();
 
