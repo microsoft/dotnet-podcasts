@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>NetPodsMauiBlazor</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -48,7 +48,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-*" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Lib\SharedMauiLib\SharedMauiLib.csproj" />
