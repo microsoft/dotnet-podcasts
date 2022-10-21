@@ -5,6 +5,8 @@ using Podcast.API.Models;
 using Podcast.Infrastructure.Data;
 using Podcast.Infrastructure.Data.Models;
 using Podcast.Infrastructure.Http.Feeds;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Podcast.API.Routes;
 
@@ -14,9 +16,35 @@ public static class FeedsApi
     {
         group.MapPost("/", CreateFeed);
         group.MapGet("/", GetAllFeeds);
-        group.MapPut("/{id}", UpdateFeed).RequireAuthorization();
-        group.MapDelete("/{id}", DeleteFeed).RequireAuthorization();
+        group.MapPut("/{id}", UpdateFeed).RequireAuthorization().AddOpenApiSecurityRequirement();
+        group.MapDelete("/{id}", DeleteFeed).RequireAuthorization().AddOpenApiSecurityRequirement();
         return group;
+    }
+
+    private static RouteHandlerBuilder AddOpenApiSecurityRequirement(this RouteHandlerBuilder builder)
+    {
+        var scheme = new OpenApiSecurityScheme()
+        {
+            Type = SecuritySchemeType.Http,
+            Name = JwtBearerDefaults.AuthenticationScheme,
+            Scheme = JwtBearerDefaults.AuthenticationScheme,
+            Reference = new()
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = JwtBearerDefaults.AuthenticationScheme
+            }
+        };
+        builder.WithOpenApi(operation => new(operation)
+        {
+            Security =
+            {
+                new()
+                {
+                    [scheme] = new List<string>()
+                }
+            }
+        });
+        return builder;
     }
 
     public static async ValueTask CreateFeed(QueueClient queueClient, UserSubmittedFeedDto feed, CancellationToken cancellationToken)

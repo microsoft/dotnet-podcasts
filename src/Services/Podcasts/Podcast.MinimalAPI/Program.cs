@@ -8,6 +8,7 @@ using Podcast.API.Routes;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Services.AddAuthorization();
 
 // OpenAPI and versioning-related services
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
+    opts.InferSecuritySchemes = true;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiVersioning(options =>
 {
