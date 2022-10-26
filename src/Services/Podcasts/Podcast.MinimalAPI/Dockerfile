@@ -7,17 +7,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["src/Services/Podcasts/Podcast.API/Podcast.API.csproj", "src/Services/Podcasts/Podcast.API/"]
+COPY ["src/Services/Podcasts/Podcast.MinimalAPI/Podcast.MinimalAPI.csproj", "src/Services/Podcasts/Podcast.MinimalAPI/"]
 COPY ["src/Services/Podcasts/Podcast.Infrastructure/Podcast.Infrastructure.csproj", "src/Services/Podcasts/Podcast.Infrastructure/"]
-RUN dotnet restore "src/Services/Podcasts/Podcast.API/Podcast.API.csproj"
+RUN dotnet restore "src/Services/Podcasts/Podcast.MinimalAPI/Podcast.MinimalAPI.csproj"
 COPY . .
-WORKDIR "/src/src/Services/Podcasts/Podcast.API"
-RUN dotnet build "Podcast.API.csproj" -c Release -o /app/build
+WORKDIR "/src/src/Services/Podcasts/Podcast.MinimalAPI"
+RUN dotnet build "Podcast.MinimalAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Podcast.API.csproj" -c Release -o /app/publish
+RUN dotnet publish "Podcast.MinimalAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Podcast.API.dll"]
+ENTRYPOINT ["dotnet", "Podcast.MinimalAPI.dll"]

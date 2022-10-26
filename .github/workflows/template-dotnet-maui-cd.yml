@@ -114,7 +114,7 @@ jobs:
         shell: bash
         run: |
           dotnet build ${{ inputs.csproj }} -f net6.0-maccatalyst -c Release
-          dotnet publish ${{ inputs.csproj }} -f net6.0-maccatalyst -c Release -p:BuildIpa=True  
+          dotnet publish ${{ inputs.csproj }} -f net6.0-maccatalyst -c Release -p:BuildIpa=True
 
       - name: Build MAUI Android
         shell: pwsh
