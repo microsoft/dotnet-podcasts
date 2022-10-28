@@ -14,10 +14,16 @@ public static class FeedsApi
 {
     public static RouteGroupBuilder MapFeedsApi(this RouteGroupBuilder group)
     {
-        group.MapPost("/", CreateFeed);
-        group.MapGet("/", GetAllFeeds);
-        group.MapPut("/{id}", UpdateFeed).RequireAuthorization().AddOpenApiSecurityRequirement();
-        group.MapDelete("/{id}", DeleteFeed).RequireAuthorization().AddOpenApiSecurityRequirement();
+        group.MapPost("/", CreateFeed).WithName("CreateFeed");
+        group.MapGet("/", GetAllFeeds).WithName("GetFeeds");
+        group.MapPut("/{id}", UpdateFeed)
+            .RequireAuthorization("modify_feeds")
+            .AddOpenApiSecurityRequirement()
+            .WithName("UpdateFeedById");
+        group.MapDelete("/{id}", DeleteFeed)
+            .RequireAuthorization("modify_feeds")
+            .AddOpenApiSecurityRequirement()
+            .WithName("DeleteFeedById");
         return group;
     }
 
