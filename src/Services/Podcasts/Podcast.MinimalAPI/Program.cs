@@ -14,6 +14,7 @@ using Podcast.Infrastructure.Data;
 using Podcast.Infrastructure.Http;
 using Podcast.Infrastructure.Http.Feeds;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,8 @@ builder.Services.AddTransient<JitterHandler>();
 builder.Services.AddHttpClient<ShowClient>().AddHttpMessageHandler<JitterHandler>();
 
 // Authentication and authorization-related services
-builder.Services.AddAuthentication().AddJwtBearer();
-builder.Services.AddAuthorization();
+builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+builder.Services.AddAuthorizationBuilder().AddPolicy("modify_feeds", policy => policy.RequireScope("API.Access"));
 
 // OpenAPI and versioning-related services
 builder.Services.AddSwaggerGen();
@@ -111,7 +112,7 @@ await EnsureDbAsync(app.Services);
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetPodcast Api v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", ".NET Podcasts Minimal API");
 });
 
 app.UseCors();

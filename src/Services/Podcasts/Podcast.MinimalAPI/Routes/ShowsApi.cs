@@ -10,8 +10,8 @@ public static class ShowsApi
 {
     public static RouteGroupBuilder MapShowsApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/", GetAllShows);
-        group.MapGet("/{id}", GetShowById);
+        group.MapGet("/", GetAllShows).WithName("GetShows");
+        group.MapGet("/{id}", GetShowById).WithName("GetShowsById");
         return group;
     }
 
