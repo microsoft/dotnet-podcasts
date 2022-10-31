@@ -65,7 +65,7 @@ jobs:
 
       - name: Build Podcast API
         run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
+          docker build -f ./src/Services/Podcasts/Podcast.MinimalAPI/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }}
 
       - name: Build Podcast Ingestion
