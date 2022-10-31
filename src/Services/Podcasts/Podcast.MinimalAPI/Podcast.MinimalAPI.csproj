@@ -8,6 +8,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DockerfileContext>..\..\..\..</DockerfileContext>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<SelfContained>false</SelfContained>
+		<ContainerImageName>podcastapi</ContainerImageName>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,6 +19,7 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+		<PackageReference Include="Microsoft.NET.Build.Containers" Version="0.2.7" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0-*" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />

@@ -63,10 +63,13 @@ jobs:
           docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }}
 
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
       - name: Build Podcast API
         run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.MinimalAPI/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }}
+          dotnet publish -c Release -r linux-x64 -p ContainerImageTag=${{ github.sha }} -p ContainerRegistry=${{ secrets.ACR_NAME }}.azurecr.io -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.MinimalAPI/Podcast.MinimalAPI.csproj
 
       - name: Build Podcast Ingestion
         run: | 
