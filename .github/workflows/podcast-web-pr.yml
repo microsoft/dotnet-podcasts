@@ -1,22 +1,25 @@
 name: Podcast Web CICD - Staging
 
 on:
+  workflow_dispatch: # allow workflow to be manually triggered
+
   pull_request:
     branches: [main]
     paths:
-      - "src/Web/**"
-      - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.deployment.json"
-  workflow_dispatch:
+      - 'src/Web/**'
+      - '.github/workflows/podcast-web.yml'
+      - 'deploy/Web/web.deployment.bicep'
 
 env:
   API_RESOURCE_NAME: podcastapica
 
 jobs:
+  # build and publish the web project and upload it as an artifact
   build:
+    runs-on: ubuntu-latest
+
     environment:
       name: staging
-    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -24,7 +27,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.x"
+          dotnet-version: '6.0.x'
 
       - name: Install wasm-tools
         run: dotnet workload install wasm-tools
@@ -36,7 +39,7 @@ jobs:
       - name: Set backend env variables
         uses: azure/powershell@v1
         with:
-          azPSVersion: "latest"
+          azPSVersion: 'latest'
           inlineScript: |
             az extension add --name containerapp
             $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
@@ -47,7 +50,7 @@ jobs:
       - name: Set Blazor WASM app settings
         uses: microsoft/variable-substitution@v1
         with:
-          files: "src/Web/Client/wwwroot/appsettings.json"
+          files: 'src/Web/Client/wwwroot/appsettings.json'
         env:
           PodcastApi.BaseAddress: ${{ env.PODCAST_API_URL }}
           ListenTogetherHub: ${{ env.LISTEN_TOGETHER_HUB_URL }}
@@ -67,11 +70,14 @@ jobs:
       PodcastApiUrl: ${{ env.PODCAST_API_URL }}
       ListenTogetherHubUrl: ${{ env.LISTEN_TOGETHER_HUB_URL }}
 
+  # deploy the web resources including a web app, then deploy the web's source (from the build artifact) to the app
   deploy:
+    runs-on: ubuntu-latest
+
     needs: build
     environment:
       name: staging
-    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
 
@@ -82,9 +88,9 @@ jobs:
       - name: Deploy ARM
         uses: azure/powershell@v1
         with:
-          azPSVersion: "3.1.0"
+          azPSVersion: '3.1.0'
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master
@@ -116,21 +122,26 @@ jobs:
           slot-name: staging
           package: web
 
+  # test the deployment
   test:
-    needs: deploy
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.26.0-focal
+
+    needs: deploy
+    timeout-minutes: 60
+
     env:
       BASEURL: https://${{secrets.WEBAPP_NAME_STAGING}}.azurewebsites.net # sets value for URL to test
+
     defaults:
       run:
         working-directory: src/Web/E2E
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "14.x"
+          node-version: '14.x'
 
       - name: Install dependencies
         run: |

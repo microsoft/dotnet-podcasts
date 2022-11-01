@@ -1,27 +1,29 @@
 name: Podcast Hub CICD
 
 on:
+  workflow_dispatch: # allow workflow to be manually triggered
+
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'src/Services/ListenTogether/**'
-      - 'deploy/Services/hub.deployment.json'
-      - '.github/workflows/podcast-hub.yml'
-  pull_request:
-    branches: [ main ]
-    paths:
-      - 'src/Services/ListenTogether/**'
+      - 'deploy/Services/hub.deployment.bicep'
       - '.github/workflows/podcast-hub.yml'
 
-  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/Services/ListenTogether/**'
+      - '.github/workflows/podcast-hub.yml'
 
 jobs:
-
+  # build and publish the hub project and upload it as an artifact
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -39,15 +41,19 @@ jobs:
           name: drop
           path: hub
 
+  # if code was pushed directly to main, a PR was merged into main, or someone started the workflow manually (on main)
+  # deploy the hub resources including a web app, then deploy the hub's source (from the build artifact) to the app
   deploy:
-    needs: build
-    environment: 
-      name: prod
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
+
+    needs: build
+    environment:
+      name: prod
+
     steps:
       - uses: actions/checkout@v2
-    
+
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -56,12 +62,12 @@ jobs:
       - name: Deploy ARM
         uses: azure/powershell@v1
         with:
-            azPSVersion: '3.1.0'
-            inlineScript: |
-              az extension add --name containerapp
-              $STORAGEKEY=$(az storage account keys list -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.STORAGE_NAME}} --query [0].value -o tsv)
-              $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n podcastapica -o tsv --query properties.configuration.ingress.fqdn)+"/"
-              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.deployment.json --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
+          azPSVersion: '3.1.0'
+          inlineScript: |
+            az extension add --name containerapp
+            $STORAGEKEY=$(az storage account keys list -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.STORAGE_NAME}} --query [0].value -o tsv)
+            $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n podcastapica -o tsv --query properties.configuration.ingress.fqdn)+"/"
+            az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.deployment.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
 
       - uses: actions/download-artifact@master
         with:
@@ -73,4 +79,3 @@ jobs:
         with:
           app-name: ${{ secrets.HUB_WEBAPP_NAME }}
           package: hub
-
