@@ -197,6 +197,12 @@
           ]
         },
         "template": {
+          "volumes": [
+            {
+              "name": "diagnostics",
+              "storageType": "EmptyDir"
+            }
+          ],
           "containers": [
             {
               "image": "[variables('podcastApiImage')]",
@@ -205,6 +211,12 @@
                 "cpu": 1,
                 "memory": "2Gi"
               },
+              "volumeMounts": [
+                {
+                  "volumeName": "diagnostics",
+                  "mountPath": "/diag"
+                }
+              ],
               "env": [
                 {
                   "name": "ConnectionStrings__FeedQueue",
@@ -217,6 +229,10 @@
                 {
                   "name": "Features__FeedIngestion",
                   "value": "[format('{0}', variables('deployIngestion'))]"
+                },
+                {
+                  "name": "DOTNET_DiagnosticPorts",
+                  "value": "/diag/port.sock"
                 }
               ]
             }
