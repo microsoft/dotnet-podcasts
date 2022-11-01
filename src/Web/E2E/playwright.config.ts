@@ -13,7 +13,7 @@ const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./global-setup'),
   testDir: './tests',
   /* Maximum time one test can run for. */
-  timeout: 100 * 1000,
+  timeout: 60000, // 1 minute
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
@@ -65,12 +65,6 @@ const config: PlaywrightTestConfig = {
       use: {
         ...devices['Desktop Firefox'],
         
-      },
-    },
-    {
-      name: 'Pixel 5',
-      use: {
-        ...devices['Pixel 5'],
       },
     },
   ],

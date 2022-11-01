@@ -10,9 +10,9 @@ test.describe('Listen Later', () => {
     // click first podcast in list
     await page.locator('.item-primary-action').first().click();
     // click first listen later button
-    await page.locator('button.buttonIcon.episode-actions-later').first().click();
+    await page.locator('button:nth-child(2)').first().click();
     // view listen later tab
-    await page.locator('.navbarApp-item >> text=ListenLater').click();
+    await page.getByRole('link', { name: 'Listen Later' }).click();
     await expect(page).toHaveURL('/listen-later');
     // assert no results page isn't shown
     expect(page.locator('.main')).not.toContain('no results');
