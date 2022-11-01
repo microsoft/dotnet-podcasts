@@ -16,15 +16,13 @@ param workspaceName string
 @secure()
 param administratorLoginPassword string
 
-var workspaceId = workspace.id
-var kubernetesEnvId = kubernetesEnv.id
 var kubernetesEnvLocation = 'canadacentral'
-var podcastDbConnectionString = 'Server=tcp:${serverName}.database.windows.net,1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+var podcastDbConnectionString = 'Server=tcp:${serverName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 var podcastApiImage = '${acrLoginServer}/podcastapi:${imageTag}'
 var podcastUpdaterImage = '${acrLoginServer}/podcastupdaterworker:${imageTag}'
 var podcastIngestionWorkerImage = '${acrLoginServer}/podcastingestionworker:${imageTag}'
-var imagesStorage = 'https://${storageAccountName}.blob.core.windows.net/covers/'
-var storageConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=core.windows.net;AccountKey=${listKeys(resourceId('Microsoft.Storage/storageAccounts', storageAccountName), '2019-06-01').keys[0].value}'
+var imagesStorage = 'https://${storageAccountName}.blob.${environment().suffixes.storage}/covers/'
+var storageConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(resourceId('Microsoft.Storage/storageAccounts', storageAccountName), '2019-06-01').keys[0].value}'
 output storageConnectionString string = storageConnectionString
 var deployIngestion = false
 
@@ -42,15 +40,16 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2020-08-01-preview' = {
   name: sqlDBName
   location: location
   sku: {
-    name: 'P2'
-    tier: 'Premium'
+    name: 'Basic'
+    tier: 'Basic'
+    capacity: 5
   }
 }
 
 resource serverName_AllowAllWindowsAzureIps 'Microsoft.Sql/servers/firewallrules@2014-04-01-preview' = if (true) {
   parent: serverName_resource
   name: 'AllowAllWindowsAzureIps'
-  location: resourceGroup().location
+  location: location
   properties: {
     endIpAddress: '0.0.0.0'
     startIpAddress: '0.0.0.0'
@@ -71,7 +70,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
 
 resource feedQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2021-06-01' = {
   name: '${storageAccountName}/default/feed-queue'
-  dependsOn:[
+  dependsOn: [
     storageAccount
   ]
 }
@@ -92,7 +91,7 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
   }
 }
 
-resource kubernetesEnv 'Microsoft.Web/kubeEnvironments@2021-03-01' = {
+resource kubernetesEnv 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
   name: kubernetesEnvName
   location: kubernetesEnvLocation
   tags: {}
@@ -101,22 +100,19 @@ resource kubernetesEnv 'Microsoft.Web/kubeEnvironments@2021-03-01' = {
     appLogsConfiguration: {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
-        customerId: reference(workspaceId, '2015-03-20').customerId
-        sharedKey: listKeys(workspaceId, '2015-11-01-preview').primarySharedKey
+        customerId: workspace.properties.customerId
+        sharedKey: workspace.listKeys().primarySharedKey
       }
     }
   }
-  dependsOn: [
-    workspace
-  ]
 }
 
-resource podcastapica 'Microsoft.Web/containerApps@2021-03-01' = {
+resource podcastapica 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: 'podcastapica'
   location: kubernetesEnvLocation
   kind: 'containerapp'
   properties: {
-    kubeEnvironmentId: kubernetesEnvId
+    managedEnvironmentId: kubernetesEnv.id
     configuration: {
       activeRevisionsMode: 'single'
       ingress: {
@@ -191,18 +187,18 @@ resource podcastapica 'Microsoft.Web/containerApps@2021-03-01' = {
   }
   tags: {}
   dependsOn: [
-    kubernetesEnv
+    // kubernetesEnv
     sqlDB
     storageAccount
   ]
 }
 
-resource podcastingestorca 'Microsoft.Web/containerApps@2021-03-01' = if (deployIngestion) {
+resource podcastingestorca 'Microsoft.App/containerApps@2022-06-01-preview' = if (deployIngestion) {
   name: 'podcastingestionca'
   location: kubernetesEnvLocation
   kind: 'containerapp'
   properties: {
-    kubeEnvironmentId: kubernetesEnvId
+    managedEnvironmentId: kubernetesEnv.id
     configuration: {
       activeRevisionsMode: 'single'
       registries: [
@@ -274,19 +270,20 @@ resource podcastingestorca 'Microsoft.Web/containerApps@2021-03-01' = if (deploy
   }
   tags: {}
   dependsOn: [
-    kubernetesEnv
+    // kubernetesEnv
     sqlDB
     storageAccount
     podcastapica
   ]
 }
 
-resource podcastupdaterca 'Microsoft.Web/containerApps@2021-03-01' = {
+resource podcastupdaterca 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: 'podcastupdaterca'
   location: kubernetesEnvLocation
   kind: 'containerapp'
   properties: {
-    kubeEnvironmentId: kubernetesEnvId
+    // managedEnvironmentId: kubernetesEnvId
+    managedEnvironmentId: kubernetesEnv.id
     configuration: {
       activeRevisionsMode: 'single'
       registries: [
@@ -332,14 +329,14 @@ resource podcastupdaterca 'Microsoft.Web/containerApps@2021-03-01' = {
         enabled: false
       }
       scale: {
-        minReplicas: 1
+        minReplicas: 0
         maxReplicas: 1
       }
     }
   }
   tags: {}
   dependsOn: [
-    kubernetesEnv
+    // kubernetesEnv
     storageAccount
     podcastapica
   ]
