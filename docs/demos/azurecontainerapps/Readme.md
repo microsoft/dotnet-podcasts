@@ -2,7 +2,7 @@
 
 This folder contains additional scripts needed for testing the Azure Container Apps scenario.
 
-You must first enable the _feeds_ injestion API by turning it on in the `api.deployment.json` file on [line 64](https://github.com/microsoft/dotnet-podcasts/blob/main/deploy/Services/api.deployment.json#L64). 
+You must first enable the _feeds_ injestion API by turning it on in the `api.deployment.bicep` file on [line 27](https://github.com/microsoft/dotnet-podcasts/blob/main/deploy/Services/api.deployment.bicep#L27).
 
 ```
 "deployIngestion": true
@@ -80,7 +80,7 @@ You must first enable the _feeds_ injestion API by turning it on in the `api.dep
     4.1 Run this commands to watch container apps scaling out.
 
     ```ps1
-    while (1) { 
+    while (1) {
         $output = az containerapp revision list -n podcastapica -g dotnetconf2021-netpodcast --query "[?properties.active].{Name:properties.name, CreatedTime:properties.createdTime, Active:properties.active, Replicas:properties.replicas}" -o table --only-show-errors
         clear;
         echo $output;
@@ -88,7 +88,7 @@ You must first enable the _feeds_ injestion API by turning it on in the `api.dep
     }
     ```
     ```ps1
-    while (1) { 
+    while (1) {
         $output = az containerapp revision list -n podcastingestionca -g dotnetconf2021-netpodcast --query "[?properties.active].{Name:properties.name, CreatedTime:properties.createdTime, Active:properties.active, Replicas:properties.replicas}" -o table --only-show-errors
         clear;
         echo $output;
@@ -96,7 +96,7 @@ You must first enable the _feeds_ injestion API by turning it on in the `api.dep
     }
     ```
     ```ps1
-        while (1) { 
+        while (1) {
         $output = ./MessageCount.ps1 -storageAccount <storageAccountName> -accessKey <accessKey>
         clear;
         echo $output;
