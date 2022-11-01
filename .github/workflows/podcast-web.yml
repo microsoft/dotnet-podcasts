@@ -152,7 +152,7 @@ jobs:
 
   testLoad:
     name: Run Load Tests
-    # needs: testE2E
+    needs: testE2E
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
