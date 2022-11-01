@@ -13,9 +13,9 @@ test.describe('Discover', () => {
       // only run vrt for MS Edge
       test.skip(channel !== 'msedge', 'Screenshots only generated using MS Edge');      
       // click on the category
-      await page.locator('.tags-item >> text=' + category).click();
+      await page.getByRole('link', { name: category }).click();  // using aria-label
       // assert category is selected
-      await expect(page.locator('.titlePage')).toHaveText(category);
+      await expect(page.getByRole('heading', { name: category, level: 1 })).toHaveText(category);
       // use visual comparison to check all images display
       await expect(page).toHaveScreenshot();
     });
