@@ -113,7 +113,7 @@ jobs:
     needs: deployStaging
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.27.0-focal
+    container: mcr.microsoft.com/playwright:v1.27.0-jammy
     env:
       BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
       AADUSERNAME: ${{secrets.AADUSERNAME}} # sets value for AAD creds
