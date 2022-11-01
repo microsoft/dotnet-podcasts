@@ -184,7 +184,7 @@
                     <a href="#dotnet" onclick="removeClass()" title="Powered by .NET">Powered by .NET</a>
                 </li>
                 <li>
-                    <a href="/discover" onclick="removeClass()" title="Sign In" class="menu-button">Sign In</a>
+                    <a href="/.auth/login/aad?post_login_redirect_uri=/discover" class="menu-button" title="Sign In" onclick="removeClass()">Sign in</a>
                 </li>
             </ul>
             <button class="menu-burger" onclick="addClass()">
@@ -304,6 +304,7 @@
                 }
             </div>
             <a href="/discover" class="buttonApp primary" title="Discover more">
+            <a href="/.auth/login/aad?post_login_redirect_uri=/discover" class="buttonApp primary" title="Discover more">
                 <span>Discover more</span>
             </a>
         </section>

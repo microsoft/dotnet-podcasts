@@ -1,0 +1,20 @@
+testName: loadtest
+testPlan: load-test.jmx
+description: 
+engineInstances: 2
+env:
+- name: domain
+  value: marcusfellingpodcastwebapp.azurewebsites.net
+- name: protocol
+  value: https
+- name: path
+  value: discover
+- name: threads_per_engine
+  value: 25
+- name: ramp_up_time
+  value: 0
+- name: duration_in_sec
+  value: 120
+failureCriteria: 
+- avg(response_time_ms) > 820
+- percentage(error) > 1
