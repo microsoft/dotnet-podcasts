@@ -134,7 +134,7 @@ jobs:
 
       - name: Run Playwright tests
         run: |
-          HOME=/root npx playwright test --update-snapshots
+          HOME=/root npx playwright test
 
       - name: Create test summary
         uses: test-summary/action@dist
@@ -147,7 +147,7 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          # path: src/Web/E2E/playwright-report/
+          path: src/Web/E2E/playwright-report/
           path: src/Web/E2E/
           retention-days: 30
 
@@ -170,7 +170,7 @@ jobs:
         uses: azure/load-testing@v1
         with:
             loadTestConfigFile: "src/Web/LoadTests/config.yaml"
-            loadTestResource: TestPodcastLoadTestQT1
+            loadTestResource: loadtest
             resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
    
   deployProd:
