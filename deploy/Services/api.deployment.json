@@ -235,6 +235,39 @@
                   "value": "/diag/port.sock"
                 }
               ]
+            },
+            {
+              "name": "monitor",
+              "image": "mcr.microsoft.com/dotnet/monitor:7.0",
+              "args": ["collect", "--no-auth"],
+              "volumeMounts": [
+                {
+                  "volumeName": "diagnostics",
+                  "mountPath": "/diag"
+                }
+              ],
+              "env": [
+                {
+                  "name": "DOTNETMONITOR_DiagnosticPort__ConnectionMode",
+                  "value": "Listen"
+                },
+                {
+                  "name": "DOTNETMONITOR_DiagnosticPort__EndpointName",
+                  "value": "/diag/port.sock"
+                },
+                {
+                  "name": "DOTNETMONITOR_Storage__DumpTempFolder",
+                  "value": "/diag/dumps"
+                },
+                {
+                  "name":"DOTNETMONITOR_Urls",
+                  "value": "http://localhost:52323"
+                }
+              ],
+              "resources": {
+                "cpu": 0.5,
+                "memory": "1.0Gi"
+              }
             }
           ],
           "dapr": {
