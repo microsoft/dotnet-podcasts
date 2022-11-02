@@ -41,9 +41,6 @@ jobs:
       name_cleaner: ${{ steps.get_config.outputs.name_cleaner }}
 
     steps:
-      # - run: echo "- **Environment Name**  $ENVIRONMENT_NAME" >> $GITHUB_STEP_SUMMARY
-      # - run: echo "- **Environment Type**  $ENVIRONMENT_TYPE" >> $GITHUB_STEP_SUMMARY
-
       - id: get_config
         name: Set Outputs
         shell: python
@@ -64,40 +61,39 @@ jobs:
           ]
 
           github_output = os.environ.get('GITHUB_OUTPUT', None)
-
           if github_output:
               with open(github_output, 'a+') as f:
                   f.write('\n'.join(outputs))
 
-          github_step_summary = os.environ.get('GITHUB_STEP_SUMMARY', None)
+          summary = [
+            f'- **Environment Type** {type}',
+            f'- **Environment Name** {name}',
+            f'- **Environment Name (clean)** {name_clean}',
+            f'- **Environment Name (cleaner)** {name_cleaner}',
+          ]
 
+          github_step_summary = os.environ.get('GITHUB_STEP_SUMMARY', None)
           if github_step_summary:
               with open(github_step_summary, 'a+') as f:
-                  f.write('\n'.join(outputs))
+                  f.write('\n'.join(summary))
 
-      # - id: get_config
-      #   name: Set Outputs
-      #   run: |
-      #     "name=ENVIRONMENT_NAME" >> $GITHUB_OUTPUT
-      #     "type=ENVIRONMENT_TYPE" >> $GITHUB_OUTPUT
+      # - name: Ensure GitHub Environments
+      #   uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       const environments_result = await github.rest.repos.getAllEnvironments({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #       });
 
-      - name: Ensure GitHub Environments
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const environments_result = await github.rest.repos.getAllEnvironments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
+      #       const environments = environments_result.data.environments;
 
-            const environments = environments_result.data.environments;
+      #       const names = ['Dev', 'Test', 'Pre-Prod', 'Prod'];
 
-            const names = ['Dev', 'Test', 'Pre-Prod', 'Prod'];
-
-            for (let i = 0; i < names.length; i++) {
-              const name = names[i];
-              const exists = environments.some(e => e.name === name);
-              if (!exists) {
-                core.setFailed(`A GitHub environment named '${name}' does not exist. Create an environment nammed '${name}' with a secret named 'AZURE_CREDENTIALS'`);
-              }
-            }
+      #       for (let i = 0; i < names.length; i++) {
+      #         const name = names[i];
+      #         const exists = environments.some(e => e.name === name);
+      #         if (!exists) {
+      #           core.setFailed(`A GitHub environment named '${name}' does not exist. Create an environment nammed '${name}' with a secret named 'AZURE_CREDENTIALS'`);
+      #         }
+      #       }

@@ -117,9 +117,9 @@ jobs:
       - name: Deploy Container Apps
         id: deploy_apps
         run: |
-          result=$( az deployment group create -n ghaction${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/api.bicep -p name=${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
+          deploy=$( az deployment group create -n ghaction${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/api.bicep -p name=${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
           outputs=$( echo $deploy | jq '.properties.outputs' )
-          storageAccountName=$( echo $outputs | jq '.storageAccountName.value' )
+          storageAccountName=$( echo $outputs | jq -r '.storageAccountName.value' )
           echo "storage_account=$storageAccountName" >> $GITHUB_OUTPUT
 
       - name: Upload Images
