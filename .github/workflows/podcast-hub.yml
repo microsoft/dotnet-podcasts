@@ -72,15 +72,15 @@ jobs:
       - name: Login to Azure
         run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
-      - name: Get Storage Account
-        id: get_storage
-        run: |
-          storageAccounts=$( az storage account list -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} )
-          storageAccountName=$( echo $storageAccounts | jq -r '.[0].name' )
-          echo "name=$storageAccountName" >> $GITHUB_OUTPUT
+      # - name: Get Storage Account
+      #   id: get_storage
+      #   run: |
+      #     storageAccounts=$( az storage account list -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} )
+      #     storageAccountName=$( echo $storageAccounts | jq -r '.[0].name' )
+      #     echo "name=$storageAccountName" >> $GITHUB_OUTPUT
 
       - name: Deploy Hub
-        run: az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ steps.get_storage.outputs.name }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
+        run: az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=cibranchmain560118900 administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
 
       - uses: actions/download-artifact@v3
         with:
