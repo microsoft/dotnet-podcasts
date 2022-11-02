@@ -6,7 +6,7 @@
 
 With the following ARM template you can automate the creation of the resources for this website.
 
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/microsoft/dotnet-podcasts/main/deploy/Web/web.deployment.json)
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/microsoft/dotnet-podcasts/main/deploy/Web/web.json)
 
 ## Run website locally
 
@@ -16,13 +16,13 @@ The easiest way to run your backend services locally is using **Docker Compose**
 
 ### Visual Studio
 
-Run `docker-compose up -d podcast.api listentogether.hub podcast.updater.worker` from terminal located in the root folder to run the backend services. 
+Run `docker-compose up -d podcast.api listentogether.hub podcast.updater.worker` from terminal located in the root folder to run the backend services.
 
 Open Visual Studio select **Podcast.Server** as startup project and press *F5* to run the project in debug mode or *Ctrl+F5* to run it without debugging. .
 
 ## Setting up the configuration variables
 
-In order to execute the website you must configure the backend API URL and the Listen Together SignalR hub URL. By default the *Development* profile is configured with the URLs of the backend services configured in Docker Compose. 
+In order to execute the website you must configure the backend API URL and the Listen Together SignalR hub URL. By default the *Development* profile is configured with the URLs of the backend services configured in Docker Compose.
 
 As it's a hosted Blazor WASM project, the configuration has to be set up in the Server and Client projects.
 
@@ -50,11 +50,11 @@ To configure the Github Action it is necessary to create an environment called `
 - `SERVICE_PLAN_NAME`: App Service plan name.
 - `SERVICE_PLAN_SKU`: App Service plan SKU.
 - `AZURE_RESOURCE_GROUP_NAME`: Existing resource group where resources will be deployed.
-- `HUB_WEBAPP_NAME`: Resource name of the listen together hub App Service 
+- `HUB_WEBAPP_NAME`: Resource name of the listen together hub App Service
 
 ## Solution
 
-The *.sln* is located in the root path of the repository and its name is [Podcast.Web.sln](/Podcast.Web.sln). The host project is **Podcast.Server**. 
+The *.sln* is located in the root path of the repository and its name is [Podcast.Web.sln](/Podcast.Web.sln). The host project is **Podcast.Server**.
 
 ### Projects
 
