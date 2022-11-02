@@ -277,6 +277,7 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' = 
   tags: {}
 }
 
-// output storageAccountName string = storageAccount.name
+output storageAccountName string = storageAccount.name
+output apiFqdn string = apiContainerApp.properties.configuration.ingress.fqdn
 
 // output storageConnectionString string = storageConnectionString

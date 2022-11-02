@@ -122,7 +122,9 @@ jobs:
         run: |
           deploy=$( az deployment group create -n ghaction${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/api.bicep -p name=${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
           outputs=$( echo $deploy | jq '.properties.outputs' )
+          apiFqdn=$( echo $outputs | jq -r '.apiFqdn.value' )
           storageAccountName=$( echo $outputs | jq -r '.storageAccountName.value' )
+          echo "PODCAST_API_RUL=https://$apiFqdn" >> $GITHUB_ENV
           echo "STORAGE_ACCOUNT=$storageAccountName" >> $GITHUB_ENV
 
       - name: Upload Images
@@ -134,6 +136,7 @@ jobs:
             ./Deploy-Images.ps1 -subscription ${{ needs.ade.outputs.subscription }} -resourceGroup ${{ needs.ade.outputs.resource_group }} -storageName ${{ env.STORAGE_ACCOUNT }}
 
     outputs:
+      podcast_api_rul: ${{ env.PODCAST_API_RUL }}
       storage_account: ${{ env.STORAGE_ACCOUNT }}
 
   build-hub:
@@ -169,7 +172,6 @@ jobs:
       - config
       - ade
       - build-hub
-      - build-and-push-api
       - deploy-api
     environment:
       name: ${{ needs.config.outputs.type }}
@@ -183,15 +185,8 @@ jobs:
       - name: Login to Azure
         run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
-      # - name: Get Storage Account
-      #   id: get_storage
-      #   run: |
-      #     storageAccounts=$( az storage account list -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} )
-      #     storageAccountName=$( echo $storageAccounts | jq -r '.[0].name' )
-      #     echo "name=$storageAccountName" >> $GITHUB_OUTPUT
-
       - name: Deploy Hub
-        run: az deployment group create -n ghactionlistentogether${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ needs.deploy-api.outputs.subscription }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
+        run: az deployment group create -n ghactionlistentogether${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ needs.deploy-api.outputs.storage_account }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
 
       - uses: actions/download-artifact@v3
         with:
@@ -211,13 +206,13 @@ jobs:
     needs:
       - config
       - ade
-      - build-and-push-api
       - deploy-api
 
     environment:
       name: ${{ needs.config.outputs.type }}
     env:
       LISTEN_TOGETHER_HUB_URL: https://hub-${{ needs.config.outputs.name_clean }}.azurewebsites.net/listentogether
+      PODCAST_API_URL: ${{ needs.deploy-api.outputs.podcast_api_rul }}
 
     steps:
       - uses: actions/checkout@v3
@@ -232,12 +227,6 @@ jobs:
 
       - name: Login to Azure
         run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
-
-      - name: Set backend env variables
-        run: |
-          az extension add --name containerapp
-          fqdn=$( az containerapp show --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn )
-          echo "PODCAST_API_URL=https://$fqdn" >> $GITHUB_ENV
 
       - name: Set Blazor WASM app settings
         uses: microsoft/variable-substitution@v1
@@ -259,7 +248,6 @@ jobs:
           path: web
 
     outputs:
-      PodcastApiUrl: ${{ env.PODCAST_API_URL }}
       ListenTogetherHubUrl: ${{ env.LISTEN_TOGETHER_HUB_URL }}
 
   # deploy the web resources including a web app, then deploy the web's source (from the build artifact) to the app
@@ -271,7 +259,6 @@ jobs:
       - config
       - ade
       - build-web
-      - build-and-push-api
       - deploy-api
 
     environment:
@@ -303,7 +290,7 @@ jobs:
             [
                 {
                     "name": "PodcastApi__BaseAddress",
-                    "value": "${{ needs.build-web.outputs.PodcastApiUrl }}"
+                    "value": "${{ needs.deploy-api.outputs.podcast_api_url }}"
                 },
                 {
                     "name": "ListenTogetherHub",
