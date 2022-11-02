@@ -276,7 +276,7 @@
                   "value": "artifacts"
                 },
                 {
-                  "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__accountKeyName",
+                  "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__accountKey",
                   "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
                 }
               ],
