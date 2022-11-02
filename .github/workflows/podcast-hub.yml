@@ -45,7 +45,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
 
-      - uses: actions/upload-artifact@3
+      - uses: actions/upload-artifact@v3
         with:
           name: drop
           path: hub
@@ -82,7 +82,7 @@ jobs:
       - name: Deploy Hub
         run: az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ steps.get_storage.outputs.name }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
 
-      - uses: actions/download-artifact@3
+      - uses: actions/download-artifact@v3
         with:
           name: drop
           path: hub
