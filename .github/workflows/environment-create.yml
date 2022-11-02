@@ -1,4 +1,4 @@
-name: Create Environment
+name: Create Deployment Environment
 
 on:
   create:

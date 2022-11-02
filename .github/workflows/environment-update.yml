@@ -1,0 +1,30 @@
+name: Update Deployment Environment
+
+on:
+  push:
+  pull_request:
+    types: [synchronize]
+
+concurrency: ${{ github.event.number || github.ref_name }}
+
+jobs:
+  config:
+    name: Get Configuration
+    uses: ./.github/workflows/environment-config.yml
+
+  ade:
+    name: Update Environment
+    if: github.event_name == 'pull_request' || (contains(github.event.ref, 'refs/heads') && !github.event.created)
+    runs-on: ubuntu-latest
+
+    needs: config
+
+    environment:
+      name: ${{ needs.config.outputs.type }}
+
+    steps:
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Install DevCenter CLI
+        run: az extension add -y -s https://fidalgosetup.blob.core.windows.net/cli-extensions/devcenter-0.1.0-py3-none-any.whl
