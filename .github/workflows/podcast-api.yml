@@ -1,8 +1,6 @@
 name: Podcast API CICD
 
 on:
-  # workflow_dispatch: # allow workflow to be manually triggered
-
   push:
     branches: [main]
     paths:
