@@ -57,20 +57,17 @@ jobs:
           name_cleaner = name_clean.replace('-', '')
 
           outputs = [
-              f'type={type}'
+              f'type={type}',
               f'name={name}',
               f'name_clean={name_clean}',
-              f'name_cleaner={name_cleaner}',
+              f'name_cleaner={name_cleaner}'
           ]
-
-          outputs = '\n'.join(outputs)
-          print(outputs)
 
           github_output = os.environ.get('GITHUB_OUTPUT', None)
 
           if github_output:
               with open(github_output, 'a+') as f:
-                  f.write(outputs)
+                  f.write('\n'.join(outputs))
 
       # - id: get_config
       #   name: Set Outputs
