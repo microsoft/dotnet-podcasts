@@ -21,7 +21,7 @@ env:
 
 jobs:
   config:
-    name: Get Environment
+    name: Get Configuration
     uses: ./.github/workflows/environment-config.yml
 
   # if a pull request triggered the action build all three docker images
@@ -49,6 +49,7 @@ jobs:
   # if code was pushed directly to main, a PR was merged into main, or someone started the workflow manually (on main)
   # deploy the Azure Container Registry (ACR), login to ACR, and build/push all three docker images
   build-and-push:
+    name: Build & Push API Images
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
 
@@ -94,6 +95,7 @@ jobs:
   # deploy the api backend resources (including three container apps using the three docker images we just pushed to ACR
   # in the build-and-push job above), finally upload the images to the storage account
   deploy:
+    name: Deploy API
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
 
@@ -115,7 +117,7 @@ jobs:
       - name: Deploy Container Apps
         id: deploy_apps
         run: |
-          result=$( az deployment group create -n ghaction${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/api.bicep -p name ${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
+          result=$( az deployment group create -n ghaction${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/api.bicep -p name=${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
           outputs=$( echo $deploy | jq '.properties.outputs' )
           storageAccountName=$( echo $outputs | jq '.storageAccountName.value' )
           echo "storage_account=$storageAccountName" >> $GITHUB_OUTPUT
