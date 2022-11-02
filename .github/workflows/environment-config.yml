@@ -16,8 +16,17 @@ on:
       name_cleaner:
         description: 'The name_cleaner of the environment'
         value: ${{ jobs.env_config.outputs.name_cleaner }}
+      devcenter:
+        description: 'The devcenter of the environment'
+        value: ${{ jobs.env_config.outputs.devcenter }}
+      project:
+        description: 'The project of the environment'
+        value: ${{ jobs.env_config.outputs.project }}
 
 env:
+  ENVIRONMENT_DEVCENTER: ContosoTest008
+  ENVIRONMENT_PROJECT: Podcast-App
+
   # format: ci-[branch|pr]-[branch name|pr number]-suffex
   ENVIRONMENT_NAME: ci-${{ github.event_name == 'pull_request' && 'pr' || 'branch' }}-${{ github.event_name == 'pull_request' && github.event.number || github.event_name == 'push' && github.ref_name || github.event.ref }}-${{ github.event.repository.id }}
 
@@ -49,6 +58,8 @@ jobs:
 
           type = os.environ.get('ENVIRONMENT_TYPE')
           name = os.environ.get('ENVIRONMENT_NAME')
+          devcenter = os.environ.get('ENVIRONMENT_DEVCENTER')
+          project = os.environ.get('ENVIRONMENT_PROJECT')
 
           name_clean = name.lower().strip().replace(' ', '-').replace('_', '-')
           name_cleaner = name_clean.replace('-', '')
@@ -57,7 +68,9 @@ jobs:
               f'type={type}',
               f'name={name}',
               f'name_clean={name_clean}',
-              f'name_cleaner={name_cleaner}'
+              f'name_cleaner={name_cleaner}',
+              f'devcenter={devcenter}',
+              f'project={project}'
           ]
 
           github_output = os.environ.get('GITHUB_OUTPUT', None)
@@ -70,6 +83,8 @@ jobs:
             f'- **Environment Name** {name}',
             f'- **Environment Name (clean)** {name_clean}',
             f'- **Environment Name (cleaner)** {name_cleaner}',
+            f'- **Environment DevCenter** {devcenter}',
+            f'- **Environment Project** {project}',
           ]
 
           github_step_summary = os.environ.get('GITHUB_STEP_SUMMARY', None)

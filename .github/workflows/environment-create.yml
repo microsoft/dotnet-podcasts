@@ -1,0 +1,318 @@
+name: Create Environment
+
+on:
+  create:
+  pull_request:
+    types: [opened, reopened]
+
+concurrency: ${{ github.event.number || github.ref_name }}
+
+jobs:
+  config:
+    name: Get Configuration
+    uses: ./.github/workflows/environment-config.yml
+
+  ade:
+    name: Create Environment
+    if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+
+    needs: config
+
+    environment:
+      name: ${{ needs.config.outputs.type }}
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Install DevCenter CLI
+        run: az extension add -y -s https://fidalgosetup.blob.core.windows.net/cli-extensions/devcenter-0.1.0-py3-none-any.whl
+
+      - name: Create Environment
+        id: create_env
+        run: |
+          az devcenter dev environment create --dev-center ${{ needs.config.outputs.devcenter }} --project ${{ needs.config.outputs.project }} \
+            --catalog-name Samples --catalog-item-name Sandbox --environment-type ${{ needs.config.outputs.type }} --environment-name ${{ needs.config.outputs.name }}
+
+          environment=$( az devcenter dev environment show --user-id me --dev-center ContosoTest008 --project Podcast-App --environment-name ci-branch-foo-1296269 )
+          environmentGroupId=$( echo $environment | jq -r '.resourceGroupId' )
+          environmentGroupName=${environmentGroupId##*/}
+          environmentSubscriptionId=${environmentGroupId%/*}; environmentSubscriptionId=${environmentSubscriptionId%/*}; environmentSubscriptionId=${environmentSubscriptionId##*/}
+
+          echo "AZURE_RESOURCE_GROUP_NAME=$environmentGroupName" >> $GITHUB_ENV
+          echo "AZURE_SUBSCRIPTION_ID=$environmentSubscriptionId" >> $GITHUB_ENV
+
+    outputs:
+      resource_group: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+      subscription: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+  build-and-push-api:
+    name: Build & Push API Images
+    # if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+
+    needs:
+      - config
+      - ade
+
+    environment:
+      name: ${{ needs.config.outputs.type }}
+    env:
+      ACR_NAME: ${{ needs.config.outputs.name_cleaner }}
+      ACR_HOST: ${{ needs.config.outputs.name_cleaner }}.azurecr.io
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Deploy ACR
+        run: az deployment group create -n ghactionbgtasks${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/acr.bicep -p name=${{ env.ACR_NAME }}
+
+      - name: Login to ACR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.ACR_HOST }}
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Build Podcast Updater
+        run: |
+          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_HOST }}/podcastupdaterworker:${{ github.sha }} .
+          docker push ${{ env.ACR_HOST }}/podcastupdaterworker:${{ github.sha }}
+
+      - name: Build Podcast API
+        run: |
+          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_HOST }}/podcastapi:${{ github.sha }} .
+          docker push ${{ env.ACR_HOST }}/podcastapi:${{ github.sha }}
+
+      - name: Build Podcast Ingestion
+        run: |
+          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_HOST }}/podcastingestionworker:${{ github.sha }} .
+          docker push ${{ env.ACR_HOST }}/podcastingestionworker:${{ github.sha }}
+
+  deploy-api:
+    name: Deploy API
+    # if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+
+    needs:
+      - config
+      - ade
+      - build-and-push-api
+
+    environment:
+      name: ${{ needs.config.outputs.type }}
+    env:
+      ACR_NAME: ${{ needs.config.outputs.name_cleaner }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Deploy Container Apps
+        id: deploy_apps
+        run: |
+          deploy=$( az deployment group create -n ghaction${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/api.bicep -p name=${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
+          outputs=$( echo $deploy | jq '.properties.outputs' )
+          storageAccountName=$( echo $outputs | jq -r '.storageAccountName.value' )
+          echo "STORAGE_ACCOUNT=$storageAccountName" >> $GITHUB_ENV
+
+      - name: Upload Images
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: '3.1.0'
+          inlineScript: |
+            cd deploy/Images
+            ./Deploy-Images.ps1 -subscription ${{ needs.ade.outputs.subscription }} -resourceGroup ${{ needs.ade.outputs.resource_group }} -storageName ${{ env.STORAGE_ACCOUNT }}
+
+    outputs:
+      storage_account: ${{ env.STORAGE_ACCOUNT }}
+
+  build-hub:
+    name: Build Hub App
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: Build
+        run: dotnet build --configuration Release src/Services/ListenTogether/ListenTogether.Hub
+
+      - name: Publish
+        run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: drop
+          path: hub
+
+  deploy-hub:
+    name: Deploy Hub App
+    # if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+
+    needs:
+      - config
+      - ade
+      - build-hub
+      - build-and-push-api
+      - deploy-api
+    environment:
+      name: ${{ needs.config.outputs.type }}
+
+    env:
+      HUB_WEBAPP_NAME: hub-${{ needs.config.outputs.name_clean }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      # - name: Get Storage Account
+      #   id: get_storage
+      #   run: |
+      #     storageAccounts=$( az storage account list -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} )
+      #     storageAccountName=$( echo $storageAccounts | jq -r '.[0].name' )
+      #     echo "name=$storageAccountName" >> $GITHUB_OUTPUT
+
+      - name: Deploy Hub
+        run: az deployment group create -n ghactionlistentogether${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ needs.deploy-api.outputs.subscription }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: drop
+          path: hub
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.HUB_WEBAPP_NAME }}
+          package: hub
+
+  build-web:
+    name: Build Web App
+    runs-on: ubuntu-latest
+
+    needs:
+      - config
+      - ade
+      - build-and-push-api
+      - deploy-api
+
+    environment:
+      name: ${{ needs.config.outputs.type }}
+    env:
+      LISTEN_TOGETHER_HUB_URL: https://hub-${{ needs.config.outputs.name_clean }}.azurewebsites.net/listentogether
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Install wasm-tools
+        run: dotnet workload install wasm-tools
+
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Set backend env variables
+        run: |
+          az extension add --name containerapp
+          fqdn=$( az containerapp show --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn )
+          echo "PODCAST_API_URL=https://$fqdn" >> $GITHUB_ENV
+
+      - name: Set Blazor WASM app settings
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'src/Web/Client/wwwroot/appsettings.json'
+        env:
+          PodcastApi.BaseAddress: ${{ env.PODCAST_API_URL }}
+          ListenTogetherHub: ${{ env.LISTEN_TOGETHER_HUB_URL }}
+
+      - name: Build
+        run: dotnet build src/Web/Server --configuration Release
+
+      - name: Publish
+        run: dotnet publish --configuration Release src/Web/Server --output web
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: drop
+          path: web
+
+    outputs:
+      PodcastApiUrl: ${{ env.PODCAST_API_URL }}
+      ListenTogetherHubUrl: ${{ env.LISTEN_TOGETHER_HUB_URL }}
+
+  # deploy the web resources including a web app, then deploy the web's source (from the build artifact) to the app
+  deploy-web:
+    name: Deploy Web App
+    runs-on: ubuntu-latest
+
+    needs:
+      - config
+      - ade
+      - build-web
+      - build-and-push-api
+      - deploy-api
+
+    environment:
+      name: ${{ needs.config.outputs.type }}
+
+    env:
+      WEBAPP_NAME: web-${{ needs.config.outputs.name_clean }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Deploy Web App
+        run: az deployment group create -n ghaction --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Web/web.bicep -p name=${{ env.WEBAPP_NAME }}
+
+      - name: Download web artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: drop
+          path: web
+
+      - name: Update App Service app settings variables
+        uses: Azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.WEBAPP_NAME }}
+          app-settings-json: |
+            [
+                {
+                    "name": "PodcastApi__BaseAddress",
+                    "value": "${{ needs.build-web.outputs.PodcastApiUrl }}"
+                },
+                {
+                    "name": "ListenTogetherHub",
+                    "value": "${{ needs.build-web.outputs.ListenTogetherHubUrl }}"
+                }
+            ]
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.WEBAPP_NAME }}
+          package: web

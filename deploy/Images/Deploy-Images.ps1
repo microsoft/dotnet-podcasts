@@ -1,11 +1,12 @@
 #! /usr/bin/pwsh
 
 Param(
+    [Parameter(Mandatory=$true)][string]$subscription,
     [parameter(Mandatory=$true)][string]$resourceGroup,
     [parameter(Mandatory=$true)][string]$storageName
 )
 
-$storage = $(az storage account show -n $storageName -g $resourceGroup -o json | ConvertFrom-Json)
+$storage = $(az storage account show --subscription $subscription -g $resourceGroup -n $storageName-o json | ConvertFrom-Json)
 
 if (-not $storage) {
     Write-Host "Storage $storageName not found in RG $resourceGroup" -ForegroundColor Red
@@ -13,14 +14,14 @@ if (-not $storage) {
 }
 
 $url = $storage.primaryEndpoints.blob
-$constr = $(az storage account show-connection-string -n $storageName -g $resourceGroup -o json | ConvertFrom-Json).connectionString
+$constr = $(az storage account show-connection-string --subscription $subscription -g $resourceGroup -n $storageName -o json | ConvertFrom-Json).connectionString
 
 $containerExists = $(az storage container exists --name "covers" --connection-string "$constr" | ConvertFrom-Json).exists
 
 if (!$containerExists) {
 
     Write-Host "Connecting to storage and creating containers" -ForegroundColor Green
-    az storage container create --name "covers" --public-access blob --connection-string "$constr" 
+    az storage container create --name "covers" --public-access blob --connection-string "$constr"
     Write-Host "Copying images..." -ForegroundColor Green
 
     $accountName=$storage.name
