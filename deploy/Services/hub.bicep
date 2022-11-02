@@ -22,6 +22,9 @@ param administratorLogin string
 // param storageAccountKey string
 param storageAccountName string
 
+// storage account names can be no longer than 24 chars, so if the provided name is logner, assume we trimmed it elsewhere
+var storageAccountNameClean = length(storageAccountName) <= 24 ? storageAccountName : take(storageAccountName, 24)
+
 var sqlDBName = 'ListenTogether'
 
 // trim whitespace, replace spaces and underscores with hyphens
@@ -35,7 +38,7 @@ var nameClean = replace(replace(toLower(trim(name)), ' ', '-'), '_', '-')
 var servicePlanName = length(nameClean) <= 40 ? nameClean : take(nameClean, 40)
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' existing = {
-  name: storageAccountName
+  name: storageAccountNameClean
 }
 
 resource apiContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' existing = {

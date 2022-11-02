@@ -32,7 +32,7 @@ var deployIngestion = false
 // trim whitespace, replace spaces and underscores with hyphens
 var nameClean = replace(replace(toLower(trim(name)), ' ', '-'), '_', '-')
 var nameCleaner = replace(nameClean, '-', '')
-var storageAccountName = length(nameCleaner) <= 20 ? '${nameCleaner}stor' : length(nameCleaner) <= 24 ? nameCleaner : take(nameCleaner, 24)
+var storageAccountName = length(nameCleaner) <= 24 ? nameCleaner : take(nameCleaner, 24)
 
 // Common properties for all containers
 var resources = { cpu: 1, memory: '2Gi' }
@@ -277,6 +277,6 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-06-01-preview' = 
   tags: {}
 }
 
-output storageAccountName string = storageAccount.name
+// output storageAccountName string = storageAccount.name
 
 // output storageConnectionString string = storageConnectionString
