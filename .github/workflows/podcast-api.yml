@@ -26,7 +26,7 @@ jobs:
 
   # if a pull request triggered the action build all three docker images
   build-pr:
-    if: ${{ github.event_name == 'pull_request }}
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
 
     needs: config
