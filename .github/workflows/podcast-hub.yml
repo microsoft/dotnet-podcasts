@@ -22,11 +22,12 @@ env:
 
 jobs:
   config:
-    name: Get Environment
+    name: Get Configuration
     uses: ./.github/workflows/environment-config.yml
 
   # build and publish the hub project and upload it as an artifact
   build:
+    name: Build Hub App
     runs-on: ubuntu-latest
 
     steps:
@@ -52,6 +53,7 @@ jobs:
   # if code was pushed directly to main, a PR was merged into main, or someone started the workflow manually (on main)
   # deploy the hub resources including a web app, then deploy the hub's source (from the build artifact) to the app
   deploy:
+    name: Deploy Hub App
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
 
@@ -73,8 +75,8 @@ jobs:
       - name: Get Storage Account
         id: get_storage
         run: |
-          storageAccount=$( az storage account list -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} )
-          storageAccountName=$( echo $storageAccount | jq '.[0].name' )
+          storageAccounts=$( az storage account list -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} )
+          storageAccountName=$( echo $storageAccounts | jq -r '.[0].name' )
           echo "name=$storageAccountName" >> $GITHUB_OUTPUT
 
       - name: Deploy Hub
