@@ -38,7 +38,7 @@ jobs:
           az devcenter dev environment create --dev-center ${{ needs.config.outputs.devcenter }} --project ${{ needs.config.outputs.project }} \
             --catalog-name Samples --catalog-item-name Sandbox --environment-type ${{ needs.config.outputs.type }} --environment-name ${{ needs.config.outputs.name }}
 
-          environment=$( az devcenter dev environment show --user-id me --dev-center ContosoTest008 --project Podcast-App --environment-name ci-branch-foo-1296269 )
+          environment=$( az devcenter dev environment show --user-id me --dev-center ${{ needs.config.outputs.devcenter }} --project ${{ needs.config.outputs.project }} --environment-name ${{ needs.config.outputs.name }} )
           environmentGroupId=$( echo $environment | jq -r '.resourceGroupId' )
           environmentGroupName=${environmentGroupId##*/}
           environmentSubscriptionId=${environmentGroupId%/*}; environmentSubscriptionId=${environmentSubscriptionId%/*}; environmentSubscriptionId=${environmentSubscriptionId##*/}
