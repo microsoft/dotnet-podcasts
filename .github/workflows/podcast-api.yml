@@ -32,18 +32,19 @@ jobs:
     needs: config
     env:
       ACR_NAME: ${{ needs.config.outputs.name_cleaner }}
+      ACR_HOST: ${{ needs.config.outputs.name_cleaner }}.azurecr.io
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Build Podcast Updater
-        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastupdaterworker:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_HOST }}/podcastupdaterworker:${{ github.sha }} .
 
       - name: Build Podcast API
-        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastapi:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_HOST }}/podcastapi:${{ github.sha }} .
 
       - name: Build Podcast Ingestion
-        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastingestionworker:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_HOST }}/podcastingestionworker:${{ github.sha }} .
 
   # if code was pushed directly to main, a PR was merged into main, or someone started the workflow manually (on main)
   # deploy the Azure Container Registry (ACR), login to ACR, and build/push all three docker images
@@ -56,6 +57,7 @@ jobs:
       name: ${{ needs.config.outputs.type }}
     env:
       ACR_NAME: ${{ needs.config.outputs.name_cleaner }}
+      ACR_HOST: ${{ needs.config.outputs.name_cleaner }}.azurecr.io
 
     steps:
       - uses: actions/checkout@v3
@@ -69,24 +71,24 @@ jobs:
       - name: Login to ACR
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.ACR_NAME }}azurecr.io
+          registry: ${{ env.ACR_HOST }}
           username: ${{ secrets.AZURE_CLIENT_ID }}
           password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Build Podcast Updater
         run: |
-          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastupdaterworker:${{ github.sha }} .
-          docker push ${{ env.ACR_NAME }}azurecr.io/podcastupdaterworker:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_HOST }}/podcastupdaterworker:${{ github.sha }} .
+          docker push ${{ env.ACR_HOST }}/podcastupdaterworker:${{ github.sha }}
 
       - name: Build Podcast API
         run: |
-          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastapi:${{ github.sha }} .
-          docker push ${{ env.ACR_NAME }}azurecr.io/podcastapi:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_HOST }}/podcastapi:${{ github.sha }} .
+          docker push ${{ env.ACR_HOST }}/podcastapi:${{ github.sha }}
 
       - name: Build Podcast Ingestion
         run: |
-          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastingestionworker:${{ github.sha }} .
-          docker push ${{ env.ACR_NAME }}azurecr.io/podcastingestionworker:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_HOST }}/podcastingestionworker:${{ github.sha }} .
+          docker push ${{ env.ACR_HOST }}/podcastingestionworker:${{ github.sha }}
 
   # if code was pushed directly to main, a PR was merged into main, or someone started the workflow manually (on main)
   # deploy the api backend resources (including three container apps using the three docker images we just pushed to ACR

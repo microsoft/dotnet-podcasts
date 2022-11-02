@@ -69,6 +69,12 @@ jobs:
               with open(github_output, 'a+') as f:
                   f.write('\n'.join(outputs))
 
+          github_step_summary = os.environ.get('GITHUB_STEP_SUMMARY', None)
+
+          if github_step_summary:
+              with open(github_step_summary, 'a+') as f:
+                  f.write('\n'.join(outputs))
+
       # - id: get_config
       #   name: Set Outputs
       #   run: |
