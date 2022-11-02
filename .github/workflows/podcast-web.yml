@@ -22,11 +22,12 @@ env:
 
 jobs:
   config:
-    name: Get Environment
+    name: Get Configuration
     uses: ./.github/workflows/environment-config.yml
 
   # build and publish the web project and upload it as an artifact
   build:
+    name: Build Web App
     runs-on: ubuntu-latest
 
     needs: config
@@ -69,7 +70,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Web/Server --output web
 
-      - uses: actions/upload-artifact@3
+      - uses: actions/upload-artifact@v3
         with:
           name: drop
           path: web
@@ -80,6 +81,7 @@ jobs:
 
   # deploy the web resources including a web app, then deploy the web's source (from the build artifact) to the app
   deploy:
+    name: Deploy Web App
     runs-on: ubuntu-latest
 
     needs:
@@ -101,7 +103,7 @@ jobs:
         run: az deployment group create -n ghaction -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Web/web.bicep -p name=${{ env.WEBAPP_NAME }}
 
       - name: Download web artifacts
-        uses: actions/download-artifact@3
+        uses: actions/download-artifact@v3
         with:
           name: drop
           path: web
