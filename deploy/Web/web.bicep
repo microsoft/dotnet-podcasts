@@ -1,25 +1,28 @@
 @description('Web app name.')
 @minLength(2)
-param webAppName string
-
-@description('Service plan name.')
-@minLength(2)
-param servicePlanName string
-
-@description('The SKU of App Service Plan.')
-param servicePlanSku string = 'B1'
+@maxLength(60)
+param name string
 
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
+@description('The SKU of App Service Plan.')
+param sku string = 'B1'
+
 @description('The Runtime stack of current web app')
 param linuxFxVersion string = 'DOTNETCORE|6.0'
+
+// trim whitespace, replace spaces and underscores with hyphens
+var nameClean = replace(replace(toLower(trim(name)), ' ', '-'), '_', '-')
+
+// req: (2-40)
+var servicePlanName = length(nameClean) <= 40 ? nameClean : take(nameClean, 40)
 
 resource servicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: servicePlanName
   location: location
   sku: {
-    name: servicePlanSku
+    name: sku
   }
   kind: 'linux'
   properties: {
@@ -28,7 +31,7 @@ resource servicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
 }
 
 resource webApp 'Microsoft.Web/sites@2020-06-01' = {
-  name: webAppName
+  name: nameClean
   location: location
   properties: {
     serverFarmId: servicePlan.id

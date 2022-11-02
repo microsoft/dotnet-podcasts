@@ -7,7 +7,7 @@ on:
     branches: [main]
     paths:
       - 'src/Services/Podcasts/**'
-      - 'deploy/Services/api.deployment.bicep'
+      - 'deploy/Services/api.bicep'
       - '.github/workflows/podcast-api.yml'
 
   pull_request:
@@ -16,23 +16,34 @@ on:
       - 'src/Services/Podcasts/**'
       - '.github/workflows/podcast-api.yml'
 
+env:
+  AZURE_RESOURCE_GROUP_NAME: Podcast002
+
 jobs:
+  config:
+    name: Get Environment
+    uses: ./.github/workflows/environment-config.yml
+
   # if a pull request triggered the action build all three docker images
   build-pr:
-    if: ${{ github.event_name == 'pull_request'}}
+    if: ${{ github.event_name == 'pull_request }}
     runs-on: ubuntu-latest
 
+    needs: config
+    env:
+      ACR_NAME: ${{ needs.config.outputs.name_cleaner }}
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Build Podcast Updater
-        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastupdaterworker:${{ github.sha }} .
 
       - name: Build Podcast API
-        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastapi:${{ github.sha }} .
 
       - name: Build Podcast Ingestion
-        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastingestionworker:${{ github.sha }} .
 
   # if code was pushed directly to main, a PR was merged into main, or someone started the workflow manually (on main)
   # deploy the Azure Container Registry (ACR), login to ACR, and build/push all three docker images
@@ -40,42 +51,42 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+    needs: config
+    environment:
+      name: ${{ needs.config.outputs.type }}
+    env:
+      ACR_NAME: ${{ needs.config.outputs.name_cleaner }}
 
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Deploy ACR
-        uses: azure/powershell@v1
-        with:
-          azPSVersion: '3.1.0'
-          inlineScript: |
-            az deployment group create -n ghactionbgtasks${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/acr.deployment.bicep --parameters acrName=${{secrets.ACR_NAME}}
+        run: az deployment group create -n ghactionbgtasks${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/acr.bicep -p name=${{ env.ACR_NAME }}
 
       - name: Login to ACR
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
-          registry: ${{ secrets.ACR_NAME }}.azurecr.io
-          username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
-          password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+          registry: ${{ env.ACR_NAME }}azurecr.io
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Build Podcast Updater
         run: |
-          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastupdaterworker:${{ github.sha }} .
+          docker push ${{ env.ACR_NAME }}azurecr.io/podcastupdaterworker:${{ github.sha }}
 
       - name: Build Podcast API
         run: |
-          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastapi:${{ github.sha }} .
+          docker push ${{ env.ACR_NAME }}azurecr.io/podcastapi:${{ github.sha }}
 
       - name: Build Podcast Ingestion
         run: |
-          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_NAME }}azurecr.io/podcastingestionworker:${{ github.sha }} .
+          docker push ${{ env.ACR_NAME }}azurecr.io/podcastingestionworker:${{ github.sha }}
 
   # if code was pushed directly to main, a PR was merged into main, or someone started the workflow manually (on main)
   # deploy the api backend resources (including three container apps using the three docker images we just pushed to ACR
@@ -84,33 +95,28 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
 
-    needs: build-and-push
+    needs:
+      - config
+      - build-and-push
+
     environment:
-      name: prod
+      name: ${{ needs.config.outputs.type }}
+    env:
+      ACR_NAME: ${{ needs.config.outputs.name_cleaner }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Deploy Container Apps
-        uses: azure/powershell@v1
-        with:
-          azPSVersion: '3.1.0'
-          failOnStandardError: true
-          inlineScript: |
-            $ACR_LOGIN_SERVER="${{secrets.ACR_NAME}}.azurecr.io"
-            $ACR_PASSWORD=$(az acr credential show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.ACR_NAME}} -o tsv --query passwords[0].value)
-
-            az deployment group create -n ghaction${{ github.sha }} `
-               --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
-               --template-file deploy/Services/api.deployment.bicep `
-               --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}}
-
-            if( $LASTEXITCODE -ne 0 ) { exit -1 }
+        id: deploy_apps
+        run: |
+          result=$( az deployment group create -n ghaction${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/api.bicep -p name ${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
+          outputs=$( echo $deploy | jq '.properties.outputs' )
+          storageAccountName=$( echo $outputs | jq '.storageAccountName.value' )
+          echo "storage_account=$storageAccountName" >> $GITHUB_OUTPUT
 
       - name: Upload Images
         uses: azure/powershell@v1
@@ -118,4 +124,4 @@ jobs:
           azPSVersion: '3.1.0'
           inlineScript: |
             cd deploy/Images
-            ./Deploy-Images.ps1 -resourceGroup ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -storageName ${{ secrets.STORAGE_NAME }}
+            ./Deploy-Images.ps1 -resourceGroup ${{ env.AZURE_RESOURCE_GROUP_NAME }} -storageName ${{ steps.deploy_apps.outputs.storage_account }}

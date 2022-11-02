@@ -7,7 +7,7 @@ on:
     branches: [main]
     paths:
       - 'src/Services/ListenTogether/**'
-      - 'deploy/Services/hub.deployment.bicep'
+      - 'deploy/Services/hub.bicep'
       - '.github/workflows/podcast-hub.yml'
 
   pull_request:
@@ -16,13 +16,21 @@ on:
       - 'src/Services/ListenTogether/**'
       - '.github/workflows/podcast-hub.yml'
 
+env:
+  API_RESOURCE_NAME: podcastapica
+  AZURE_RESOURCE_GROUP_NAME: Podcast002
+
 jobs:
+  config:
+    name: Get Environment
+    uses: ./.github/workflows/environment-config.yml
+
   # build and publish the hub project and upload it as an artifact
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -36,7 +44,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@3
         with:
           name: drop
           path: hub
@@ -47,29 +55,32 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
 
-    needs: build
+    needs:
+      - config
+      - build
     environment:
-      name: prod
+      name: ${{ needs.config.outputs.type }}
+
+    env:
+      HUB_WEBAPP_NAME: hub-${{ needs.config.outputs.name_clean }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
+      - name: Login to Azure
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
-      - name: Deploy ARM
-        uses: azure/powershell@v1
-        with:
-          azPSVersion: '3.1.0'
-          inlineScript: |
-            az extension add --name containerapp
-            $STORAGEKEY=$(az storage account keys list -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.STORAGE_NAME}} --query [0].value -o tsv)
-            $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n podcastapica -o tsv --query properties.configuration.ingress.fqdn)+"/"
-            az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.deployment.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
+      - name: Get Storage Account
+        id: get_storage
+        run: |
+          storageAccount=$( az storage account list -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} )
+          storageAccountName=$( echo $storageAccount | jq '.[0].name' )
+          echo "name=$storageAccountName" >> $GITHUB_OUTPUT
 
-      - uses: actions/download-artifact@master
+      - name: Deploy Hub
+        run: az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ steps.get_storage.outputs.name }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
+
+      - uses: actions/download-artifact@3
         with:
           name: drop
           path: hub
@@ -77,5 +88,5 @@ jobs:
       - name: Azure WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.HUB_WEBAPP_NAME }}
+          app-name: ${{ env.HUB_WEBAPP_NAME }}
           package: hub
