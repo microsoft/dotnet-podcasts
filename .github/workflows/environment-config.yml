@@ -48,6 +48,8 @@ jobs:
       name: ${{ steps.get_config.outputs.name }}
       name_clean: ${{ steps.get_config.outputs.name_clean }}
       name_cleaner: ${{ steps.get_config.outputs.name_cleaner }}
+      devcenter: ${{ steps.get_config.outputs.devcenter }}
+      project: ${{ steps.get_config.outputs.project }}
 
     steps:
       - id: get_config
