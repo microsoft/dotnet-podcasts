@@ -262,6 +262,22 @@
                 {
                   "name":"DOTNETMONITOR_Urls",
                   "value": "http://localhost:52323"
+                },
+                {
+                  "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__accountUri",
+                  "value": "[format('https://{0}.blob.core.windows.net', parameters('storageAccountName'))]"
+                },
+                {
+                  "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__containerName",
+                  "value": "monitoring"
+                },
+                {
+                  "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__blobPrefix",
+                  "value": "artifacts"
+                },
+                {
+                  "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__accountKey",
+                  "value": "parameters('storageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value"
                 }
               ],
               "resources": {
