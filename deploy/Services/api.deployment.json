@@ -282,6 +282,10 @@
                 {
                   "name": "DotnetMonitor_Experimental_Feature_CallStacks",
                   "value": "true"
+                },
+                {
+                  "name": "DotnetMonitor_Storage__DefaultSharedPath",
+                  "value": "/diag"
                 }
               ],
               "resources": {
