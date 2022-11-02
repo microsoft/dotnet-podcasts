@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup .NET 6
         uses: actions/setup-dotnet@v2
@@ -20,7 +20,7 @@ jobs:
 
       - name: Install MAUI Workloads
         run: |
-          dotnet workload install maui --source https://api.nuget.org/v3/index.json          
+          dotnet workload install maui --source https://api.nuget.org/v3/index.json
 
       - name: Build MAUI Mobile app
         shell: pwsh
@@ -28,7 +28,7 @@ jobs:
           dotnet build ${{inputs.csproj}} -bl:mobile.binlog
 
       - name: Archive build log
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: logs
           path: '*.binlog'
