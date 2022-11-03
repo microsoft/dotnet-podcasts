@@ -290,6 +290,11 @@
                   "name": "DotnetMonitor_Experimental_Feature_CallStacks",
                   "value": "true"
                 },
+                // used to load some of the native profilers for each platform (ideally would discover from mapped apps)
+                {
+                  "name": "DotnetMonitor_RuntimeIdentifier",
+                  "value": "linux-x64"
+                }
                 {
                   "name": "DotnetMonitor_Storage__DefaultSharedPath",
                   "value": "/diag"
