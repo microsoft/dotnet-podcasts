@@ -160,7 +160,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: drop
+          name: hub-drop
           path: hub
 
   deploy-hub:
@@ -192,7 +192,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: drop
+          name: hub-drop
           path: hub
 
       - name: Azure WebApp
@@ -246,7 +246,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: drop
+          name: web-drop
           path: web
 
     outputs:
@@ -283,7 +283,7 @@ jobs:
       - name: Download web artifacts
         uses: actions/download-artifact@v3
         with:
-          name: drop
+          name: web-drop
           path: web
 
       - name: Update App Service app settings variables
