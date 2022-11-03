@@ -183,7 +183,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Login to Azure
-        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+        run: |
+          az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az account set -s ${{ needs.ade.outputs.subscription }}
 
       - name: Deploy Hub
         run: az deployment group create -n hub-${{ github.run_number }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ needs.deploy-api.outputs.storage_account }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
@@ -271,7 +273,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Login to Azure
-        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+        run: |
+          az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az account set -s ${{ needs.ade.outputs.subscription }}
 
       - name: Deploy Web App
         run: az deployment group create -n web-${{ github.run_number }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Web/web.bicep -p name=${{ env.WEBAPP_NAME }}
