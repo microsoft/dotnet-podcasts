@@ -294,7 +294,7 @@
                 {
                   "name": "DotnetMonitor_RuntimeIdentifier",
                   "value": "linux-x64"
-                }
+                },
                 {
                   "name": "DotnetMonitor_Storage__DefaultSharedPath",
                   "value": "/diag"
