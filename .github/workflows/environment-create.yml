@@ -72,7 +72,7 @@ jobs:
         run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Deploy ACR
-        run: az deployment group create -n ghactionbgtasks${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/acr.bicep -p name=${{ env.ACR_NAME }}
+        run: az deployment group create -n acr-${{ github.run_number }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/acr.bicep -p name=${{ env.ACR_NAME }}
 
       - name: Login to ACR
         uses: docker/login-action@v2
@@ -120,7 +120,7 @@ jobs:
       - name: Deploy Container Apps
         id: deploy_apps
         run: |
-          deploy=$( az deployment group create -n ghaction${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/api.bicep -p name=${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
+          deploy=$( az deployment group create -n api-${{ github.run_number }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/api.bicep -p name=${{ needs.config.outputs.name }} imageTag=${{ github.sha }} acrName=${{ env.ACR_NAME }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }} )
           outputs=$( echo $deploy | jq '.properties.outputs' )
           apiFqdn=$( echo $outputs | jq -r '.apiFqdn.value' )
           storageAccountName=$( echo $outputs | jq -r '.storageAccountName.value' )
@@ -186,7 +186,7 @@ jobs:
         run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Deploy Hub
-        run: az deployment group create -n ghactionlistentogether${{ github.sha }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ needs.deploy-api.outputs.storage_account }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
+        run: az deployment group create -n hub-${{ github.run_number }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Services/hub.bicep -p name=${{ env.HUB_WEBAPP_NAME }} storageAccountName=${{ needs.deploy-api.outputs.storage_account }} administratorLogin=${{ secrets.PODCASTDB_USER_LOGIN }} administratorLoginPassword=${{ secrets.PODCASTDB_USER_PASSWORD }}
 
       - uses: actions/download-artifact@v3
         with:
@@ -274,7 +274,7 @@ jobs:
         run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Deploy Web App
-        run: az deployment group create -n ghaction --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Web/web.bicep -p name=${{ env.WEBAPP_NAME }}
+        run: az deployment group create -n web-${{ github.run_number }} --subscription ${{ needs.ade.outputs.subscription }} -g ${{ needs.ade.outputs.resource_group }} -f deploy/Web/web.bicep -p name=${{ env.WEBAPP_NAME }}
 
       - name: Download web artifacts
         uses: actions/download-artifact@v3
