@@ -313,6 +313,10 @@
                   "value": "10"
                 },
                 {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Trigger__Settings__SlidingWindowDuration",
+                  "value": "00:00:10"
+                },
+                {
                   "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__0__Type",
                   "value": "CollectDump"
                 },
