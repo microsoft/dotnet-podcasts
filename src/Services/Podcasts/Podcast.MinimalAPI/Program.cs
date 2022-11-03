@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 var builder = WebApplication.CreateBuilder(args);
 
 // Database and storage related-services
-var connectionString = builder.Configuration.GetConnectionString("PodcastDb");
+var connectionString = builder.Configuration.GetConnectionString("PodcastDb")!;
 builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
 var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
@@ -76,6 +76,8 @@ var shows = app.MapGroup("/shows");
 var categories = app.MapGroup("/categories");
 var episodes = app.MapGroup("/episodes");
 
+var blocking = app.MapGroup("/blocking");
+
 shows
     .MapShowsApi()
     .WithApiVersionSet(versionSet)
@@ -93,13 +95,18 @@ episodes
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0);
 
-var feedIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngestion");
+blocking
+    .MapBlockingApi()
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(1.0)
+    .MapToApiVersion(2.0);
 
-if (feedIngestionEnabled)
-{
-    var feeds = app.MapGroup("/feeds");
-    feeds.MapFeedsApi().WithApiVersionSet(versionSet).MapToApiVersion(2.0).RequireRateLimiting("feeds");
-}
+var feeds = app.MapGroup("/feeds");
+feeds
+    .MapFeedsApi()
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(2.0)
+    .RequireRateLimiting("feeds");
 
 app.Run();
 
