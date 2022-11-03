@@ -309,4 +309,41 @@ jobs:
           app-name: ${{ env.WEBAPP_NAME }}
           package: web
 
-      - run: echo "**Web App URL** ${{ steps.deploy_webapp.outputs.webapp-url }}" >> $GITHUB_STEP_SUMMARY
+      - run: |
+          echo "**Web App URL** ${{ steps.deploy_webapp.outputs.webapp-url }}" >> $GITHUB_STEP_SUMMARY
+          echo "WEBAPP_URL=${{ steps.deploy_webapp.outputs.webapp-url }}" >> $GITHUB_ENV
+
+    outputs:
+      webapp_url: ${{ env.WEBAPP_URL }}
+
+  add_pr_comment:
+    name: Add link to PR
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    runs-on: ubuntu-latest
+
+    needs:
+      - ade
+      - deploy-web
+
+    environment:
+      name: ${{ needs.config.outputs.type }}
+
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Add Link to Pull Request
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const tenantId = '${{ secrets.AZURE_TENANT_ID }}';
+            const resourceId = '/subscriptions/${{ needs.ade.outputs.subscription }}/resourceGroups/${{ needs.ade.outputs.resource_group }}';
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `The source in this Pull Request has been deployed to Azure for review and can be accessed [here](https://portal.azure.com/#@${tenantId}/resource${resourceId})`,
+            });

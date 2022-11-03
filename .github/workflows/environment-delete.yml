@@ -13,8 +13,10 @@ jobs:
     uses: ./.github/workflows/environment-config.yml
 
   ade:
+    name: Delete Environment
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
+
     needs: config
 
     environment:

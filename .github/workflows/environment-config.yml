@@ -4,24 +4,24 @@ on:
   workflow_call:
     # Map the workflow outputs to job outputs
     outputs:
-      type:
-        description: 'The type of the environment'
-        value: ${{ jobs.env_config.outputs.type }}
-      name:
-        description: 'The name of the environment'
-        value: ${{ jobs.env_config.outputs.name }}
-      name_clean:
-        description: 'The name_clean of the environment'
-        value: ${{ jobs.env_config.outputs.name_clean }}
-      name_cleaner:
-        description: 'The name_cleaner of the environment'
-        value: ${{ jobs.env_config.outputs.name_cleaner }}
       devcenter:
         description: 'The devcenter of the environment'
         value: ${{ jobs.env_config.outputs.devcenter }}
       project:
         description: 'The project of the environment'
         value: ${{ jobs.env_config.outputs.project }}
+      name:
+        description: 'The name of the environment'
+        value: ${{ jobs.env_config.outputs.name }}
+      type:
+        description: 'The type of the environment'
+        value: ${{ jobs.env_config.outputs.type }}
+      name_clean:
+        description: 'The name_clean of the environment'
+        value: ${{ jobs.env_config.outputs.name_clean }}
+      name_cleaner:
+        description: 'The name_cleaner of the environment'
+        value: ${{ jobs.env_config.outputs.name_cleaner }}
 
 env:
   ENVIRONMENT_DEVCENTER: ContosoTest008
@@ -44,12 +44,12 @@ jobs:
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
     outputs:
-      type: ${{ steps.get_config.outputs.type }}
-      name: ${{ steps.get_config.outputs.name }}
-      name_clean: ${{ steps.get_config.outputs.name_clean }}
-      name_cleaner: ${{ steps.get_config.outputs.name_cleaner }}
       devcenter: ${{ steps.get_config.outputs.devcenter }}
       project: ${{ steps.get_config.outputs.project }}
+      name: ${{ steps.get_config.outputs.name }}
+      type: ${{ steps.get_config.outputs.type }}
+      name_clean: ${{ steps.get_config.outputs.name_clean }}
+      name_cleaner: ${{ steps.get_config.outputs.name_cleaner }}
 
     steps:
       - id: get_config
@@ -67,12 +67,12 @@ jobs:
           name_cleaner = name_clean.replace('-', '')
 
           outputs = [
-              f'type={type}',
+              f'devcenter={devcenter}',
+              f'project={project}',
               f'name={name}',
+              f'type={type}',
               f'name_clean={name_clean}',
               f'name_cleaner={name_cleaner}',
-              f'devcenter={devcenter}',
-              f'project={project}'
           ]
 
           github_output = os.environ.get('GITHUB_OUTPUT', None)
@@ -81,12 +81,13 @@ jobs:
                   f.write('\n'.join(outputs))
 
           summary = [
-            f'- **Environment Type** {type}',
-            f'- **Environment Name** {name}',
-            f'- **Environment Name (clean)** {name_clean}',
-            f'- **Environment Name (cleaner)** {name_cleaner}',
-            f'- **Environment DevCenter** {devcenter}',
-            f'- **Environment Project** {project}',
+            '## Azure Deployment Environment',
+            f'- **Environment DevCenter:** {devcenter}',
+            f'- **Environment Project:** {project}',
+            f'- **Environment Name:** {name}',
+            f'- **Environment Type:** {type}',
+            f'- **Environment Name (clean):** {name_clean}',
+            f'- **Environment Name (cleaner):** {name_cleaner}',
           ]
 
           github_step_summary = os.environ.get('GITHUB_STEP_SUMMARY', None)
