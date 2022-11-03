@@ -10,6 +10,12 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Podcast.Infrastructure.Http;
+using System.Diagnostics;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Resources;
+using Azure.Monitor.OpenTelemetry.Exporter;
+using System.Reflection;
+using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +33,8 @@ builder.Services.AddAuthorization();
 
 // OpenAPI and versioning-related services
 builder.Services.AddSwaggerGen();
-builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
+builder.Services.Configure<SwaggerGeneratorOptions>(opts =>
+{
     opts.InferSecuritySchemes = true;
 });
 builder.Services.AddEndpointsApiExplorer();
@@ -52,11 +59,47 @@ builder.Services.AddRateLimiter(options => options.AddFixedWindowLimiter("feeds"
     options.Window = TimeSpan.FromSeconds(2);
     options.AutoReplenishment = false;
 }));
+
+var serviceName = typeof(Program).Assembly.FullName;
+var serviceVersion = typeof(Program).GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
+var serviceResource =
+        ResourceBuilder
+         .CreateDefault()
+         .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
+
+builder.Services.AddOpenTelemetryTracing(b =>
+    b.AddSource("dotnet-podcasts")
+     .SetResourceBuilder(serviceResource)
+     //.AddJaegerExporter(o =>
+     //{
+     //    o.Endpoint = builder.Configuration["Jaeger"]["Endpoint"];
+     //})
+     .AddAzureMonitorTraceExporter(o =>
+     {
+         o.ConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
+     })
+    .AddHttpClientInstrumentation()
+    .AddAspNetCoreInstrumentation()
+    .AddEntityFrameworkCoreInstrumentation()
+);
+
+builder.Services.AddOpenTelemetryMetrics(metrics =>
+{
+    metrics
+    .SetResourceBuilder(serviceResource)
+    .AddPrometheusExporter()
+    .AddAzureMonitorMetricExporter(o =>
+    {
+        o.ConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
+    });
+});
 builder.Services.AddOutputCache();
 
 var app = builder.Build();
 
 await EnsureDbAsync(app.Services);
+
+app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
 // Register required middlewares
 app.UseSwagger();

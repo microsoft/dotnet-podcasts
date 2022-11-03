@@ -102,7 +102,7 @@ jobs:
              az deployment group create -n ghaction${{ github.sha }} `
                 --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
                 --template-file deploy/Services/api.deployment.json `
-                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}}
+                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}} appInsightsInstrumentationKey=${{secrets.APPINSIGHTS_INSTRUMENTATION_KEY}}
 
              if( $LASTEXITCODE -ne 0 ) { exit -1 }
             
