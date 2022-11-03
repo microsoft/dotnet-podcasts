@@ -283,6 +283,10 @@
                 },
                 // experimental feature support
                 {
+                  "name": "DotnetMonitor_InProcessFeatures__Enabled",
+                  "value": "true"
+                },
+                {
                   "name": "DotnetMonitor_Experimental_Feature_CallStacks",
                   "value": "true"
                 },
