@@ -247,6 +247,7 @@
                 }
               ],
               "env": [
+                // connectivity
                 {
                   "name": "DOTNETMONITOR_DiagnosticPort__ConnectionMode",
                   "value": "Listen"
@@ -263,6 +264,7 @@
                   "name":"DOTNETMONITOR_Urls",
                   "value": "http://localhost:52323"
                 },
+                // azure storage egress
                 {
                   "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__accountUri",
                   "value": "[format('https://{0}.blob.core.windows.net', parameters('storageAccountName'))]"
@@ -279,6 +281,7 @@
                   "name": "DOTNETMONITOR_Egress__AzureBlobStorage__monitorBlob__accountKey",
                   "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]"
                 },
+                // experimental feature support
                 {
                   "name": "DotnetMonitor_Experimental_Feature_CallStacks",
                   "value": "true"
@@ -286,6 +289,48 @@
                 {
                   "name": "DotnetMonitor_Storage__DefaultSharedPath",
                   "value": "/diag"
+                },
+                // collection rules
+                // rule 1 - trigger when the threadpool queue is > SOME_NUMBER for more than 30s
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Trigger__Type",
+                  "value": "EventCounter"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Trigger__Settings__ProviderName",
+                  "value": "System.Runtime"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Trigger__Settings__CounterName",
+                  "value": "threadpool-queue-length"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Trigger__Settings__GreaterThan",
+                  "value": "10"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__0__Type",
+                  "value": "CollectDump"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__0__Settings__Type",
+                  "value": "WithHeap"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__0__Settings__Egress",
+                  "value": "monitorBlob"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__1__Type",
+                  "value": "CollectStacks"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__1__Settings__Format",
+                  "value": "Json"
+                },
+                {
+                  "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__1__Settings__Egress",
+                  "value": "monitorBlob"
                 }
               ],
               "resources": {
