@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Podcast.Infrastructure.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,8 @@ var connectionString = builder.Configuration.GetConnectionString("PodcastDb")!;
 builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
 var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
-builder.Services.AddHttpClient<IFeedClient, FeedClient>().AddHttpMessageHandler<JitterHandler>();
+builder.Services.AddHttpClient<IFeedClient, FeedClient>();
+builder.Services.AddHttpClient<ShowClient>().AddHttpMessageHandler<JitterHandler>();
 
 // Authentication and authorization-related services
 builder.Services.AddAuthentication().AddJwtBearer();

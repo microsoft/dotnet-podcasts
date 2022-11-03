@@ -7,17 +7,6 @@ using Podcast.Infrastructure.Data.Models;
 
 namespace Podcast.Infrastructure.Http.Feeds;
 
-public class JitterHandler : DelegatingHandler
-{
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        // Who would do such a thing?!
-        // TODO fix this horrible perf leak!
-        await Task.Delay(TimeSpan.FromSeconds(Random.Shared.NextInt64()));
-        return await base.SendAsync(request, cancellationToken);
-    }
-}
-
 public class FeedClient : IFeedClient
 {
     private static readonly XmlSerializer XmlSerializer = new(typeof(Rss));
