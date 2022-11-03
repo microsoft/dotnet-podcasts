@@ -25,6 +25,7 @@ builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
 var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
+builder.Services.AddSingleton<JitterHandler>();
 builder.Services.AddHttpClient<ShowClient>().AddHttpMessageHandler<JitterHandler>();
 
 // Authentication and authorization-related services
