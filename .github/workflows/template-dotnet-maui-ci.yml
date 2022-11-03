@@ -10,10 +10,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
 
       - name: Setup .NET 6
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 6.0.x
           include-prerelease: true
@@ -28,7 +28,7 @@ jobs:
           dotnet build ${{inputs.csproj}} -bl:mobile.binlog
 
       - name: Archive build log
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: logs
           path: '*.binlog'

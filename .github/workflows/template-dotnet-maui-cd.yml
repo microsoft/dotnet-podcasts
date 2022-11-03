@@ -33,9 +33,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
       - name: Setup .NET 6
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 6.0.x
           include-prerelease: true
@@ -71,7 +71,7 @@ jobs:
 
       #POST-BUILD
       - name: Publish build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:     
           name: "WinUI .NET MAUI artifacts" 
           path: "${{ env.WINDOWS_ARTIFACTS_PATH }}/*"
@@ -81,7 +81,7 @@ jobs:
   macos-build-android-macos-ios:
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
 
       - name: Decrypt keystore
         shell: pwsh
@@ -90,12 +90,12 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase=${{ secrets.android_keystore_gpg_pass }} --output ${{inputs.root_path}}${{ inputs.keystore_path }} ${{ inputs.encrypted_keystore_path }}
 
       - name: Setup .NET 6
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 6.0.x
           include-prerelease: true
 
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3.6.0
         with:
           distribution: 'microsoft'
           java-version: '11'     
@@ -146,7 +146,7 @@ jobs:
            Get-Childitem –Path ${{ github.workspace }} -Include *.pkg -File -Recurse | Copy-Item -Destination ${{ env.MACOS_ARTIFACTS_PATH }}
 
       - name: Publish Android build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:     
           name: "Android artifacts" 
           path: "${{ env.ANDROID_ARTIFACTS_PATH }}/*"
@@ -154,7 +154,7 @@ jobs:
           retention-days: 90
 
       - name: Publish macOS build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:     
           name: "macOS artifacts" 
           path: "${{ env.MACOS_ARTIFACTS_PATH }}/*"
