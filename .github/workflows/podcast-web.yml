@@ -13,10 +13,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.1.0
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: "6.0.x"
 
@@ -52,7 +52,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Web/Server --output web
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v3.1.1
         with:
           name: drop
           path: web
@@ -68,7 +68,7 @@ jobs:
       name: staging
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.1.0
 
       - uses: azure/login@v1
         with:
@@ -82,7 +82,7 @@ jobs:
             az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
             
       - name: Download web artifacts
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v3.0.1
         with:
           name: drop
           path: web
@@ -122,8 +122,8 @@ jobs:
       run:
         working-directory: src/Web/E2E
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3.1.0
+      - uses: actions/setup-node@v3.5.1
         with:
           node-version: "14.x"
 
@@ -137,13 +137,13 @@ jobs:
           HOME=/root npx playwright test
 
       - name: Create test summary
-        uses: test-summary/action@dist
+        uses: test-summary/action@v2.0
         if: always()
         with:
           paths: src/Web/E2E/test-results/junit.xml
 
       - name: Upload HTML report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         if: always()
         with:
           name: playwright-report
@@ -158,7 +158,7 @@ jobs:
     env:
       ENVIRONMENTNAME: test
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.1.0
 
       - name: Azure authentication
         uses: azure/login@v1
@@ -179,4 +179,4 @@ jobs:
       name: prod
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.1.0

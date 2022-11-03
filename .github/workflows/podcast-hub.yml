@@ -20,10 +20,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
       
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
@@ -34,7 +34,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v3.1.1
         with:
           name: drop
           path: hub
@@ -46,7 +46,7 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.1.0
     
       - uses: azure/login@v1
         with:
@@ -63,7 +63,7 @@ jobs:
               $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n podcastapica -o tsv --query properties.configuration.ingress.fqdn)+"/"
               az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.deployment.json --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
 
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v3.0.1
         with:
           name: drop
           path: hub
