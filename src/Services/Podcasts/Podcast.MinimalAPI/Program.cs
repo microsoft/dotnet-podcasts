@@ -61,7 +61,7 @@ builder.Services.AddRateLimiter(options => options.AddFixedWindowLimiter("feeds"
 }));
 
 var serviceName = typeof(Program).Assembly.FullName;
-var serviceVersion = typeof(Program).GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
+var serviceVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
 var serviceResource =
         ResourceBuilder
          .CreateDefault()
