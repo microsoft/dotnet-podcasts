@@ -309,4 +309,4 @@ jobs:
           app-name: ${{ env.WEBAPP_NAME }}
           package: web
 
-      - run: echo "**Web App URL** {{ steps.deploy_webapp.outputs.webapp-url }}" >> GITHUB_STEP_SUMMARY
+      - run: echo "**Web App URL** ${{ steps.deploy_webapp.outputs.webapp-url }}" >> $GITHUB_STEP_SUMMARY
