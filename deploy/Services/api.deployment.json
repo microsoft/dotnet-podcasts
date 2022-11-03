@@ -331,6 +331,14 @@
                 {
                   "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__1__Settings__Egress",
                   "value": "monitorBlob"
+                },
+                {
+                  "name": "DotnetMonitor_CollectionRules__ThreadBlock__Limits__ActionCount",
+                  "value": "3"
+                },
+                {
+                  "name": "DotnetMonitor_CollectionRules__ThreadBlock__Limits__ActionCountSlidingWindowDuration",
+                  "value": "01:00:00"
                 }
               ],
               "resources": {
