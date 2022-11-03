@@ -303,7 +303,10 @@ jobs:
             ]
 
       - name: Azure WebApp
+        id: deploy_webapp
         uses: Azure/webapps-deploy@v2
         with:
           app-name: ${{ env.WEBAPP_NAME }}
           package: web
+
+      - run: echo "**Web App URL** {{ steps.deploy_webapp.outputs.webapp-url }}" >> GITHUB_STEP_SUMMARY
