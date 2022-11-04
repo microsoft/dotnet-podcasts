@@ -34,7 +34,7 @@ public static class ShowsApi
             .Select(x => new ShowDto(x))
             .ToListAsync(cancellationToken);
         var showsWithValidLinks =
-                shows.Where(show => !showClient.CheckLink(show.Link).Result).ToList();
+                shows.Where(show => showClient.CheckLink(show.Link).Result).ToList();
         return TypedResults.Ok(showsWithValidLinks);
     }
 
