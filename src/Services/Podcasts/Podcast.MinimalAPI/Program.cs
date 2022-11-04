@@ -71,7 +71,9 @@ builder.Services.AddOpenTelemetryTracing(b =>
      .SetResourceBuilder(serviceResource)
      .AddJaegerExporter(o =>
      {
-        o.Endpoint = new Uri(builder.Configuration.GetSection("Jaeger").GetValue<string>("Endpoint"));
+         // because we chose to use _endpoint_ we must use binaryThrift protocol
+         o.Endpoint = new Uri(builder.Configuration.GetSection("Jaeger").GetValue<string>("Endpoint"));
+         o.Protocol = OpenTelemetry.Exporter.JaegerExportProtocol.HttpBinaryThrift;
      })
      .AddAzureMonitorTraceExporter(o =>
      {
