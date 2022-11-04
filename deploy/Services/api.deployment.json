@@ -225,7 +225,14 @@
               "name": "grafana",
               // "args": ["--config", "/config/grafana.ini"],
               "env": [
-                
+                {
+                  "name": "Prometheus_Host",
+                  "value": "[format('{0}.internal.{1}', reference(resourceId('Microsoft.App/containerApps', 'prometheus'), '2022-03-01').latestRevisionName, reference(variables('kubernetesEnvId')).defaultDomain)]"
+                },
+                {
+                  "name": "Jaeger_Host",
+                  "value": "[format('{0}.internal.{1}', reference(resourceId('Microsoft.App/containerApps', 'jaeger'), '2022-03-01').latestRevisionName, reference(variables('kubernetesEnvId')).defaultDomain)]"
+                }
               ]
               // "volumeMounts": [
               //   {
@@ -269,7 +276,12 @@
               "image": "prom/prometheus:v2.39.1",
               "name": "prometheus",
               //"args": ["--config.file", "/config/config.yaml"],
-              "env": []
+              "env": [
+                {
+                  "name": "App_Scrape_Endpoint",
+                  "value": "[format('http://{0}.internal.{1}:9090/metrics', reference(resourceId('Microsoft.App/containerApps', 'podcastapica'), '2022-03-01').latestRevisionName, reference(variables('kubernetesEnvId')).defaultDomain)]"
+                }
+              ]
               // "volumeMounts": [
               //   {
               //     "mountPath": "/config",
