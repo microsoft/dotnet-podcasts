@@ -128,8 +128,7 @@ shows
     .MapShowsApi()
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0)
-    .MapToApiVersion(2.0)
-    .CacheOutput();
+    .MapToApiVersion(2.0);
 
 categories
     .MapCategoriesApi()
