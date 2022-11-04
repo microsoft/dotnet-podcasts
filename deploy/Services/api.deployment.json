@@ -306,7 +306,7 @@
         "managedEnvironmentId": "[variables('kubernetesEnvId')]",
         "configuration": {
           "ingress": {
-            "external": false,
+            "external": true,
             "targetPort": 16686
           }
         },
