@@ -160,6 +160,40 @@
           }
         }
       },
+      "resources": [
+        {
+          "type": "storages",
+          "name": "grafana",
+          "apiVersion": "2022-03-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]"
+          ],
+          "properties": {
+            "azureFile": {
+              "accountName": "[parameters('storageAccountName')]",
+              "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]",
+              "shareName": "grafana-volume",
+              "accessMode": "ReadWrite"
+            }
+          }
+        },
+        {
+          "type": "storages",
+          "name": "prometheus",
+          "apiVersion": "2022-03-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]"
+          ],
+          "properties": {
+            "azureFile": {
+              "accountName": "[parameters('storageAccountName')]",
+              "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]",
+              "shareName": "prometheus-volume",
+              "accessMode": "ReadWrite"
+            }
+          }
+        }
+      ],
       "dependsOn": [
         "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
       ]
