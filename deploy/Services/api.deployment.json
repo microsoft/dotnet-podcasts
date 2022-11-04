@@ -180,7 +180,11 @@
         "template": {
           "containers": [
             {
-              "image": "grafana/grafana-oss:9.2.3"
+              "image": "grafana/grafana-oss:9.2.3",
+              "name": "grafana",
+              "env": [
+                
+              ]
             }
           ]
         }
@@ -203,6 +207,7 @@
           "containers": [
             {
               "image": "prom/prometheus:v2.39.1",
+              "name": "prometheus",
               "env": []
             }
           ]
@@ -226,6 +231,7 @@
           "containers": [
             {
               "image": "jaegertracing/all-in-one:1.39",
+              "name": "jaeger",
               "env": [
 
               ]
