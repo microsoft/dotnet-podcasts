@@ -1,22 +1,19 @@
-using Azure.Storage.Queues;
-using Microsoft.EntityFrameworkCore;
-using Podcast.Infrastructure.Data;
-using Podcast.Infrastructure.Http.Feeds;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
-using Podcast.API.Routes;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Podcast.Infrastructure.Http;
-using System.Diagnostics;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Resources;
 using Azure.Monitor.OpenTelemetry.Exporter;
-using System.Reflection;
+using Azure.Storage.Queues;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
-using Microsoft.Extensions.Azure;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Podcast.API.Routes;
+using Podcast.Infrastructure.Data;
+using Podcast.Infrastructure.Http;
+using Podcast.Infrastructure.Http.Feeds;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,8 +94,7 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     .AddAspNetCoreInstrumentation()
     .AddRuntimeInstrumentation()
     .AddProcessInstrumentation()    
-    .AddHttpClientInstrumentation()
-    ;
+    .AddHttpClientInstrumentation();
 });
 builder.Services.AddOutputCache();
 
