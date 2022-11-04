@@ -428,7 +428,7 @@
                 },
                 {
                   "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__0__Settings__Type",
-                  "value": "WithHeap"
+                  "value": "Full"
                 },
                 {
                   "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__0__Settings__Egress",
