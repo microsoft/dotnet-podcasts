@@ -28,7 +28,6 @@ public class PodcastDbContext : DbContext
     {
         modelBuilder.Entity<Feed>().HasData(Seed.Feeds);
         modelBuilder.Entity<Category>().HasData(Seed.Categories);
-        modelBuilder.Entity<Show>().HasQueryFilter(show => _showClient.CheckLink(show.Link).Result);
         modelBuilder.Entity<FeedCategory>().HasData(Seed.FeedCategories);
         modelBuilder.Entity<FeedCategory>().HasKey(prop => new { prop.FeedId, prop.CategoryId });
         base.OnModelCreating(modelBuilder);

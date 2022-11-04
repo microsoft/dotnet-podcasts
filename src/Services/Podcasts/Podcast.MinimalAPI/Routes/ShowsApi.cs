@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Podcast.API.Models;
 using Podcast.Infrastructure.Data;
+using Podcast.Infrastructure.Http;
 
 namespace Podcast.API.Routes;
 
@@ -14,7 +15,7 @@ public static class ShowsApi
         return group;
     }
 
-    public static async ValueTask<Ok<List<ShowDto>>> GetAllShows(int limit, string? term, Guid? categoryId, CancellationToken cancellationToken, PodcastDbContext podcastDbContext)
+    public static async ValueTask<Ok<List<ShowDto>>> GetAllShows(int limit, string? term, Guid? categoryId, CancellationToken cancellationToken, PodcastDbContext podcastDbContext, ShowClient showClient)
     {
         var showsQuery = podcastDbContext.Shows.Include(show => show.Feed!.Categories)
         .ThenInclude(x => x.Category)
@@ -32,7 +33,9 @@ public static class ShowsApi
             .Take(limit)
             .Select(x => new ShowDto(x))
             .ToListAsync(cancellationToken);
-        return TypedResults.Ok(shows);
+        var showsWithValidLinks =
+                shows.Where(show => !showClient.CheckLink(show.Link).Result).ToList();
+        return TypedResults.Ok(showsWithValidLinks);
     }
 
 
