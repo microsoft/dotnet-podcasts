@@ -10,7 +10,7 @@ public static class EpisodesApi
 {
     public static RouteGroupBuilder MapEpisodesApi(this RouteGroupBuilder group)
     {
-        group.MapPost("/{id}", GetEpisodeById);
+        group.MapPost("/{id}", GetEpisodeById).WithName("GetEpisodeById");
         return group;
     }
 

@@ -22,11 +22,11 @@
 		<PackageReference Include="Asp.Versioning.Http" Version="6.1.0" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.4.3" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0-*" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Podcast.Infrastructure\Podcast.Infrastructure.csproj" />
-		<ProjectReference Include="..\Podcast.Ingestion.Worker\Podcast.Ingestion.Worker.csproj" />
 	</ItemGroup>
 
 </Project>
