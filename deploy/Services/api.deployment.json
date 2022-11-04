@@ -178,12 +178,26 @@
           }
         },
         "template": {
+          "volumes": [
+            {
+              "name": "grafana-volume",
+              "storageType": "AzureFile",
+              "storageName": "[parameters('storageAccountName')]"
+            }
+          ],
           "containers": [
             {
               "image": "grafana/grafana-oss:9.2.3",
               "name": "grafana",
+              "args": ["--config", "/config/grafana.ini"],
               "env": [
                 
+              ],
+              "volumeMounts": [
+                {
+                  "mountPath": "/config",
+                  "volumeName": "grafana-volume"
+                }
               ]
             }
           ],
@@ -209,11 +223,25 @@
           "activeRevisionsMode": "Single"
         },
         "template": {
+          "volumes": [
+            {
+              "name": "prometheus-volume",
+              "storageType": "AzureFile",
+              "storageName": "[parameters('storageAccountName')]"
+            }
+          ],
           "containers": [
             {
               "image": "prom/prometheus:v2.39.1",
               "name": "prometheus",
-              "env": []
+              "args": ["--config.file", "/config/config.yaml"],
+              "env": [],
+              "volumeMounts": [
+                {
+                  "mountPath": "/config",
+                  "volumeName": "prometheus-volume"
+                }
+              ]
             }
           ],
           "scale": {
