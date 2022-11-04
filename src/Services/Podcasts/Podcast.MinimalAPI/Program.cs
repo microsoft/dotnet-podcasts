@@ -73,7 +73,7 @@ builder.Services.AddOpenTelemetryTracing(b =>
      .SetResourceBuilder(serviceResource)
      .AddJaegerExporter(o =>
      {
-        o.Endpoint = builder.Configuration["Jaeger"]["Endpoint"];
+        o.Endpoint = new Uri(builder.Configuration.GetSection("Jaeger").GetValue<string>("Endpoint"));
      })
      .AddAzureMonitorTraceExporter(o =>
      {
