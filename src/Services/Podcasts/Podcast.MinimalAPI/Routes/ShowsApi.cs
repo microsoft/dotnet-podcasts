@@ -33,8 +33,8 @@ public static class ShowsApi
             .Take(limit)
             .Select(x => new ShowDto(x))
             .ToListAsync(cancellationToken);
-        var showsWithValidLinks =
-                shows.Where(show => showClient.CheckLink(show.Link).Result).ToList();
+
+        List<ShowDto> showsWithValidLinks = Task.WhenAll(shows.Select(async show => await showClient.CheckLink(show.Link) ? show : null)).Result.Where(show => show is not null).ToList()!;
         return TypedResults.Ok(showsWithValidLinks);
     }
 
