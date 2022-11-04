@@ -12,7 +12,7 @@ namespace Podcast.Infrastructure.Http
         {
             // Who would do such a thing?!
             // TODO fix this horrible perf leak!
-            await Task.Delay(TimeSpan.FromSeconds(Random.Shared.NextInt64(1, 11)));
+            await Task.Delay(TimeSpan.FromMilliseconds(Random.Shared.NextInt64(50, 500)));
             return await base.SendAsync(request, cancellationToken);
         }
     }
