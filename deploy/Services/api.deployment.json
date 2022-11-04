@@ -166,7 +166,77 @@
     },
     {
       "type": "Microsoft.App/containerApps",
-      "apiVersion": "2022-01-01-preview",
+      "apiVersion": "2022-03-01",
+      "location": "[variables('kubernetesEnvLocation')]",
+      "name": "grafana",
+      "properties": {
+        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
+        "configuration": {
+          "ingress": {
+            "external": true,
+            "targetPort": 3000
+          }
+        },
+        "template": {
+          "containers": [
+            {
+              "image": "grafana/grafana-oss:9.2.3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-03-01",
+      "location": "[variables('kubernetesEnvLocation')]",
+      "name": "prometheus",
+      "properties": {
+        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
+        "configuration": {
+          "ingress": {
+            "external": false,
+            "targetPort": 9090
+          }
+        },
+        "template": {
+          "containers": [
+            {
+              "image": "prom/prometheus:v2.39.1",
+              "env": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-03-01",
+      "location": "[variables('kubernetesEnvLocation')]",
+      "name": "jaeger",
+      "properties": {
+        "managedEnvironmentId": "[variables('kubernetesEnvId')]",
+        "configuration": {
+          "ingress": {
+            "external": false,
+            "targetPort": 16686
+          }
+        },
+        "template": {
+          "containers": [
+            {
+              "image": "jaegertracing/all-in-one:1.39",
+              "env": [
+
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-03-01",
       "name": "podcastapica",
       "location": "[variables('kubernetesEnvLocation')]",
       "kind": "containerapp",
@@ -250,7 +320,7 @@
                 {
                   "name": "DotnetMonitor_RuntimeIdentifier",
                   "value": "linux-x64"
-                },
+                }
               ]
             },
             {
