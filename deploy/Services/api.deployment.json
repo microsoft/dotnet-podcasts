@@ -339,6 +339,10 @@
                 {
                   "name": "DotnetMonitor_RuntimeIdentifier",
                   "value": "linux-x64"
+                },
+                {
+                  "name": "Jaeger__Endpoint",
+                  "value": "[format('http://{0}.internal.{1}:14268', reference(resourceId('Microsoft.App/containerApps', 'jaeger'), '2022-03-01').name, reference(variables('kubernetesEnvId')).properties.defaultDomain)]"
                 }
               ]
             },

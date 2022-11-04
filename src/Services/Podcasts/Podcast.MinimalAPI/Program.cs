@@ -71,10 +71,10 @@ var serviceResource =
 builder.Services.AddOpenTelemetryTracing(b =>
     b.AddSource("dotnet-podcasts")
      .SetResourceBuilder(serviceResource)
-     //.AddJaegerExporter(o =>
-     //{
-     //    o.Endpoint = builder.Configuration["Jaeger"]["Endpoint"];
-     //})
+     .AddJaegerExporter(o =>
+     {
+        o.Endpoint = builder.Configuration["Jaeger"]["Endpoint"];
+     })
      .AddAzureMonitorTraceExporter(o =>
      {
          o.ConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
