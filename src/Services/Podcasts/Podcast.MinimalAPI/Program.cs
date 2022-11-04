@@ -12,6 +12,8 @@ using Podcast.Infrastructure.Data;
 using Podcast.Infrastructure.Http;
 using Podcast.Infrastructure.Http.Feeds;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Collections.Concurrent;
+using System.Diagnostics.Tracing;
 using System.Reflection;
 using System.Threading.RateLimiting;
 
@@ -98,6 +100,9 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     .AddProcessInstrumentation()    
     .AddHttpClientInstrumentation();
 });
+
+
+
 builder.Services.AddOutputCache();
 
 var app = builder.Build();
@@ -158,10 +163,50 @@ feeds
     .MapToApiVersion(2.0)
     .RequireRateLimiting("feeds");
 
+var factory = app.Services.GetRequiredService<ILoggerFactory>();
+OtelListener._factory = factory;
+var listener = new OtelListener();
+
 app.Run();
 
 static async Task EnsureDbAsync(IServiceProvider sp)
 {
     await using var db = sp.CreateScope().ServiceProvider.GetRequiredService<PodcastDbContext>();
     await db.Database.MigrateAsync();
+}
+
+
+class OtelListener : EventListener
+{
+    public static ILoggerFactory _factory;
+    private ConcurrentDictionary<string, ILogger> _loggerMap = new();
+
+    public OtelListener()
+    {
+
+    }
+
+    protected override void OnEventSourceCreated(EventSource eventSource)
+    {
+        if (eventSource.Name.StartsWith("OpenTelemetry"))
+        {
+            if (_loggerMap.TryGetValue(eventSource.Name, out _)) return;
+            ILogger CreateAndRegister(string name)
+            {
+                var l = _factory.CreateLogger(name);
+                base.EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All);
+                return l;
+            }
+            var logger = _loggerMap.AddOrUpdate(eventSource.Name, CreateAndRegister, (name, existing) => existing);
+        }
+        base.OnEventSourceCreated(eventSource);
+    }
+
+    protected override void OnEventWritten(EventWrittenEventArgs eventData)
+    {
+        if (_loggerMap[eventData.EventSource.Name] is { } logger)
+        {
+            logger.Log(LogLevel.Information, string.Format(eventData.Message, (eventData.Payload?.ToArray() ?? Array.Empty<object>())));
+        }
+    }
 }
