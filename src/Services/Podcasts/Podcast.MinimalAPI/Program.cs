@@ -16,6 +16,7 @@ using OpenTelemetry.Resources;
 using Azure.Monitor.OpenTelemetry.Exporter;
 using System.Reflection;
 using OpenTelemetry.Metrics;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,7 +93,12 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     .AddAzureMonitorMetricExporter(o =>
     {
         o.ConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
-    });
+    })
+    .AddAspNetCoreInstrumentation()
+    .AddRuntimeInstrumentation()
+    .AddProcessInstrumentation()    
+    .AddHttpClientInstrumentation()
+    ;
 });
 builder.Services.AddOutputCache();
 
@@ -100,7 +106,6 @@ var app = builder.Build();
 
 await EnsureDbAsync(app.Services);
 
-app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
 // Register required middlewares
 app.UseSwagger();
@@ -111,6 +116,8 @@ app.UseSwaggerUI(c =>
 app.UseCors();
 app.UseRateLimiter();
 app.UseOutputCache();
+
+app.MapPrometheusScrapingEndpoint();
 
 var versionSet = app.NewApiVersionSet()
                     .HasApiVersion(1.0)

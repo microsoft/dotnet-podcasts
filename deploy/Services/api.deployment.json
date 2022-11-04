@@ -160,40 +160,40 @@
           }
         }
       },
-      "resources": [
-        {
-          "type": "storages",
-          "name": "grafana",
-          "apiVersion": "2022-03-01",
-          "dependsOn": [
-            "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]"
-          ],
-          "properties": {
-            "azureFile": {
-              "accountName": "[parameters('storageAccountName')]",
-              "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]",
-              "shareName": "grafana-volume",
-              "accessMode": "ReadWrite"
-            }
-          }
-        },
-        {
-          "type": "storages",
-          "name": "prometheus",
-          "apiVersion": "2022-03-01",
-          "dependsOn": [
-            "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]"
-          ],
-          "properties": {
-            "azureFile": {
-              "accountName": "[parameters('storageAccountName')]",
-              "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]",
-              "shareName": "prometheus-volume",
-              "accessMode": "ReadWrite"
-            }
-          }
-        }
-      ],
+      // "resources": [
+      //   {
+      //     "type": "storages",
+      //     "name": "grafana",
+      //     "apiVersion": "2022-03-01",
+      //     "dependsOn": [
+      //       "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]"
+      //     ],
+      //     "properties": {
+      //       "azureFile": {
+      //         "accountName": "[parameters('storageAccountName')]",
+      //         "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]",
+      //         "shareName": "grafana-volume",
+      //         "accessMode": "ReadWrite"
+      //       }
+      //     }
+      //   },
+      //   {
+      //     "type": "storages",
+      //     "name": "prometheus",
+      //     "apiVersion": "2022-03-01",
+      //     "dependsOn": [
+      //       "[resourceId('Microsoft.App/managedEnvironments', parameters('kubernetesEnvName'))]"
+      //     ],
+      //     "properties": {
+      //       "azureFile": {
+      //         "accountName": "[parameters('storageAccountName')]",
+      //         "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2019-06-01').keys[0].value]",
+      //         "shareName": "prometheus-volume",
+      //         "accessMode": "ReadWrite"
+      //       }
+      //     }
+      //   }
+      // ],
       "dependsOn": [
         "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
       ]
@@ -213,26 +213,26 @@
         },
         "template": {
           "volumes": [
-            {
-              "name": "grafana-volume",
-              "storageType": "AzureFile",
-              "storageName": "[parameters('storageAccountName')]"
-            }
+            // {
+            //   "name": "grafana-volume",
+            //   "storageType": "AzureFile",
+            //   "storageName": "[parameters('storageAccountName')]"
+            // }
           ],
           "containers": [
             {
               "image": "grafana/grafana-oss:9.2.3",
               "name": "grafana",
-              "args": ["--config", "/config/grafana.ini"],
+              // "args": ["--config", "/config/grafana.ini"],
               "env": [
                 
-              ],
-              "volumeMounts": [
-                {
-                  "mountPath": "/config",
-                  "volumeName": "grafana-volume"
-                }
               ]
+              // "volumeMounts": [
+              //   {
+              //     "mountPath": "/config",
+              //     "volumeName": "grafana-volume"
+              //   }
+              // ]
             }
           ],
           "scale": {
@@ -258,24 +258,24 @@
         },
         "template": {
           "volumes": [
-            {
-              "name": "prometheus-volume",
-              "storageType": "AzureFile",
-              "storageName": "[parameters('storageAccountName')]"
-            }
+            // {
+            //   "name": "prometheus-volume",
+            //   "storageType": "AzureFile",
+            //   "storageName": "[parameters('storageAccountName')]"
+            // }
           ],
           "containers": [
             {
               "image": "prom/prometheus:v2.39.1",
               "name": "prometheus",
-              "args": ["--config.file", "/config/config.yaml"],
-              "env": [],
-              "volumeMounts": [
-                {
-                  "mountPath": "/config",
-                  "volumeName": "prometheus-volume"
-                }
-              ]
+              //"args": ["--config.file", "/config/config.yaml"],
+              "env": []
+              // "volumeMounts": [
+              //   {
+              //     "mountPath": "/config",
+              //     "volumeName": "prometheus-volume"
+              //   }
+              // ]
             }
           ],
           "scale": {
