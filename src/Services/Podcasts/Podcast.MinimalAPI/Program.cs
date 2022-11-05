@@ -100,6 +100,7 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
         o.ConnectionString = azureMonitorConnectionString;
     })
     .AddAspNetCoreInstrumentation()
+    .AddHttpClientInstrumentation()
     .AddRuntimeInstrumentation()
     .AddProcessInstrumentation()
     .AddHttpClientInstrumentation();
