@@ -110,6 +110,7 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetPodcast Api v1");
 });
+
 app.UseCors();
 app.UseRateLimiter();
 app.UseOutputCache();
@@ -125,6 +126,7 @@ var versionSet = app.NewApiVersionSet()
 var shows = app.MapGroup("/shows");
 var categories = app.MapGroup("/categories");
 var episodes = app.MapGroup("/episodes");
+var feeds = app.MapGroup("/feeds");
 
 shows
     .MapShowsApi()
@@ -142,7 +144,6 @@ episodes
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0);
 
-var feeds = app.MapGroup("/feeds");
 feeds
     .MapFeedsApi()
     .WithApiVersionSet(versionSet)
