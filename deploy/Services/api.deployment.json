@@ -518,7 +518,7 @@
                 },
                 {
                   "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__1__Settings__Format",
-                  "value": "PlainText"
+                  "value": "Json"
                 },
                 {
                   "name" : "DotnetMonitor_CollectionRules__ThreadBlock__Actions__1__Settings__Egress",
