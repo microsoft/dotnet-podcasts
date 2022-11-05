@@ -126,6 +126,7 @@ app.UseRateLimiter();
 app.UseOutputCache();
 
 app.MapPrometheusScrapingEndpoint();
+app.MapGet("/version", () => serviceVersion);
 
 var versionSet = app.NewApiVersionSet()
                     .HasApiVersion(1.0)
