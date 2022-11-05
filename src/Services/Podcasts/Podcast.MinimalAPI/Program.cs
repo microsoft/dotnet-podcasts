@@ -206,7 +206,7 @@ class OtelListener : EventListener
     {
         if (_loggerMap[eventData.EventSource.Name] is { } logger)
         {
-            logger.Log(LogLevel.Information, string.Format(eventData.Message, (eventData.Payload?.ToArray() ?? Array.Empty<object>())));
+            logger.Log(LogLevel.Information, eventData.Message, (eventData.Payload?.ToArray() ?? Array.Empty<object>()));
         }
     }
 }
