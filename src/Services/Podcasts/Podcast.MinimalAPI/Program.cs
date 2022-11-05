@@ -102,10 +102,12 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
 
 builder.Logging.AddOpenTelemetry(logging =>
 {
-    logging.AddAzureMonitorLogExporter(o =>
-    {
-        o.ConnectionString = azureMonitorConnectionString;
-    });
+    logging
+     .SetResourceBuilder(serviceResource)
+     .AddAzureMonitorLogExporter(o =>
+     {
+         o.ConnectionString = azureMonitorConnectionString;
+     });
 });
 
 var app = builder.Build();
