@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+using System.Diagnostics.Tracing;
 using System.Reflection;
 using System.Threading.RateLimiting;
 using Asp.Versioning;
@@ -14,10 +16,6 @@ using Podcast.Infrastructure.Data;
 using Podcast.Infrastructure.Http;
 using Podcast.Infrastructure.Http.Feeds;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Concurrent;
-using System.Diagnostics.Tracing;
-using System.Reflection;
-using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
