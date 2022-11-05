@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
 using Azure.Monitor.OpenTelemetry.Exporter;
@@ -20,9 +22,11 @@ using System.Threading.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 
 // Database and storage related-services
-var connectionString = builder.Configuration.GetConnectionString("PodcastDb")!;
-builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
-var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
+var dbConnectionString = builder.Configuration.GetConnectionString("PodcastDb") ?? throw new InvalidOperationException("Missing connection string configuration");
+builder.Services.AddSqlServer<PodcastDbContext>(dbConnectionString);
+
+var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue") ?? throw new InvalidOperationException("Missing feed queue configuration");
+
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 builder.Services.AddTransient<JitterHandler>();
@@ -61,12 +65,15 @@ builder.Services.AddRateLimiter(options => options.AddFixedWindowLimiter("feeds"
     options.AutoReplenishment = false;
 }));
 
-var serviceName = typeof(Program).Assembly.FullName;
+var serviceName = builder.Environment.ApplicationName;
 var serviceVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
 var serviceResource =
         ResourceBuilder
          .CreateDefault()
          .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
+
+var jagerEndpoint = builder.Configuration.GetSection("Jaeger")["Endpoint"] ?? throw new InvalidOperationException("Missing jager endpoint configuration");
+var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
 
 builder.Services.AddOpenTelemetryTracing(b =>
     b.AddSource("dotnet-podcasts")
@@ -74,12 +81,12 @@ builder.Services.AddOpenTelemetryTracing(b =>
      .AddJaegerExporter(o =>
      {
          // because we chose to use _endpoint_ we must use binaryThrift protocol
-         o.Endpoint = new Uri(builder.Configuration.GetSection("Jaeger").GetValue<string>("Endpoint"));
          o.Protocol = OpenTelemetry.Exporter.JaegerExportProtocol.HttpBinaryThrift;
+         o.Endpoint = new Uri(jagerEndpoint);
      })
      .AddAzureMonitorTraceExporter(o =>
      {
-         o.ConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
+         o.ConnectionString = azureMonitorConnectionString;
      })
     .AddHttpClientInstrumentation()
     .AddAspNetCoreInstrumentation()
@@ -93,11 +100,11 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     .AddPrometheusExporter()
     .AddAzureMonitorMetricExporter(o =>
     {
-        o.ConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
+        o.ConnectionString = azureMonitorConnectionString;
     })
     .AddAspNetCoreInstrumentation()
     .AddRuntimeInstrumentation()
-    .AddProcessInstrumentation()    
+    .AddProcessInstrumentation()
     .AddHttpClientInstrumentation();
 });
 
@@ -132,8 +139,6 @@ var shows = app.MapGroup("/shows");
 var categories = app.MapGroup("/categories");
 var episodes = app.MapGroup("/episodes");
 
-var blocking = app.MapGroup("/blocking");
-
 shows
     .MapShowsApi()
     .WithApiVersionSet(versionSet)
@@ -149,12 +154,6 @@ episodes
     .MapEpisodesApi()
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0);
-
-blocking
-    .MapBlockingApi()
-    .WithApiVersionSet(versionSet)
-    .MapToApiVersion(1.0)
-    .MapToApiVersion(2.0);
 
 var feeds = app.MapGroup("/feeds");
 feeds
