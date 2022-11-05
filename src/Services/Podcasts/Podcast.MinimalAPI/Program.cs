@@ -100,6 +100,14 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     .AddHttpClientInstrumentation();
 });
 
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging.AddAzureMonitorLogExporter(o =>
+    {
+        o.ConnectionString = azureMonitorConnectionString;
+    });
+});
+
 var app = builder.Build();
 
 await EnsureDbAsync(app.Services);
