@@ -97,7 +97,11 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     .AddHttpClientInstrumentation()
     .AddRuntimeInstrumentation()
     .AddProcessInstrumentation()
-    .AddHttpClientInstrumentation();
+    .AddHttpClientInstrumentation()
+    .AddEventCountersInstrumentation(ec =>
+    {
+        ec.AddEventSources("Microsoft.AspNetCore.Hosting");
+    });
 });
 
 builder.Logging.AddOpenTelemetry(logging =>
