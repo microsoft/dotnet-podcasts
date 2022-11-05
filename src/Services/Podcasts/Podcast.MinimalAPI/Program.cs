@@ -1,5 +1,3 @@
-using System.Collections.Concurrent;
-using System.Diagnostics.Tracing;
 using System.Reflection;
 using System.Threading.RateLimiting;
 using Asp.Versioning;
@@ -70,18 +68,19 @@ var serviceResource =
          .CreateDefault()
          .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
-var jagerEndpoint = builder.Configuration.GetSection("Jaeger")["Endpoint"] ?? throw new InvalidOperationException("Missing jager endpoint configuration");
+// Disable this for now
+// var jagerEndpoint = builder.Configuration.GetSection("Jaeger")["Endpoint"] ?? throw new InvalidOperationException("Missing jager endpoint configuration");
 var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
 
 builder.Services.AddOpenTelemetryTracing(b =>
     b.AddSource("dotnet-podcasts")
      .SetResourceBuilder(serviceResource)
-     .AddJaegerExporter(o =>
-     {
-         // because we chose to use _endpoint_ we must use binaryThrift protocol
-         o.Protocol = OpenTelemetry.Exporter.JaegerExportProtocol.HttpBinaryThrift;
-         o.Endpoint = new Uri(jagerEndpoint);
-     })
+     //.AddJaegerExporter(o =>
+     //{
+     //    // because we chose to use _endpoint_ we must use binaryThrift protocol
+     //    o.Protocol = OpenTelemetry.Exporter.JaegerExportProtocol.HttpBinaryThrift;
+     //    o.Endpoint = new Uri(jagerEndpoint);
+     //})
      .AddAzureMonitorTraceExporter(o =>
      {
          o.ConnectionString = azureMonitorConnectionString;
@@ -160,50 +159,10 @@ feeds
     .MapToApiVersion(2.0)
     .RequireRateLimiting("feeds");
 
-var factory = app.Services.GetRequiredService<ILoggerFactory>();
-OtelListener._factory = factory;
-var listener = new OtelListener();
-
 app.Run();
 
 static async Task EnsureDbAsync(IServiceProvider sp)
 {
     await using var db = sp.CreateScope().ServiceProvider.GetRequiredService<PodcastDbContext>();
     await db.Database.MigrateAsync();
-}
-
-
-class OtelListener : EventListener
-{
-    public static ILoggerFactory _factory;
-    private ConcurrentDictionary<string, ILogger> _loggerMap = new();
-
-    public OtelListener()
-    {
-
-    }
-
-    protected override void OnEventSourceCreated(EventSource eventSource)
-    {
-        if (eventSource.Name.StartsWith("OpenTelemetry"))
-        {
-            if (_loggerMap.TryGetValue(eventSource.Name, out _)) return;
-            ILogger CreateAndRegister(string name)
-            {
-                var l = _factory.CreateLogger(name);
-                base.EnableEvents(eventSource, EventLevel.LogAlways, EventKeywords.All);
-                return l;
-            }
-            var logger = _loggerMap.AddOrUpdate(eventSource.Name, CreateAndRegister, (name, existing) => existing);
-        }
-        base.OnEventSourceCreated(eventSource);
-    }
-
-    protected override void OnEventWritten(EventWrittenEventArgs eventData)
-    {
-        if (_loggerMap[eventData.EventSource.Name] is { } logger)
-        {
-            logger.Log(LogLevel.Information, eventData.Message, (eventData.Payload?.ToArray() ?? Array.Empty<object>()));
-        }
-    }
 }
