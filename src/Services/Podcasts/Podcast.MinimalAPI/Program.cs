@@ -46,6 +46,8 @@ builder.Services.AddApiVersioning(options =>
     options.AssumeDefaultVersionWhenUnspecified = true;
 });
 
+builder.Services.AddOutputCache();
+
 builder.Services.AddCors(setup =>
 {
     setup.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -68,19 +70,11 @@ var serviceResource =
          .CreateDefault()
          .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
-// Disable this for now
-// var jagerEndpoint = builder.Configuration.GetSection("Jaeger")["Endpoint"] ?? throw new InvalidOperationException("Missing jager endpoint configuration");
 var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
 
 builder.Services.AddOpenTelemetryTracing(b =>
     b.AddSource("dotnet-podcasts")
      .SetResourceBuilder(serviceResource)
-     //.AddJaegerExporter(o =>
-     //{
-     //    // because we chose to use _endpoint_ we must use binaryThrift protocol
-     //    o.Protocol = OpenTelemetry.Exporter.JaegerExportProtocol.HttpBinaryThrift;
-     //    o.Endpoint = new Uri(jagerEndpoint);
-     //})
      .AddAzureMonitorTraceExporter(o =>
      {
          o.ConnectionString = azureMonitorConnectionString;
@@ -106,14 +100,9 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     .AddHttpClientInstrumentation();
 });
 
-
-
-builder.Services.AddOutputCache();
-
 var app = builder.Build();
 
 await EnsureDbAsync(app.Services);
-
 
 // Register required middlewares
 app.UseSwagger();
