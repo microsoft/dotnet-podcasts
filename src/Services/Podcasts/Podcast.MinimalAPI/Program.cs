@@ -30,7 +30,9 @@ builder.Services.AddTransient<JitterHandler>();
 builder.Services.AddHttpClient<ShowClient>().AddHttpMessageHandler<JitterHandler>();
 
 // Authentication and authorization-related services
+// Comment back in if testing authentication
 // builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+
 builder.Services.AddAuthorizationBuilder().AddPolicy("modify_feeds", policy => policy.RequireScope("API.Access"));
 
 // OpenAPI and versioning-related services
