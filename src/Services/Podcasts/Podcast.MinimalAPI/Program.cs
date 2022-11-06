@@ -21,7 +21,7 @@ builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 
 // Authentication and authorization-related services
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+// builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
 builder.Services.AddAuthorizationBuilder().AddPolicy("modify_feeds", policy => policy.RequireScope("API.Access"));
 
 // OpenAPI and versioning-related services
