@@ -21,7 +21,9 @@ builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 
 // Authentication and authorization-related services
-builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+// Comment back in if testing authentication
+// builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+
 builder.Services.AddAuthorizationBuilder().AddPolicy("modify_feeds", policy => policy.RequireScope("API.Access"));
 
 // OpenAPI and versioning-related services
@@ -35,6 +37,7 @@ builder.Services.AddApiVersioning(options =>
     options.DefaultApiVersion = new ApiVersion(2, 0);
     options.ReportApiVersions = true;
     options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ApiVersionReader = new HeaderApiVersionReader("api-version");
 });
 
 builder.Services.AddCors(setup =>
