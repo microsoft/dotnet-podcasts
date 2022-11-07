@@ -7,12 +7,6 @@ on:
       - "src/Web/**"
       - ".github/workflows/podcast-web.yml"
       - "deploy/Web/web.deployment.json"
-  pull_request:
-    branches: [main]
-    paths:
-      - "src/Web/**"
-      - ".github/workflows/podcast-web.yml"
-      - "deploy/Web/web.deployment.json"
   workflow_dispatch:
 
 env:
@@ -20,7 +14,7 @@ env:
 
 jobs:
   build:
-    environment: 
+    environment:
       name: prod
     runs-on: ubuntu-latest
 
@@ -45,7 +39,6 @@ jobs:
           azPSVersion: "latest"
           inlineScript: |
             az extension add --name containerapp
-            az provider register --namespace Microsoft.App
             $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
             $listenTogetherHubUrl = "https://${{ secrets.HUB_WEBAPP_NAME }}.azurewebsites.net/listentogether"
             echo "PODCAST_API_URL=$apiUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
@@ -54,10 +47,10 @@ jobs:
       - name: Set Blazor WASM app settings
         uses: microsoft/variable-substitution@v1
         with:
-          files: 'src/Web/Client/wwwroot/appsettings.json'
+          files: "src/Web/Client/wwwroot/appsettings.json"
         env:
           PodcastApi.BaseAddress: ${{ env.PODCAST_API_URL }}
-          ListenTogetherHub:  ${{ env.LISTEN_TOGETHER_HUB_URL }}
+          ListenTogetherHub: ${{ env.LISTEN_TOGETHER_HUB_URL }}
 
       - name: Build
         run: dotnet build src/Web/Server --configuration Release
@@ -76,9 +69,8 @@ jobs:
 
   deploy:
     needs: build
-    environment: 
+    environment:
       name: prod
-    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -99,7 +91,7 @@ jobs:
         with:
           name: drop
           path: web
-      
+
       - name: Update App Service app settings variables
         uses: Azure/appservice-settings@v1
         with:

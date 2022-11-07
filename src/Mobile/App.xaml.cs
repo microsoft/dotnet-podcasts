@@ -21,4 +21,9 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(CategoriesPage), typeof(CategoriesPage));
         Routing.RegisterRoute(nameof(CategoryPage), typeof(CategoryPage));
     }
+
+    protected override Window CreateWindow(IActivationState activationState)
+    {
+        return new MauiWindow(MainPage);
+    }
 }

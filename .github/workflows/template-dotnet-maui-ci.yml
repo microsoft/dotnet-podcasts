@@ -1,0 +1,34 @@
+on:
+  workflow_call:
+    inputs:
+      csproj:
+        required: true
+        type: string
+
+jobs:
+  build-mobile:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+          include-prerelease: true
+
+      - name: Install MAUI Workloads
+        run: |
+          dotnet workload install maui --source https://api.nuget.org/v3/index.json          
+
+      - name: Build MAUI Mobile app
+        shell: pwsh
+        run: |
+          dotnet build ${{inputs.csproj}} -bl:mobile.binlog
+
+      - name: Archive build log
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: '*.binlog'

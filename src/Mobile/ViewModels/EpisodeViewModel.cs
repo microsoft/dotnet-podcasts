@@ -1,11 +1,11 @@
-﻿using MvvmHelpers.Interfaces;
+﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-namespace Microsoft.NetConf2021.Maui.ViewModels;
-
-public class EpisodeViewModel : BaseViewModel
+public partial class EpisodeViewModel : ViewModelBase
 {
-    private readonly PlayerService playerService;
-    private Episode episode;
+    readonly PlayerService playerService;
+
+    [ObservableProperty]
+    Episode episode;
 
     public bool IsInListenLater
     {
@@ -20,17 +20,7 @@ public class EpisodeViewModel : BaseViewModel
         }
     }
 
-    public Episode Episode
-    {
-        get { return episode; }
-        set { SetProperty(ref episode, value); }
-    }
-
     public Show Show { get; set; }
-
-    public IAsyncCommand PlayEpisodeCommand { get; private set; }
-
-    public IAsyncCommand NavigateToDetailCommand { get; private set; }
 
     public EpisodeViewModel(
         Episode episode,
@@ -41,11 +31,11 @@ public class EpisodeViewModel : BaseViewModel
 
         Episode = episode;
         Show = show;
-        PlayEpisodeCommand = new AsyncCommand(PlayEpisodeCommandExecute);
-        NavigateToDetailCommand = new AsyncCommand(NavigateToDetailCommandExecute);
     }
 
-    private Task PlayEpisodeCommandExecute() => playerService.PlayAsync(Episode, Show);
+    [RelayCommand]
+    Task PlayEpisode() => playerService.PlayAsync(Episode, Show);
 
-    private Task NavigateToDetailCommandExecute() => Shell.Current.GoToAsync($"{nameof(EpisodeDetailPage)}?Id={episode.Id}&ShowId={Show.Id}");
+    [RelayCommand]
+    Task NavigateToDetail() => Shell.Current.GoToAsync($"{nameof(EpisodeDetailPage)}?Id={episode.Id}&ShowId={Show.Id}");
 }

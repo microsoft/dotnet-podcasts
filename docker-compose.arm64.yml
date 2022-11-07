@@ -1,0 +1,53 @@
+version: '3.4'
+
+services:
+
+  podcast.api:
+    image: ${DOCKER_REGISTRY-}podcastapi
+    build:
+      context: .
+      dockerfile: src/Services/Podcasts/Podcast.API/Dockerfile
+    depends_on:
+      - podcast.db
+      - storage
+
+  podcast.updater.worker:
+    image: ${DOCKER_REGISTRY-}podcastupdaterworker
+    build:
+      context: .
+      dockerfile: src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile
+    depends_on:
+      - podcast.db
+      - podcast.api
+      - storage
+
+  podcast.db:
+    image: mcr.microsoft.com/azure-sql-edge
+
+  listentogether.hub:
+    image: ${DOCKER_REGISTRY-}listentogetherhub
+    build:
+      context: .
+      dockerfile: src/Services/ListenTogether/ListenTogether.Hub/Dockerfile
+    depends_on:
+      - podcast.api
+
+  podcast.ingestion.worker:
+    image: ${DOCKER_REGISTRY-}podcastingestionworker
+    build:
+      context: .
+      dockerfile: src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile
+    depends_on:
+      - podcast.db
+      - storage
+
+  podcast.web:
+    image: ${DOCKER_REGISTRY-}podcastweb
+    build:
+      context: .
+      dockerfile: src/Web/Server/Dockerfile
+    depends_on:
+      - podcast.api
+
+  storage:
+    image: mcr.microsoft.com/azure-storage/azurite:latest

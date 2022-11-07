@@ -81,7 +81,7 @@ You must first enable the _feeds_ injestion API by turning it on in the `api.dep
 
     ```ps1
     while (1) { 
-        $output = az containerapp revision list -n podcastapica -g dotnetconf2021-netpodcast --query "[?active].{Name:name, CreatedTime:createdTime, Active:active, Replicas:replicas}" -o table --only-show-errors
+        $output = az containerapp revision list -n podcastapica -g dotnetconf2021-netpodcast --query "[?properties.active].{Name:properties.name, CreatedTime:properties.createdTime, Active:properties.active, Replicas:properties.replicas}" -o table --only-show-errors
         clear;
         echo $output;
         sleep 2;
@@ -89,7 +89,7 @@ You must first enable the _feeds_ injestion API by turning it on in the `api.dep
     ```
     ```ps1
     while (1) { 
-        $output = az containerapp revision list -n podcastingestionca -g dotnetconf2021-netpodcast --query "[?active].{Name:name, CreatedTime:createdTime, Active:active, Replicas:replicas}" -o table --only-show-errors
+        $output = az containerapp revision list -n podcastingestionca -g dotnetconf2021-netpodcast --query "[?properties.active].{Name:properties.name, CreatedTime:properties.createdTime, Active:properties.active, Replicas:properties.replicas}" -o table --only-show-errors
         clear;
         echo $output;
         sleep 2;

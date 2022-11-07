@@ -1,18 +1,11 @@
 ﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
 
-public class CategoriesViewModel : BaseViewModel
+public partial class CategoriesViewModel : ViewModelBase
 {
     private readonly ShowsService showsService;
 
+    [ObservableProperty]
     List<Category> categories;
-
-    public List<Category> Categories
-    {
-        get { return categories; }
-        set { SetProperty(ref categories, value); } 
-    }
-
-    public ICommand SelectedCommand => new AsyncCommand<Category>(SelectedCommandExecute);
 
     public CategoriesViewModel(ShowsService shows)
     {
@@ -26,7 +19,8 @@ public class CategoriesViewModel : BaseViewModel
         Categories = categories?.ToList();
     }
 
-    private Task SelectedCommandExecute(Category category)
+    [RelayCommand]
+    Task Selected(Category category)
     {
         return Shell.Current.GoToAsync($"{nameof(CategoryPage)}?Id={category.Id}");
     }

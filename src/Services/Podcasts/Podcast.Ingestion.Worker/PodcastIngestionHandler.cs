@@ -24,11 +24,8 @@ public class PodcastIngestionHandler : IPodcastIngestionHandler
     public async Task HandleIngestionAsync(string title, string url, IReadOnlyCollection<string> feedCategories,
         CancellationToken stoppingToken)
     {
-        _logger.LogInformation(
-            "The show {Title} at {Url} was received by the ingestion worker.",
-            title, url);
-
-        var isExistingShow = await _podcastDbContext.Feeds.AnyAsync(feed => string.Equals(feed.Url, url, StringComparison.OrdinalIgnoreCase), stoppingToken);
+        _logger.LogInformation($"The show {title} at {url} was received by the ingestion worker.");
+        var isExistingShow = await _podcastDbContext.Feeds.AnyAsync(feed => feed.Url.ToLower() == url.ToLower(), stoppingToken);
         if (isExistingShow) 
             return;
 
@@ -45,7 +42,7 @@ public class PodcastIngestionHandler : IPodcastIngestionHandler
 
             // Must be manually approved
             var userFeed = new UserSubmittedFeed(
-                title, url, string.Join(",", feedCategories));
+                url, title, string.Join(",", feedCategories));
             await _podcastDbContext.UserSubmittedFeeds.AddAsync(userFeed, stoppingToken);
             await _podcastDbContext.SaveChangesAsync(stoppingToken);
             
