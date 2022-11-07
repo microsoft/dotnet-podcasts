@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Listen Later', () => {
   test('should allow me to listen to podcast later', async ({ page }) => {
@@ -11,6 +11,6 @@ test.describe('Listen Later', () => {
     await page.locator('.navbarApp-item >> text=ListenLater').click();
     await expect(page).toHaveURL('/listen-later');
     // assert no results page isn't shown
-    expect(page.locator('.main')).not.toContain('no results');
+    await expect(page.locator('main')).not.toContainText('no results');
   });
 });

@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Listen Together', () => {
   test('should allow me to listen together', async ({ page }) => {
@@ -11,13 +11,13 @@ test.describe('Listen Together', () => {
     await page.locator('text=ListenTogether').click();
     await expect(page).toHaveURL('/listen-together');
     // assert Create new room button isn't disabled
-    expect(page.locator('.buttonApp.primary >> text=Create new room')).toBeEnabled
+    await expect(page.locator('.buttonApp.primary >> text=Create new room')).toBeEnabled()
     // create new room
     await page.locator('.buttonApp.primary >> text=Create new room').click();
-    await page.locator('[placeholder="Your name"]').fill('test');
+    await page.getByPlaceholder('Your name').fill('test');
     // open room
     await page.locator('button:has-text("Open room")').click();
     // leave the room
-    await page.locator('text=Leave the room').click();
+    await page.getByRole('button', { name: 'Leave the room' }).click();
   });
 });

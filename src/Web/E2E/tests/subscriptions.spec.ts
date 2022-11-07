@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Subscriptions', () => {
   test('should allow me to subscribe', async ({ page }) => {
@@ -11,6 +11,6 @@ test.describe('Subscriptions', () => {
     await page.locator('.navbarApp-item >> text=subscriptions').click();
     await expect(page).toHaveURL('/subscriptions');
     // assert subscriptions are shown
-    expect(page.locator('.main')).not.toContain('You haven’t subscribed to any channel yet.');
+    await expect(page.locator('main')).not.toContainText('You haven’t subscribed to any channel yet.');
   });
 });
