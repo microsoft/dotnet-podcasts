@@ -72,9 +72,8 @@ var serviceResource =
 
 var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
 
-builder.Services.AddOpenTelemetryTracing(b =>
-    b.AddSource("dotnet-podcasts")
-     .SetResourceBuilder(serviceResource)
+builder.Services.AddOpenTelemetryTracing(tracing =>
+    tracing.SetResourceBuilder(serviceResource)
      .AddAzureMonitorTraceExporter(o =>
      {
          o.ConnectionString = azureMonitorConnectionString;
