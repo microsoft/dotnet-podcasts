@@ -28,7 +28,8 @@ public partial class DiscoverViewModel : ViewModelBase
 
     internal async Task InitializeAsync()
     {
-        if(App.WindowCreated)
+        //Delay on first load until window loads
+        await Task.Delay(1000);
             await FetchAsync();
     }
 
