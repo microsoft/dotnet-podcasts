@@ -4,6 +4,7 @@ namespace Microsoft.NetConf2021.Maui;
 
 public partial class App : Application
 {
+    public static bool WindowCreated { get; private set; }
     public App()
     {
         InitializeComponent();
@@ -24,6 +25,17 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState activationState)
     {
-        return new MauiWindow(MainPage);
+
+
+        var window = new MauiWindow(MainPage);
+
+        window.Created += Window_Created;
+        return window;
+    }
+
+
+    private void Window_Created(object sender, EventArgs e)
+    {
+        WindowCreated = true;
     }
 }
