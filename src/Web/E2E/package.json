@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Microsoft/dotnet-podcasts#readme",
   "devDependencies": {
-    "@playwright/test": "^1.27.0",
+    "@playwright/test": "^1.27.1",
     "@types/node": "^18.8.4"
   },
   "dependencies": {
