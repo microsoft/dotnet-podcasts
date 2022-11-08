@@ -6,7 +6,7 @@ services:
     image: ${DOCKER_REGISTRY-}podcastminapi
     build:
       context: .
-      dockerfile: src/Services/Podcasts/Podcast.MinimalAPI/Dockerfile
+      dockerfile: src/Services/Podcasts/Podcast.API/Dockerfile
     depends_on:
       - podcast.db
       - storage

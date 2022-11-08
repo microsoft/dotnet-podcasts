@@ -1,70 +1,104 @@
-using Azure.Storage.Queues;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Podcast.API.Controllers;
-using Podcast.API.Models;
-using Podcast.Infrastructure.Data;
-using Podcast.Infrastructure.Http.Feeds;
+using Asp.Versioning;
+using Asp.Versioning.Conventions;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Identity.Web;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Database and storage related-services
 var connectionString = builder.Configuration.GetConnectionString("PodcastDb");
 builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
-
 var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 
-builder.Services.AddSwaggerGen(setup =>
-{
-    setup.SwaggerDoc("v1",
-        new OpenApiInfo { Description = "NetPodcast API", Title = ".NetConf2021", Version = "v1" });
+// Authentication and authorization-related services
+// Comment back in if testing authentication
+// builder.Services.AddMicrosoftIdentityWebApiAuthentication(builder.Configuration);
+
+builder.Services.AddAuthorizationBuilder().AddPolicy("modify_feeds", policy => policy.RequireScope("API.Access"));
+
+// OpenAPI and versioning-related services
+builder.Services.AddSwaggerGen();
+builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
+    opts.InferSecuritySchemes = true;
 });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(2, 0);
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+});
+
 builder.Services.AddCors(setup =>
 {
     setup.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
+
+// Rate-limiting and output caching-related services
+builder.Services.AddRateLimiter(options => options.AddFixedWindowLimiter("feeds", options =>
+{
+    options.PermitLimit = 5;
+    options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    options.QueueLimit = 0;
+    options.Window = TimeSpan.FromSeconds(2);
+    options.AutoReplenishment = false;
+}));
+builder.Services.AddOutputCache();
 
 var app = builder.Build();
 
 await EnsureDbAsync(app.Services);
 
+// Register required middlewares
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetPodcast Api v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", ".NET Podcasts  API");
 });
-
 app.UseCors();
+app.UseRateLimiter();
+app.UseOutputCache();
 
-app.MapGet("v1/categories",
-    async (PodcastDbContext podcastDbContext, CancellationToken cancellationToken) =>
-    {
-        var categories = await podcastDbContext.Categories.Select(x => new CategoryDto(x.Id, x.Genre))
-            .ToListAsync(cancellationToken);
-        return categories;
-    });
+var versionSet = app.NewApiVersionSet()
+                    .HasApiVersion(1.0)
+                    .HasApiVersion(2.0)
+                    .ReportApiVersions()
+                    .Build();
 
-app.MapGet("v1/episodes/{id}", async (PodcastDbContext podcastDbContext, Guid id,
-    CancellationToken cancellationToken) =>
-{
-    var episode = await podcastDbContext.Episodes.Include(episode => episode.Show)
-        .Where(episode => episode.Id == id)
-        .Select(episode => new EpisodeDto(episode))
-        .FirstAsync(cancellationToken);
-    return episode;
-});
+var shows = app.MapGroup("/shows");
+var categories = app.MapGroup("/categories");
+var episodes = app.MapGroup("/episodes");
+
+shows
+    .MapShowsApi()
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(1.0)
+    .MapToApiVersion(2.0)
+    .CacheOutput();
+
+categories
+    .MapCategoriesApi()
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(1.0);
+
+episodes
+    .MapEpisodesApi()
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(1.0);
 
 var feedIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngestion");
 
 if (feedIngestionEnabled)
 {
-    app.MapFeedEndpointRoutes();   
+    var feeds = app.MapGroup("/feeds");
+    feeds.MapFeedsApi().WithApiVersionSet(versionSet).MapToApiVersion(2.0).RequireRateLimiting("feeds");
 }
 
-app.MapControllers();
 app.Run();
 
 static async Task EnsureDbAsync(IServiceProvider sp)
