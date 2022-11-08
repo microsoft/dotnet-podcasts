@@ -15,6 +15,6 @@ test.describe('Listen Later', () => {
     await page.getByRole('link', { name: 'Listen Later' }).click();
     await expect(page).toHaveURL('/listen-later');
     // assert no results page isn't shown
-    expect(page.locator('.main')).not.toContain('no results');
+    await expect(page.locator('main')).not.toContainText('no results');
   });
 });

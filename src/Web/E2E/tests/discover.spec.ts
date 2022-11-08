@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   // Go to discover page
