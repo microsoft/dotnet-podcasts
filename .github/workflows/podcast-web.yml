@@ -110,7 +110,7 @@ jobs:
 
   testE2E:
     name: Run Playwright E2E tests
-    needs: deployStaging
+    #needs: deployStaging
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.27.1-jammy
