@@ -115,24 +115,27 @@ jobs:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.27.1-jammy
     env:
-      BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
+      BASEURL: localhost
       AADUSERNAME: ${{secrets.AADUSERNAME}} # sets value for AAD creds
       AADPASSWORD: ${{secrets.AADPASSWORD}}
-    defaults:
-      run:
-        working-directory: src/Web/E2E
+        
     steps:
       - uses: actions/checkout@v3.1.0
       - uses: actions/setup-node@v3.5.1
         with:
           node-version: "14.x"
+      
+      - name: Build the stack
+        run: docker-compose up
 
       - name: Install dependencies
+        working-directory: src/Web/E2E
         run: |
           npm ci
           npx playwright install msedge
 
       - name: Run Playwright tests
+        working-directory: src/Web/E2E
         run: |
           HOME=/root npx playwright test
 
