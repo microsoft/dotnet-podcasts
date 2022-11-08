@@ -10,8 +10,8 @@ test.describe('Settings', () => {
   for (const setting of settings) {  
     test(`should allow me to toggle setting ${setting}`, async ({ page }) => {
         // toggle setting
-        await page.locator('input[name="' + setting + '"]').check();
-        await page.locator('input[name="' + setting + '"]').uncheck();
+        await page.locator(`input[name="${setting}"]`).check();
+        await page.locator(`input[name="${setting}"]`).uncheck();
       });
   }
 });

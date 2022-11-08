@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/discover');
@@ -10,7 +10,7 @@ test.describe('Discover', () => {
   for (const category of categories) {
     test(`should allow me to browse category ${category}`, async ({ page }) => {
         // click on the category
-        await page.locator('.tags-item >> text=' + category).click();
+        await page.locator('.tags-item').getByText(category).click();
         // assert category is selected
         await expect(page.locator('.titlePage')).toHaveText(category);
     });
@@ -18,10 +18,10 @@ test.describe('Discover', () => {
 
   test('should allow me to search', async ({ page }) => {
     // use search bar
-    await page.locator('[placeholder="Search here"]').click();
+    await page.getByPlaceholder('Search here').click();
     // search for a podcast
-    await page.locator('[placeholder="Search here"]').fill('.NET');
-    await page.locator('[placeholder="Search here"]').press('Enter');
+    await page.getByPlaceholder('Search here').fill('.NET');
+    await page.getByPlaceholder('Search here').press('Enter');
     // assert no results page isn't shown
     expect(page.locator('.main')).not.toContain('no results');
   });
