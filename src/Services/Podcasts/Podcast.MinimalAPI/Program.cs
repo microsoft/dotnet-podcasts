@@ -74,10 +74,14 @@ var serviceResource =
          .CreateDefault()
          .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
-//var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
+var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
 
 builder.Services.AddOpenTelemetryTracing(tracing =>
     tracing.SetResourceBuilder(serviceResource)
+    .AddAzureMonitorTraceExporter(o =>
+     {
+         o.ConnectionString = azureMonitorConnectionString;
+     })
     .AddJaegerExporter()
     .AddHttpClientInstrumentation()
     .AddAspNetCoreInstrumentation()
@@ -89,6 +93,10 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
     metrics
     .SetResourceBuilder(serviceResource)
     .AddPrometheusExporter()
+    .AddAzureMonitorMetricExporter(o =>
+     {
+        o.ConnectionString = azureMonitorConnectionString;
+     })
     .AddAspNetCoreInstrumentation()
     .AddHttpClientInstrumentation()
     .AddRuntimeInstrumentation()
@@ -103,8 +111,12 @@ builder.Services.AddOpenTelemetryMetrics(metrics =>
 builder.Logging.AddOpenTelemetry(logging =>
 {
     logging
-     .AttachLogsToActivityEvent()
-     .SetResourceBuilder(serviceResource);
+     .SetResourceBuilder(serviceResource)
+     .AddAzureMonitorLogExporter(o =>
+      {
+         o.ConnectionString = azureMonitorConnectionString;
+      })
+     .AttachLogsToActivityEvent();
 });
 
 var app = builder.Build();
