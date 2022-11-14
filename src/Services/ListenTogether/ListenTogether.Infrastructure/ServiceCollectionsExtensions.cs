@@ -16,7 +16,6 @@ namespace ListenTogether.Infrastructure
             serviceCollection.AddHttpClient<IEpisodesClient, EpisodesHttpClient>(opt =>
             {
                 opt.BaseAddress = new Uri(configuration["NetPodcastApi:BaseAddress"]);
-                opt.DefaultRequestHeaders.Add("api-version", "1.0");
             });
 
             return serviceCollection;

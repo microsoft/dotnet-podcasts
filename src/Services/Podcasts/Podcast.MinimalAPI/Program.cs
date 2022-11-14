@@ -164,11 +164,16 @@ episodes
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0);
 
-feeds
-    .MapFeedsApi()
-    .WithApiVersionSet(versionSet)
-    .MapToApiVersion(2.0)
-    .RequireRateLimiting("feeds");
+var feedsIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngestion");
+
+if (feedsIngestionEnabled)
+{
+    feeds
+        .MapFeedsApi()
+        .WithApiVersionSet(versionSet)
+        .MapToApiVersion(2.0)
+        .RequireRateLimiting("feeds");
+}
 
 app.Run();
 

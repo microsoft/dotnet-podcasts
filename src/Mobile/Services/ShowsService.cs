@@ -14,7 +14,6 @@ public class ShowsService
     public ShowsService(ListenLaterService listenLaterService)
     {
         this.httpClient = new HttpClient() { BaseAddress = new Uri(Config.APIUrl) };
-        httpClient.DefaultRequestHeaders.Add("api-version", "1.0");
         this.listenLaterService = listenLaterService;
     }
 

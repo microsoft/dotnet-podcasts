@@ -15,6 +15,6 @@ public class EpisodesHttpClient : IEpisodesClient
 
     public async Task<Episode> GetEpisodeByIdAsync(Guid episodeId, CancellationToken cancellationToken)
     {
-        return (await _httpClient.GetFromJsonAsync<Episode>($"episodes/{episodeId}", cancellationToken))!;
+        return (await _httpClient.GetFromJsonAsync<Episode>($"v1/episodes/{episodeId}", cancellationToken))!;
     }
 }

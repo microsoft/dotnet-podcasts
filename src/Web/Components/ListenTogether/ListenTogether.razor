@@ -128,27 +128,21 @@
     {
         isRoomHost = true;
         roomCode = room.Code;
-        await InvokeAsync(async () =>
-        {
-            await OnJoinRoom.InvokeAsync(room.Code);
-            await OnRoomCreated.InvokeAsync();
-        });
+        await OnJoinRoom.InvokeAsync(room.Code);
+        await OnRoomCreated.InvokeAsync();
     }
 
     private async void OnRoomUpdated(Room room)
     {
-        await InvokeAsync(async () =>
+        if (currentRoom == null && !isRoomHost)
         {
-            if (currentRoom == null && !isRoomHost)
-            {
-                await SetPlayerState(room);
-            }
-            currentRoom = room;
-            StateHasChanged();
-        });
+            await SetPlayerState(room);
+        }
+        currentRoom = room;
+        StateHasChanged();
     }
 
-    private async void OnPlayerStateUpdated(Room room) => await InvokeAsync(() => SetPlayerState(room));
+    private async void OnPlayerStateUpdated(Room room) => SetPlayerState(room);
 
     private async Task SetPlayerState(Room room)
     {

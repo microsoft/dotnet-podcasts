@@ -17,7 +17,6 @@ public partial class DiscoverPage : ContentPage
         await viewModel.InitializeAsync();
     }
 
-
     protected override void OnDisappearing()
     {
         player.OnDisappearing();

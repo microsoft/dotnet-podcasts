@@ -25,7 +25,7 @@
                            Margin="32"
                            HorizontalOptions="Center"
                            FontAttributes="Bold"
-                           FontSize="{OnPlatform WinUI=24, Android=14,iOS=14}"
+                           FontSize="{OnPlatform UWP=24, Android=14,iOS=14}"
                            Style="{StaticResource H5LabelStyle}" />
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding SelectedCommand, Source={RelativeSource AncestorType={x:Type viewmodels:CategoriesViewModel}}}"

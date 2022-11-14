@@ -24,7 +24,6 @@ public static class MauiProgram
         builder.Services.AddHttpClient<PodcastService>(client =>
         {
             client.BaseAddress = new Uri(APIUrl);
-            client.DefaultRequestHeaders.Add("api-version", "1.0");
         });
 
 #if WINDOWS

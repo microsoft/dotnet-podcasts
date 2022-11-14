@@ -7,15 +7,12 @@ namespace Podcast.Infrastructure.Data;
 
 public class PodcastDbContext : DbContext
 {
-    private readonly ShowClient _showClient;
-
     protected PodcastDbContext()
     {
     }
 
-    public PodcastDbContext(DbContextOptions options, ShowClient showClient) : base(options)
+    public PodcastDbContext(DbContextOptions options) : base(options)
     {
-        _showClient = showClient;
     }
 
     public DbSet<Show> Shows => Set<Show>();
