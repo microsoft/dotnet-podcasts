@@ -164,9 +164,9 @@ episodes
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0);
 
-var feedsIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngestion");
+var feedIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngestion");
 
-if (feedsIngestionEnabled)
+if (feedIngestionEnabled)
 {
     feeds
         .MapFeedsApi()

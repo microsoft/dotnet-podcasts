@@ -6,7 +6,6 @@ using Podcast.Infrastructure.Data;
 using Podcast.Infrastructure.Data.Models;
 using Podcast.Infrastructure.Http.Feeds;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Podcast.API.Routes;
 
@@ -14,16 +13,10 @@ public static class FeedsApi
 {
     public static RouteGroupBuilder MapFeedsApi(this RouteGroupBuilder group)
     {
-        group.MapPost("/", CreateFeed).WithName("CreateFeed");
-        group.MapGet("/", GetAllFeeds).WithName("GetFeeds");
-        group.MapPut("/{id}", UpdateFeed)
-            .RequireAuthorization("modify_feeds")
-            .AddOpenApiSecurityRequirement()
-            .WithName("UpdateFeedById");
-        group.MapDelete("/{id}", DeleteFeed)
-            .RequireAuthorization("modify_feeds")
-            .AddOpenApiSecurityRequirement()
-            .WithName("DeleteFeedById");
+        group.MapPost("/", CreateFeed);
+        group.MapGet("/", GetAllFeeds);
+        group.MapPut("/{id}", UpdateFeed).RequireAuthorization().AddOpenApiSecurityRequirement();
+        group.MapDelete("/{id}", DeleteFeed).RequireAuthorization().AddOpenApiSecurityRequirement();
         return group;
     }
 

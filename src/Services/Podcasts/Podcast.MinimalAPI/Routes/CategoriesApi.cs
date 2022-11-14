@@ -10,7 +10,7 @@ public static class CategoriesApi
 {
     public static RouteGroupBuilder MapCategoriesApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/", GetAllCategories).WithName("GetCategories");
+        group.MapPost("/", GetAllCategories);
         return group;
     }
 

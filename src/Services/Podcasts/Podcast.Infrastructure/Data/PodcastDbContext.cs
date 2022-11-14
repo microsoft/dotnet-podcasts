@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Podcast.Infrastructure.Data.Models;
-using Podcast.Infrastructure.Http;
-using Podcast.Infrastructure.Http.Feeds;
 
 namespace Podcast.Infrastructure.Data;
 

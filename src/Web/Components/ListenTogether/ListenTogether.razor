@@ -139,10 +139,10 @@
             await SetPlayerState(room);
         }
         currentRoom = room;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
-    private async void OnPlayerStateUpdated(Room room) => SetPlayerState(room);
+    private async void OnPlayerStateUpdated(Room room) => await SetPlayerState(room);
 
     private async Task SetPlayerState(Room room)
     {
