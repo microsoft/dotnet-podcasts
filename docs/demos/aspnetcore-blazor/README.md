@@ -6,7 +6,7 @@ Open up ` src/Web/Server/appsettings.Development.json` and `src/Web/Client/wwwro
 
 ```json
 "PodcastApi": {
-"BaseAddress": "https://podcastapica.delightfulocean-02c18c32.canadacentral.azurecontainerapps.io"
+"BaseAddress": "https://podcastapica.ashyhill-df3dfdf5.eastus.azurecontainerapps.io"
 },
 "ListenTogetherHub": "https://dotnetpodcasts-listentogether-hub.azurewebsites.net/listentogether"
 ```
