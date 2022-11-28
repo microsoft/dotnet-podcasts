@@ -7,22 +7,42 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DockerfileContext>..\..\..\..</DockerfileContext>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+		<SelfContained>false</SelfContained>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<ContainerImageName>podcastapi</ContainerImageName>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Asp.Versioning.Http" Version="6.1.0" />
+		<PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.0.0-beta.4" />
 		<PackageReference Include="Azure.Storage.Queues" Version="12.11.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
+		<PackageReference Include="Dotnet.ReproducibleBuilds" Version="1.1.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0-*" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0-*" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0-rc.2.22472.11">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0-*" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-		<PackageReference Include="Asp.Versioning.Http" Version="6.1.0" />
-		<PackageReference Include="Microsoft.OpenApi" Version="1.4.3" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0-*" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-rc.2.22472.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0-rc.2.22472.11" />
 		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.3" />
+		<PackageReference Include="Microsoft.NET.Build.Containers" Version="0.2.7" />
+		<PackageReference Include="Microsoft.OpenApi" Version="1.4.3" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.4.0-beta.2" />
+		<PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.4.0-beta.2" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.8" />
+		<PackageReference Include="OpenTelemetry.Extensions" Version="1.0.0-beta.3" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.8" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.EventCounters" Version="1.0.0-alpha.1" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.3" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.8" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Process" Version="0.1.0-alpha.1" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>

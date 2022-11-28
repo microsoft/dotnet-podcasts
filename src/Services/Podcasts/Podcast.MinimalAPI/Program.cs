@@ -1,24 +1,33 @@
-using Azure.Storage.Queues;
-using Microsoft.EntityFrameworkCore;
-using Podcast.Infrastructure.Data;
-using Podcast.Infrastructure.Http.Feeds;
+using System.Reflection;
+using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
-using Podcast.API.Routes;
+using Azure.Monitor.OpenTelemetry.Exporter;
+using Azure.Storage.Queues;
 using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Podcast.API.Routes;
+using Podcast.Infrastructure.Data;
+using Podcast.Infrastructure.Http;
+using Podcast.Infrastructure.Http.Feeds;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Database and storage related-services
-var connectionString = builder.Configuration.GetConnectionString("PodcastDb");
-builder.Services.AddSqlServer<PodcastDbContext>(connectionString);
-var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue");
+var dbConnectionString = builder.Configuration.GetConnectionString("PodcastDb") ?? throw new InvalidOperationException("Missing connection string configuration");
+builder.Services.AddSqlServer<PodcastDbContext>(dbConnectionString);
+
+var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue") ?? throw new InvalidOperationException("Missing feed queue configuration");
+
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
+builder.Services.AddTransient<JitterHandler>();
+builder.Services.AddHttpClient<ShowClient>().AddHttpMessageHandler<JitterHandler>();
 
 // Authentication and authorization-related services
 // Comment back in if testing authentication
@@ -28,7 +37,8 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("modify_feeds", policy => p
 
 // OpenAPI and versioning-related services
 builder.Services.AddSwaggerGen();
-builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
+builder.Services.Configure<SwaggerGeneratorOptions>(opts =>
+{
     opts.InferSecuritySchemes = true;
 });
 builder.Services.AddEndpointsApiExplorer();
@@ -39,6 +49,8 @@ builder.Services.AddApiVersioning(options =>
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.ApiVersionReader = new HeaderApiVersionReader("api-version");
 });
+
+builder.Services.AddOutputCache();
 
 builder.Services.AddCors(setup =>
 {
@@ -54,7 +66,58 @@ builder.Services.AddRateLimiter(options => options.AddFixedWindowLimiter("feeds"
     options.Window = TimeSpan.FromSeconds(2);
     options.AutoReplenishment = false;
 }));
-builder.Services.AddOutputCache();
+
+var serviceName = builder.Environment.ApplicationName;
+var serviceVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
+var serviceResource =
+        ResourceBuilder
+         .CreateDefault()
+         .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
+
+var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
+
+builder.Services.AddOpenTelemetryTracing(tracing =>
+    tracing.SetResourceBuilder(serviceResource)
+    .AddAzureMonitorTraceExporter(o =>
+     {
+         o.ConnectionString = azureMonitorConnectionString;
+     })
+    .AddJaegerExporter()
+    .AddHttpClientInstrumentation()
+    .AddAspNetCoreInstrumentation()
+    .AddEntityFrameworkCoreInstrumentation()
+);
+
+builder.Services.AddOpenTelemetryMetrics(metrics =>
+{
+    metrics
+    .SetResourceBuilder(serviceResource)
+    .AddPrometheusExporter()
+    .AddAzureMonitorMetricExporter(o =>
+     {
+        o.ConnectionString = azureMonitorConnectionString;
+     })
+    .AddAspNetCoreInstrumentation()
+    .AddHttpClientInstrumentation()
+    .AddRuntimeInstrumentation()
+    .AddProcessInstrumentation()
+    .AddHttpClientInstrumentation()
+    .AddEventCountersInstrumentation(ec =>
+    {
+        ec.AddEventSources("Microsoft.AspNetCore.Hosting");
+    });
+});
+
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging
+     .SetResourceBuilder(serviceResource)
+     .AddAzureMonitorLogExporter(o =>
+      {
+         o.ConnectionString = azureMonitorConnectionString;
+      })
+     .AttachLogsToActivityEvent();
+});
 
 var app = builder.Build();
 
@@ -66,9 +129,13 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", ".NET Podcasts Minimal API");
 });
+
 app.UseCors();
 app.UseRateLimiter();
 app.UseOutputCache();
+
+app.MapPrometheusScrapingEndpoint();
+app.MapGet("/version", () => serviceVersion);
 
 var versionSet = app.NewApiVersionSet()
                     .HasApiVersion(1.0)
@@ -79,13 +146,13 @@ var versionSet = app.NewApiVersionSet()
 var shows = app.MapGroup("/shows");
 var categories = app.MapGroup("/categories");
 var episodes = app.MapGroup("/episodes");
+var feeds = app.MapGroup("/feeds");
 
 shows
     .MapShowsApi()
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0)
-    .MapToApiVersion(2.0)
-    .CacheOutput();
+    .MapToApiVersion(2.0);
 
 categories
     .MapCategoriesApi()
@@ -101,8 +168,11 @@ var feedIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngest
 
 if (feedIngestionEnabled)
 {
-    var feeds = app.MapGroup("/feeds");
-    feeds.MapFeedsApi().WithApiVersionSet(versionSet).MapToApiVersion(2.0).RequireRateLimiting("feeds");
+    feeds
+        .MapFeedsApi()
+        .WithApiVersionSet(versionSet)
+        .MapToApiVersion(2.0)
+        .RequireRateLimiting("feeds");
 }
 
 app.Run();
