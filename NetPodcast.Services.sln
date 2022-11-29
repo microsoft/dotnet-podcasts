@@ -25,7 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{CE88241B-B740-4E6A-9D73-7C0B9F7CC069}"
 	ProjectSection(SolutionItems) = preProject
 		deploy\Services\api.deployment.bicep = deploy\Services\api.deployment.bicep
-		deploy\Services\hub.deployment.json = deploy\Services\hub.deployment.json
+		deploy\Services\hub.bicep = deploy\Services\hub.bicep
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Infrastructure", "src\Services\ListenTogether\ListenTogether.Infrastructure\ListenTogether.Infrastructure.csproj", "{F7C33B71-158B-4956-B707-EEE291E6EBF9}"
