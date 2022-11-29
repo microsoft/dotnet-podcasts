@@ -24,7 +24,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "7.0.x"
+          dotnet-version: "6.0.x"
 
       - name: Install wasm-tools
         run: dotnet workload install wasm-tools
@@ -79,12 +79,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy ARM
+      - name: Deploy Bicep template
         uses: azure/powershell@v1
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.deployment.json --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master
@@ -120,7 +120,7 @@ jobs:
     needs: deploy
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.26.0-focal
+    container: mcr.microsoft.com/playwright:v1.27.1-focal
     env:
       BASEURL: https://${{secrets.WEBAPP_NAME_STAGING}}.azurewebsites.net # sets value for URL to test
     defaults:
