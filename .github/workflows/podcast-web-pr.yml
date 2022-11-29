@@ -87,7 +87,7 @@ jobs:
             az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
-        uses: actions/download-artifact@3
+        uses: actions/download-artifact@master
         with:
           name: drop
           path: web
