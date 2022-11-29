@@ -87,7 +87,7 @@ jobs:
             az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}}
 
       - name: Download web artifacts
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@3
         with:
           name: drop
           path: web
@@ -128,6 +128,7 @@ jobs:
         working-directory: src/Web/E2E
     steps:
       - uses: actions/checkout@v2
+      
       - uses: actions/setup-node@v2
         with:
           node-version: "14.x"
@@ -148,7 +149,7 @@ jobs:
           paths: src/Web/E2E/test-results/junit.xml
 
       - name: Upload HTML report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
