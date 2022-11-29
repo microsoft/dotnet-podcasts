@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Podcast.API.Models;
-using Podcast.Infrastructure.Data;
-using System.Threading;
-
-namespace Podcast.API.Routes;
+﻿namespace Podcast.API.Routes;
 
 public static class CategoriesApi
 {

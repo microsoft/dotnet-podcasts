@@ -1,14 +1,4 @@
-﻿using Azure.Storage.Queues;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Podcast.API.Models;
-using Podcast.Infrastructure.Data;
-using Podcast.Infrastructure.Data.Models;
-using Podcast.Infrastructure.Http.Feeds;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-namespace Podcast.API.Routes;
+﻿namespace Podcast.API.Routes;
 
 public static class FeedsApi
 {

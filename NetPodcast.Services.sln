@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.API", "src\Services\Podcasts\Podcast.API\Podcast.API.csproj", "{777229ED-F33B-4A49-B872-EB1CF454C329}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Infrastructure", "src\Services\Podcasts\Podcast.Infrastructure\Podcast.Infrastructure.csproj", "{0004571F-FFA3-4DB3-BF91-65DF1E774677}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Updater.Worker", "src\Services\Podcasts\Podcast.Updater.Worker\Podcast.Updater.Worker.csproj", "{3B324F00-AE02-4FC7-B665-86F87B22BD75}"
@@ -36,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Domain", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Application", "src\Services\ListenTogether\ListenTogether.Application\ListenTogether.Application.csproj", "{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.MinimalAPI", "src\Services\Podcasts\Podcast.MinimalAPI\Podcast.MinimalAPI.csproj", "{64DB86C6-5A19-44A8-A326-1D3EF7471EED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.API", "src\Services\Podcasts\Podcast.API\Podcast.API.csproj", "{58507F58-A2A2-4ACE-9EF6-0FC9C9780DC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +42,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{777229ED-F33B-4A49-B872-EB1CF454C329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{777229ED-F33B-4A49-B872-EB1CF454C329}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{777229ED-F33B-4A49-B872-EB1CF454C329}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{777229ED-F33B-4A49-B872-EB1CF454C329}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0004571F-FFA3-4DB3-BF91-65DF1E774677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0004571F-FFA3-4DB3-BF91-65DF1E774677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0004571F-FFA3-4DB3-BF91-65DF1E774677}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -76,16 +70,15 @@ Global
 		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64DB86C6-5A19-44A8-A326-1D3EF7471EED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64DB86C6-5A19-44A8-A326-1D3EF7471EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64DB86C6-5A19-44A8-A326-1D3EF7471EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64DB86C6-5A19-44A8-A326-1D3EF7471EED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58507F58-A2A2-4ACE-9EF6-0FC9C9780DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58507F58-A2A2-4ACE-9EF6-0FC9C9780DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58507F58-A2A2-4ACE-9EF6-0FC9C9780DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58507F58-A2A2-4ACE-9EF6-0FC9C9780DC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{777229ED-F33B-4A49-B872-EB1CF454C329} = {3577F0EE-7091-46E0-9B25-37559228A896}
 		{0004571F-FFA3-4DB3-BF91-65DF1E774677} = {3577F0EE-7091-46E0-9B25-37559228A896}
 		{3B324F00-AE02-4FC7-B665-86F87B22BD75} = {3577F0EE-7091-46E0-9B25-37559228A896}
 		{03EC558C-665F-4E3A-BDC4-8F56B5ED45C1} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
@@ -93,7 +86,7 @@ Global
 		{F7C33B71-158B-4956-B707-EEE291E6EBF9} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
 		{5C09F557-3425-4290-9122-56D1EBA8330F} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
 		{C11EFB24-BF9A-4631-BA96-12A6E1CC9122} = {0DE82D5C-C8CA-40E5-A5FE-3445A7CEE51E}
-		{64DB86C6-5A19-44A8-A326-1D3EF7471EED} = {3577F0EE-7091-46E0-9B25-37559228A896}
+		{58507F58-A2A2-4ACE-9EF6-0FC9C9780DC8} = {3577F0EE-7091-46E0-9B25-37559228A896}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11182059-7938-44A8-9759-7A0BCCFACBE7}
