@@ -11,11 +11,6 @@ on:
   workflow_dispatch:
 
 env:
-  ACR_NAME: ${{ secrets.ACR_NAME }}staging
-  STORAGE_NAME: ${{ secrets.STORAGE_NAME }}staging
-  PODCASTDB_SERVER_NAME: ${{secrets.PODCASTDB_SERVER_NAME}}staging
-  KUBERNETES_ENV_NAME: ${{secrets.KUBERNETES_ENV_NAME}}staging
-  WORKSPACE_NAME: ${{secrets.WORKSPACE_NAME}}staging
   API_RESOURCE_NAME: podcastapicastaging
   UPDATER_RESOURCE_NAME: podcastupdatercastaging
 
@@ -31,13 +26,13 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build Podcast Updater
-        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
 
       - name: Build Podcast API
-        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
 
       - name: Build Podcast Ingestion
-        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
+        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
 
   build-and-push:
     environment: 
@@ -56,29 +51,29 @@ jobs:
         with:
             azPSVersion: '3.1.0'
             inlineScript: |
-              az deployment group create -n ghactionbgtasks${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/acr.bicep --parameters acrName=${{env.ACR_NAME}}
+              az deployment group create -n ghactionbgtasks${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/acr.bicep --parameters acrName=${{secrets.ACR_NAME}}
 
       - name: Login to ACR
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.ACR_NAME }}.azurecr.io
+          registry: ${{ secrets.ACR_NAME }}.azurecr.io
           username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
           password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
 
       - name: Build Podcast Updater
         run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ env.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
-          docker push ${{ env.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }}
 
       - name: Build Podcast API
         run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ env.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
-          docker push ${{ env.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }}
 
       - name: Build Podcast Ingestion
         run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
-          docker push ${{ env.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }}
+          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }}
 
   deploy:
     needs: build-and-push
@@ -99,13 +94,13 @@ jobs:
             azPSVersion: '3.1.0'
             failOnStandardError: true
             inlineScript: |
-             $ACR_LOGIN_SERVER="${{env.ACR_NAME}}.azurecr.io"
-             $ACR_PASSWORD=$(az acr credential show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{env.ACR_NAME}} -o tsv --query passwords[0].value)
+             $ACR_LOGIN_SERVER="${{secrets.ACR_NAME}}.azurecr.io"
+             $ACR_PASSWORD=$(az acr credential show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.ACR_NAME}} -o tsv --query passwords[0].value)
 
              az deployment group create -n ghaction${{ github.sha }} `
                 --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
                 --template-file deploy/Services/api.bicep `
-                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{env.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ env.STORAGE_NAME }} serverName=${{env.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{env.KUBERNETES_ENV_NAME}} workspaceName=${{env.WORKSPACE_NAME}} apiName=${{env.API_RESOURCE_NAME}} updaterName=${{env.UPDATER_RESOURCE_NAME}}
+                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}} apiName=${{env.API_RESOURCE_NAME}} updaterName=${{env.UPDATER_RESOURCE_NAME}}
 
              if( $LASTEXITCODE -ne 0 ) { exit -1 }
             
@@ -115,4 +110,4 @@ jobs:
             azPSVersion: '3.1.0'
             inlineScript: |
               cd deploy/Images
-              ./Deploy-Images.ps1 -resourceGroup ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -storageName ${{ env.STORAGE_NAME }}
+              ./Deploy-Images.ps1 -resourceGroup ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -storageName ${{ secrets.STORAGE_NAME }}

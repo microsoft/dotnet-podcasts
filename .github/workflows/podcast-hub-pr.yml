@@ -10,13 +10,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  ACR_NAME: ${{ secrets.ACR_NAME }}staging
-  STORAGE_NAME: ${{ secrets.STORAGE_NAME }}staging
-  PODCASTDB_SERVER_NAME: ${{secrets.PODCASTDB_SERVER_NAME}}staging
-  KUBERNETES_ENV_NAME: ${{secrets.KUBERNETES_ENV_NAME}}staging
-  WORKSPACE_NAME: ${{secrets.WORKSPACE_NAME}}staging
-
 jobs:
 
   build:
@@ -61,9 +54,9 @@ jobs:
             azPSVersion: '3.1.0'
             inlineScript: |
               az extension add --name containerapp
-              $STORAGEKEY=$(az storage account keys list -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{env.STORAGE_NAME}} --query [0].value -o tsv)
+              $STORAGEKEY=$(az storage account keys list -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.STORAGE_NAME}} --query [0].value -o tsv)
               $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n podcastapica -o tsv --query properties.configuration.ingress.fqdn)+"/"
-              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{env.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{env.PODCASTDB_SERVER_NAME}}
+              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
 
       - uses: actions/download-artifact@master
         with:
@@ -74,6 +67,5 @@ jobs:
         uses: Azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.HUB_WEBAPP_NAME }}
-          slot-name: staging
           package: hub
 

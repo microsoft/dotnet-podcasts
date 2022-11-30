@@ -11,7 +11,6 @@ on:
 
 env:
   API_RESOURCE_NAME: podcastapicastaging
-  HUB_WEBAPP_NAME: ${{ secrets.HUB_WEBAPP_NAME }}-staging
 
 jobs:
   build:
@@ -42,7 +41,7 @@ jobs:
           inlineScript: |
             az extension add --name containerapp
             $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
-            $listenTogetherHubUrl = "https://${{ env.HUB_WEBAPP_NAME }}.azurewebsites.net/listentogether"
+            $listenTogetherHubUrl = "https://${{ secrets.HUB_WEBAPP_NAME }}.azurewebsites.net/listentogether"
             echo "PODCAST_API_URL=$apiUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
             echo "LISTEN_TOGETHER_HUB_URL=$listenTogetherHubUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 
@@ -98,7 +97,6 @@ jobs:
         uses: Azure/appservice-settings@v1
         with:
           app-name: ${{ secrets.WEBAPP_NAME }}
-          slot-name: staging
           app-settings-json: |
             [
                 {
@@ -114,17 +112,18 @@ jobs:
       - name: Azure WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.WEBAPP_NAME }}
-          slot-name: staging
+          app-name: ${{ secrets.WEBAPP_NAME_STAGING }}
           package: web
 
   test:
     needs: deploy
+    environment:
+      name: staging
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.26.0-focal
     env:
-      BASEURL: https://${{secrets.WEBAPP_NAME_STAGING}}.azurewebsites.net # sets value for URL to test
+      BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
     defaults:
       run:
         working-directory: src/Web/E2E
