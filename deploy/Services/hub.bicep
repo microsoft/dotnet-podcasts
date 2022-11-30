@@ -13,7 +13,7 @@ param location string = resourceGroup().location
 param sku string = 'S1'
 
 @description('The Runtime stack of current web app')
-param linuxFxVersion string = 'DOTNETCORE|6.0'
+param linuxFxVersion string = 'DOTNETCORE|7.0'
 param podcastApiUrl string
 param serverName string
 param sqlDBName string = 'ListenTogether'
