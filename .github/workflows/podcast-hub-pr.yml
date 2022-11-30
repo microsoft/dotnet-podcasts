@@ -20,6 +20,7 @@ env:
 jobs:
 
   build:
+    if: ${{ github.event_name == 'pull_request'}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -44,7 +45,7 @@ jobs:
   deploy:
     needs: build
     environment: 
-      name: prod
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

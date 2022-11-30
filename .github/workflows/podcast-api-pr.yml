@@ -23,6 +23,8 @@ jobs:
 
   build-pr:
     if: ${{ github.event_name == 'pull_request'}}
+    environment: 
+      name: staging
     runs-on: ubuntu-latest
 
     steps:
@@ -38,6 +40,8 @@ jobs:
         run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ env.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
 
   build-and-push:
+    environment: 
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -79,8 +83,7 @@ jobs:
   deploy:
     needs: build-and-push
     environment: 
-      name: prod
-    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
