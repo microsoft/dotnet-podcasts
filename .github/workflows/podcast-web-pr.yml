@@ -14,7 +14,6 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event_name == 'pull_request'}}
     environment:
       name: staging
     runs-on: ubuntu-latest
