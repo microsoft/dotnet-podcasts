@@ -74,50 +74,56 @@ var serviceResource =
          .CreateDefault()
          .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
-var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor") ?? throw new InvalidOperationException("Missing azure monitor configuration");
+var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor"); 
 
-builder.Services.AddOpenTelemetryTracing(tracing =>
-    tracing.SetResourceBuilder(serviceResource)
-    .AddAzureMonitorTraceExporter(o =>
-    {
-        o.ConnectionString = azureMonitorConnectionString;
-    })
-    .AddJaegerExporter()
-    .AddHttpClientInstrumentation()
-    .AddAspNetCoreInstrumentation()
-    .AddEntityFrameworkCoreInstrumentation()
-);
+var enableMonitor = !string.IsNullOrWhiteSpace(azureMonitorConnectionString);
 
-builder.Services.AddOpenTelemetryMetrics(metrics =>
+if(enableMonitor)
 {
-    metrics
-    .SetResourceBuilder(serviceResource)
-    .AddPrometheusExporter()
-    .AddAzureMonitorMetricExporter(o =>
+
+    builder.Services.AddOpenTelemetryTracing(tracing =>
+        tracing.SetResourceBuilder(serviceResource)
+        .AddAzureMonitorTraceExporter(o =>
+        {
+            o.ConnectionString = azureMonitorConnectionString;
+        })
+        .AddJaegerExporter()
+        .AddHttpClientInstrumentation()
+        .AddAspNetCoreInstrumentation()
+        .AddEntityFrameworkCoreInstrumentation()
+    );
+
+    builder.Services.AddOpenTelemetryMetrics(metrics =>
     {
-        o.ConnectionString = azureMonitorConnectionString;
-    })
-    .AddAspNetCoreInstrumentation()
-    .AddHttpClientInstrumentation()
-    .AddRuntimeInstrumentation()
-    .AddProcessInstrumentation()
-    .AddHttpClientInstrumentation()
-    .AddEventCountersInstrumentation(ec =>
-    {
-        ec.AddEventSources("Microsoft.AspNetCore.Hosting");
+        metrics
+        .SetResourceBuilder(serviceResource)
+        .AddPrometheusExporter()
+        .AddAzureMonitorMetricExporter(o =>
+        {
+            o.ConnectionString = azureMonitorConnectionString;
+        })
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddProcessInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddEventCountersInstrumentation(ec =>
+        {
+            ec.AddEventSources("Microsoft.AspNetCore.Hosting");
+        });
     });
-});
 
-builder.Logging.AddOpenTelemetry(logging =>
-{
-    logging
-     .SetResourceBuilder(serviceResource)
-     .AddAzureMonitorLogExporter(o =>
-     {
-         o.ConnectionString = azureMonitorConnectionString;
-     })
-     .AttachLogsToActivityEvent();
-});
+    builder.Logging.AddOpenTelemetry(logging =>
+    {
+        logging
+        .SetResourceBuilder(serviceResource)
+        .AddAzureMonitorLogExporter(o =>
+        {
+            o.ConnectionString = azureMonitorConnectionString;
+        })
+        .AttachLogsToActivityEvent();
+    });
+}
 
 var app = builder.Build();
 
@@ -134,7 +140,9 @@ app.UseCors();
 app.UseRateLimiter();
 app.UseOutputCache();
 
-app.MapPrometheusScrapingEndpoint();
+if(enableMonitor)
+    app.MapPrometheusScrapingEndpoint();
+
 app.MapGet("/version", () => serviceVersion);
 
 var versionSet = app.NewApiVersionSet()
