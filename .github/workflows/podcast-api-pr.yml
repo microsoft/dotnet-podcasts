@@ -11,8 +11,8 @@ on:
   workflow_dispatch:
 
 env:
-  API_RESOURCE_NAME: podcastapicastaging
-  UPDATER_RESOURCE_NAME: podcastupdatercastaging
+  API_RESOURCE_NAME: ${{secrets.API_RESOURCE_NAME}}
+  UPDATER_RESOURCE_NAME: ${{secrets.UPDATER_RESOURCE_NAME}}
 
 jobs:
 
