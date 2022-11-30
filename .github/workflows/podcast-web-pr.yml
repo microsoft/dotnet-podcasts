@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "src/Web/**"
-      - ".github/workflows/podcast-web.yml"
+      - ".github/workflows/podcast-web-pr.yml"
       - "deploy/Web/web.deployment.json"
   workflow_dispatch:
 

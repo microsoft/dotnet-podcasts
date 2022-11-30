@@ -6,7 +6,7 @@ on:
     paths:
       - 'src/Services/ListenTogether/**'
       - 'deploy/Services/hub.bicep'
-      - '.github/workflows/podcast-hub.yml'
+      - '.github/workflows/podcast-hub-pr.yml'
 
   workflow_dispatch:
 

@@ -6,7 +6,7 @@ on:
     paths:
       - 'src/Services/Podcasts/**'
       - 'deploy/Services/api.bicep'
-      - '.github/workflows/podcast-api.yml'
+      - '.github/workflows/podcast-api-pr.yml'
 
   workflow_dispatch:
 
