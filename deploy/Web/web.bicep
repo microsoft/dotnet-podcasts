@@ -41,19 +41,3 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
     clientAffinityEnabled: false
   }
 }
-
-resource webAppSlot 'Microsoft.Web/sites/slots@2022-03-01' = {
-  parent: webApp
-  name: 'staging'
-  location: location
-  properties: {
-    serverFarmId: servicePlan.id
-    siteConfig: {
-      linuxFxVersion: linuxFxVersion
-      alwaysOn: true
-      http20Enabled: true
-    }
-    httpsOnly: true
-    clientAffinityEnabled: false
-  }
-}
