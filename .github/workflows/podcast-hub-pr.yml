@@ -1,4 +1,4 @@
-name: Podcast Hub CICD
+name: Podcast Hub CICD - Staging
 
 on:
   pull_request:

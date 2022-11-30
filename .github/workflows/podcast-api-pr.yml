@@ -16,6 +16,8 @@ env:
   PODCASTDB_SERVER_NAME: ${{secrets.PODCASTDB_SERVER_NAME}}staging
   KUBERNETES_ENV_NAME: ${{secrets.KUBERNETES_ENV_NAME}}staging
   WORKSPACE_NAME: ${{secrets.WORKSPACE_NAME}}staging
+  API_RESOURCE_NAME: podcastapicastaging
+  UPDATER_RESOURCE_NAME: podcastupdatercastaging
 
 jobs:
 
@@ -100,7 +102,7 @@ jobs:
              az deployment group create -n ghaction${{ github.sha }} `
                 --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
                 --template-file deploy/Services/api.bicep `
-                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{env.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ env.STORAGE_NAME }} serverName=${{env.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{env.KUBERNETES_ENV_NAME}} workspaceName=${{env.WORKSPACE_NAME}}
+                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{env.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ env.STORAGE_NAME }} serverName=${{env.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{env.KUBERNETES_ENV_NAME}} workspaceName=${{env.WORKSPACE_NAME}} apiName=${{env.API_RESOURCE_NAME}} updaterName=${{env.UPDATER_RESOURCE_NAME}}
 
              if( $LASTEXITCODE -ne 0 ) { exit -1 }
             
