@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  API_RESOURCE_NAME: podcastapica
+  API_RESOURCE_NAME: podcastapicastaging
 
 jobs:
   build:

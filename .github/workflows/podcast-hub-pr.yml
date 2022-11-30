@@ -1,0 +1,78 @@
+name: Podcast Hub CICD
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/Services/ListenTogether/**'
+      - 'deploy/Services/hub.bicep'
+      - '.github/workflows/podcast-hub.yml'
+
+  workflow_dispatch:
+
+env:
+  ACR_NAME: ${{ secrets.ACR_NAME }}staging
+  STORAGE_NAME: ${{ secrets.STORAGE_NAME }}staging
+  PODCASTDB_SERVER_NAME: ${{secrets.PODCASTDB_SERVER_NAME}}staging
+  KUBERNETES_ENV_NAME: ${{secrets.KUBERNETES_ENV_NAME}}staging
+  WORKSPACE_NAME: ${{secrets.WORKSPACE_NAME}}staging
+  HUB_WEBAPP_NAME: ${{secrets.HUB_WEBAPP_NAME}}staging
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: Build
+        run: dotnet build --configuration Release src/Services/ListenTogether/ListenTogether.Hub
+
+      - name: Publish
+        run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: drop
+          path: hub
+
+  deploy:
+    needs: build
+    environment: 
+      name: prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+    
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Bicep template
+        uses: azure/powershell@v1
+        with:
+            azPSVersion: '3.1.0'
+            inlineScript: |
+              az extension add --name containerapp
+              $STORAGEKEY=$(az storage account keys list -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{env.STORAGE_NAME}} --query [0].value -o tsv)
+              $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n podcastapica -o tsv --query properties.configuration.ingress.fqdn)+"/"
+              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.bicep --parameters webAppName=${{env.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{env.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{env.PODCASTDB_SERVER_NAME}}
+
+      - uses: actions/download-artifact@master
+        with:
+          name: drop
+          path: hub
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.HUB_WEBAPP_NAME }}
+          package: hub
+
