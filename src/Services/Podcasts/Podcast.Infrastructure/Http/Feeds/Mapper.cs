@@ -38,7 +38,7 @@ internal static class Mapper
     {
         var imagePath = new UriBuilder(showImage).Path;
         var imageExtension = Path.GetExtension(imagePath);
-        var imageUrl = $"{imagesStorage}{showTitle}{imageExtension}";
+        var imageUrl = $"{imagesStorage}{showTitle}{imageExtension ?? ".jpg"}";
         return imageUrl;
     }
 }

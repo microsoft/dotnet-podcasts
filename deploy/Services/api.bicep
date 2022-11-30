@@ -14,6 +14,8 @@ param administratorLogin string
 param storageAccountName string
 param kubernetesEnvName string
 param workspaceName string
+param apiName string = 'podcastapica'
+param updaterName string = 'podcastupdaterca'
 
 var workspaceId = workspace.id
 var kubernetesEnvId = kubernetesEnv.id
@@ -105,7 +107,7 @@ resource kubernetesEnv 'Microsoft.App/managedEnvironments@2022-03-01' = {
 }
 
 resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
-  name: 'podcastapica'
+  name: apiName
   location: location
   properties: {
     managedEnvironmentId: kubernetesEnvId
@@ -267,7 +269,7 @@ resource ingestionContainerApp 'Microsoft.App/containerApps@2022-03-01' = if (de
 }
 
 resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
-  name: 'podcastupdaterca'
+  name: updaterName
   location: location
   properties: {
     managedEnvironmentId: kubernetesEnvId
