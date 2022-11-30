@@ -114,6 +114,8 @@ Go ahead and add the following GitHub secrets. Some of the values need to be uni
 - `SERVICE_PLAN_SKU`: Provide a preferred SKU for the service plan. For e.g., `S1`.
 - `HUB_WEBAPP_NAME`: Provide a Web App name for Listen Together SignalR Hub. _This needs to be unique_. For e.g., `yourname-podcasthub`
 - `WEBAPP_NAME`: Provide a Web App name for the the websites._This needs to be unique_. For e.g., `yourname-podcastwebapp`
+- `API_RESOURCE_NAME`: set to `podcastapica`
+- `UPDATER_RESOURCE_NAME`: set to `podcastupdaterca`
 
 Once configured correctly, you should be having 13 secrets. Here's our list for reference:
 

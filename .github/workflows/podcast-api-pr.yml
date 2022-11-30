@@ -10,10 +10,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  API_RESOURCE_NAME: ${{secrets.API_RESOURCE_NAME}}
-  UPDATER_RESOURCE_NAME: ${{secrets.UPDATER_RESOURCE_NAME}}
-
 jobs:
 
   build-pr:
@@ -100,7 +96,7 @@ jobs:
              az deployment group create -n ghaction${{ github.sha }} `
                 --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
                 --template-file deploy/Services/api.bicep `
-                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}} apiName=${{env.API_RESOURCE_NAME}} updaterName=${{env.UPDATER_RESOURCE_NAME}}
+                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}} apiName=${{secrets.API_RESOURCE_NAME}} updaterName=${{secrets.UPDATER_RESOURCE_NAME}}
 
              if( $LASTEXITCODE -ne 0 ) { exit -1 }
             
