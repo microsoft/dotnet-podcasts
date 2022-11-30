@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 env:
-  API_RESOURCE_NAME: podcastapica
+  LISTEN_TOGETHER_HUB_URL: "https://${{secrets.HUB_WEBAPP_NAME}}.azurewebsites.net/listentogether"
 
 jobs:
   build:
@@ -43,10 +43,8 @@ jobs:
           azPSVersion: "latest"
           inlineScript: |
             az extension add --name containerapp
-            $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ env.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
-            $listenTogetherHubUrl = "https://${{ secrets.HUB_WEBAPP_NAME }}.azurewebsites.net/listentogether"
+            $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ secrets.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
             echo "PODCAST_API_URL=$apiUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-            echo "LISTEN_TOGETHER_HUB_URL=$listenTogetherHubUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 
       - name: Set Blazor WASM app settings
         uses: microsoft/variable-substitution@v1
@@ -67,10 +65,6 @@ jobs:
           name: drop
           path: web
 
-    outputs:
-      PodcastApiUrl: ${{ env.PODCAST_API_URL }}
-      ListenTogetherHubUrl: ${{ env.LISTEN_TOGETHER_HUB_URL }}
-
   deploy:
     needs: build
     environment:
@@ -82,6 +76,15 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set backend env variables
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            az extension add --name containerapp
+            $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ secrets.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
+            echo "PODCAST_API_URL=$apiUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
 
       - name: Deploy Bicep template
         uses: azure/powershell@v1
@@ -104,11 +107,11 @@ jobs:
             [
                 {
                     "name": "PodcastApi__BaseAddress",
-                    "value": "${{ needs.build.outputs.PodcastApiUrl }}"
+                    "value": "${{ env.PODCAST_API_URL }}"
                 },
                 {
                     "name": "ListenTogetherHub",
-                    "value": "${{ needs.build.outputs.ListenTogetherHubUrl }}"
+                    "value": "${{ env.LISTEN_TOGETHER_HUB_URL }}"
                 }
             ]
 
