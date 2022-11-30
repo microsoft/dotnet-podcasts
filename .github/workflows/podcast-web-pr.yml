@@ -6,7 +6,7 @@ on:
     paths:
       - "src/Web/**"
       - ".github/workflows/podcast-web-pr.yml"
-      - "deploy/Web/web.deployment.json"
+      - "deploy/Web/web.json"
   workflow_dispatch:
 
 env:
