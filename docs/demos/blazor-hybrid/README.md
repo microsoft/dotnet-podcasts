@@ -6,7 +6,7 @@ Open `src/MobileBlazor/mauiapp/MauiProgram.cs` and enter
 
 ```csharp
 public static string BaseWeb = $"https://dotnetpodcasts.azurewebsites.net/";
-public static string APIUrl = $"https://podcastapica.delightfulocean-02c18c32.canadacentral.azurecontainerapps.io";
+public static string APIUrl = $"https://podcastapica.ashyhill-df3dfdf5.eastus.azurecontainerapps.io";
 public static string ListenTogetherUrl = $"https://dotnetpodcasts-listentogether-hub.azurewebsites.net/listentogether";
 ```
 
