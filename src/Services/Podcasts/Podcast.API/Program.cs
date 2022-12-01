@@ -74,11 +74,11 @@ var serviceResource =
          .CreateDefault()
          .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
-var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor"); 
+var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
 
 var enableMonitor = !string.IsNullOrWhiteSpace(azureMonitorConnectionString);
 
-if(enableMonitor)
+if (enableMonitor)
 {
 
     builder.Services.AddOpenTelemetryTracing(tracing =>
@@ -133,14 +133,14 @@ await EnsureDbAsync(app.Services);
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", ".NET Podcasts Minimal API");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", ".NET Podcasts API");
 });
 
 app.UseCors();
 app.UseRateLimiter();
 app.UseOutputCache();
 
-if(enableMonitor)
+if (enableMonitor)
     app.MapPrometheusScrapingEndpoint();
 
 app.MapGet("/version", () => serviceVersion);
@@ -165,12 +165,14 @@ shows
 categories
     .MapCategoriesApi()
     .WithApiVersionSet(versionSet)
-    .MapToApiVersion(1.0);
+    .MapToApiVersion(1.0)
+    .MapToApiVersion(2.0);
 
 episodes
     .MapEpisodesApi()
     .WithApiVersionSet(versionSet)
-    .MapToApiVersion(1.0);
+    .MapToApiVersion(1.0)
+    .MapToApiVersion(2.0);
 
 var feedIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngestion");
 
