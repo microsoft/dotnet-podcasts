@@ -17,23 +17,30 @@ jobs:
     environment: 
       name: staging
     runs-on: ubuntu-latest
-
+    env:
+      # all built containers have the same tag
+      ContainerImageTag: "${{ github.sha }}"
     steps:
       - uses: actions/checkout@v2
 
       - name: Build Podcast Updater
-        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
 
       - name: Build Podcast API
-        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
+        run: dotnet publish -c Release -r linux-x64 -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
 
       - name: Build Podcast Ingestion
-        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
 
   build-and-push:
     environment: 
       name: staging
     runs-on: ubuntu-latest
+    env:
+      # all containers have the same parent registry
+      ContainerRegistry: "${{ secrets.ACR_NAME }}.azurecr.io"
+      # all built containers have the same tag
+      ContainerImageTag: "${{ github.sha }}"
     steps:
       - uses: actions/checkout@v2
 
@@ -56,20 +63,19 @@ jobs:
           username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
           password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
 
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
       - name: Build Podcast Updater
-        run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }}
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
 
       - name: Build Podcast API
-        run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }}
+        run: dotnet publish -c Release -r linux-x64 -p ContainerImageTag=${{ github.sha }} -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
 
       - name: Build Podcast Ingestion
-        run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }}
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
+
 
   deploy:
     needs: build-and-push

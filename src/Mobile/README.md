@@ -42,8 +42,8 @@ One the Web and Api are available we will need to update next properties:
 Via CLI it is necesary to build:
 
 - `dotnet build src/Web/Components/Podcast.Components.Maui.csproj`
-- Mac: `dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -t:run -f net6.0-maccatalyst`
-- iOS: `dotnet build -t:Run -f net6.0-ios -p:\_DeviceName=:v2:udid='[EMULATOR ID]'`
+- Mac: `dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -t:run -f net7.0-maccatalyst`
+- iOS: `dotnet build -t:Run -f net7.0-ios -p:\_DeviceName=:v2:udid='[EMULATOR ID]'`
 
 To run iOS from windows we can use Visual Studio 2022 Preview from Windows.
 

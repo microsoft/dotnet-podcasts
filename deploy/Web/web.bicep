@@ -13,7 +13,7 @@ param servicePlanSku string = 'B1'
 param location string = resourceGroup().location
 
 @description('The Runtime stack of current web app')
-param linuxFxVersion string = 'DOTNETCORE|6.0'
+param linuxFxVersion string = 'DOTNETCORE|7.0'
 
 resource servicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: servicePlanName

@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   podcast.api:
-    image: ${DOCKER_REGISTRY-}podcastapi
+    image: ${DOCKER_REGISTRY-}podcastminapi
     build:
       context: .
       dockerfile: src/Services/Podcasts/Podcast.API/Dockerfile

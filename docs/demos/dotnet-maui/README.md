@@ -6,7 +6,7 @@ Open `src/Mobile/Config.cs` and enter
 
 ```csharp
 public static string BaseWeb = $"https://dotnetpodcasts.azurewebsites.net/";
-public static string APIUrl = $"https://podcastapica.ashyhill-df3dfdf5.eastus.azurecontainerapps.io/v1/";
+public static string APIUrl = $"https://podcastapica.ashyhill-df3dfdf5.eastus.azurecontainerapps.io/";
 public static string ListenTogetherUrl = $"https://dotnetpodcasts-listentogether-hub.azurewebsites.net/listentogether";
 ```
 

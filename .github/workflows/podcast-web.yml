@@ -26,9 +26,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "6.0.x"
+          dotnet-version: "7.0.x"
 
       - name: Install wasm-tools
         run: dotnet workload install wasm-tools
@@ -69,6 +69,7 @@ jobs:
     needs: build
     environment:
       name: prod
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

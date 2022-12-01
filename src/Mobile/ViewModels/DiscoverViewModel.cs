@@ -28,11 +28,16 @@ public partial class DiscoverViewModel : ViewModelBase
 
     internal async Task InitializeAsync()
     {
-        await FetchAsync();
+        //Delay on first load until window loads
+        await Task.Delay(1000);
+            await FetchAsync();
     }
 
     private async Task FetchAsync()
     {
+        if(shows?.Any() ??  false)
+            return;
+
         var podcastsModels = await showsService.GetShowsAsync();
 
         if (podcastsModels == null)

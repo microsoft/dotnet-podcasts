@@ -20,22 +20,29 @@ jobs:
   build-pr:
     if: ${{ github.event_name == 'pull_request'}}
     runs-on: ubuntu-latest
-
+    env:
+      # all built containers have the same tag
+      ContainerImageTag: "${{ github.sha }}"
     steps:
       - uses: actions/checkout@v2
 
       - name: Build Podcast Updater
-        run: docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
 
       - name: Build Podcast API
-        run: docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
+        run: dotnet publish -c Release -r linux-x64 -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
 
       - name: Build Podcast Ingestion
-        run: docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
 
   build-and-push:
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
+    env:
+      # all containers have the same parent registry
+      ContainerRegistry: "${{ secrets.ACR_NAME }}.azurecr.io"
+      # all built containers have the same tag
+      ContainerImageTag: "${{ github.sha }}"
     steps:
       - uses: actions/checkout@v2
 
@@ -58,30 +65,28 @@ jobs:
           username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
           password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
 
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
       - name: Build Podcast Updater
-        run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastupdaterworker:${{ github.sha }}
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
 
       - name: Build Podcast API
-        run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.API/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastapi:${{ github.sha }}
+        run: dotnet publish -c Release -r linux-x64 -p ContainerImageTag=${{ github.sha }} -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
 
       - name: Build Podcast Ingestion
-        run: | 
-          docker build -f ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile -t ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }} .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/podcastingestionworker:${{ github.sha }}
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
 
   deploy:
     needs: build-and-push
-    environment: 
+    environment:
       name: prod
     if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -99,10 +104,10 @@ jobs:
              az deployment group create -n ghaction${{ github.sha }} `
                 --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
                 --template-file deploy/Services/api.bicep `
-                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}}
+                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}} apiName=${{secrets.API_RESOURCE_NAME}} updaterName=${{secrets.UPDATER_RESOURCE_NAME}}
 
              if( $LASTEXITCODE -ne 0 ) { exit -1 }
-            
+
       - name: Upload Images
         uses: azure/powershell@v1
         with:

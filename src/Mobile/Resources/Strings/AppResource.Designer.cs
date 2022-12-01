@@ -169,6 +169,15 @@ namespace Microsoft.NetConf2021.Maui.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove episode.
+        /// </summary>
+        internal static string Listen_Later_Remove_Episode {
+            get {
+                return ResourceManager.GetString("Listen_Later_Remove_Episode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Listen.
         /// </summary>
         internal static string Listen_Later_Short {
@@ -212,16 +221,25 @@ namespace Microsoft.NetConf2021.Maui.Resources.Strings {
                 return ResourceManager.GetString("Play", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar See All Categories.
+        ///   Looks up a localized string similar to Play or pause episode.
+        /// </summary>
+        internal static string Play_Or_Pause {
+            get {
+                return ResourceManager.GetString("Play_Or_Pause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See All Categories.
         /// </summary>
         internal static string See_All_Categories {
             get {
                 return ResourceManager.GetString("See_All_Categories", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Tap to listen later.
         /// </summary>
@@ -230,7 +248,7 @@ namespace Microsoft.NetConf2021.Maui.Resources.Strings {
                 return ResourceManager.GetString("Semantic_Description_Tap_Listen_Later", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Tap to play or pause an episode.
         /// </summary>

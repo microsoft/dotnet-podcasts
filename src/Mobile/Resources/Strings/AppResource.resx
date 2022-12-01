@@ -153,6 +153,9 @@
   <data name="Listen_Later" xml:space="preserve">
     <value>Listen Later</value>
   </data>
+  <data name="Listen_Later_Remove_Episode" xml:space="preserve">
+    <value>Remove episode</value>
+  </data>
   <data name="Listen_Later_Short" xml:space="preserve">
     <value>Listen</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="Play" xml:space="preserve">
     <value>Play</value>
+  </data>
+  <data name="Play_Or_Pause" xml:space="preserve">
+    <value>Play or pause episode</value>
   </data>
   <data name="See_All_Categories" xml:space="preserve">
     <value>See All Categories</value>

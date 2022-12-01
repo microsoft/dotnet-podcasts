@@ -24,7 +24,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.x"
+          dotnet-version: "7.0.x"
 
       - name: Install wasm-tools
         run: dotnet workload install wasm-tools
@@ -123,7 +123,7 @@ jobs:
       name: staging
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.26.0-focal
+    container: mcr.microsoft.com/playwright:v1.27.1-focal
     env:
       BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
     defaults:
@@ -131,6 +131,7 @@ jobs:
         working-directory: src/Web/E2E
     steps:
       - uses: actions/checkout@v2
+      
       - uses: actions/setup-node@v2
         with:
           node-version: "14.x"
@@ -151,7 +152,7 @@ jobs:
           paths: src/Web/E2E/test-results/junit.xml
 
       - name: Upload HTML report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
