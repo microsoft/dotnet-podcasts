@@ -1,12 +1,13 @@
 ---
 page_type: sample
-description: ".NET 6 reference application shown at .NET Conf 2021 featuring ASP.NET Core, Blazor, .NET MAUI, Microservices, and more!"
+description: ".NET reference application shown at .NET Conf 2021 & 2022 featuring ASP.NET Core, Blazor, .NET MAUI, Microservices, Power Apps, Playwright, Orleans, and more!"
 languages:
 - csharp
 products:
 - dotnet-core
 - ef-core
 - blazor
+- orleans
 - dotnet-maui
 - azure-sql-database
 - azure-storage
@@ -18,7 +19,8 @@ products:
 
 # .NET Podcasts - Sample Application
 
-The .NET Podcast app is a sample application showcasing [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://dotnet.microsoft.com/apps/maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), [Orleans](https://docs.microsoft.com/dotnet/orleans/overview), and more.
+The .NET Podcast app is a sample application showcasing [.NET](https://dotnet.microsoft.com/), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://dotnet.microsoft.com/apps/maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), [Orleans](https://docs.microsoft.com/dotnet/orleans/overview), [Playwright](https://playwright.dev), and more.
+
 In addition, we created an Approval App using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to handle incoming podcast requests.
 
 You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor.

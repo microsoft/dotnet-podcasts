@@ -1,42 +1,55 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<VerticalStackLayout  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                      x:Class="Microsoft.NetConf2021.Maui.Views.EpisodeItemView"
-                      xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
-                      x:Name="self">
-    <VerticalStackLayout.GestureRecognizers>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Grid
+    x:Class="Microsoft.NetConf2021.Maui.Views.EpisodeItemView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+    x:Name="self"
+    x:DataType="viewmodels:EpisodeViewModel"
+    ColumnDefinitions="Auto, *, Auto"
+    ColumnSpacing="10"
+    Padding="0,0,5,0">
+    <Grid.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding NavigateToDetailCommand}" />
-    </VerticalStackLayout.GestureRecognizers>
-    <Grid>
-        <Image Aspect="AspectFit"
-               MinimumWidthRequest="{x:OnIdiom Phone=180, Default=264}"
-               MinimumHeightRequest="{x:OnIdiom Default=264, Phone=180}"
-               MaximumHeightRequest="{x:OnIdiom Phone=190, Default=264}"
-               MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
-               Source="{Binding Show.Image}"
-               HorizontalOptions="Start"
-               Margin="0,0,0,12" />
+    </Grid.GestureRecognizers>
+    <Image
+        Aspect="AspectFit"
+        HeightRequest="{OnIdiom Desktop=125, Default=80}"
+        Source="{Binding Show.Image}"
+        WidthRequest="{OnIdiom Desktop=125, Default=80}" />
+    <VerticalStackLayout Grid.Column="1" 
+                         VerticalOptions="Center">
+        <Label
+            LineBreakMode="TailTruncation"
+            MaxLines="1"
+            Style="{OnIdiom Default={StaticResource BodyXLLabelStyle},
+                            Phone={StaticResource BodyMLabelStyle}}"
+            Text="{Binding Episode.Title}"
+            FontAttributes="Bold"/>
+        <Label
+            LineBreakMode="TailTruncation"
+            MaxLines="1"
+            Style="{OnIdiom Default={StaticResource BodyMLabelStyle},
+                            Phone={StaticResource BodySLabelStyle}}"
+            Text="{Binding Show.Title}"
+            FontAttributes="Bold" />
+        <Label
+            LineBreakMode="TailTruncation"
+            MaxLines="1"
+            Style="{OnIdiom Default={StaticResource BodyMLabelStyle},
+                            Phone={StaticResource BodySLabelStyle}}"
+            Text="{Binding Episode.Published, StringFormat='{0:MMM dd, yyyy}'}" />
+    </VerticalStackLayout>
 
-        <Image Source="listenlaterfilled.png"
-               HorizontalOptions="End"
-               VerticalOptions="End"
-               Margin="22"
-               SemanticProperties.Description="Episode marked for listening later"
-               WidthRequest="24"
-               HeightRequest="24">
-            <Image.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding RemoveListenLaterCommand, Source={x:Reference self}}" CommandParameter="{Binding }"/>
-            </Image.GestureRecognizers>
-        </Image>
-    </Grid>
-    <Label Text="{Binding Episode.Title}"
-           MaxLines="1"
-           HorizontalOptions="Start"
-           LineBreakMode="TailTruncation"
-           MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
-           Style="{OnIdiom Default={StaticResource BodyXLLabelStyle},Phone={StaticResource BodyLLabelStyle}}" />
-    <Label Text="{Binding Show.Author}"
-           LineBreakMode="TailTruncation"
-           MaxLines="1"
-           Style="{OnIdiom Default={StaticResource BodyMLabelStyle},Phone={StaticResource BodySLabelStyle}}" />
-</VerticalStackLayout>
+    <Image
+        Grid.Column="2"
+        HeightRequest="36"
+        HorizontalOptions="Center"
+        SemanticProperties.Description="Episode marked for listening later"
+        Source="clockpink.png"
+        WidthRequest="36">
+        <Image.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding RemoveListenLaterCommand, Source={x:Reference self}}" CommandParameter="{Binding}" />
+        </Image.GestureRecognizers>
+    </Image>
+</Grid>
