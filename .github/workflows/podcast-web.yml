@@ -64,7 +64,7 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}} apiContainerAppName=${{ secrets.API_RESOURCE_NAME }} hubWebAppName=${{secrets.HUB_WEBAPP_NAME}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}} hubWebAppName=${{secrets.HUB_WEBAPP_NAME}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master
@@ -97,7 +97,7 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}} apiContainerAppName=${{ secrets.API_RESOURCE_NAME }} hubWebAppName=${{secrets.HUB_WEBAPP_NAME}}
+            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}} hubWebAppName=${{secrets.HUB_WEBAPP_NAME}}
 
       - name: Download web artifacts
         uses: actions/download-artifact@master

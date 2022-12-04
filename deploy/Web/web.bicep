@@ -16,7 +16,7 @@ param location string = resourceGroup().location
 param linuxFxVersion string = 'DOTNETCORE|7.0'
 
 @description('The name of the API container app.')
-param apiContainerAppName string = ''
+param apiContainerAppName string = 'podcastapica'
 
 @description('The name of the Hub Web App.')
 param hubWebAppName string = ''
