@@ -19,14 +19,14 @@ param sqlDBName string = 'ListenTogether'
 param administratorLogin string
 
 @description('The name of the API container app.')
-param apiContainerAppName string = ''
+param apiContainerAppName string = 'podcastapica'
 
 @secure()
 param administratorLoginPassword string
 
 param storageAccountName string
 
-resource servicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
+resource servicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: servicePlanName
   location: location
   sku: {
@@ -50,7 +50,7 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' existing = {
   scope: resourceGroup()
 }
 
-resource webApp 'Microsoft.Web/sites@2020-06-01' = {
+resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   name: webAppName
   location: location
   properties: {
@@ -74,7 +74,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   ]
 }
 
-resource webAppConnectionString 'Microsoft.Web/sites/config@2020-12-01' = {
+resource webAppConnectionString 'Microsoft.Web/sites/config@2022-03-01' = {
   parent: webApp
   name: 'connectionstrings'
   properties: {
@@ -89,7 +89,7 @@ resource webAppConnectionString 'Microsoft.Web/sites/config@2020-12-01' = {
   }
 }
 
-resource sqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
+resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
   name: serverName
   location: location
   properties: {
@@ -98,7 +98,7 @@ resource sqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   }
 }
 
-resource sqlDB 'Microsoft.Sql/servers/databases@2020-08-01-preview' = {
+resource sqlDB 'Microsoft.Sql/servers/databases@2021-11-01' = {
   parent: sqlServer
   name: sqlDBName
   location: location
