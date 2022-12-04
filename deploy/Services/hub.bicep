@@ -26,8 +26,6 @@ param administratorLoginPassword string
 
 param storageAccountName string
 
-var sqlServerHostname = environment().suffixes.sqlServerHostname
-
 resource servicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: servicePlanName
   location: location
@@ -81,17 +79,14 @@ resource webAppConnectionString 'Microsoft.Web/sites/config@2020-12-01' = {
   name: 'connectionstrings'
   properties: {
     ListenTogetherDb: {
-      value: 'Server=tcp:${serverName}${sqlServerHostname},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+      value: 'Server=tcp:${serverName}${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlDB.name};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
       type: 'SQLAzure'
     }
     OrleansStorage: {
-      value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+      value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value}'
       type: 'Custom'
     }
   }
-  dependsOn: [
-    sqlServer
-  ]
 }
 
 resource sqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
