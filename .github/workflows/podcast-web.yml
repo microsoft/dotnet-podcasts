@@ -113,6 +113,7 @@ jobs:
 
   test:
     needs: [deployStaging, deployProd]
+    if: ${{ always() }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.27.1-focal
