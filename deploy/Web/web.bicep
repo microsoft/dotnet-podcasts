@@ -15,6 +15,12 @@ param location string = resourceGroup().location
 @description('The Runtime stack of current web app')
 param linuxFxVersion string = 'DOTNETCORE|7.0'
 
+@description('The name of the API container app.')
+param apiContainerAppName string = ''
+
+@description('The name of the Hub Web App.')
+param hubWebAppName string = ''
+
 resource servicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: servicePlanName
   location: location
@@ -27,6 +33,18 @@ resource servicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   }
 }
 
+// Reference existing API Container App to set App Settings
+resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' existing = {
+  name: apiContainerAppName
+  scope: resourceGroup()
+}
+
+// Reference existing Hub Container App to set App Settings
+resource hubWebApp 'Microsoft.Web/sites@2022-03-01' existing = {
+  name: hubWebAppName
+  scope: resourceGroup()
+}
+
 resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   name: webAppName
   location: location
@@ -36,8 +54,19 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
       linuxFxVersion: linuxFxVersion
       alwaysOn: true
       http20Enabled: true
+      appSettings: [
+        {
+          name: 'PodcastApi__BaseAddress'
+          value: apiContainerApp.properties.configuration.ingress.fqdn
+        }
+        {
+          name: 'ListenTogetherHub'
+          value: hubWebApp.properties.hostNames[0] 
+        }
+      ]
     }
     httpsOnly: true
     clientAffinityEnabled: false
+    
   }
 }
