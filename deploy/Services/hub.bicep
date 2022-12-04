@@ -19,11 +19,12 @@ param serverName string
 param sqlDBName string = 'ListenTogether'
 param administratorLogin string
 
+@description('The name of the API container app.')
+param apiContainerAppName string = ''
+
 @secure()
 param administratorLoginPassword string
 
-@secure()
-param storageAccountKey string
 param storageAccountName string
 
 var sqlServerHostname = environment().suffixes.sqlServerHostname
@@ -40,6 +41,18 @@ resource servicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   }
 }
 
+// Reference storage account to set keys in app settings
+resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' existing = {
+  name: storageAccountName
+  scope:  resourceGroup()
+}
+
+// Reference existing API Container App to set App Settings
+resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' existing = {
+  name: apiContainerAppName
+  scope: resourceGroup()
+}
+
 resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   name: webAppName
   location: location
@@ -53,6 +66,10 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
         {
           name: 'NetPodcastApi__BaseAddress'
           value: podcastApiUrl
+        }
+        {
+          name: 'PodcastApi__BaseAddress'
+          value: apiContainerApp.properties.configuration.ingress.fqdn
         }
       ]
     }
@@ -73,7 +90,7 @@ resource webAppConnectionString 'Microsoft.Web/sites/config@2020-12-01' = {
       type: 'SQLAzure'
     }
     OrleansStorage: {
-      value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${storageAccountKey}'
+      value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
       type: 'Custom'
     }
   }
