@@ -112,7 +112,7 @@ jobs:
           package: web
 
   test:
-    needs: deploy
+    needs: [deployStaging, deployProd]
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.27.1-focal
