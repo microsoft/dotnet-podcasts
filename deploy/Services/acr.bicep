@@ -31,5 +31,3 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
     adminUserEnabled: acrAdminUserEnabled
   }
 }
-
-output acrLoginServer string = acr.properties.loginServer

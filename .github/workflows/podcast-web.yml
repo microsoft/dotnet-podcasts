@@ -50,7 +50,7 @@ jobs:
     needs: build
     environment:
       name: staging
-    if: ${{ github.event_name == 'pull_request' }}
+    if: "!startsWith(github.ref, 'refs/heads/main')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -83,7 +83,7 @@ jobs:
     needs: build
     environment:
       name: prod
-    if: ${{ github.event.pull_request.merged == true }}
+    if: startsWith(github.ref, 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

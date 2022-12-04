@@ -65,10 +65,6 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       appSettings: [
         {
           name: 'NetPodcastApi__BaseAddress'
-          value: podcastApiUrl
-        }
-        {
-          name: 'PodcastApi__BaseAddress'
           value: apiContainerApp.properties.configuration.ingress.fqdn
         }
       ]
