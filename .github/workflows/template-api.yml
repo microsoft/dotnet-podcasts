@@ -6,7 +6,7 @@ on:
         type: string
                        
 jobs:
-  buildAndPush:
+  buildPushDeploy:
     environment:
       name: ${{ inputs.environment }}    
     runs-on: ubuntu-latest
@@ -44,19 +44,6 @@ jobs:
 
       - name: Build Podcast Ingestion
         run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
-
-  deploy:
-    environment:
-      name: ${{ inputs.environment }}    
-    needs: buildAndPush
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
 
       - name: Deploy Container Apps
         uses: azure/powershell@v1
