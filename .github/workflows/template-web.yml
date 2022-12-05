@@ -1,0 +1,50 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      azure_resource_group_name:
+        required: true
+      webapp_name:
+        required: true
+      service_plan_name:
+        required: true        
+      service_plan_sku:
+        required: true
+      hub_webapp_name:
+        required: true
+      azure_credentials:
+        required: true
+                       
+jobs:
+  deploy:
+    environment:
+      name: ${{ inputs.environment }}    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ inputs.azure_credentials }}
+
+      - name: Deploy Bicep template
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "3.1.0"
+          inlineScript: |
+            az deployment group create -n ghaction -g ${{ inputs.azure_resource_group_name }} --template-file deploy/Web/web.bicep --parameters webAppName=${{ inputs.webapp_name }} servicePlanName=${{ inputs.service_plan_name }} servicePlanSku=${{ inputs.service_plan_sku }} hubWebAppName=${{ inputs.hub_webapp_name }}
+
+      - name: Download web artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: drop
+          path: web
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.WEBAPP_NAME }}
+          package: web

@@ -48,68 +48,32 @@ jobs:
   deployStaging:
     name: 'Deploy PR to Staging environment'
     needs: build
-    environment:
-      name: staging
     if: "!contains(github.ref, 'refs/heads/main')"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy Bicep template
-        uses: azure/powershell@v1
-        with:
-          azPSVersion: "3.1.0"
-          inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}} hubWebAppName=${{secrets.HUB_WEBAPP_NAME}}
-
-      - name: Download web artifacts
-        uses: actions/download-artifact@master
-        with:
-          name: drop
-          path: web
-
-      - name: Azure WebApp
-        uses: Azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.WEBAPP_NAME }}
-          package: web
+    uses: ./.github/workflows/template-web.yml
+    with:
+      environment: staging
+    secrets:  
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}      
+      azure_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+      webapp_name: ${{secrets.WEBAPP_NAME}}
+      service_plan_name: ${{ secrets.SERVICE_PLAN_NAME }}
+      service_plan_sku: ${{ secrets.SERVICE_PLAN_SKU }}
+      hub_webapp_name: ${{ secrets.HUB_WEBAPP_NAME }}
 
   deployProd:
     name: 'Deploy main branch commit to Production environment'
     needs: build
-    environment:
-      name: prod
     if: contains(github.ref, 'refs/heads/main')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy Bicep template
-        uses: azure/powershell@v1
-        with:
-          azPSVersion: "3.1.0"
-          inlineScript: |
-            az deployment group create -n ghaction -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{secrets.WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} servicePlanSku=${{secrets.SERVICE_PLAN_SKU}} hubWebAppName=${{secrets.HUB_WEBAPP_NAME}}
-
-      - name: Download web artifacts
-        uses: actions/download-artifact@master
-        with:
-          name: drop
-          path: web
-
-      - name: Azure WebApp
-        uses: Azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.WEBAPP_NAME }}
-          package: web
+    uses: ./.github/workflows/template-web.yml
+    with:
+      environment: prod
+    secrets:  
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}      
+      azure_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
+      webapp_name: ${{secrets.WEBAPP_NAME}}
+      service_plan_name: ${{ secrets.SERVICE_PLAN_NAME }}
+      service_plan_sku: ${{ secrets.SERVICE_PLAN_SKU }}
+      hub_webapp_name: ${{ secrets.HUB_WEBAPP_NAME }}
 
   test:
     needs: [deployStaging, deployProd]
