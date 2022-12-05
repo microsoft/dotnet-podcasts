@@ -50,15 +50,9 @@ jobs:
     needs: build
     if: "!contains(github.ref, 'refs/heads/main')"
     uses: ./.github/workflows/template-web.yml
+    secrets: inherit
     with:
       environment: staging
-    secrets:  
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}      
-      azure_resource_group_name: ${{ secrets.AZURE_RESOURCE_GROUP_NAME }}
-      webapp_name: ${{secrets.WEBAPP_NAME}}
-      service_plan_name: ${{ secrets.SERVICE_PLAN_NAME }}
-      service_plan_sku: ${{ secrets.SERVICE_PLAN_SKU }}
-      hub_webapp_name: ${{ secrets.HUB_WEBAPP_NAME }}
 
   deployProd:
     name: 'Deploy main branch commit to Production environment'

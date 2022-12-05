@@ -4,38 +4,25 @@ on:
       environment:
         required: true
         type: string
-    secrets:
-      azure_resource_group_name:
-        required: true
-      webapp_name:
-        required: true
-      service_plan_name:
-        required: true        
-      service_plan_sku:
-        required: true
-      hub_webapp_name:
-        required: true
-      azure_credentials:
-        required: true
                        
 jobs:
   deploy:
     environment:
-      name: ${{ inputs.environment }}    
+      name: ${{ env.environment }}    
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
       - uses: azure/login@v1
         with:
-          creds: ${{ inputs.azure_credentials }}
+          creds: ${{ env.AZURE_CREDENTIALS }}
 
       - name: Deploy Bicep template
         uses: azure/powershell@v1
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghaction -g ${{ inputs.azure_resource_group_name }} --template-file deploy/Web/web.bicep --parameters webAppName=${{ inputs.webapp_name }} servicePlanName=${{ inputs.service_plan_name }} servicePlanSku=${{ inputs.service_plan_sku }} hubWebAppName=${{ inputs.hub_webapp_name }}
+            az deployment group create -n ghaction -g ${{ env.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Web/web.bicep --parameters webAppName=${{ env.WEBAPP_NAME }} servicePlanName=${{ env.SERVICE_PLAN_NAME }} servicePlanSku=${{ env.SERVICE_PLAN_SKU }} hubWebAppName=${{ env.HUB_WEBAPP_NAME }}
 
       - name: Download web artifacts
         uses: actions/download-artifact@v3
