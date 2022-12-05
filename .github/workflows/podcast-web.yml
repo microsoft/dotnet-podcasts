@@ -68,7 +68,7 @@ jobs:
     if: "!contains(github.ref, 'refs/heads/main')"
     uses: ./.github/workflows/template-web.yml
     concurrency:
-      group: staging
+      group: staging-web
       cancel-in-progress: true    
     secrets: inherit
     with:
@@ -80,7 +80,7 @@ jobs:
     if: contains(github.ref, 'refs/heads/main')
     uses: ./.github/workflows/template-web.yml
     concurrency:
-      group: prod
+      group: prod-web
       cancel-in-progress: true      
     secrets: inherit
     with:
