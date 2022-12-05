@@ -48,6 +48,7 @@ jobs:
   deploy:
     environment:
       name: ${{ inputs.environment }}    
+    needs: buildAndPush
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
