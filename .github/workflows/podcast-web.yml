@@ -67,6 +67,9 @@ jobs:
     needs: build
     if: "!contains(github.ref, 'refs/heads/main')"
     uses: ./.github/workflows/template-web.yml
+    concurrency:
+      group: staging
+      cancel-in-progress: true    
     secrets: inherit
     with:
       environment: staging
@@ -76,6 +79,9 @@ jobs:
     needs: build
     if: contains(github.ref, 'refs/heads/main')
     uses: ./.github/workflows/template-web.yml
+    concurrency:
+      group: prod
+      cancel-in-progress: true      
     secrets: inherit
     with:
       environment: prod

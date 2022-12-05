@@ -20,6 +20,9 @@ jobs:
     name: 'staging'   
     if: "!contains(github.ref, 'refs/heads/main')"
     uses: ./.github/workflows/template-api.yml
+    concurrency:
+      group: staging
+      cancel-in-progress: true      
     secrets: inherit
     with:
       environment: staging    
@@ -28,6 +31,9 @@ jobs:
     name: 'prod'
     if: contains(github.ref, 'refs/heads/main')
     uses: ./.github/workflows/template-api.yml
+    concurrency:
+      group: prod
+      cancel-in-progress: true      
     secrets: inherit
     with:
       environment: prod
