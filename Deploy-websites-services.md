@@ -35,7 +35,7 @@ First, you need to create an Azure Resource group within your subscription. If y
 To create the resource group, run the following command in the terminal:
 
 ```console
-az group create --name podcastrg --location canadacentral
+az group create --name podcastrg --location eastus
 ```
 
 The above resource group name will be added to the GitHub secrets in a later step. If you decide to use your own resource group name, be sure to update the same later.
