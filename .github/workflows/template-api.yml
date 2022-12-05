@@ -37,13 +37,13 @@ jobs:
           dotnet-version: "7.0.x"
 
       - name: Build Podcast Updater
-        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj -p ContainerRegistry=${{ secrets.ACR_NAME }}.azurecr.io
 
       - name: Build Podcast API
-        run: dotnet publish -c Release -r linux-x64 -p ContainerImageTag=${{ github.sha }} -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
+        run: dotnet publish -c Release -r linux-x64 -p ContainerRegistry=${{ secrets.ACR_NAME }}.azurecr.io -p ContainerImageTag=${{ github.sha }} -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
 
       - name: Build Podcast Ingestion
-        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj -p ContainerRegistry=${{ secrets.ACR_NAME }}.azurecr.io
 
       - name: Deploy Container Apps
         uses: azure/powershell@v1
