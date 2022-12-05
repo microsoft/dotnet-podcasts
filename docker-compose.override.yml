@@ -4,7 +4,7 @@ services:
 
   podcast.api:
     environment:
-        - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word
+        - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word;Encrypt=False
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=http://+:80
         - ConnectionStrings__FeedQueue=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://azurite
@@ -22,11 +22,11 @@ services:
 
   podcast.updater.worker:
     environment:
-      - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word
+      - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word;Encrypt=False
 
   podcast.ingestion.worker:
     environment:
-      - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word
+      - ConnectionStrings__PodcastDb=Server=podcast.db;Database=Podcast;User Id=sa;Password=Pass@word;Encrypt=False
       - ConnectionStrings__FeedQueue=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://azurite
 
   listentogether.hub:
@@ -34,7 +34,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - NetPodcastApi__BaseAddress=http://podcast.api
-      - ConnectionStrings__ListenTogetherDb=Server=podcast.db;Database=ListenTogether;User Id=sa;Password=Pass@word
+      - ConnectionStrings__ListenTogetherDb=Server=podcast.db;Database=ListenTogether;User Id=sa;Password=Pass@word;Encrypt=False
       - ConnectionStrings__OrleansStorage=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://azurite
     ports:
       - "5001:80"
