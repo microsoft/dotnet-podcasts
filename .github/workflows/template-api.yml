@@ -1,0 +1,79 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+                       
+jobs:
+  buildAndPush:
+    environment:
+      name: ${{ inputs.environment }}    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Deploy ACR
+        uses: azure/powershell@v1
+        with:
+            azPSVersion: '3.1.0'
+            inlineScript: |
+              az deployment group create -n ghactionbgtasks${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/acr.bicep --parameters acrName=${{secrets.ACR_NAME}}
+
+      - name: Login to ACR
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ${{ secrets.ACR_NAME }}.azurecr.io
+          username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+          password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Build Podcast Updater
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
+
+      - name: Build Podcast API
+        run: dotnet publish -c Release -r linux-x64 -p ContainerImageTag=${{ github.sha }} -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
+
+      - name: Build Podcast Ingestion
+        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
+
+  deploy:
+    environment:
+      name: ${{ inputs.environment }}    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Deploy Container Apps
+        uses: azure/powershell@v1
+        with:
+            azPSVersion: '3.1.0'
+            failOnStandardError: true
+            inlineScript: |
+             az deployment group create -n ghaction${{ github.sha }} `
+                --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
+                --template-file deploy/Services/api.bicep `
+                --parameters acrName=${{secrets.ACR_NAME}} imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}}
+
+             if( $LASTEXITCODE -ne 0 ) { exit -1 }
+
+      - name: Upload Images
+        uses: azure/powershell@v1
+        with:
+            azPSVersion: '3.1.0'
+            inlineScript: |
+              cd deploy/Images
+              ./Deploy-Images.ps1 -resourceGroup ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -storageName ${{ secrets.STORAGE_NAME }}    
