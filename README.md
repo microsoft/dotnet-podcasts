@@ -66,7 +66,7 @@ docker-compose up
 docker-compose -f docker-compose.arm64.yml -f docker-compose.override.yml up
 ```
 
-This will deploy and start all services required to run the web, mobile, and desktop apps. The Web API will run on `localhost:5000` and the SignalR Hub for listen together will run on `localhost:5001`.
+This will deploy and start all services required to run the web, mobile, and desktop apps. The Web API will run on `localhost:5003` and the SignalR Hub for listen together will run on `localhost:5001`.
 
 ### Web, Mobile, & Desktop
 
