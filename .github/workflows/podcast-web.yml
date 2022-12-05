@@ -39,7 +39,7 @@ jobs:
       environment: prod
 
   test:
-    needs: [deployStaging, deployProd]
+    needs: [buildDeployStaging, buildDeployProd]
     if: ${{ always() }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
