@@ -6,7 +6,55 @@ on:
         type: string
                        
 jobs:
+  build:
+    environment:
+      name: ${{ inputs.environment }}    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
+
+      - name: Install wasm-tools
+        run: dotnet workload install wasm-tools
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set backend env variables
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            az extension add --name containerapp
+            $apiUrl = "https://$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ secrets.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)"
+            echo "PODCAST_API_URL=$apiUrl" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+
+      - name: Set Blazor WASM app settings
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: "src/Web/Client/wwwroot/appsettings.json"
+        env:
+          PodcastApi.BaseAddress: ${{ env.PODCAST_API_URL }}
+          ListenTogetherHub: "https://${{secrets.HUB_WEBAPP_NAME}}.azurewebsites.net/listentogether"          
+
+      - name: Build
+        run: dotnet build src/Web/Server --configuration Release
+
+      - name: Publish
+        run: dotnet publish --configuration Release src/Web/Server --output web
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: drop
+          path: web      
+
   deploy:
+    needs: build
     environment:
       name: ${{ inputs.environment }}    
     runs-on: ubuntu-latest
