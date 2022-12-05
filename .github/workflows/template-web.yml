@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     environment:
-      name: ${{ env.environment }}    
+      name: ${{ inputs.environment }}    
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
