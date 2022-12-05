@@ -40,7 +40,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Web/Server --output web
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v3
         with:
           name: drop
           path: web

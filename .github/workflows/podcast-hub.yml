@@ -33,7 +33,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v3
         with:
           name: drop
           path: hub
