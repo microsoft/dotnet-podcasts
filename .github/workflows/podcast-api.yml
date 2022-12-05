@@ -26,6 +26,7 @@ jobs:
 
   buildPushDeployProd:
     name: 'prod'     
+    needs: buildPushDeployStaging
     if: contains(github.ref, 'refs/heads/main')
     uses: ./.github/workflows/template-api.yml
     secrets: inherit
