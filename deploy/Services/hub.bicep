@@ -79,7 +79,7 @@ resource webAppConnectionString 'Microsoft.Web/sites/config@2022-03-01' = {
   name: 'connectionstrings'
   properties: {
     ListenTogetherDb: {
-      value: 'Server=tcp:${serverName}${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlDB.name};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+      value: 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlDB.name};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
       type: 'SQLAzure'
     }
     OrleansStorage: {
