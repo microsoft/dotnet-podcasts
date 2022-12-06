@@ -16,7 +16,7 @@ param location string = resourceGroup().location
 param linuxFxVersion string = 'DOTNETCORE|7.0'
 
 @description('The name of the API container app.')
-param apiContainerAppName string = 'podcastapica'
+param apiName string
 
 @description('The name of the Hub Web App.')
 param hubWebAppName string = ''
@@ -35,7 +35,7 @@ resource servicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
 
 // Reference existing API Container App to set App Settings
 resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' existing = {
-  name: apiContainerAppName
+  name: apiName
   scope: resourceGroup()
 }
 
