@@ -19,7 +19,7 @@ param sqlDBName string = 'ListenTogether'
 param administratorLogin string
 
 @description('The name of the API container app.')
-param apiContainerAppName string = 'podcastapica'
+param apiName string = 'podcastapica'
 
 @secure()
 param administratorLoginPassword string
@@ -46,7 +46,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' existing 
 
 // Reference existing API Container App to set App Settings
 resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' existing = {
-  name: apiContainerAppName
+  name: apiName
   scope: resourceGroup()
 }
 

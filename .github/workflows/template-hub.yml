@@ -23,7 +23,7 @@ jobs:
         with:
             azPSVersion: '3.1.0'
             inlineScript: |            
-              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
+              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}} apiName=${{secrets.API_RESOURCE_NAME}}
 
       - uses: actions/download-artifact@v3
         with:

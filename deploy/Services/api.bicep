@@ -11,8 +11,8 @@ param administratorLogin string
 param storageAccountName string
 param kubernetesEnvName string
 param workspaceName string
-param apiName string = 'podcastapica'
-param updaterName string = 'podcastupdaterca'
+param apiName string
+param updaterName string
 
 var workspaceId = workspace.id
 var kubernetesEnvId = kubernetesEnv.id
