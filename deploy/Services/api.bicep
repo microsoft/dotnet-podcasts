@@ -223,7 +223,7 @@ resource ingestionContainerApp 'Microsoft.App/containerApps@2022-03-01' = if (de
     template: {
       containers: [
         {
-          image: '${acr.properties.loginServer}/podcastingestion:1.0.0' 
+          image: '${acr.properties.loginServer}/podcastingestion:${imageTag}' 
           name: 'podcastingestion'
           resources: {
             cpu: 1
@@ -299,7 +299,7 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
     template: {
       containers: [
         {
-          image: '${acr.properties.loginServer}/podcastupdaterworker:1.0.0'
+          image: '${acr.properties.loginServer}/podcastupdaterworker:${imageTag}'
           name: 'podcastupdater'
           resources: {
             cpu: 1
