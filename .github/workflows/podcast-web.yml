@@ -57,12 +57,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
-      -name: install edge
-        run: npx playwright install msedge
-
+        
       - name: Run Playwright tests
         run: |
+          npx playwright install msedge
           HOME=/root npx playwright test
 
       - name: Create test summary
