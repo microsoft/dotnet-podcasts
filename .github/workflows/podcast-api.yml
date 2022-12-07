@@ -2,38 +2,38 @@ name: Podcast API CICD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/Podcasts/**'
-      - 'deploy/Services/api.bicep'
-      - '.github/workflows/podcast-api.yml'
+      - "src/Services/Podcasts/**"
+      - "deploy/Services/api.bicep"
+      - ".github/workflows/podcast-api.yml"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/Podcasts/**'
-      - '.github/workflows/podcast-api.yml'
+      - "src/Services/Podcasts/**"
+      - ".github/workflows/podcast-api.yml"
 
   workflow_dispatch:
 
 jobs:
   buildPushDeployStaging:
-    name: 'staging'   
+    name: "staging"
     if: "!contains(github.ref, 'refs/heads/main')"
     uses: ./.github/workflows/template-api.yml
     concurrency:
       group: staging-api
-      cancel-in-progress: true      
+      cancel-in-progress: true
     secrets: inherit
     with:
-      environment: staging    
+      environment: staging
 
   buildPushDeployProd:
-    name: 'prod'
+    name: "prod"
     if: contains(github.ref, 'refs/heads/main')
     uses: ./.github/workflows/template-api.yml
     concurrency:
       group: prod-api
-      cancel-in-progress: true      
+      cancel-in-progress: true
     secrets: inherit
     with:
       environment: prod

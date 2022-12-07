@@ -2,30 +2,29 @@ name: Podcast Hub CICD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/ListenTogether/**'
-      - 'deploy/Services/hub.bicep'
-      - '.github/workflows/podcast-hub.yml'
+      - "src/Services/ListenTogether/**"
+      - "deploy/Services/hub.bicep"
+      - ".github/workflows/podcast-hub.yml"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/ListenTogether/**'
-      - '.github/workflows/podcast-hub.yml'
+      - "src/Services/ListenTogether/**"
+      - ".github/workflows/podcast-hub.yml"
 
   workflow_dispatch:
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.0.x'
+          dotnet-version: "7.0.x"
 
       - name: Build
         run: dotnet build --configuration Release src/Services/ListenTogether/ListenTogether.Hub
@@ -39,25 +38,25 @@ jobs:
           path: hub
 
   deployStaging:
-    name: 'Deploy PR to Staging environment'    
+    name: "Deploy PR to Staging environment"
     needs: build
-    if: "!contains(github.ref, 'refs/heads/main')"   
+    if: "!contains(github.ref, 'refs/heads/main')"
     uses: ./.github/workflows/template-hub.yml
     concurrency:
       group: staging-hub
-      cancel-in-progress: true      
+      cancel-in-progress: true
     secrets: inherit
     with:
       environment: staging
 
   deployProd:
-    name: 'Deploy main branch commit to Production environment'  
+    name: "Deploy main branch commit to Production environment"
     needs: build
     if: contains(github.ref, 'refs/heads/main')
     uses: ./.github/workflows/template-hub.yml
     concurrency:
       group: prod-hub
-      cancel-in-progress: true      
+      cancel-in-progress: true
     secrets: inherit
     with:
       environment: prod

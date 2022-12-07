@@ -4,11 +4,11 @@ on:
       environment:
         required: true
         type: string
-                       
+
 jobs:
   build:
     environment:
-      name: ${{ inputs.environment }}    
+      name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
           files: "src/Web/Client/wwwroot/appsettings.json"
         env:
           PodcastApi.BaseAddress: ${{ env.PODCAST_API_URL }}
-          ListenTogetherHub: "https://${{secrets.HUB_WEBAPP_NAME}}.azurewebsites.net/listentogether"          
+          ListenTogetherHub: "https://${{secrets.HUB_WEBAPP_NAME}}.azurewebsites.net/listentogether"
 
       - name: Build
         run: dotnet build src/Web/Server --configuration Release
@@ -51,12 +51,12 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: drop
-          path: web      
+          path: web
 
   deploy:
     needs: build
     environment:
-      name: ${{ inputs.environment }}    
+      name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
