@@ -9,7 +9,7 @@ services:
         - ASPNETCORE_URLS=http://+:80
         - ConnectionStrings__FeedQueue=UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://azurite
     ports:
-        - "5000:80"
+        - "5003:80"
 
   podcast.db:
     environment:

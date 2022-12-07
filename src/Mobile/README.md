@@ -19,7 +19,7 @@ In Config.cs you can find:
 ```csharp
 public static string BaseWeb = $"{Base}:5002/listentogether";
 public static string Base = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2" : "http://localhost";
-public static string APIUrl = $"{Base}:5000/v1/";
+public static string APIUrl = $"{Base}:5003/";
 public static string ListenTogetherUrl = $"{Base}:5001/listentogether";
 ```
 
