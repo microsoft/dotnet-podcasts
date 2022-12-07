@@ -57,11 +57,11 @@ resource webApp 'Microsoft.Web/sites@2022-03-01' = {
       appSettings: [
         {
           name: 'PodcastApi__BaseAddress'
-          value: apiContainerApp.properties.configuration.ingress.fqdn
+          value: 'https://${apiContainerApp.properties.configuration.ingress.fqdn}'
         }
         {
           name: 'ListenTogetherHub'
-          value: hubWebApp.properties.hostNames[0] 
+          value: 'https://${hubWebApp.properties.hostNames[0]}/listentogether'
         }
       ]
     }
