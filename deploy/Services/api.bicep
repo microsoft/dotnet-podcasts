@@ -4,26 +4,20 @@ param imageTag string
 
 @secure()
 param administratorLoginPassword string
-@secure()
-param acrPassword string
-param acrLogin string
-param acrLoginServer string
+param acrName string
 param serverName string
 param sqlDBName string = 'Podcast'
 param administratorLogin string
 param storageAccountName string
 param kubernetesEnvName string
 param workspaceName string
-param apiName string = 'podcastapica'
-param updaterName string = 'podcastupdaterca'
+param apiName string
+param updaterName string
 
 var workspaceId = workspace.id
 var kubernetesEnvId = kubernetesEnv.id
 var sqlServerHostname = environment().suffixes.sqlServerHostname
 var podcastDbConnectionString = 'Server=tcp:${serverName}${sqlServerHostname},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-var podcastApiImage = '${acrLoginServer}/podcastapi:${imageTag}'
-var podcastUpdaterImage = '${acrLoginServer}/podcastupdaterworker:${imageTag}'
-var podcastIngestionWorkerImage = '${acrLoginServer}/podcastingestionworker:${imageTag}'
 var storageEnv = environment().suffixes.storage
 var imagesStorage = 'https://${storageAccountName}.blob.${storageEnv}/covers/'
 var deployIngestion = false
@@ -106,6 +100,12 @@ resource kubernetesEnv 'Microsoft.App/managedEnvironments@2022-03-01' = {
   }
 }
 
+// Reference existing ACR to set container app secrets
+resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' existing = {
+  name: acrName
+  scope: resourceGroup()
+}
+
 resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: apiName
   location: location
@@ -122,8 +122,8 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
       }
       registries: [
         {
-          server: acrLoginServer
-          username: acrLogin
+          server: acr.properties.loginServer
+          username: acr.listCredentials().username
           passwordSecretRef: 'acr-password'
         }
       ]
@@ -138,14 +138,14 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
         }
         {
           name: 'acr-password'
-          value: acrPassword
+          value: acr.listCredentials().passwords[0].value
         }
       ]
     }
     template: {
       containers: [
         {
-          image: podcastApiImage
+          image: '${acr.properties.loginServer}/podcastapi:${imageTag}'
           name: 'podcastapi'
           resources: {
             cpu: 1
@@ -200,8 +200,8 @@ resource ingestionContainerApp 'Microsoft.App/containerApps@2022-03-01' = if (de
       activeRevisionsMode: 'single'
       registries: [
         {
-          server: acrLoginServer
-          username: acrLogin
+          server: acr.properties.loginServer
+          username: acr.listCredentials().username
           passwordSecretRef: 'acr-password'
         }
       ]
@@ -216,14 +216,14 @@ resource ingestionContainerApp 'Microsoft.App/containerApps@2022-03-01' = if (de
         }
         {
           name: 'acr-password'
-          value: acrPassword
+          value: acr.listCredentials().passwords[0].value
         }
       ]
     }
     template: {
       containers: [
         {
-          image: podcastIngestionWorkerImage
+          image: '${acr.properties.loginServer}/podcastingestion:${imageTag}' 
           name: 'podcastingestion'
           resources: {
             cpu: 1
@@ -280,8 +280,8 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
       activeRevisionsMode: 'single'
       registries: [
         {
-          server: acrLoginServer
-          username: acrLogin
+          server: acr.properties.loginServer
+          username: acr.listCredentials().username
           passwordSecretRef: 'acr-password'
         }
       ]
@@ -292,14 +292,14 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
         }
         {
           name: 'acr-password'
-          value: acrPassword
+          value: acr.listCredentials().passwords[0].value
         }
       ]
     }
     template: {
       containers: [
         {
-          image: podcastUpdaterImage
+          image: '${acr.properties.loginServer}/podcastupdaterworker:${imageTag}'
           name: 'podcastupdater'
           resources: {
             cpu: 1

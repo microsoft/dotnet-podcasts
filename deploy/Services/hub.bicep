@@ -14,21 +14,19 @@ param sku string = 'S1'
 
 @description('The Runtime stack of current web app')
 param linuxFxVersion string = 'DOTNETCORE|7.0'
-param podcastApiUrl string
 param serverName string
 param sqlDBName string = 'ListenTogether'
 param administratorLogin string
 
+@description('The name of the API container app.')
+param apiName string = 'podcastapica'
+
 @secure()
 param administratorLoginPassword string
 
-@secure()
-param storageAccountKey string
 param storageAccountName string
 
-var sqlServerHostname = environment().suffixes.sqlServerHostname
-
-resource servicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
+resource servicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: servicePlanName
   location: location
   sku: {
@@ -40,7 +38,19 @@ resource servicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   }
 }
 
-resource webApp 'Microsoft.Web/sites@2020-06-01' = {
+// Reference storage account to set keys in app settings
+resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' existing = {
+  name: storageAccountName
+  scope:  resourceGroup()
+}
+
+// Reference existing API Container App to set App Settings
+resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' existing = {
+  name: apiName
+  scope: resourceGroup()
+}
+
+resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   name: webAppName
   location: location
   properties: {
@@ -52,7 +62,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       appSettings: [
         {
           name: 'NetPodcastApi__BaseAddress'
-          value: podcastApiUrl
+          value: 'https://${apiContainerApp.properties.configuration.ingress.fqdn}'
         }
       ]
     }
@@ -64,25 +74,22 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   ]
 }
 
-resource webAppConnectionString 'Microsoft.Web/sites/config@2020-12-01' = {
+resource webAppConnectionString 'Microsoft.Web/sites/config@2022-03-01' = {
   parent: webApp
   name: 'connectionstrings'
   properties: {
     ListenTogetherDb: {
-      value: 'Server=tcp:${serverName}${sqlServerHostname},1433;Initial Catalog=${sqlDBName};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+      value: 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlDB.name};Persist Security Info=False;User ID=${administratorLogin};Password=${administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
       type: 'SQLAzure'
     }
     OrleansStorage: {
-      value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${storageAccountKey}'
+      value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value}'
       type: 'Custom'
     }
   }
-  dependsOn: [
-    sqlServer
-  ]
 }
 
-resource sqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
+resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
   name: serverName
   location: location
   properties: {
@@ -91,7 +98,7 @@ resource sqlServer 'Microsoft.Sql/servers@2020-02-02-preview' = {
   }
 }
 
-resource sqlDB 'Microsoft.Sql/servers/databases@2020-08-01-preview' = {
+resource sqlDB 'Microsoft.Sql/servers/databases@2021-11-01' = {
   parent: sqlServer
   name: sqlDBName
   location: location

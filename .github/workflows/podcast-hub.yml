@@ -2,31 +2,29 @@ name: Podcast Hub CICD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/ListenTogether/**'
-      - 'deploy/Services/hub.bicep'
-      - '.github/workflows/podcast-hub.yml'
+      - "src/Services/ListenTogether/**"
+      - "deploy/Services/hub.bicep"
+      - ".github/workflows/podcast-hub.yml"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/ListenTogether/**'
-      - '.github/workflows/podcast-hub.yml'
+      - "src/Services/ListenTogether/**"
+      - ".github/workflows/podcast-hub.yml"
 
   workflow_dispatch:
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      
+      - uses: actions/checkout@v3
+
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.0.x'
-          include-prerelease: true
+          dotnet-version: "7.0.x"
 
       - name: Build
         run: dotnet build --configuration Release src/Services/ListenTogether/ListenTogether.Hub
@@ -34,43 +32,31 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release src/Services/ListenTogether/ListenTogether.Hub --output hub
 
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v3
         with:
           name: drop
           path: hub
 
-  deploy:
+  deployStaging:
+    name: "Deploy PR to Staging environment"
     needs: build
-    environment: 
-      name: prod
-    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-    
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
+    if: "!contains(github.ref, 'refs/heads/main')"
+    uses: ./.github/workflows/template-hub.yml
+    concurrency:
+      group: staging-hub
+      cancel-in-progress: true
+    secrets: inherit
+    with:
+      environment: staging
 
-      - name: Bicep template
-        uses: azure/powershell@v1
-        with:
-            azPSVersion: '3.1.0'
-            inlineScript: |
-              az extension add --name containerapp
-              $STORAGEKEY=$(az storage account keys list -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.STORAGE_NAME}} --query [0].value -o tsv)
-              $PODCAST_API_URL ="https://"+$(az containerapp show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{ secrets.API_RESOURCE_NAME }} -o tsv --query properties.configuration.ingress.fqdn)+"/"
-              az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} podcastApiUrl=$PODCAST_API_URL storageAccountKey=$STORAGEKEY storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}}
-
-      - uses: actions/download-artifact@master
-        with:
-          name: drop
-          path: hub
-
-      - name: Azure WebApp
-        uses: Azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.HUB_WEBAPP_NAME }}
-          package: hub
-
+  deployProd:
+    name: "Deploy main branch commit to Production environment"
+    needs: build
+    if: contains(github.ref, 'refs/heads/main')
+    uses: ./.github/workflows/template-hub.yml
+    concurrency:
+      group: prod-hub
+      cancel-in-progress: true
+    secrets: inherit
+    with:
+      environment: prod

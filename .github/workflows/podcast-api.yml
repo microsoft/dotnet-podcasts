@@ -2,116 +2,38 @@ name: Podcast API CICD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/Podcasts/**'
-      - 'deploy/Services/api.bicep'
-      - '.github/workflows/podcast-api.yml'
+      - "src/Services/Podcasts/**"
+      - "deploy/Services/api.bicep"
+      - ".github/workflows/podcast-api.yml"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'src/Services/Podcasts/**'
-      - '.github/workflows/podcast-api.yml'
+      - "src/Services/Podcasts/**"
+      - ".github/workflows/podcast-api.yml"
 
   workflow_dispatch:
 
 jobs:
+  buildPushDeployStaging:
+    name: "staging"
+    if: "!contains(github.ref, 'refs/heads/main')"
+    uses: ./.github/workflows/template-api.yml
+    concurrency:
+      group: staging-api
+      cancel-in-progress: true
+    secrets: inherit
+    with:
+      environment: staging
 
-  build-pr:
-    if: ${{ github.event_name == 'pull_request'}}
-    runs-on: ubuntu-latest
-    env:
-      # all built containers have the same tag
-      ContainerImageTag: "${{ github.sha }}"
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Build Podcast Updater
-        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
-
-      - name: Build Podcast API
-        run: dotnet publish -c Release -r linux-x64 -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
-
-      - name: Build Podcast Ingestion
-        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
-
-  build-and-push:
-    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
-    runs-on: ubuntu-latest
-    env:
-      # all containers have the same parent registry
-      ContainerRegistry: "${{ secrets.ACR_NAME }}.azurecr.io"
-      # all built containers have the same tag
-      ContainerImageTag: "${{ github.sha }}"
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
-
-      - name: Deploy ACR
-        uses: azure/powershell@v1
-        with:
-            azPSVersion: '3.1.0'
-            inlineScript: |
-              az deployment group create -n ghactionbgtasks${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/acr.bicep --parameters acrName=${{secrets.ACR_NAME}}
-
-      - name: Login to ACR
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ secrets.ACR_NAME }}.azurecr.io
-          username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
-          password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
-
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'
-
-      - name: Build Podcast Updater
-        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Updater.Worker/Podcast.Updater.Worker.csproj
-
-      - name: Build Podcast API
-        run: dotnet publish -c Release -r linux-x64 -p ContainerImageTag=${{ github.sha }} -p PublishProfile=DefaultContainer src/Services/Podcasts/Podcast.API/Podcast.API.csproj
-
-      - name: Build Podcast Ingestion
-        run: dotnet publish -c Release -r linux-x64 /t:PublishContainer src/Services/Podcasts/Podcast.Ingestion.Worker/Podcast.Ingestion.Worker.csproj
-
-  deploy:
-    needs: build-and-push
-    environment:
-      name: prod
-    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch') }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          enable-AzPSSession: true
-
-      - name: Deploy Container Apps
-        uses: azure/powershell@v1
-        with:
-            azPSVersion: '3.1.0'
-            failOnStandardError: true
-            inlineScript: |
-             $ACR_LOGIN_SERVER="${{secrets.ACR_NAME}}.azurecr.io"
-             $ACR_PASSWORD=$(az acr credential show -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -n ${{secrets.ACR_NAME}} -o tsv --query passwords[0].value)
-
-             az deployment group create -n ghaction${{ github.sha }} `
-                --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
-                --template-file deploy/Services/api.bicep `
-                --parameters acrPassword=$ACR_PASSWORD acrLogin=${{secrets.ACR_NAME}} acrLoginServer=$ACR_LOGIN_SERVER imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}} apiName=${{secrets.API_RESOURCE_NAME}} updaterName=${{secrets.UPDATER_RESOURCE_NAME}}
-
-             if( $LASTEXITCODE -ne 0 ) { exit -1 }
-
-      - name: Upload Images
-        uses: azure/powershell@v1
-        with:
-            azPSVersion: '3.1.0'
-            inlineScript: |
-              cd deploy/Images
-              ./Deploy-Images.ps1 -resourceGroup ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} -storageName ${{ secrets.STORAGE_NAME }}
+  buildPushDeployProd:
+    name: "prod"
+    if: contains(github.ref, 'refs/heads/main')
+    uses: ./.github/workflows/template-api.yml
+    concurrency:
+      group: prod-api
+      cancel-in-progress: true
+    secrets: inherit
+    with:
+      environment: prod
