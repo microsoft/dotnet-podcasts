@@ -57,6 +57,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+      
+      -name: install edge
+        run: npx playwright install msedge
 
       - name: Run Playwright tests
         run: |
