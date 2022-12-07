@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-		<ContainerImageName>podcastupdaterworker</ContainerImageName>
+		<ContainerImageName>podcastingestionworker</ContainerImageName>
 	</PropertyGroup>
 
 	<ItemGroup>
