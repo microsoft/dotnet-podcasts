@@ -25,12 +25,12 @@ In addition, we created an Approval App using [Microsoft Power Apps](https://doc
 
 You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor.
 
-![Logo](./docs/net-podcasts.png)
+![Logo](./docs/images/net-podcasts.png)
 
 
 ## Application Architecture Diagram
 
-![.NET Podcast Application Diagram](docs/arch_diagram_podcast.png)
+![.NET Podcast Application Diagram](./docs/images/arch_diagram_podcast.png)
 
 ## Repositories
 
@@ -47,7 +47,7 @@ Additionally, we build an application using [Microsoft Power Apps](https://docs.
 
 ## Full Deployment with GitHub Actions
 
-`dotnet-podcasts` repo is configured to deploy all services and websites automatically to Azure using GitHub Actions. [Follow the detailed guidelines](Deploy-websites-services.md) to setup GitHub Actions on your fork.
+`dotnet-podcasts` repo is configured to deploy all services and websites automatically to Azure using GitHub Actions. [Follow the detailed guidelines](docs/deploy-websites-services.md) to setup GitHub Actions on your fork.
 
 ## Local Deployment Quickstart
 
@@ -74,7 +74,7 @@ The apps are configured to speak to `localhost` on the correct ports for each se
 
 Ensure that you have the following services running in Docker (podcast.api, listentogether.hub, podcast.updater.worker, podcast.db, storage):
 
-![Configured Docker services](docs/docker/docker-app-config.png)
+![Configured Docker services](docs/images/docker-app-config.png)
 
 ### Backend Services
 
@@ -82,7 +82,7 @@ Open the [Services solution](src/Services) and pick a service to run locally suc
 
 Ensure that the following services are running in Docker, note that you only need the `podcast.db` and `storage`:
 
-![Configured Docker services](docs/docker/docker-services-config.png)
+![Configured Docker services](docs/images/docker-services-config.png)
 
 ## Local Deployment with Visual Studio
 
