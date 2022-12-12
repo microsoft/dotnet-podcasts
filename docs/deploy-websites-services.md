@@ -159,7 +159,7 @@ The GitHub workflow is also configured to deploy these apps only if the source w
 
 ## Staging Environment
 
-In addition to the main CI/CD pipeline that creates and publishes the podcast app to Azure, you can also enable a full staging environment that gets run and deployed on pull requests. If you do nothing all PRs will push to your main resources, but if you setup an Environment named staging in your repos settings you can create the same GitHub Secrets outlined. The only difference being a different name such as appendng staging onto the end of every resource. Once these secrets are setup when you make a PR these new secrets will be used deploying to a new Azure Resource Group with new resources.
+In addition to the main CI/CD pipeline that creates and publishes the podcast app to Azure, you can also enable a full staging environment that gets run and deployed on pull requests. If you do nothing all PRs will push to your main resources, but if you setup an Environment named staging in your repos settings you can create the same GitHub Secrets outlined. The only difference being a different name such as appending `staging` onto the end of every resource. Once these secrets are setup when you make a PR these new secrets will be used deploying to a new Azure Resource Group with new resources.
 
 Happy Deployments!
 
