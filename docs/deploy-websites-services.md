@@ -18,7 +18,7 @@ Learn more about it with [Microsoft Learn - Introduction to Azure](https://docs.
 
 To understand the dotnet-podcasts architecture better, see the diagram below.
 
-![.NET Podcast Application Diagram](docs/arch_diagram_podcast.png)
+![.NET Podcast Application Diagram](images/arch_diagram_podcast.png)
 
 - The backend services `Podcasts.API`, `Podcasts.Ingestion` and `Podcast.Updater` are deployed to [Azure Container Apps (Preview)](https://docs.microsoft.com/azure/container-apps/overview). [Azure Container Registry](https://docs.microsoft.com/azure/container-registry/) is used to store the docker images securely and Log Analytics Workspace is configured automatically to monitor telemetry.
 - Web Apps including ASP.NET Core Website, Listen Together SignalR hub and the Blazor Web App are deployed to Azure App Service (Linux).
@@ -86,15 +86,15 @@ To connect GitHub Actions, you will create a secret named `AZURE_CREDENTIALS` th
 
 1. Open your GitHub repository and go to **Settings**.
 
-    ![Select Settings in the navigation](docs/github-repo-settings.png)
+    ![Select Settings in the navigation](images/github-repo-settings.png)
 
 1. Under **Security** Select **Secrets** -> **Actions** and then **New repository secret**.
 
-    ![Choose to add a secret](docs/select-secrets.png)
+    ![Choose to add a secret](images/select-secrets.png)
 
 1. Paste in your JSON object for your service principal with the name `AZURE_CREDENTIALS`. 
 
-    ![Add a secret in GitHub](docs/azure-secret-add.png)
+    ![Add a secret in GitHub](images/azure-secret-add.png)
 
 1. Save by selecting **Add secret**.
 
@@ -119,7 +119,7 @@ Go ahead and add the following GitHub secrets. Some of the values need to be uni
 
 Once configured correctly, you should be having 13 secrets. Here's our list for reference:
 
-![Configured GitHub Secrets](docs/gh-configured-secrets.png)
+![Configured GitHub Secrets](images/gh-configured-secrets.png)
 
 That's it! You're all set. Now, let's run the configured Workflows, one by one, to deploy the Websites and Backend services. Be cognizant of pricing tiers for different services. You may want to adjust your App Service plan and database tiers to control costs.
 
@@ -127,7 +127,7 @@ That's it! You're all set. Now, let's run the configured Workflows, one by one, 
 
 Go to the GitHub actions tab, and enable the workflows.
 
-![Enable workflows in GitHub](docs/Enable-Workflow.png)
+![Enable workflows in GitHub](images/Enable-Workflow.png)
 
 ## Run the Podcast API CICD first
 
@@ -151,18 +151,22 @@ Then run the web action with:
 
 Once all the runs are complete, you'll see something like this under the Actions tab.
 
-![Al workflow runs](docs/all-workflow-runs.png)
+![Al workflow runs](images/all-workflow-runs.png)
 
 That's it! Now, Navigate to you https://`WEBAPP_NAME`.azurewebsites.net/ to watch the podcast app in action!
 
 The GitHub workflow is also configured to deploy these apps only if the source within specific folders such as `src/Services/Podcasts/` is changed. So now, if you make some changes to the code, build locally, and then commit changes to see the GitHub workflow kickstart. Need any ideas for code change? You'll notice an empty `GlobalUsings.cs` in the `Podcasts.API` project. Go ahead refactor the code and move your global namespaces there.
+
+## Staging Environment
+
+In addition to the main CI/CD pipeline that creates and publishes the podcast app to Azure, you can also enable a full staging environment that gets run and deployed on pull requests. If you do nothing all PRs will push to your main resources, but if you setup an Environment named staging in your repos settings you can create the same GitHub Secrets outlined. The only difference being a different name such as appending `staging` onto the end of every resource. Once these secrets are setup when you make a PR these new secrets will be used deploying to a new Azure Resource Group with new resources.
 
 Happy Deployments!
 
 ---
 ## Azure Container Apps Demo
 
-To run the Azure Container Apps demo that we showcased at .NET Conf, checkout the [Azure Container Apps](docs/demos/azurecontainerapps).
+To run the Azure Container Apps demo that we showcased at .NET Conf, checkout the [Azure Container Apps](images/demos/azurecontainerapps).
 
 ## Individual Deployment Guides and Configurations
 

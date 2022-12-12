@@ -18,7 +18,7 @@ jobs:
     with:
       csproj: src/Mobile/Microsoft.NetConf2021.Maui.csproj
       root_path: src/Mobile/
-      encrypted_keystore_path: android-keystore-test.jks.gpg
+      encrypted_keystore_path: deploy/Android/android-keystore-test.jks.gpg
       keystore_path: android-keystore-test.keystore
     secrets:  
       android_keystore_gpg_pass: ${{secrets.ANDROID_KEYSTORE_GPG_PASSWORD}}
