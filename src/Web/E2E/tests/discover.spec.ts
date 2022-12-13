@@ -10,7 +10,7 @@ test.describe('Discover', () => {
   for (const category of categories) {
     test(`should allow me to browse category ${category}`, async ({ page }) => {
         // click on the category
-        await page.locator('.tags-item').getByText(category).click();
+        await page.getByRole('list').getByRole('link', { name: category }).click();
         // assert category is selected
         await expect(page.locator('.titlePage')).toHaveText(category);
     });
