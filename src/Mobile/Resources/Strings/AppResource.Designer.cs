@@ -142,7 +142,7 @@ namespace Microsoft.NetConf2021.Maui.Resources.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oppss.
+        ///   Looks up a localized string similar to Oops.
         /// </summary>
         internal static string Error_Title {
             get {
