@@ -14,8 +14,8 @@ test.describe('Listen Together', () => {
     await page.getByRole('button', { name: 'Create new room' }).click();
     await page.getByPlaceholder('Your name').fill('test');
     // open room
-    await page.getByRole('button', { name: 'Open room' }).click();  
+    await page.getByRole('button', { name: 'Open room' }).click();
     // leave the room
-    await page.getByRole('button', { name: 'Leave the room' }).click(); 
+    await page.getByRole('button', { name: 'Leave the room' }).click();
   });
 });
