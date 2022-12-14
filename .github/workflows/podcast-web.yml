@@ -43,7 +43,7 @@ jobs:
     if: ${{ always() }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.27.1-focal
+    container: mcr.microsoft.com/playwright:v1.28.1-focal
     env:
       BASEURL: https://${{secrets.WEBAPP_NAME}}.azurewebsites.net # sets value for URL to test
     defaults:

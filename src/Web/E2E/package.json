@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/Microsoft/dotnet-podcasts#readme",
   "devDependencies": {
-    "@playwright/test": "^1.27.1"
+    "@playwright/test": "^1.28.1"
   }
 }
