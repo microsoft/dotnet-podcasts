@@ -1,16 +1,22 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Subscriptions', () => {
-  test('should allow me to subscribe', async ({ page }) => {
-    await page.goto('/discover');
-    // click first podcast in list
-    await page.locator('.item-primary-action').first().click();
-    // click subscribe
-    await page.getByRole('button', { name: 'Subscribe' }).click();
-    // view subscriptions
-    await page.getByRole('link', { name: 'Subscriptions' }).click();
-    await expect(page).toHaveURL('/subscriptions');
-    // assert subscriptions are shown
-    await expect(page.locator('.containerPage')).not.toHaveClass('no-results');
+
+  test('should start with no subscriptions', async ({ page }) => {
+    await page.goto('/subscriptions');
+  await expect(page.getByRole('heading', { name: 'You haven’t subscribed to any channel yet.' })).toBeVisible();
+    await page.getByRole('link', { name: 'Discover podcasts' }).click();
+    await expect(page).toHaveURL('/discover');
   });
+
+  test('should allow me to subscribe and unsubscribe', async ({ page }) => { 
+    await page.goto('/discover');
+    await page.getByTitle('Subscribe').first().click();
+    await page.getByRole('link', { name: 'Subscriptions' }).click({ timeout: 30000 });
+    await expect.poll(() =>
+      page.locator('.card').count()).toBeGreaterThan(0);
+    await page.getByTitle('Unsubscribe').click();
+    await expect(page.getByRole('heading', { name: 'You haven\'t subscribed to any podcasts yet.' })).toBeVisible();
+  });
+
 });
