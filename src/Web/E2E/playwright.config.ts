@@ -30,7 +30,7 @@ const config: PlaywrightTestConfig = {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.BASEURL || 'https://dotnetpodcasts.azurewebsites.net',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on',
+    trace: 'on-first-retry',
     video: 'off',
     screenshot: 'only-on-failure',
   },
