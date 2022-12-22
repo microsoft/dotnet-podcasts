@@ -1,3 +1,4 @@
+using Azure.Identity;
 using System.Reflection;
 using System.Threading.RateLimiting;
 using Asp.Versioning;
@@ -19,11 +20,12 @@ using Microsoft.Identity.Web;
 var builder = WebApplication.CreateBuilder(args);
 
 // Database and storage related-services
-var dbConnectionString = builder.Configuration.GetConnectionString("PodcastDb") ?? throw new InvalidOperationException("Missing connection string configuration");
+var credential = new ChainedTokenCredential(new AzureDeveloperCliCredential(), new DefaultAzureCredential());
+builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"]), credential);
+var dbConnectionString = builder.Configuration[builder.Configuration["AZURE_API_SQL_CONNECTION_STRING_KEY"]] ?? throw new InvalidOperationException("Missing connection string configuration");
 builder.Services.AddSqlServer<PodcastDbContext>(dbConnectionString);
 
-var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue") ?? throw new InvalidOperationException("Missing feed queue configuration");
-
+var queueConnectionString = builder.Configuration[builder.Configuration["AZURE_FEED_QUEUE_CONNECTION_STRING_KEY"]] ?? throw new InvalidOperationException("Missing feed queue configuration");
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
 builder.Services.AddTransient<JitterHandler>();
@@ -74,7 +76,7 @@ var serviceResource =
          .CreateDefault()
          .AddService(serviceName: serviceName, serviceVersion: serviceVersion);
 
-var azureMonitorConnectionString = builder.Configuration.GetConnectionString("AzureMonitor");
+var azureMonitorConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
 
 var enableMonitor = !string.IsNullOrWhiteSpace(azureMonitorConnectionString);
 
@@ -174,7 +176,7 @@ episodes
     .MapToApiVersion(1.0)
     .MapToApiVersion(2.0);
 
-var feedIngestionEnabled = app.Configuration.GetValue<bool>("Features:FeedIngestion");
+var feedIngestionEnabled = app.Configuration.GetValue<bool>("REACT_FEATURES_FEED_INGESTION");
 
 if (feedIngestionEnabled)
 {
