@@ -1,0 +1,37 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    environment:
+      name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Bicep template
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: "3.1.0"
+          inlineScript: |
+            az deployment group create -n ghactionlistentogether${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/hub.bicep --parameters webAppName=${{secrets.HUB_WEBAPP_NAME}} servicePlanName=${{secrets.SERVICE_PLAN_NAME}} storageAccountName=${{secrets.STORAGE_NAME}} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} serverName=${{secrets.PODCASTDB_SERVER_NAME}} apiName=${{secrets.API_RESOURCE_NAME}}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: drop
+          path: hub
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.HUB_WEBAPP_NAME }}
+          package: hub

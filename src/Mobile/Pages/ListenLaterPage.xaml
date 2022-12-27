@@ -1,67 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
-             Title="{x:Static res:AppResource.Listen_Later}"
-             xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
-             xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
-             Style="{StaticResource MainSectionStyle}"
-             xmlns:views="clr-namespace:Microsoft.NetConf2021.Maui.Views"
-             x:Class="Microsoft.NetConf2021.Maui.Pages.ListenLaterPage">
+<ContentPage
+    x:Class="Microsoft.NetConf2021.Maui.Pages.ListenLaterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Microsoft.NetConf2021.Maui.Controls"
+    xmlns:res="clr-namespace:Microsoft.NetConf2021.Maui.Resources.Strings"
+    xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+    xmlns:views="clr-namespace:Microsoft.NetConf2021.Maui.Views"
+    x:DataType="viewmodels:ListenLaterViewModel"
+    Title="{x:Static res:AppResource.Listen_Later}"
+    Style="{StaticResource MainSectionStyle}">
     <ContentPage.Content>
-        <Grid RowDefinitions="auto,*" Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}">
+        <Grid Background="{AppThemeBinding Light={StaticResource Grey1}, Dark={StaticResource Grey9}}" RowDefinitions="auto,*">
             <StackLayout Margin="10,0">
                 <controls:HeaderControl IsVisible="{OnIdiom Phone=true, Tablet=false, Desktop=false}" />
-                <Label Text="{x:Static res:AppResource.Listen_Later}"
-                               Style="{StaticResource H5LabelStyle}"
-                        Margin="14,-6,0,0"/>
+                <Label
+                    Margin="14,-6,0,0"
+                    Style="{StaticResource H5LabelStyle}"
+                    Text="{x:Static res:AppResource.Listen_Later}" />
             </StackLayout>
-            <CollectionView 
-                ItemsSource="{Binding Episodes}"
-                Margin="10,0"
-                Grid.Row="1">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
-                                     Span="{OnIdiom Phone=2, Tablet=4, Desktop=4}"
-                                     HorizontalItemSpacing="5"
-                                     VerticalItemSpacing="5" />
-                </CollectionView.ItemsLayout>
-
+            <CollectionView
+                Grid.Row="1"
+                ItemsSource="{Binding Episodes}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:EpisodeViewModel">
-                        <views:EpisodeItemView BindingContext="{Binding }"
-                                               RemoveListenLaterCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ListenLaterViewModel}}, Path=RemoveCommand}"
-                                               RemoveListenLaterCommandParameter="{Binding}" />
+                        <Grid Padding="20,10">
+                            <Frame Style="{StaticResource CardView}">
+                                <views:EpisodeItemView
+                                    BindingContext="{Binding}"
+                                    RemoveListenLaterCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ListenLaterViewModel}}, Path=RemoveCommand}"
+                                    RemoveListenLaterCommandParameter="{Binding}">
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem
+                                            Command="{Binding PlayEpisodeCommand}"
+                                            Text="{x:Static res:AppResource.Play_Or_Pause}" />
+                                            <MenuFlyoutItem
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ListenLaterViewModel}}, Path=RemoveCommand}"
+                                            CommandParameter="{Binding .}"
+                                            Text="{x:Static res:AppResource.Listen_Later_Remove_Episode}" />
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+                                </views:EpisodeItemView>
+                            </Frame>
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.EmptyView>
-                    <Grid
-                        RowDefinitions="*, auto"
-                        Padding="{OnIdiom Desktop=200, Default=50}">
-                        <Image 
-                            Source="empty_collection.png"
+                    <Grid Padding="{OnIdiom Desktop=200, Default=50}" RowDefinitions="*, auto">
+                        <Image
                             HorizontalOptions="Center"
+                            Source="empty_collection.png"
                             VerticalOptions="Center" />
-                        <StackLayout HorizontalOptions="CenterAndExpand"
-                             VerticalOptions="CenterAndExpand"
-                             Grid.Row="1"
-                             Spacing="20">
-                            <Label 
-                                Text="You don't have any episodes saved yet."
+                        <StackLayout
+                            Grid.Row="1"
+                            HorizontalOptions="CenterAndExpand"
+                            Spacing="20"
+                            VerticalOptions="CenterAndExpand">
+                            <Label
+                                HorizontalTextAlignment="Center"
                                 Style="{StaticResource BodySLabelStyle}"
-                                HorizontalTextAlignment="Center" />
-                            <Label 
-                                Text="Discover podcasts episodes and save them to listen later.."
+                                Text="You don't have any episodes saved yet." />
+                            <Label
+                                HorizontalTextAlignment="Center"
                                 Style="{StaticResource BodySLabelStyle}"
-                                HorizontalTextAlignment="Center"/>
+                                Text="Discover podcasts episodes and save them to listen later.." />
                         </StackLayout>
                     </Grid>
                 </CollectionView.EmptyView>
             </CollectionView>
 
-            <controls:Player x:Name="player"
-                             Grid.Row="1"
-                             VerticalOptions="End" />
+            <controls:Player
+                x:Name="player"
+                Grid.Row="1"
+                VerticalOptions="End" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

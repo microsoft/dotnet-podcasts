@@ -12,6 +12,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient<PodcastService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["PodcastApi:BaseAddress"]!);
+    client.DefaultRequestHeaders.Add("api-supported-versions", "1.0,2.0");
 });
 builder.Services.AddScoped<ThemeInterop>();
 builder.Services.AddScoped<IAudioInterop, AudioInterop>();

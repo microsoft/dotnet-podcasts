@@ -1,45 +1,53 @@
 ---
 page_type: sample
-description: ".NET 6 reference application shown at .NET Conf 2021 featuring ASP.NET Core, Blazor, .NET MAUI, Microservices, and more!"
+description: ".NET reference application shown at .NET Conf 2021 & 2022 featuring ASP.NET Core, Blazor, .NET MAUI, Microservices, Power Apps, Playwright, Orleans, and more!"
 languages:
 - csharp
 products:
 - dotnet-core
 - ef-core
 - blazor
+- orleans
 - dotnet-maui
 - azure-sql-database
 - azure-storage
 - azure-container-apps
 - azure-container-registry
 - azure-app-service-web
+- playwright
 ---
 
 # .NET Podcasts - Sample Application
 
-The .NET Podcast app is a sample application showcasing [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://dotnet.microsoft.com/apps/maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), [Orleans](https://docs.microsoft.com/dotnet/orleans/overview), and more.
+The .NET Podcast app is a sample application showcasing [.NET](https://dotnet.microsoft.com/), [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet), [Blazor](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor), [.NET MAUI](https://dotnet.microsoft.com/apps/maui), [Azure Container Apps](https://azure.microsoft.com/services/container-apps/#overview), [Orleans](https://docs.microsoft.com/dotnet/orleans/overview), [Playwright](https://playwright.dev), and more.
+
+In addition, we created an Approval App using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to handle incoming podcast requests.
 
 You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor.
 
-![Logo](./docs/net-podcasts.png)
+![Logo](./docs/images/net-podcasts.png)
 
 
 ## Application Architecture Diagram
 
-![.NET Podcast Application Diagram](docs/arch_diagram_podcast.png)
+![.NET Podcast Application Diagram](./docs/images/arch_diagram_podcast.png)
 
 ## Repositories
 
-For this sample application, we build an app to listen all your favorite .NET podcasts for all the ecosystems: Web, Android, iOS, macOS and Windows. You can find the different apps separated by folders in this repo:
+For this sample application, we build an app to listen to all your favorite .NET podcasts for all the ecosystems: Web, Android, iOS, macOS and Windows. You can find the different apps separated by folders in this repo:
 
 - [Mobile & Desktop:](src/Mobile) Native .NET MAUI Application for iOS, Android, macOS, and Windows
 - [Website:](src/Web) Blazor WebAssembly app and ASP.NET Core Razor Marketing website
 - [Backend API:](src/Services) ASP.NET Core Web APIs & Minimal APIs, ingestion worker, and podcast update worker
 - [Blazor Hybrid App:](src/MobileBlazor) Sample hybrid application of .NET MAUI with Blazor.
 
+Additionally, we build an application using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to allow us to reject or accept incoming podcast requests:
+
+- [Microsoft Power Apps:](src/PowerApps) Power Apps sample to handle incoming podcast requests. [Follow these guidelines](src/PowerApps) on how to import the Approval Power App into your own Power Platform environment or [check out how to connect your API](docs/demos/powerapps) with the Microsoft Power Platform.
+
 ## Full Deployment with GitHub Actions
 
-`dotnet-podcasts` repo is configured to deploy all services and websites automatically to Azure using GitHub Actions. [Follow the detailed guidelines](Deploy-websites-services.md) to setup GitHub Actions on your fork.
+`dotnet-podcasts` repo is configured to deploy all services and websites automatically to Azure using GitHub Actions. [Follow the detailed guidelines](docs/deploy-websites-services.md) to setup GitHub Actions on your fork.
 
 ## Local Deployment Quickstart
 
@@ -58,7 +66,7 @@ docker-compose up
 docker-compose -f docker-compose.arm64.yml -f docker-compose.override.yml up
 ```
 
-This will deploy and start all services required to run the web, mobile, and desktop apps. The Web API will run on `localhost:5000` and the SignalR Hub for listen together will run on `localhost:5001`.
+This will deploy and start all services required to run the web, mobile, and desktop apps. The Web API will run on `localhost:5003` and the SignalR Hub for listen together will run on `localhost:5001`.
 
 ### Web, Mobile, & Desktop
 
@@ -66,7 +74,7 @@ The apps are configured to speak to `localhost` on the correct ports for each se
 
 Ensure that you have the following services running in Docker (podcast.api, listentogether.hub, podcast.updater.worker, podcast.db, storage):
 
-![Configured Docker services](docs/docker/docker-app-config.png)
+![Configured Docker services](docs/images/docker-app-config.png)
 
 ### Backend Services
 
@@ -74,7 +82,7 @@ Open the [Services solution](src/Services) and pick a service to run locally suc
 
 Ensure that the following services are running in Docker, note that you only need the `podcast.db` and `storage`:
 
-![Configured Docker services](docs/docker/docker-services-config.png)
+![Configured Docker services](docs/images/docker-services-config.png)
 
 ## Local Deployment with Visual Studio
 

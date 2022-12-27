@@ -1,0 +1,24 @@
+{
+  "name": "dotnet-podcasts",
+  "version": "1.0.0",
+  "description": "---\r page_type: sample\r description: \".NET reference application shown at .NET Conf featuring ASP.NET Core, Blazor, .NET MAUI, Microservices, and more!\"\r languages:\r - csharp\r products:\r - dotnet-core\r - ef-core\r - blazor\r - dotnet-maui\r - azure-sql-database\r - azure-storage\r - azure-container-apps\r - azure-container-registry\r - azure-app-service-web\r ---",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/dotnet-podcasts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Microsoft/dotnet-podcasts/issues"
+  },
+  "homepage": "https://github.com/Microsoft/dotnet-podcasts#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.28.1"
+  }
+}

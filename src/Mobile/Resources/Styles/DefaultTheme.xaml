@@ -243,6 +243,7 @@
     </Style>
 
     <Style TargetType="Switch">
+        
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -272,5 +273,17 @@
                 Value="Transparent" />
         <Setter Property="android:ImageButton.ShadowColor"
                 Value="Transparent" />
+    </Style>
+    
+    <Color x:Key="CardBackground">White</Color>
+    <Color x:Key="CardBackgroundDark">#1C1C1E</Color>
+    
+    <Style x:Key="CardView" TargetType="Frame">
+        <Setter Property="BorderColor" Value="#DDDDDD" />
+        <Setter Property="HasShadow" Value="{OnPlatform iOS=false, MacCatalyst=false, Default=true}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource CardBackground}, Dark={StaticResource CardBackgroundDark}}" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="IsClippedToBounds" Value="True"/>
     </Style>
 </ResourceDictionary>

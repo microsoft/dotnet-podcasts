@@ -32,7 +32,7 @@
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
         DisplayName=".NET Pods"
-        Description=".NET 6 Reference Application that will be showcased at .NET Conf 11/9"
+        Description=".NET Reference Application that will be showcased at .NET Conf"
         BackgroundColor="transparent"
         Square150x150Logo="appiconMediumTile.png"
         Square44x44Logo="appiconLogo.png">
