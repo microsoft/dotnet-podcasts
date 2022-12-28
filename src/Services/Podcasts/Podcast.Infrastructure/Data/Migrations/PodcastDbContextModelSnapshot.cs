@@ -256,6 +256,12 @@ namespace Podcast.Infrastructure.Data.Migrations
                             Id = new Guid("e2a825f2-1a5e-4b54-94dd-1544511349ab"),
                             IsFeatured = false,
                             Url = "https://feeds.soundcloud.com/users/soundcloud:users:941029057/sounds.rss"
+                        },
+                        new
+                        {
+                            Id = new Guid("bb7f7061-8954-45f8-83db-36f1f68073dc"),
+                            IsFeatured = false,
+                            Url = "https://feeds.buzzsprout.com/978640.rss"
                         });
                 });
 

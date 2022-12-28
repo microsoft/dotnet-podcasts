@@ -147,7 +147,8 @@ namespace Podcast.Infrastructure.Data.Migrations
                     { new Guid("cbab58bb-fa24-46b9-b68d-ee25ddefb1a6"), false, "https://feeds.fireside.fm/mergeconflict/rss" },
                     { new Guid("da5fb742-7ceb-40cc-ac17-2d46253de3f9"), false, "https://feeds.buzzsprout.com/978640.rss" },
                     { new Guid("e2a825f2-1a5e-4b54-94dd-1544511349ab"), false, "https://feeds.soundcloud.com/users/soundcloud:users:941029057/sounds.rss" },
-                    { new Guid("fa3da5bc-805e-401e-a590-f57776712170"), false, "https://intrazone.libsyn.com/rss" }
+                    { new Guid("fa3da5bc-805e-401e-a590-f57776712170"), false, "https://intrazone.libsyn.com/rss" },
+                    { new Guid("bb7f7061-8954-45f8-83db-36f1f68073dc"), false, "https://feeds.buzzsprout.com/978640.rss" },
                 });
 
             migrationBuilder.InsertData(
@@ -192,7 +193,8 @@ namespace Podcast.Infrastructure.Data.Migrations
                     { new Guid("bee871ad-750b-400b-91b0-c34056c92297"), new Guid("cbab58bb-fa24-46b9-b68d-ee25ddefb1a6") },
                     { new Guid("a5ae013c-14a1-4c2d-a731-47fbbd0ba527"), new Guid("da5fb742-7ceb-40cc-ac17-2d46253de3f9") },
                     { new Guid("a5ae013c-14a1-4c2d-a731-47fbbd0ba527"), new Guid("e2a825f2-1a5e-4b54-94dd-1544511349ab") },
-                    { new Guid("5f923017-86da-4793-9332-7b74197acc51"), new Guid("fa3da5bc-805e-401e-a590-f57776712170") }
+                    { new Guid("5f923017-86da-4793-9332-7b74197acc51"), new Guid("fa3da5bc-805e-401e-a590-f57776712170") },
+                    { new Guid("5f923017-86da-4793-9332-7b74197acc51"), new Guid("bb7f7061-8954-45f8-83db-36f1f68073dc") }
                 });
 
             migrationBuilder.CreateIndex(

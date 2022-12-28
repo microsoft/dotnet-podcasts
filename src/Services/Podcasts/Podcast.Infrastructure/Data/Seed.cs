@@ -26,7 +26,8 @@ internal static class Seed
         new(new Guid("76c2dd2f-7232-4842-9808-f6a389de510e"), "http://awayfromthekeyboard.com/feed/" ),
         new(new Guid("da5fb742-7ceb-40cc-ac17-2d46253de3f9"), "https://feeds.buzzsprout.com/978640.rss" ),
         new(new Guid("a8791dd6-0ad8-48b7-b66e-8c6d67719626"), "http://feeds.feedburner.com/NoDogmaPodcast" ),
-        new(new Guid("e2a825f2-1a5e-4b54-94dd-1544511349ab"), "https://feeds.soundcloud.com/users/soundcloud:users:941029057/sounds.rss")
+        new(new Guid("e2a825f2-1a5e-4b54-94dd-1544511349ab"), "https://feeds.soundcloud.com/users/soundcloud:users:941029057/sounds.rss"),
+        new(new Guid("bb7f7061-8954-45f8-83db-36f1f68073dc"), "https://feeds.buzzsprout.com/978640.rss")
     };
 
     internal static Category[] Categories = {

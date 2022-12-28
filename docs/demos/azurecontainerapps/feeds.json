@@ -283,5 +283,10 @@
     "Title": "Last Week in .NET",
     "Url": "https://feeds.transistor.fm/last-week-in-net",
     "Categories": ["Microsoft" , "Community" ]
+  },
+  {
+    "Title": "The Unhandled Exception Podcast",
+    "Url": "https://feeds.buzzsprout.com/978640.rss",
+    "Categories": ["Microsoft" , "Community", "Technology", "Podcasts" ]
   }
 ]
