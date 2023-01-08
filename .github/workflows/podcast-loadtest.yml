@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 env:
-  LOAD_TEST_RESOURCE: "podcast-alt"
-  LOAD_TEST_RESOURCE_GROUP: "podcast-alt-rg"
+  LOAD_TEST_RESOURCE: "Demo-Podcast-EUS"
+  LOAD_TEST_RESOURCE_GROUP: "demo-podcast"
   LOAD_TEST_LOCATION: "East US"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -40,13 +40,13 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
-          template: ./loadTest/template.json
-          parameters: ./loadTest/parameters.json name=${{ env.LOAD_TEST_RESOURCE }} location="${{ env.LOAD_TEST_LOCATION }}"
+          template: ./loadTest/ARM Template/template.json
+          parameters: ./loadTest/ARM Template/parameters.json name=${{ env.LOAD_TEST_RESOURCE }} location="${{ env.LOAD_TEST_LOCATION }}"
         
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
-          loadTestConfigFile: 'podcast-load.yml'
+          loadTestConfigFile: 'loadTest/podcast-load.yml'
           loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
           resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
 
