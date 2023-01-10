@@ -27,7 +27,7 @@ jobs:
         run: |
           $ProgressPreference = 'SilentlyContinue'
           Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
-          .\dotnet-install.ps1 -Channel 8.0 -Quality preview -InstallDir .
+          .\dotnet-install.ps1 -Channel 8.0 -Quality daily -InstallDir .
 
       - name: install MAUI workload
         shell: pwsh
