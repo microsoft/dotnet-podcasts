@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
 
+// From the perspective of a podcast listener what can that listener do
+// Listener can subscribe, unsubscribe, see subscriptions, listen now, listen later and listen together
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/discover');
   await page.locator('.card').first().click();
