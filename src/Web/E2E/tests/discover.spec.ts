@@ -32,7 +32,12 @@ test.describe('Discover Categories', () => {
 
 test.describe('Discover search bar', () => {
 
-  test.skip('should return results when category/podcast found', async ({ page }) => {
+  // these tests will not pass due to JS loading issues
+  // Playwright is like a very fast user
+  // to see whats going on in your code sometimes we need to slow down the code
+  // You can do this by using the site with 3G network throttling
+
+  test.fixme('should return results when category/podcast found', async ({ page }) => {
     const searchBar = page.getByPlaceholder('Search here');
     await searchBar.click();
     await searchBar.fill('dogma');
@@ -40,7 +45,7 @@ test.describe('Discover search bar', () => {
     await expect(page.getByRole('heading', { name: 'dogma' }).first()).toBeVisible();
   });
 
-  test.skip('should show no results when no category/podcast found', async ({ page }) => {
+  test.fixme('should show no results when no category/podcast found', async ({ page }) => {
     const searchBar = page.getByPlaceholder('Search here');
     await searchBar.click();
     await searchBar.fill('test');
