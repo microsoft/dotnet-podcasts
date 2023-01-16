@@ -19,6 +19,9 @@
             "name": "[parameters('name')]",
             "location": "[parameters('location')]",
             "tags": "[parameters('tags')]"
+            "identity": {
+             "type": "SystemAssigned",
+             }
         }
     ]
 }
