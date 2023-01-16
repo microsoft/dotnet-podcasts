@@ -40,13 +40,13 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
-          template: ./loadTest/ARMTemplate/template.json
-          parameters: ./loadTest/ARMTemplate/parameters.json name=${{ env.LOAD_TEST_RESOURCE }} location="${{ env.LOAD_TEST_LOCATION }}"
+          template: ./Test/ARMTemplate/template.json
+          parameters: ./Test/ARMTemplate/parameters.json name=${{ env.LOAD_TEST_RESOURCE }} location="${{ env.LOAD_TEST_LOCATION }}"
         
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
-          loadTestConfigFile: 'config.yml'
+          loadTestConfigFile: 'Test/config.yml'
           loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
           resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
 
