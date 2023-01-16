@@ -18,9 +18,9 @@
             "apiVersion": "2021-12-01-preview",
             "name": "[parameters('name')]",
             "location": "[parameters('location')]",
-            "tags": "[parameters('tags')]"
+            "tags": "[parameters('tags')]",
             "identity": {
-             "type": "SystemAssigned",
+             "type": "SystemAssigned"
              }
         }
     ]
