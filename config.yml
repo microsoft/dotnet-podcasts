@@ -4,8 +4,8 @@ description: ''
 engineInstances: 5
 subnetId: /subscriptions/7c71b563-0dc0-4bc0-bcf6-06f8f0516c7a/resourceGroups/demo-podcast/providers/Microsoft.Network/virtualNetworks/demo-podcast-vnet/subnets/default
 splitAllCSVs: True
-#configurationFiles:
-#- Shows.csv
+configurationFiles:
+- Shows.csv
 failureCriteria: []
 properties:
   userPropertyFile: load.properties
