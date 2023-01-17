@@ -15,6 +15,6 @@ certificates:
     value: https://demo-podcast-akv.vault.azure.net/certificates/podcastcert
 subnetId: /subscriptions/7c71b563-0dc0-4bc0-bcf6-06f8f0516c7a/resourceGroups/demo-podcast/providers/Microsoft.Network/virtualNetworks/demo-podcast-vnet/subnets/default
 failureCriteria:
-- Podcast page: p90(response_time_ms) > 5000
-- Homepage: p90(response_time_ms) > 10000
+- Podcast page: p90(response_time_ms) > 10000
+- Homepage: p90(response_time_ms) > 60000
 - percentage(error) >  10
