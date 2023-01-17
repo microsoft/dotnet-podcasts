@@ -15,17 +15,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="BASE_URL_1" elementType="Argument">
             <stringProp name="Argument.name">BASE_URL_1</stringProp>
-            <stringProp name="Argument.value">demo-podcastwebapp.azurewebsites.net</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="BASE_URL_2" elementType="Argument">
-            <stringProp name="Argument.name">BASE_URL_2</stringProp>
-            <stringProp name="Argument.value">dotnetpodcasts.azurewebsites.net</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="BASE_URL_3" elementType="Argument">
-            <stringProp name="Argument.name">BASE_URL_3</stringProp>
-            <stringProp name="Argument.value">demopodcastapica.greenpond-f6ebfedd.eastus.azurecontainerapps.io</stringProp>
+            <stringProp name="Argument.value">${__env(webapp,,dotnetpodcasts.azurewebsites.net/)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -37,10 +27,10 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(threadCount,1)}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(rampUpSeconds,1)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">120</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(durationSeconds,30)}</stringProp>
+        <stringProp name="ThreadGroup.duration">400</stringProp>
         <stringProp name="ThreadGroup.delay">0</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
