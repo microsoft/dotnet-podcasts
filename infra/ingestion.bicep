@@ -1,20 +1,19 @@
-@description('Web app name.')
-@minLength(2)
+
 param name string
-@description('Location for all resources.')
 param location string = resourceGroup().location
 param tags object = {}
 param containerAppsEnvironmentName string
 param containerRegistryName string
-param imageName string
-param apiBaseUrl string
-param listenTogetherHubUrl string
+param imageName string = ''
 param keyVaultName string
+param feedQueueConnectionStringKey string
+param dbConnectionStringKey string
+param keyVaultEndpoint string
+param applicationInsightsConnectionString string
 
+var serviceName = 'ingestion'
 
-var serviceName = 'web'
-
-module app '../core/host/container-app.bicep' = {
+module app 'core/host/container-app.bicep' = {
   name: '${serviceName}-container-app-module'
   params: {
     name: name
@@ -26,12 +25,20 @@ module app '../core/host/container-app.bicep' = {
     containerMemory: '2.0Gi'
     env: [
       {
-        name: 'REACT_APP_API_BASE_URL'
-        value: apiBaseUrl
+        name: 'AZURE_FEED_QUEUE_CONNECTION_STRING_KEY'
+        value: feedQueueConnectionStringKey
       }
       {
-        name: 'REACT_LISTEN_TOGETHER_HUB'
-        value: listenTogetherHubUrl
+        name: 'AZURE_API_SQL_CONNECTION_STRING_KEY'
+        value: dbConnectionStringKey
+      }
+      {
+        name: 'AZURE_KEY_VAULT_ENDPOINT'
+        value: keyVaultEndpoint
+      }
+      {
+        name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+        value: applicationInsightsConnectionString
       }
       {
         name: 'ASPNETCORE_ENVIRONMENT'
@@ -43,7 +50,7 @@ module app '../core/host/container-app.bicep' = {
   }
 }
 
-module keyVaultAccess '../core/security/keyvault-access.bicep' = {
+module keyVaultAccess 'core/security/keyvault-access.bicep' = {
   name: '${serviceName}-keyvault-access'
   params: {
     keyVaultName: keyVaultName
@@ -55,7 +62,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
 
-output SERVICE_WEB_IDENTITY_PRINCIPAL_ID string = app.outputs.identityPrincipalId
-output SERVICE_WEB_NAME string = app.outputs.name
-output SERVICE_WEB_URI string = app.outputs.uri
-output SERVICE_WEB_IMAGE_NAME string = app.outputs.imageName
+output SERVICE_INGESTION_IDENTITY_PRINCIPAL_ID string = app.outputs.identityPrincipalId
+output SERVICE_INGESTION_NAME string = app.outputs.name
+output SERVICE_INGESTION_URI string = app.outputs.uri
+output SERVICE_INGESTION_IMAGE_NAME string = app.outputs.imageName

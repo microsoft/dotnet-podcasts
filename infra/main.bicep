@@ -116,7 +116,7 @@ module storage 'app/storage.bicep' = {
   }
 }
 
-module web 'app/web.bicep' = {
+module web 'web.bicep' = {
   name: 'podcast.web'
   scope: rg
   params: {
@@ -138,7 +138,7 @@ module web 'app/web.bicep' = {
   ]
 }
 
-module hub 'app/hub.bicep' = {
+module hub 'hub.bicep' = {
   name: 'listentogether.hub'
   scope: rg
   params: {
@@ -164,7 +164,7 @@ module hub 'app/hub.bicep' = {
   ]
 }
 
-module api 'app/api.bicep' = {
+module api 'api.bicep' = {
   name: 'podcast.api'
   scope: rg
   params: {
@@ -189,7 +189,7 @@ module api 'app/api.bicep' = {
   ]
 }
 
-module updaterWorker 'app/updater.bicep' = {
+module updaterWorker 'updater.bicep' = {
   name: 'updater.worker'
   scope: rg
   params: {
@@ -212,7 +212,7 @@ module updaterWorker 'app/updater.bicep' = {
   ]
 }
 
-module ingestionWorker 'app/ingestion.bicep' = if (feedIngestion) {
+module ingestionWorker 'ingestion.bicep' = if (feedIngestion) {
   name: 'ingestion.worker'
   scope: rg
   params: {

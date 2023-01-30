@@ -1,3 +1,4 @@
+
 param name string
 param location string = resourceGroup().location
 param tags object = {}
@@ -13,7 +14,7 @@ param apiBaseUrl string
 
 var serviceName = 'hub'
 
-module app '../core/host/container-app.bicep' = {
+module app 'core/host/container-app.bicep' = {
   name: '${serviceName}-container-app-module'
   params: {
     name: name
@@ -54,7 +55,7 @@ module app '../core/host/container-app.bicep' = {
   }
 }
 
-module keyVaultAccess '../core/security/keyvault-access.bicep' = {
+module keyVaultAccess 'core/security/keyvault-access.bicep' = {
   name: '${name}-keyvault-access'
   params: {
     keyVaultName: keyVaultName
