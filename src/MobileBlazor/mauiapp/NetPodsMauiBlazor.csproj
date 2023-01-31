@@ -40,7 +40,7 @@
 		<MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#C00CC0" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\splash.svg" Color="#C00CC0" BaseSize="128,128"/>
+		<MauiSplashScreen Include="Resources\splash.svg" Color="#C00CC0" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -48,6 +48,7 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="1.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-*" />
 	</ItemGroup>
 	<ItemGroup>

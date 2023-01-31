@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using CommunityToolkit.Maui;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Infrastructure;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetPodsMauiBlazor.Services;
 using Podcast.Components;
 using Podcast.Pages.Data;
@@ -18,7 +20,8 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiApp<App>();
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkitMediaElement();
 
         builder.Services.AddMauiBlazorWebView();
         builder.Services.AddHttpClient<PodcastService>(client =>
@@ -27,15 +30,16 @@ public static class MauiProgram
             client.DefaultRequestHeaders.Add("api-version", "1.0");
         });
 
-#if WINDOWS
-        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Windows.NativeAudioService>();
-#elif ANDROID
-        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Android.NativeAudioService>();
-#elif MACCATALYST
-        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.MacCatalyst.NativeAudioService>();
-#elif IOS
-        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.iOS.NativeAudioService>();
-#endif
+        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.MediaElementAudioService>();
+//#if WINDOWS
+//        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Windows.NativeAudioService>();
+//#elif ANDROID
+//        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Android.NativeAudioService>();
+//#elif MACCATALYST
+//        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.MacCatalyst.NativeAudioService>();
+//#elif IOS
+//        builder.Services.AddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.iOS.NativeAudioService>();
+//#endif
 
         builder.Services.AddScoped<ThemeInterop>();
         builder.Services.AddScoped<IAudioInterop, AudioInteropService>();
