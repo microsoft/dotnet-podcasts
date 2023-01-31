@@ -23,6 +23,7 @@ public partial class Player : ContentView
 
         if (playerService == null)
         {
+            SharedMauiLib.MediaElementAudioService.MediaElement = mediaElement;
             this.playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
             InitPlayer();
         }
@@ -51,15 +52,19 @@ public partial class Player : ContentView
 
     private void UpdatePlayPause()
     {
-        this.IsVisible = true;
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
 
-        this.playButton.Source = this.playerService.IsPlaying ? "player_pause.png" : "player_play.png";
+            this.IsVisible = true;
 
-        epiosdeTitle.Text = this.playerService.CurrentEpisode.Title;
-        authorText.Text = $"{this.playerService.CurrentShow?.Author} - {this.playerService.CurrentEpisode?.Published.ToString("MMM, d yyy")}";
+            this.playButton.Source = this.playerService.IsPlaying ? "player_pause.png" : "player_play.png";
 
-        podcastImage.Source = this.playerService.CurrentShow?.Image;
-        duration.Text = this.playerService.CurrentEpisode?.Duration.ToString();
+            epiosdeTitle.Text = this.playerService.CurrentEpisode.Title;
+            authorText.Text = $"{this.playerService.CurrentShow?.Author} - {this.playerService.CurrentEpisode?.Published.ToString("MMM, d yyy")}";
+
+            podcastImage.Source = this.playerService.CurrentShow?.Image;
+            duration.Text = this.playerService.CurrentEpisode?.Duration.ToString();
+        });
     }
 
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)

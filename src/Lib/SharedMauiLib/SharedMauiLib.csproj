@@ -18,4 +18,8 @@
 		<MauiImage Include="Resources\Images\*" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="1.0.1" />
+	</ItemGroup>
+
 </Project>

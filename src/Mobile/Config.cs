@@ -16,8 +16,7 @@ public static class Config
         }
     }
 
-    public static string BaseWeb = $"{Base}:5002/";
-    public static string Base = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2" : "http://localhost";
-    public static string APIUrl = $"{Base}:5003/";
-    public static string ListenTogetherUrl = $"{Base}:5001/listentogether";
+    public static string BaseWeb = $"https://dotnetpodcasts.azurewebsites.net/";
+    public static string APIUrl = $"https://podcastapica.ashyhill-df3dfdf5.eastus.azurecontainerapps.io/";
+    public static string ListenTogetherUrl = $"https://dotnetpodcasts-listentogether-hub.azurewebsites.net/listentogether";
 }
