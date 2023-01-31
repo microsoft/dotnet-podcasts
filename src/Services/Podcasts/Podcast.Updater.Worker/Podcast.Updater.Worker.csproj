@@ -15,12 +15,12 @@
 
   <ItemGroup>
     <PackageReference Include="Dotnet.ReproducibleBuilds" Version="1.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0-*" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-*" />
-    <PackageReference Include="Microsoft.NET.Build.Containers" Version="0.2.7" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="Microsoft.NET.Build.Containers" Version="0.3.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="System.ServiceModel.Syndication" Version="7.0.0-*" />
   </ItemGroup>
 
