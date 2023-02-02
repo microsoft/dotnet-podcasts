@@ -41,7 +41,7 @@ public class ShowsService
     public async Task<IEnumerable<Show>> GetShowsByCategoryAsync(Guid idCategory)
     {
         var result = new List<Show>();
-        var showsResponse = await TryGetAsync<IEnumerable<ShowResponse>>($"shows?limit=10&categoryId={idCategory}");
+        var showsResponse = await TryGetAsync<IEnumerable<ShowResponse>>($"shows?limit=20&categoryId={idCategory}");
 
         if (showsResponse == null)
             return result;
@@ -58,14 +58,14 @@ public class ShowsService
 
     public async Task<IEnumerable<Show>> SearchShowsAsync(Guid idCategory, string term)
     {
-        var showsResponse = await TryGetAsync<IEnumerable<ShowResponse>>($"shows?limit=10&categoryId={idCategory}&term={term}");
+        var showsResponse = await TryGetAsync<IEnumerable<ShowResponse>>($"shows?limit=20&categoryId={idCategory}&term={term}");
 
         return showsResponse?.Select(response => GetShow(response));
     }
 
     public async Task<IEnumerable<Show>> SearchShowsAsync(string term)
     {
-        var showsResponse = await TryGetAsync<IEnumerable<ShowResponse>>($"shows?limit=10&term={term}");
+        var showsResponse = await TryGetAsync<IEnumerable<ShowResponse>>($"shows?limit=20&term={term}");
 
         return showsResponse?.Select(response => GetShow(response));
     }
