@@ -6,7 +6,7 @@ The .NET Podcast app is set up to automatically run load tests using Azure Load 
 
 - An Azure account with an active subscription. If you don't have an Azure subscription, create a [free account](https://azure.microsoft.com/en-us/free/) before you begin.
 
-- Deploy the dotnet-podcasts application. Follow the detailed guidelines [here](https://github.com/microsoft/dotnet-podcasts/blob/main/docs/deploy-websites-services.md).
+- Deploy the dotnet-podcasts application. Follow the detailed guidelines [here](../../deploy-websites-services.md).
 
 ## Grant access to Azure Load Testing
 
