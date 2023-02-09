@@ -43,7 +43,7 @@ Add the following GitHub secrets:
 - `LOAD_TEST_RESOURCE`: The name of the Azure Load Testing resource.
 - `LOAD_TEST_LOCATION`: The location for the Azure Load Testing resource. The load is generated from this region.
 
-That's it! You're all set. Now, let's run the configured workflows to run the load test.
+That's it! You're all set. Now, let's run the configured workflow to run the load test.
 
 You can manually run the Hub action from the `Actions` tab, click on:
 * `Select workflow` -> `Podcast Load Test` -> `Run workflow`.
