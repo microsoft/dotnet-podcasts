@@ -7,13 +7,6 @@ configurationFiles:
 - jmeter-plugins-functions-2.2.jar
 - Shows.csv
 splitAllCSVs: True
-env:
-- name: webapp
-  value: dotnetpodcasts.azurewebsites.net
-certificates:
-  - name: podcastcert
-    value: https://demo-podcast-akv.vault.azure.net/certificates/podcastcert
-subnetId: /subscriptions/0000000-0000-0000-0000-000000000000/resourceGroups/demo-podcast/providers/Microsoft.Network/virtualNetworks/demo-podcast-vnet/subnets/default
 failureCriteria:
 - Podcast page: p90(response_time_ms) > 10000
 - Homepage: p90(response_time_ms) > 60000
