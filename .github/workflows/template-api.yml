@@ -51,10 +51,23 @@ jobs:
           azPSVersion: "3.1.0"
           failOnStandardError: true
           inlineScript: |
-            az deployment group create -n ghaction${{ github.sha }} `
-               --resource-group  ${{secrets.AZURE_RESOURCE_GROUP_NAME}} `
+            $deploymentName = "ghaction${{ github.sha }}"
+            $resourceGroupName = "${{ secrets.AZURE_RESOURCE_GROUP_NAME }}"
+            $acrName = "${{ secrets.ACR_NAME }}"
+            $imageTag = "${{ github.sha }}"
+            $administratorLogin = "${{ secrets.PODCASTDB_USER_LOGIN }}"
+            $administratorLoginPsasword = "${{secrets.PODCASTDB_USER_PASSWORD }}"
+            $storageAccountName = "${{ secrets.STORAGE_NAME }}"
+            $serverName= "${{ secrets.PODCASTDB_SERVER_NAME }}"
+            $kubernetesEnvName = "${{ secrets.KUBERNETES_ENV_NAME }}"
+            $workspaceName = "${{ secrets.WORKSPACE_NAME }}"
+            $apiName = "${{ secrets.API_RESOURCE_NAME }}"
+            $updaterName = "${{ secrets.UPDATER_RESOURCE_NAME }}"
+            
+            az deployment group create -n "$($deploymentName)" `
+               --resource-group  "$($resourceGroupName)" `
                --template-file deploy/Services/api.bicep `
-               --parameters acrName=${{ secrets.ACR_NAME }} imageTag=${{ github.sha }} administratorLogin=${{secrets.PODCASTDB_USER_LOGIN}} administratorLoginPassword=${{secrets.PODCASTDB_USER_PASSWORD}} storageAccountName=${{ secrets.STORAGE_NAME }} serverName=${{secrets.PODCASTDB_SERVER_NAME}} kubernetesEnvName=${{secrets.KUBERNETES_ENV_NAME}} workspaceName=${{secrets.WORKSPACE_NAME}} apiName=${{secrets.API_RESOURCE_NAME}} updaterName=${{secrets.UPDATER_RESOURCE_NAME}}
+               --parameters acrName="$($acrName)" imageTag="$($imageTag)" administratorLogin="$($administratorLogin)" administratorLoginPassword="$($administratorLoginPassword)" storageAccountName="$($storageAccountName)" serverName="$($serverName)" kubernetesEnvName="$($administratorkubernetesEnvNameLogin)" workspaceName="$($workspaceName)" apiName="$($apiName)" updaterName="$($updaterName)"
             if( $LASTEXITCODE -ne 0 ) { exit -1 }
 
       - name: Upload Images
