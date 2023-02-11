@@ -23,7 +23,7 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            $deploymentName = "ghactionbgtasks${{ github.sha }}'
+            $deploymentName = 'ghactionbgtasks${{ github.sha }}'
             $resourceGroupName = '${{ secrets.AZURE_RESOURCE_GROUP_NAME }}'
             $acrName = '${{ secrets.ACR_NAME }}'
           
