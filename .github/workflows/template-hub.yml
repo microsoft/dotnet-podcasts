@@ -25,7 +25,7 @@ jobs:
           inlineScript: |
             $deploymentName = 'ghactionlistentogether${{ github.sha }}'
             $resourceGroupName = '${{ secrets.AZURE_RESOURCE_GROUP_NAME }}'
-            $webAppName = '${{ secrets.HUB_WEBAPP_NAME}}"
+            $webAppName = '${{ secrets.HUB_WEBAPP_NAME }}'
             $servicePlanName = '${{ secrets.SERVICE_PLAN_NAME }}'
             $storageAccountName = '${{ secrets.STORAGE_NAME }}'
             $administratorLogin = '${{ secrets.PODCASTDB_USER_LOGIN }}'
