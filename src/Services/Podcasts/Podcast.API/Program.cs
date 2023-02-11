@@ -26,8 +26,7 @@ var queueConnectionString = builder.Configuration.GetConnectionString("FeedQueue
 
 builder.Services.AddSingleton(new QueueClient(queueConnectionString, "feed-queue"));
 builder.Services.AddHttpClient<IFeedClient, FeedClient>();
-builder.Services.AddTransient<JitterHandler>();
-builder.Services.AddHttpClient<ShowClient>().AddHttpMessageHandler<JitterHandler>();
+builder.Services.AddHttpClient<ShowClient>();
 
 // Authentication and authorization-related services
 // Comment back in if testing authentication
