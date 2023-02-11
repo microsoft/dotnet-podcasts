@@ -23,9 +23,9 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            $deploymentName = "ghactionbgtasks${{ github.sha }}"
-            $resourceGroupName = "${{ secrets.AZURE_RESOURCE_GROUP_NAME }}"
-            $acrName = "${{ secrets.ACR_NAME }}"
+            $deploymentName = "ghactionbgtasks${{ github.sha }}'
+            $resourceGroupName = '${{ secrets.AZURE_RESOURCE_GROUP_NAME }}'
+            $acrName = '${{ secrets.ACR_NAME }}'
           
             az deployment group create -n "$($deploymentName)" `
                --resource-group  "$($resourceGroupName)" `
@@ -58,18 +58,18 @@ jobs:
           azPSVersion: "3.1.0"
           failOnStandardError: true
           inlineScript: |
-            $deploymentName = "ghaction${{ github.sha }}"
-            $resourceGroupName = "${{ secrets.AZURE_RESOURCE_GROUP_NAME }}"
-            $acrName = "${{ secrets.ACR_NAME }}"
-            $imageTag = "${{ github.sha }}"
-            $administratorLogin = "${{ secrets.PODCASTDB_USER_LOGIN }}"
-            $administratorLoginPassword = "${{ secrets.PODCASTDB_USER_PASSWORD }}"
-            $storageAccountName = "${{ secrets.STORAGE_NAME }}"
-            $serverName= "${{ secrets.PODCASTDB_SERVER_NAME }}"
-            $kubernetesEnvName = "${{ secrets.KUBERNETES_ENV_NAME }}"
-            $workspaceName = "${{ secrets.WORKSPACE_NAME }}"
-            $apiName = "${{ secrets.API_RESOURCE_NAME }}"
-            $updaterName = "${{ secrets.UPDATER_RESOURCE_NAME }}"
+            $deploymentName = 'ghaction${{ github.sha }}'
+            $resourceGroupName = '${{ secrets.AZURE_RESOURCE_GROUP_NAME }}'
+            $acrName = '${{ secrets.ACR_NAME }}'
+            $imageTag = '${{ github.sha }}'
+            $administratorLogin = '${{ secrets.PODCASTDB_USER_LOGIN }}'
+            $administratorLoginPassword = '${{ secrets.PODCASTDB_USER_PASSWORD }}'
+            $storageAccountName = '${{ secrets.STORAGE_NAME }}'
+            $serverName= '${{ secrets.PODCASTDB_SERVER_NAME }}'
+            $kubernetesEnvName = '${{ secrets.KUBERNETES_ENV_NAME }}'
+            $workspaceName = '${{ secrets.WORKSPACE_NAME }}'
+            $apiName = '${{ secrets.API_RESOURCE_NAME }}'
+            $updaterName = '${{ secrets.UPDATER_RESOURCE_NAME }}'
             
             az deployment group create -n "$($deploymentName)" `
                --resource-group  "$($resourceGroupName)" `
