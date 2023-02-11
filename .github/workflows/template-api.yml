@@ -23,8 +23,15 @@ jobs:
         with:
           azPSVersion: "3.1.0"
           inlineScript: |
-            az deployment group create -n ghactionbgtasks${{ github.sha }} -g ${{ secrets.AZURE_RESOURCE_GROUP_NAME }} --template-file deploy/Services/acr.bicep --parameters acrName=${{secrets.ACR_NAME}}
-
+            $deploymentName = "ghactionbgtasks${{ github.sha }}"
+            $resourceGroupName = "${{ secrets.AZURE_RESOURCE_GROUP_NAME }}"
+            $acrName = "${{ secrets.ACR_NAME }}"
+          
+            az deployment group create -n "$($deploymentName)" `
+               --resource-group  "$($resourceGroupName)" `
+               --template-file deploy/Services/acr.bicep `
+               --parameters acrName="$($acrName)" 
+               
       - name: Login to ACR
         uses: docker/login-action@v1
         with:
