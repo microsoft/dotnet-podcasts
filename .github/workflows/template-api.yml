@@ -31,7 +31,7 @@ jobs:
                --resource-group  "$($resourceGroupName)" `
                --template-file deploy/Services/acr.bicep `
                --parameters acrName="$($acrName)" 
-               
+
       - name: Login to ACR
         uses: docker/login-action@v1
         with:
@@ -63,7 +63,7 @@ jobs:
             $acrName = "${{ secrets.ACR_NAME }}"
             $imageTag = "${{ github.sha }}"
             $administratorLogin = "${{ secrets.PODCASTDB_USER_LOGIN }}"
-            $administratorLoginPsasword = "${{secrets.PODCASTDB_USER_PASSWORD }}"
+            $administratorLoginPassword = "${{ secrets.PODCASTDB_USER_PASSWORD }}"
             $storageAccountName = "${{ secrets.STORAGE_NAME }}"
             $serverName= "${{ secrets.PODCASTDB_SERVER_NAME }}"
             $kubernetesEnvName = "${{ secrets.KUBERNETES_ENV_NAME }}"
