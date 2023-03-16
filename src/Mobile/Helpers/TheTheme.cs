@@ -1,4 +1,7 @@
-﻿namespace Microsoft.NetConf2021.Maui.Helpers;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.NetConf2021.Maui.Messaging;
+
+namespace Microsoft.NetConf2021.Maui.Helpers;
 
 public static class TheTheme
 {
@@ -16,6 +19,6 @@ public static class TheTheme
 
         }
 
-        MessagingCenter.Instance.Send<string>(".NET Pods", "ChangeWebTheme");
+        WeakReferenceMessenger.Default.Send<ChangeThemeNotification>();
     }
 }

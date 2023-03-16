@@ -1,5 +1,7 @@
 ﻿@implements IDisposable
 @using Podcast.Components.ListenTogether
+@using CommunityToolkit.Mvvm.Messaging
+@using Microsoft.NetConf2021.Maui.Messaging
 @using static Podcast.Components.ListenTogether.ListenTogether
 @inject ThemeInterop ThemeInterop
 @inject PlayerService PlayerService
@@ -15,104 +17,106 @@
 				OnPlayerStateChange="@UpdatePlayer" />
 
 @code {
-	private ListenTogether? listenTogetherRef;
-	private Guid? episodeId;
-	private string? roomCode;
-	private bool canCreateRoom = false;
+    private ListenTogether? listenTogetherRef;
+    private Guid? episodeId;
+    private string? roomCode;
+    private bool canCreateRoom = false;
 
-	protected override void OnInitialized()
-	{
-		MessagingCenter.Instance.Subscribe<string>(
-			".NET Pods",
-			"ChangeWebTheme",
-			async (sender) =>
-				{
-					await UpdateWebThemeAsync();
-				});
-		MessagingCenter.Instance.Subscribe<string>(
-			".NET Pods",
-			"LeaveRoom",
-			async (sender) =>
-				{
-					LeaveRoom();
-					await InvokeAsync(StateHasChanged);
-				});
+    protected override void OnInitialized()
+    {
+        WeakReferenceMessenger.Default
+            .Register<ListenTogetherComponent, ChangeThemeNotification>(
+                this,
+                async (r, n) =>
+                {
+                    await UpdateWebThemeAsync();
+                });
 
-		canCreateRoom = PlayerService.CurrentEpisode != null;
-		PlayerService.NewEpisodeAdded += NewEpisodeAddedToPlayer;
-	}
+        WeakReferenceMessenger.Default
+            .Register<ListenTogetherComponent, LeaveRoomNotification>(
+                this,
+                async (r, n) =>
+                {
+                    LeaveRoom();
+                    await InvokeAsync(StateHasChanged);
+                });
 
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-		{
-			await UpdateWebThemeAsync();
-		}
-	}
+        canCreateRoom = PlayerService.CurrentEpisode != null;
+        PlayerService.NewEpisodeAdded += NewEpisodeAddedToPlayer;
+    }
 
-	public void Dispose()
-	{
-		PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
-		PlayerService.NewEpisodeAdded -= NewEpisodeAddedToPlayer;
-		MessagingCenter.Instance.Unsubscribe<string>(".NET Pods", "ChangeWebTheme");
-		MessagingCenter.Instance.Unsubscribe<string>(".NET Pods", "LeaveRoom");
-	}
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UpdateWebThemeAsync();
+        }
+    }
 
-	private void JoinRoom(string roomCode)
-	{
-		this.roomCode = roomCode;
-		PlayerService.IsPlayingChanged += IsLocalPlayingChanged;
-	}
+    public void Dispose()
+    {
+        PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
+        PlayerService.NewEpisodeAdded -= NewEpisodeAddedToPlayer;
 
-	private void LeaveRoom()
-	{
-		PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
-		roomCode = null;
-	}
+        WeakReferenceMessenger.Default.Unregister<ChangeThemeNotification>(this);
+        WeakReferenceMessenger.Default.Unregister<LeaveRoomNotification>(this);
+    }
 
-	private void CreateRoom()
-	{
-		episodeId = PlayerService.CurrentEpisode?.Id;
-	}
+    private void JoinRoom(string roomCode)
+    {
+        this.roomCode = roomCode;
+        PlayerService.IsPlayingChanged += IsLocalPlayingChanged;
+    }
 
-	private async void UpdatePlayer(RoomPlayerState playerState)
-	{
-		PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
+    private void LeaveRoom()
+    {
+        PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
+        roomCode = null;
+    }
 
-		var episode = new Episode(playerState);
-		var show = new Show(playerState);
+    private void CreateRoom()
+    {
+        episodeId = PlayerService.CurrentEpisode?.Id;
+    }
 
-		await PlayerService.PlayAsync(episode, show, playerState.IsPlaying, playerState.Progress.TotalSeconds);
+    private async void UpdatePlayer(RoomPlayerState playerState)
+    {
+        PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
 
-		PlayerService.IsPlayingChanged += IsLocalPlayingChanged;
-	}
+        var episode = new Episode(playerState);
+        var show = new Show(playerState);
 
-	private async Task UpdateRoomPlayerState()
-	{
-		if (listenTogetherRef != null)
-		{
-			double currentTime = PlayerService?.CurrentPosition ?? 0;
-			bool isPlaying = PlayerService?.IsPlaying ?? false;
+        await PlayerService.PlayAsync(episode, show, playerState.IsPlaying, playerState.Progress.TotalSeconds);
 
-			await listenTogetherRef.UpdateRoomPlayerState((long)currentTime, isPlaying);
-		}
-	}
+        PlayerService.IsPlayingChanged += IsLocalPlayingChanged;
+    }
 
-	private async Task UpdateWebThemeAsync()
-	{
-		var darkModeIsActive = Settings.Theme == AppTheme.Dark;
-		await ThemeInterop.SetThemeAsync(darkModeIsActive ? Theme.Dark : Theme.Light);
+    private async Task UpdateRoomPlayerState()
+    {
+        if (listenTogetherRef != null)
+        {
+            double currentTime = PlayerService?.CurrentPosition ?? 0;
+            bool isPlaying = PlayerService?.IsPlaying ?? false;
 
-	}
+            await listenTogetherRef.UpdateRoomPlayerState((long)currentTime, isPlaying);
+        }
+    }
 
-	private async void IsLocalPlayingChanged(object sender, EventArgs e)
-	{
-		await UpdateRoomPlayerState();
-	}
-	
-	private async void NewEpisodeAddedToPlayer(object sender, EventArgs e)
-	{
-		canCreateRoom = PlayerService.CurrentEpisode != null;
-		await InvokeAsync(StateHasChanged);
-	}
+    private async Task UpdateWebThemeAsync()
+    {
+        var darkModeIsActive = Settings.Theme == AppTheme.Dark;
+        await ThemeInterop.SetThemeAsync(darkModeIsActive ? Theme.Dark : Theme.Light);
+
+    }
+
+    private async void IsLocalPlayingChanged(object sender, EventArgs e)
+    {
+        await UpdateRoomPlayerState();
+    }
+
+    private async void NewEpisodeAddedToPlayer(object sender, EventArgs e)
+    {
+        canCreateRoom = PlayerService.CurrentEpisode != null;
+        await InvokeAsync(StateHasChanged);
+    }
 }
