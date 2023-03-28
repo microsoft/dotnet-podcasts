@@ -3,6 +3,9 @@
 [QueryProperty(nameof(Id), nameof(Id))]
 public partial class CategoryViewModel : ViewModelBase
 {
+    private readonly ShowsService showsService;
+    private readonly SubscriptionsService subscriptionsService;
+    private readonly ImageProcessingService imageProcessingService;
 
     [ObservableProperty]
     string text;
@@ -15,13 +18,12 @@ public partial class CategoryViewModel : ViewModelBase
     [ObservableProperty]
     List<ShowViewModel> shows;
 
-    readonly ShowsService showsService;
-    readonly SubscriptionsService subscriptionsService;
 
-    public CategoryViewModel(ShowsService shows, SubscriptionsService subs)
+    public CategoryViewModel(ShowsService shows, SubscriptionsService subs, ImageProcessingService imageProcessing)
     {
         showsService = shows;
         subscriptionsService = subs;
+        imageProcessingService = imageProcessing;
     }
 
 
@@ -63,7 +65,7 @@ public partial class CategoryViewModel : ViewModelBase
 
         foreach (var show in shows)
         {
-            var showVM = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+            var showVM = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id), imageProcessingService);
             showList.Add(showVM);
         }
 

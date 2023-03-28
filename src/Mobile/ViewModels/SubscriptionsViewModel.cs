@@ -4,15 +4,16 @@ namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 public partial class SubscriptionsViewModel : ViewModelBase
 {
-    readonly SubscriptionsService subscriptionsService;
+    private readonly SubscriptionsService subscriptionsService;
+    private readonly ImageProcessingService imageProcessingService;
 
     [ObservableProperty]
     ObservableRangeCollection<ShowViewModel> subscribedShows;
 
-
-    public SubscriptionsViewModel(SubscriptionsService subs)
+    public SubscriptionsViewModel(SubscriptionsService subs, ImageProcessingService imageProcessing)
     {
         subscriptionsService = subs;
+        imageProcessingService = imageProcessing;
         SubscribedShows = new ObservableRangeCollection<ShowViewModel>();
     }
 
@@ -23,7 +24,7 @@ public partial class SubscriptionsViewModel : ViewModelBase
         var list = new List<ShowViewModel>();
         foreach (var show in shows)
         {
-            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id), imageProcessingService);
             list.Add(showViewModel);
         }
         SubscribedShows.ReplaceRange(list);

@@ -6,14 +6,18 @@ namespace Microsoft.NetConf2021.Maui.ViewModels;
 [QueryProperty(nameof(ShowId), nameof(ShowId))]
 public partial class EpisodeDetailViewModel : ViewModelBase
 {
+    private readonly ListenLaterService listenLaterService;
+    private readonly ShowsService podcastService;
+    private readonly PlayerService playerService;
+    private readonly SubscriptionsService subscriptionsService;
+    private readonly ImageProcessingService imageProcessingService;
+
     public string Id { get; set; }
     public string ShowId { get; set; }
-
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsInListenLater))]
     Episode episode;
-
 
     public bool IsInListenLater
     {
@@ -29,20 +33,15 @@ public partial class EpisodeDetailViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    Uri image;
+    private ShowViewModel show;
 
-    [ObservableProperty]
-    private Show show;
-
-    private readonly ListenLaterService listenLaterService;
-    private readonly ShowsService podcastService;
-    private readonly PlayerService playerService;
-
-    public EpisodeDetailViewModel(ListenLaterService listen, ShowsService shows, PlayerService player)
+    public EpisodeDetailViewModel(ListenLaterService listen, ShowsService shows, PlayerService player, SubscriptionsService subs, ImageProcessingService imageProcessing)
     {
         listenLaterService = listen;
         podcastService = shows;
         playerService = player;
+        subscriptionsService = subs;
+        imageProcessingService = imageProcessing;
     }
 
     internal async Task InitializeAsync()
@@ -55,7 +54,13 @@ public partial class EpisodeDetailViewModel : ViewModelBase
 
     async Task FetchAsync()
     {
-        Show = await podcastService.GetShowByIdAsync(new Guid(ShowId));
+        var show = await podcastService.GetShowByIdAsync(new Guid(ShowId));
+
+        var showVM = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id), imageProcessingService);
+
+        Show = showVM;
+        Show.InitializeCommand.Execute(null);
+
         var eId = new Guid(Id);
         Episode = Show.Episodes.FirstOrDefault(e => e.Id == eId);
 
@@ -69,7 +74,6 @@ public partial class EpisodeDetailViewModel : ViewModelBase
             return;
         }
 
-        Image = Show.Image;
         IsInListenLater = listenLaterService.IsInListenLater(Episode);
     }
 
@@ -79,7 +83,7 @@ public partial class EpisodeDetailViewModel : ViewModelBase
         if (listenLaterService.IsInListenLater(episode))
             listenLaterService.Remove(episode);
         else
-            listenLaterService.Add(episode, show);
+            listenLaterService.Add(episode, show.Show);
 
         IsInListenLater = listenLaterService.IsInListenLater(episode);
         Show.Episodes.FirstOrDefault(x => x.Id == episode.Id).IsInListenLater = IsInListenLater;
@@ -87,13 +91,13 @@ public partial class EpisodeDetailViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    Task Play() => playerService.PlayAsync(Episode, Show);
+    Task Play() => playerService.PlayAsync(Episode, Show.Show);
 
     [RelayCommand]
     Task Share() => 
         Microsoft.Maui.ApplicationModel.DataTransfer.Share.RequestAsync(new ShareTextRequest
     {
-        Text = $"{Config.BaseWeb}show/{show.Id}",
+        Text = $"{Config.BaseWeb}show/{show.Show.Id}",
         Title = "Share the episode uri"
     });
 }

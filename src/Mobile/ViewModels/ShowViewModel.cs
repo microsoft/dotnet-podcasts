@@ -2,14 +2,19 @@
 
 public partial class ShowViewModel : ObservableObject
 {
+    private readonly ImageProcessingService imageProcessingService;
+
+    bool isInitialized;
+
     public Show Show { get; set; }
 
     [ObservableProperty]
     bool isSubscribed;
 
-    public IEnumerable<Episode> Episodes => Show?.Episodes;
+    [ObservableProperty]
+    string cachedImage;
 
-    public Uri Image => Show?.Image;
+    public IEnumerable<Episode> Episodes => Show?.Episodes;
 
     public string Author => Show?.Author;
 
@@ -17,12 +22,33 @@ public partial class ShowViewModel : ObservableObject
 
     public string Description => Show?.Description;
 
-    public ShowViewModel(Show show, bool isSubscribed)
+    public ShowViewModel(Show show, bool isSubscribed, ImageProcessingService imageProcessing)
     {
         Show = show;
         IsSubscribed = isSubscribed;
+        imageProcessingService = imageProcessing;
     }
 
     [RelayCommand]
-    Task NavigateToDetail() => Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");
+    private Task NavigateToDetail() => Shell.Current.GoToAsync($"{nameof(ShowDetailPage)}?Id={Show.Id}");
+
+    [RelayCommand]
+    private async Task InitializeAsync()
+    {
+        if (isInitialized)
+        {
+            return;
+        }
+
+        try
+        {
+            CachedImage = await imageProcessingService.ProcessRemoteImage(Show.Image);
+        }
+        catch
+        {
+            return;
+        }
+
+        isInitialized = true;
+    }
 }

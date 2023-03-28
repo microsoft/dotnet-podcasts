@@ -5,9 +5,11 @@ namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 public partial class DiscoverViewModel : ViewModelBase
 {
-    readonly ShowsService showsService;
-    readonly SubscriptionsService subscriptionsService;
-    IEnumerable<ShowViewModel> shows;
+    private readonly ShowsService showsService;
+    private readonly SubscriptionsService subscriptionsService;
+    private readonly ImageProcessingService imageProcessingService;
+
+    private IEnumerable<ShowViewModel> shows;
 
     [ObservableProperty]
     CategoriesViewModel categoriesVM;
@@ -18,10 +20,12 @@ public partial class DiscoverViewModel : ViewModelBase
     [ObservableProperty]
     ObservableRangeCollection<ShowGroup> podcastsGroup;
 
-    public DiscoverViewModel(ShowsService shows, SubscriptionsService subs, CategoriesViewModel categories)
+    public DiscoverViewModel(ShowsService shows, SubscriptionsService subs, CategoriesViewModel categories, ImageProcessingService imageProcessing)
     {
         showsService = shows;
         subscriptionsService = subs;
+        imageProcessingService = imageProcessing;
+
         PodcastsGroup = new ObservableRangeCollection<ShowGroup>();
         categoriesVM = categories;
     }
@@ -60,7 +64,7 @@ public partial class DiscoverViewModel : ViewModelBase
         var viewmodels = new List<ShowViewModel>();
         foreach (var show in shows)
         {
-            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+            var showViewModel = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id), imageProcessingService);
             viewmodels.Add(showViewModel);
         }
 

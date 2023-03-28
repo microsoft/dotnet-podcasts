@@ -1,19 +1,20 @@
 ﻿using Microsoft.NetConf2021.Maui.Resources.Strings;
 using MvvmHelpers;
-using MvvmHelpers.Interfaces;
 
 namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 [QueryProperty(nameof(Id), nameof(Id))]
 public partial class ShowDetailViewModel : ViewModelBase
 {
-    public string Id { get; set; }
-    Guid showId;
+    private readonly PlayerService playerService;
+    private readonly SubscriptionsService subscriptionsService;
+    private readonly ListenLaterService listenLaterService;
+    private readonly ShowsService showsService;
+    private readonly ImageProcessingService imageProcessingService;
 
-    readonly PlayerService playerService;
-    readonly SubscriptionsService subscriptionsService;
-    readonly ListenLaterService listenLaterService;
-    readonly ShowsService showsService;
+    private Guid showId;
+
+    public string Id { get; set; }
 
     [ObservableProperty]
     ShowViewModel show;
@@ -24,20 +25,20 @@ public partial class ShowDetailViewModel : ViewModelBase
     [ObservableProperty]
     ObservableRangeCollection<Episode> episodes;
 
-
     [ObservableProperty]
     bool isPlaying;
 
     [ObservableProperty]
     string textToSearch;
 
-
-    public ShowDetailViewModel(ShowsService shows, PlayerService player, SubscriptionsService subs, ListenLaterService later)
+    public ShowDetailViewModel(ShowsService shows, PlayerService player, SubscriptionsService subs, ListenLaterService later, ImageProcessingService imageProcessing)
     {
         showsService = shows;
         playerService = player;
         subscriptionsService = subs;
         listenLaterService = later;
+        imageProcessingService = imageProcessing;
+
         episodes = new ObservableRangeCollection<Episode>();
     }
 
@@ -65,9 +66,10 @@ public partial class ShowDetailViewModel : ViewModelBase
             return;
         }
 
-        var showVM = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id));
+        var showVM = new ShowViewModel(show, subscriptionsService.IsSubscribed(show.Id), imageProcessingService);
 
         Show = showVM;
+        Show.InitializeCommand.Execute(null);
         Episodes.ReplaceRange(show.Episodes.ToList());
     }
 
