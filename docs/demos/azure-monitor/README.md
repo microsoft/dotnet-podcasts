@@ -9,22 +9,21 @@ The .NET Podcast is set up to handle reporting Telemetry data to Azure Monitor w
 
 ## Create a Microsoft.AppInsights Resource
 
-In order to collect telemetry, we will need to create a Microsoft.AppInsights resource to report to.
+To collect telemetry, we will need to create a Microsoft.AppInsights resource to report to.
 
 1. Create a new application insights web component with the `{APP_NAME}`, `{LOCATION}`, and `{RESOURCE_GROUP}` arguments replaced for your configuration. A list of valid locations for the `{LOCATION}` can be retrieved by running `az account list-locations`.
 
-```azurecli-interactive
-az monitor app-insights component create --app {APP_NAME} --kind web --location {LOCATION} --resource-group {RESOURCE_GROUP} --application-type web
+   ```azurecli-interactive
+   az monitor app-insights component create --app {APP_NAME} --kind web --location {LOCATION} --resource-group {RESOURCE_GROUP} --application-type web
+   ```
 
-```
+1. Once the command has executed successfully, retrieve the value from the `connectionString` property.
 
-2. Once the command has executed successfully, retrieve the value from the `connectionString` property.
-
-```json
-{
-  "connectionString": "InstrumentationKey=XXXXXXXXXX;IngestionEndpoint=https://centralus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/"
-}
-```
+   ```json
+   {
+     "connectionString": "InstrumentationKey=XXXXXXXXXX;IngestionEndpoint=https://centralus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/"
+   }
+   ```
 
 ## Configure API for Azure Monitor
 
