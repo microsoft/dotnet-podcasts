@@ -16,20 +16,27 @@ The .NET Podcast can be configured to use authentication from an OAuth provider.
 
 1. Sign in to the [Azure Portal](https://portal.azure.com)
 1. Select the `Azure Active Directory` option from the side menu
-   :::image type="content" source="images/select-active-directory.png" alt-text="select active directory":::
+
+   ![select active directory](images/select-active-directory.png)
 1. Select the `App registrations` option from the Azure Active Directory side menu.
-   :::image type="content" source="images/select-app-registrations.png" alt-text="select app registrations":::
+   
+   ![select app registrations](images/select-app-registrations.png)
 1. Select the `New registration` option from the Azure Active Directory top menu.
-   :::image type="content" source="images/select-new-registration.png" alt-text="select new registration":::
+   
+   ![select new registration](images/select-new-registration.png)
 1. On the `Register an application` page, provide a name for the application and select `Register`.
-   :::image type="content" source="images/provide-application-name.png" alt-text="provide application name and select register":::
+   
+   ![provide application name and select register](images/provide-application-name.png)
 1. On the app registration overview page, take note of the `Application (client) ID` and `Directory (tenant) ID` as we will need this information for a later step.
 1. Select the `Manage > App Roles` side menu option from the app registration management page.
-   :::image type="content" source="images/select-app-roles.png" alt-text="select manage > app roles":::
+   
+   ![select manage > app roles](images/select-app-roles.png)
 1. Select the `Create app role` option from the App roles top menu.
-   :::image type="content" source="images/select-create-app-role.png" alt-text="create app role":::
+   
+   ![create app role](images/select-create-app-role.png)
 1. Configure the app role with the following information and select `Apply`.
-   :::image type="content" source="images/create-app-role.png" alt-text="create app role":::
+   
+   ![create app role](images/create-app-role.png)
 
    | Configuration                        | Value                                |
    | ------------------------------------ | ------------------------------------ |
@@ -91,12 +98,16 @@ The .NET Podcast can be configured to use authentication from an OAuth provider.
    ```
 
 1. When this executes, it will generate a new `Token`. Select the token value for later use.
-   :::image type="content" source="images/generated-token.png" alt-text="select generated token":::
+
+   ![select generated token](images/generated-token.png)
 1. Navigate to the `Podcast.API` swagger page. If debugging it may be `https://localhost:5001/swagger/index.html`.
 1. Select the `Authorize` button, add the `Token` value generated previously, select `Authorize`, and select `Close`.
-   :::image type="content" source="images/authorize-swagger.png" alt-text="select authorize in swagger":::
-   :::image type="content" source="images/add-swagger-authorization.png" alt-text="add swagger authorization":::
+   
+   ![select authorize in swagger](images/authorize-swagger.png)
+   
+   ![add swagger authorization](images/add-swagger-authorization.png)
 1. Using the swagger UI, expand the `Get /feeds` option and `Execute`. From the response body, select the `id` value from one of the returned feed items.
-   :::image type="content" source="images/get-feeds.png" alt-text="select get /feeds":::
+   ![select get /feeds](images/get-feeds.png)
 1. Using the swagger UI, expand the `Delete /feeds` option, select the `try it out` option, paste the `id` copied from the previous step into the `id` field, and `Execute`. If everything is authenticated successfully, you will receive a `204` code.
-   :::image type="content" source="images/delete-feed.png" alt-text="delete /feed item":::
+   
+   ![delete /feed item](images/delete-feed.png)
