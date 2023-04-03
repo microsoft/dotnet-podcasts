@@ -1,49 +1,62 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<VerticalStackLayout  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<Grid  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       x:Class="Microsoft.NetConf2021.Maui.Views.ShowItemView"
                       xmlns:viewmodels="clr-namespace:Microsoft.NetConf2021.Maui.ViewModels"
+                      xmlns:views="clr-namespace:Microsoft.NetConf2021.Maui.Views"
                       x:DataType="viewmodels:ShowViewModel"
-                      x:Name="self"
-                      >
-    <VerticalStackLayout.GestureRecognizers>
+                      x:Name="self">
+    <Grid.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding NavigateToDetailCommand}" />
-    </VerticalStackLayout.GestureRecognizers>
-    <Grid>
-        <ActivityIndicator WidthRequest="50" HeightRequest="50" IsRunning="{Binding IsLoading, Source={x:Reference self}}"/>
+    </Grid.GestureRecognizers>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="32" />
+        <RowDefinition Height="28" />
+    </Grid.RowDefinitions>
 
-        <Image Aspect="AspectFit"
-               MinimumWidthRequest="{x:OnIdiom Phone=180, Default=264}"
-               MinimumHeightRequest="{x:OnIdiom Default=264, Phone=180}"
-               MaximumHeightRequest="{x:OnIdiom Phone=190, Default=264}"
-               MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
-               Source="{Binding Show.Image}"
-               Loaded="Image_Loaded"
-               HorizontalOptions="Start"
-               Margin="0,0,0,12" />
+    <Image Aspect="AspectFit"
+            MinimumWidthRequest="{x:OnIdiom Phone=180, Default=264}"
+            MinimumHeightRequest="{x:OnIdiom Default=264, Phone=180}"
+            MaximumHeightRequest="{x:OnIdiom Phone=190, Default=264}"
+            MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
+            Source="{Binding CachedImage, TargetNullValue='default_podcast_image.png'}"
+            HorizontalOptions="Center"
+            Margin="0,0,0,12"
+            Grid.Row="0" Grid.Column="0"/>
 
-        <Image Source="suscribed.png"
-               HorizontalOptions="End"
-               VerticalOptions="End"
-               SemanticProperties.Description="Suscribed icon"
-               Margin="22"
-               IsVisible="{Binding IsSubscribed}"
-               WidthRequest="24"
-               HeightRequest="24">
-            <Image.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding SubscriptionCommand, Source={x:Reference self}}" CommandParameter="{Binding }"/>
-            </Image.GestureRecognizers>
-        </Image>
-    </Grid>
-    <Label Text="{Binding Show.Title}"
+    <Image Source="suscribed.png"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            SemanticProperties.Description="Suscribed icon"
+            Margin="22"
+            IsVisible="{Binding IsSubscribed}"
+            WidthRequest="24"
+            HeightRequest="24"
+            Grid.Row="0" Grid.Column="0">
+        <Image.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding SubscriptionCommand, Source={x:Reference self}}" CommandParameter="{Binding }"/>
+        </Image.GestureRecognizers>
+    </Image>
+
+    <ActivityIndicator
+        InputTransparent="True"
+        HorizontalOptions="Center" VerticalOptions="Center"
+        WidthRequest="50" HeightRequest="50"
+        IsRunning="{Binding InitializeCommand.IsRunning}"
+        Grid.Row="0" Grid.Column="0"/>
+
+    <Label Text="{Binding Title}"
            MaxLines="1"
            HorizontalOptions="Start"
            LineBreakMode="TailTruncation"
            MaximumWidthRequest="{x:OnIdiom Phone=190, Default=264}"
-           Style="{OnIdiom Default={StaticResource BodyXLLabelStyle},Phone={StaticResource BodyLLabelStyle}}" />
-    <Label Text="{Binding Show.Author}"
+           Style="{OnIdiom Default={StaticResource BodyXLLabelStyle},Phone={StaticResource BodyLLabelStyle}}"
+           Grid.Row="1" Grid.Column="0"/>
+    <Label Text="{Binding Author}"
            LineBreakMode="TailTruncation"
            MaxLines="1"
-           Style="{OnIdiom Default={StaticResource BodyMLabelStyle},Phone={StaticResource BodySLabelStyle}}" />
-</VerticalStackLayout>
+           Style="{OnIdiom Default={StaticResource BodyMLabelStyle},Phone={StaticResource BodySLabelStyle}}"
+           Grid.Row="2" Grid.Column="0"/>
+</Grid>
 

@@ -20,7 +20,7 @@
                                  Spacing="8">
                 <Image Margin="0,4,0,8"
                        HeightRequest="156"
-                       Source="{Binding Image}"
+                       Source="{Binding Show.CachedImage, TargetNullValue='default_podcast_image.png'}"
                        SemanticProperties.Description="It is the banner of the episode"
                        WidthRequest="156" />
                 <Label Style="{StaticResource H6LabelStyle}"

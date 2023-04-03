@@ -29,6 +29,8 @@ public static class ServicesExtensions
         builder.Services.AddScoped<ListenTogetherHubClient>(_ =>
             new ListenTogetherHubClient(Config.ListenTogetherUrl));
 
+        builder.Services.AddSingleton<ImageProcessingService>();
+
 
         return builder;
     }
