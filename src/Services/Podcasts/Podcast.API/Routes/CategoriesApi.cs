@@ -5,6 +5,7 @@ public static class CategoriesApi
     public static RouteGroupBuilder MapCategoriesApi(this RouteGroupBuilder group)
     {
         group.MapGet("/", GetAllCategories).WithName("GetCategories");
+        group.MapGet("/test", GetAllCategories).WithName("GetCategoriesTest");
         return group;
     }
 
