@@ -1,4 +1,4 @@
-targetScope = 'subscription'
+// targetScope = 'subscription'
 
 @minLength(1)
 @maxLength(64)
@@ -37,16 +37,16 @@ var apiSqlConnectionStringKey = 'AZURE-API-SQL-CONNECTION-STRING'
 var hubSqlConnectionStringKey = 'AZURE-HUB-SQL-CONNECTION-STRING'
 
 // Organize resources in a resource group
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${abbrs.resourcesResourceGroups}${environmentName}'
-  location: location
-  tags: tags
-}
+// resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+//   name: '${abbrs.resourcesResourceGroups}${environmentName}'
+//   location: location
+//   tags: tags
+// }
 
 // Container apps host (including container registry)
 module containerApps './core/host/container-apps.bicep' = {
   name: 'container.apps'
-  scope: rg
+  // scope: rg
   params: {
     name: 'app'
     containerAppsEnvironmentName: '${abbrs.appManagedEnvironments}${resourceToken}'
@@ -59,7 +59,7 @@ module containerApps './core/host/container-apps.bicep' = {
 // Store secrets in a keyvault
 module keyVault 'core/security/keyvault.bicep' = {
   name: 'keyvault'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.keyVaultVaults}${resourceToken}'
     location: location
@@ -70,7 +70,7 @@ module keyVault 'core/security/keyvault.bicep' = {
 
 module apiSqlServer 'app/db.bicep' = {
   name: 'podcast.sql'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.sqlServers}podcast-${resourceToken}'
     location: location
@@ -88,7 +88,7 @@ module apiSqlServer 'app/db.bicep' = {
 
 module hubSqlServer 'app/db.bicep' = {
   name: 'listentogether.sql'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.sqlServers}listentogether-${resourceToken}'
     location: location
@@ -106,7 +106,7 @@ module hubSqlServer 'app/db.bicep' = {
 
 module storage 'app/storage.bicep' = {
   name: 'storage'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.storageStorageAccounts}${resourceToken}'
     location: location
@@ -118,7 +118,7 @@ module storage 'app/storage.bicep' = {
 
 module web 'web.bicep' = {
   name: 'podcast.web'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.appContainerApps}web-${resourceToken}'
     location: location
@@ -130,7 +130,7 @@ module web 'web.bicep' = {
     listenTogetherHubUrl: hub.outputs.LISTEN_TOGETHER_HUB
     tags: tags
   }
-  dependsOn:[
+  dependsOn: [
     monitoring
     containerApps
     api
@@ -140,7 +140,7 @@ module web 'web.bicep' = {
 
 module hub 'hub.bicep' = {
   name: 'listentogether.hub'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.appContainerApps}hub-${resourceToken}'
     location: location
@@ -166,7 +166,7 @@ module hub 'hub.bicep' = {
 
 module api 'api.bicep' = {
   name: 'podcast.api'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.appContainerApps}api-${resourceToken}'
     location: location
@@ -191,7 +191,7 @@ module api 'api.bicep' = {
 
 module updaterWorker 'updater.bicep' = {
   name: 'updater.worker'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.appContainerApps}updater-${resourceToken}'
     location: location
@@ -214,7 +214,7 @@ module updaterWorker 'updater.bicep' = {
 
 module ingestionWorker 'ingestion.bicep' = if (feedIngestion) {
   name: 'ingestion.worker'
-  scope: rg
+  // scope: rg
   params: {
     name: '${abbrs.appContainerApps}ingestion-${resourceToken}'
     location: location
@@ -239,7 +239,7 @@ module ingestionWorker 'ingestion.bicep' = if (feedIngestion) {
 // Monitor application with Azure Monitor
 module monitoring 'core/monitor/monitoring.bicep' = {
   name: 'monitoring'
-  scope: rg
+  // scope: rg
   params: {
     location: location
     tags: tags
@@ -272,7 +272,7 @@ output REACT_APP_HUB_BASE_URL string = hub.outputs.SERVICE_HUB_URI
 output REACT_APP_WEB_BASE_URL string = web.outputs.SERVICE_WEB_URI
 output REACT_FEATURES_FEED_INGESTION string = '${feedIngestion}'
 output REACT_LISTEN_TOGETHER_HUB string = hub.outputs.LISTEN_TOGETHER_HUB
-output REACT_RESOURCE_GROUP_NAME string = rg.name
+output REACT_RESOURCE_GROUP_NAME string = resourceGroup().name
 output REACT_STORAGE_NAME string = storage.outputs.name
 output SERVICE_API_NAME string = api.outputs.SERVICE_API_NAME
 output SERVICE_HUB_NAME string = hub.outputs.SERVICE_HUB_NAME
