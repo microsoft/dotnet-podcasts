@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: dotnet-podcasts
+metadata:
+  template: dotnet-podcasts@0.0.1-beta
+services:
+  web:
+    project: ./
+    docker:
+      path: ./src/Web/Server/Dockerfile
+      context: .
+      platform: amd64
+    language: csharp
+    host: containerapp
+  hub:
+    project: ./
+    docker:
+      path: ./src/Services/ListenTogether/ListenTogether.Hub/Dockerfile
+      context: .
+      platform: amd64
+    language: csharp
+    host: containerapp
+  api:
+    project: ./
+    docker:
+      path: ./src/Services/Podcasts/Podcast.API/Dockerfile
+      context: .
+      platform: amd64
+    language: csharp
+    host: containerapp
+  ingestion:
+    project: ./
+    docker:
+      path: ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile
+      context: .
+      platform: amd64
+    language: csharp
+    host: containerapp
+  updater:
+    project: ./
+    docker:
+      path: ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile
+      context: .
+      platform: amd64
+    language: csharp
+    host: containerapp

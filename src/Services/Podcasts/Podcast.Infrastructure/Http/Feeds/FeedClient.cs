@@ -25,7 +25,7 @@ public class FeedClient : IFeedClient
     {
         await using var feedContent = await _httpClient.GetStreamAsync(feed.Url, cancellationToken);
         var rss = (Rss)XmlSerializer.Deserialize(feedContent)!;
-        var imagesStorage = _configuration["Storage:Images"];
+        var imagesStorage = _configuration["REACT_STORAGE_IMAGES"];
         var updatedShow = Mapper.Map(rss, imagesStorage);
         return updatedShow;
     }

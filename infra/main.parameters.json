@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "sqlAdminPassword": {
+      "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} sqlAdminPassword)"
+    },
+    "appUserPassword": {
+      "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} appUserPassword)"
+    },
+    "apiImageName": {
+      "value": "${SERVICE_API_IMAGE_NAME}"
+    },
+    "hubImageName": {
+      "value": "${SERVICE_HUB_IMAGE_NAME}"
+    },
+    "ingestionImageName": {
+      "value": "${SERVICE_INGESTION_IMAGE_NAME}"
+    },
+    "updaterImageName": {
+      "value": "${SERVICE_UPDATER_IMAGE_NAME}"
+    },
+    "webImageName": {
+      "value": "${SERVICE_WEB_IMAGE_NAME}"
+    }
+  }
+}
