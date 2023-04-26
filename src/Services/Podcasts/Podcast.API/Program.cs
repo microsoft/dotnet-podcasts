@@ -154,6 +154,7 @@ var shows = app.MapGroup("/shows");
 var categories = app.MapGroup("/categories");
 var episodes = app.MapGroup("/episodes");
 var feeds = app.MapGroup("/feeds");
+var instruments = app.MapGroup("/instruments");
 
 shows
     .MapShowsApi()
@@ -169,6 +170,12 @@ categories
 
 episodes
     .MapEpisodesApi()
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(1.0)
+    .MapToApiVersion(2.0);
+
+instruments
+    .MapInstrumentsApi()
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0)
     .MapToApiVersion(2.0);
