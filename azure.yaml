@@ -44,3 +44,5 @@ services:
       platform: amd64
     language: csharp
     host: containerapp
+infra:
+  scope: resourcegroup
