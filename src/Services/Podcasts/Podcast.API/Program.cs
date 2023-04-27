@@ -17,8 +17,6 @@ using Podcast.Infrastructure.Http.Feeds;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Identity.Web;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Database and storage related-services
