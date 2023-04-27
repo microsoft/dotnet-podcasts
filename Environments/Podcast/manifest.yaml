@@ -1,0 +1,6 @@
+name: Podcast
+version: 1.0.0
+summary: Podcast App environment
+description: Deploys the dotnet podcast environment
+runner: ARM
+templatePath: azuredeploy.json

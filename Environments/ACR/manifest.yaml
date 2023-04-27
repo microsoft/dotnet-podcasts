@@ -1,0 +1,6 @@
+name: ACR
+version: 1.0.0
+summary: Azure Container Registry
+description: Deploys a new Azure Container Registry
+runner: ARM
+templatePath: azuredeploy.json

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.12.1.58429",
+      "templateHash": "4641755978273797669"
+    }
+  },
+  "parameters": {
+    "name": {
+      "type": "string",
+      "maxLength": 50,
+      "minLength": 5,
+      "metadata": {
+        "description": "Name of the azure container registry (must be globally unique)"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "acrAdminUserEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable an admin user that has push/pull permission to the registry."
+      }
+    },
+    "acrSku": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "metadata": {
+        "description": "Tier of your Azure Container Registry."
+      }
+    }
+  },
+  "variables": {
+    "nameClean": "[replace(replace(replace(toLower(trim(parameters('name'))), ' ', ''), '-', ''), '_', '')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2021-09-01",
+      "name": "[variables('nameClean')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "Container Registry",
+        "container.registry": "[variables('nameClean')]"
+      },
+      "sku": {
+        "name": "[parameters('acrSku')]"
+      },
+      "properties": {
+        "adminUserEnabled": "[parameters('acrAdminUserEnabled')]"
+      }
+    }
+  ],
+  "outputs": {
+    "acrLoginServer": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', variables('nameClean')), '2021-09-01').loginServer]"
+    }
+  }
+}
