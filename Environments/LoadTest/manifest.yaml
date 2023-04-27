@@ -1,0 +1,19 @@
+name: LoadTest
+version: 1.0.0
+summary: Load test service
+description: Deploys the load test service
+runner: ARM
+templatePath: azuredeploy.json
+
+parameters:
+  - id: name
+    name: Name
+    description: 'Name of the Load Test service'
+    type: string
+    required: true
+
+  - id: location
+    name: Location
+    description: 'Location of the Load Test service'
+    type: string
+    required: false
