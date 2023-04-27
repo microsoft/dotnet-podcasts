@@ -46,7 +46,7 @@ jobs:
               --name ${{ env.ENVIRONMENT_NAME }} --environment-type ${{ env.ENVIRONMENT_TYPE }} \
               --dev-center ${{ vars.AZURE_DEVCENTER }} --project ${{ vars.AZURE_PROJECT }} \
               --catalog-name ${{ vars.AZURE_CATALOG }} --catalog-item-name ${{ vars.AZURE_CATALOG_ITEM }} \
-              --parameters '{ "name": "${{ env.ENVIRONMENT_NAME }}" }' --only-show-errors
+              --only-show-errors
 
       - name: Get Resource Group
         shell: bash {0}
