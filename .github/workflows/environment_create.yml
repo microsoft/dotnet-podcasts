@@ -76,7 +76,7 @@ jobs:
         run: azd env set AZURE_RESOURCE_GROUP ${{ env.ENVIRONMENT_RESOURCE_GROUP }}
 
       - name: azd provision
-        run: azd provison
+        run: azd provision
 
       - name: azd deploy
         run: azd deploy
