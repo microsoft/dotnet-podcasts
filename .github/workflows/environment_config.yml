@@ -1,0 +1,75 @@
+# This workflow is called by other workflows It is used to:
+#  1. Create a consistant name for the deployment environment
+#  2. Determine the environment type for the environment
+
+name: Configuration
+
+on:
+  workflow_call:
+    # Map the workflow outputs to job outputs
+    outputs:
+      name:
+        description: 'The name of the environment'
+        value: ${{ jobs.env_config.outputs.name }}
+      type:
+        description: 'The type of the environment'
+        value: ${{ jobs.env_config.outputs.type }}
+
+env:
+  # format: ci-[branch|pr]-[branch name|pr number]-suffexe
+  ENVIRONMENT_NAME: ci-${{ github.event_name == 'pull_request' && 'pr' || 'branch' }}-${{ github.event_name == 'pull_request' && github.event.number || github.event_name == 'push' && github.ref_name || github.event.ref }}-${{ github.event.repository.id }}
+
+  # branch/Pull request | Environment Type
+  # --------------------------------------
+  # feature branches    | Dev
+  # PR feature -> main  | Test
+  # main branch         | Prod
+  ENVIRONMENT_TYPE: ${{ github.event_name == 'push' && (github.event.ref == 'refs/heads/main' && 'Prod' || 'Dev') || github.event_name == 'pull_request' && (github.event.pull_request.base.ref == 'main' && 'Test') || 'Dev' }}
+
+jobs:
+  env_config:
+    name: Resolve Configuration
+    runs-on: ubuntu-latest
+
+    # Map the job outputs to step outputs
+    outputs:
+      name: ${{ steps.get_config.outputs.name }}
+      type: ${{ steps.get_config.outputs.type }}
+
+    steps:
+      - name: Validate
+        shell: python
+        run: |
+          import os
+
+          environment_type = '${{ env.ENVIRONMENT_TYPE }}'
+
+          if environment_type not in ['Dev', 'Test', 'Prod']:
+              print(f'::error title=Invalid environment type: {environment_type}::Please set the environment to one of Dev, Test, or Prod.')
+              exit(1)
+
+          required_vars = {
+              'AZURE_PROJECT': 'the name of your dev center project',
+              'AZURE_DEVCENTER': 'the name of your dev center',
+              'AZURE_CATALOG': 'a value of: Environments',
+              'AZURE_CATALOG_ITEM': 'a value of: FunctionApp',
+              'AZURE_TENANT_ID': 'your Azure tenant Id (GUID)',
+              'AZURE_SUBSCRIPTION_ID': 'your Azure subscription Id (GUID)'
+          }
+
+          try:
+              variables = ${{ toJson( vars ) }}
+          except NameError:
+              print(f'::error title=Missing required repository variables::Please see README.md for required variables.')
+              exit(1)
+
+          for k, v in required_vars.items():
+              if k not in variables:
+                  print(f'::error title=Missing required repository variable: {k}::Please create a new repository variable named {k} with {v}. https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-a-repository')
+                  exit(1)
+
+      - id: get_config
+        name: Set Outputs
+        run: |
+          echo "name=$ENVIRONMENT_NAME" >> $GITHUB_OUTPUT
+          echo "type=$ENVIRONMENT_TYPE" >> $GITHUB_OUTPUT

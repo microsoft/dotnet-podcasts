@@ -1,0 +1,82 @@
+name: Create Environment
+
+on:
+  create:
+  pull_request:
+    types: [opened, reopened]
+
+concurrency: ${{ github.event.number || github.ref_name }}
+
+jobs:
+  config:
+    if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
+    name: Get Configuration
+    uses: ./.github/workflows/environment_config.yml
+
+  create_env:
+    if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
+    name: Create ${{ needs.config.outputs.type }} Environment
+    runs-on: ubuntu-latest
+
+    needs: config
+    environment: ${{ needs.config.outputs.type }}
+
+    env:
+      ENVIRONMENT_NAME: ${{ needs.config.outputs.name }}
+      ENVIRONMENT_TYPE: ${{ needs.config.outputs.type }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Azure CLI login
+        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ vars.AZURE_TENANT_ID }}
+
+      - name: Install DevCenter CLI Extension
+        run: az extension add --name devcenter --upgrade
+
+      - name: Install Azure Developer CLI (azd)
+        run: curl -fsSL https://azuresdkreleasepreview.blob.core.windows.net/azd/standalone/pr/2021/install-azd.sh | bash -s -- --base-url https://azuresdkreleasepreview.blob.core.windows.net/azd/standalone/pr/2021 --version '' --verbose --skip-verify
+
+      - name: Azure Developer CLI login
+        run: azd auth login --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }} --tenant-id ${{ vars.AZURE_TENANT_ID }}
+
+      - name: Create Environment
+        run: |
+          az devcenter dev environment create \
+              --name ${{ env.ENVIRONMENT_NAME }} --environment-type ${{ env.ENVIRONMENT_TYPE }} \
+              --dev-center ${{ vars.AZURE_DEVCENTER }} --project ${{ vars.AZURE_PROJECT }} \
+              --catalog-name ${{ vars.AZURE_CATALOG }} --catalog-item-name ${{ vars.AZURE_CATALOG_ITEM }} \
+              --parameters '{ "name": "${{ env.ENVIRONMENT_NAME }}" }' --only-show-errors
+
+      - name: Get Resource Group
+        shell: bash {0}
+        run: |
+          environment_rg=$(az devcenter dev environment show --name ${{ env.ENVIRONMENT_NAME }} \
+              --dev-center ${{ vars.AZURE_DEVCENTER }} --project ${{ vars.AZURE_PROJECT }} \
+              --only-show-errors --query resourceGroupId --output tsv 2>&1)
+
+          if [ $? -ne 0 ]; then
+              echo "::error::az devcenter dev environment show command failed: $environment_rg"; exit 1
+          fi
+
+          environment_group=${environment_rg##*/}
+          environment_sub=${environment_rg%/resourceGroups*}
+          environment_sub=${environment_sub##*/}
+
+          echo "ENVIRONMENT_RESOURCE_GROUP=$environment_group" >> $GITHUB_ENV
+          echo "ENVIRONMENT_SUBSCRIPTION_ID=$environment_sub" >> $GITHUB_ENV
+
+          echo "- [View environment resources in the Azure portal](https://portal.azure.com/#@${{ vars.AZURE_TENANT_ID }}/resource$environment_rg)" >> $GITHUB_STEP_SUMMARY
+
+      - name: azd init
+        # TODO: LOCATION
+        run: azd init --location eastus --subscription ${{ env.ENVIRONMENT_SUBSCRIPTION_ID }} --environment ${{ env.ENVIRONMENT_NAME }}
+
+      - name: azd env set AZURE_RESOURCE_GROUP
+        run: azd env set AZURE_RESOURCE_GROUP ${{ env.ENVIRONMENT_RESOURCE_GROUP }}
+
+      - name: azd provision
+        run: azd provison
+
+      - name: azd deploy
+        run: azd deploy
