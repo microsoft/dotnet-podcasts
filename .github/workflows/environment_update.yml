@@ -91,17 +91,28 @@ jobs:
           echo "ENVIRONMENT_RESOURCE_GROUP=$environment_group" >> $GITHUB_ENV
           echo "ENVIRONMENT_SUBSCRIPTION_ID=$environment_sub" >> $GITHUB_ENV
 
+          environment_loc=$(az group show --subscription $environment_sub --name $environment_group --query location --output tsv 2>&1)
+
+          if [ $? -ne 0 ]; then
+              echo "::error::az group show command failed: $environment_loc"; exit 1
+          fi
+
+          echo "ENVIRONMENT_LOCATION=$environment_loc" >> $GITHUB_ENV
+
           echo "- [View environment resources in the Azure portal](https://portal.azure.com/#@${{ vars.AZURE_TENANT_ID }}/resource$environment_rg)" >> $GITHUB_STEP_SUMMARY
 
       - name: azd init
-        # TODO: LOCATION
-        run: azd init --location eastus --subscription ${{ env.ENVIRONMENT_SUBSCRIPTION_ID }} --environment ${{ env.ENVIRONMENT_NAME }}
+        run: azd init --location ${{ env.ENVIRONMENT_LOCATION }} --subscription ${{ env.ENVIRONMENT_SUBSCRIPTION_ID }} --environment ${{ env.ENVIRONMENT_NAME }}
 
       - name: azd env set AZURE_RESOURCE_GROUP
         run: azd env set AZURE_RESOURCE_GROUP ${{ env.ENVIRONMENT_RESOURCE_GROUP }}
 
       - name: azd provision
-        run: azd provision
+        run: |
+          azd provision
+
+          web_endpoint=$( azd env get-values -o json | jq -r '.SERVICE_WEB_URI' )
+          echo "- [View the deployed Website]($web_endpoint)" >> $GITHUB_STEP_SUMMARY
 
       - name: azd deploy
         run: azd deploy --all
