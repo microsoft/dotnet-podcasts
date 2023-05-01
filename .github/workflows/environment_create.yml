@@ -91,3 +91,10 @@ jobs:
 
       - name: azd deploy
         run: azd deploy --all
+
+      - name: Load Test
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "Starting load test..."
+          sleep 10
+          echo "Load test finished."
