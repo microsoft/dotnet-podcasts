@@ -70,17 +70,13 @@ jobs:
           azd init --location eastus2 --subscription $ADE_SUBSCRIPTION --environment $ADE_NAME
           azd env set AZURE_RESOURCE_GROUP $ADE_RESOURCE_GROUP
 
-      - name: created
+      - name: AZD Provision
         if: ${{ steps.ade.outputs.created == 'true' }}
-        run: echo "created"
+        run: azd provision
 
-      - name: not created
+      - name: AZD Refresh
         if: ${{ steps.ade.outputs.created == 'false' }}
-        run: echo "not created"
-
-      # - name: AZD Provision
-      #   if: ${{ steps.ade.outputs.created }}
-      #   run: azd provision
+        run: azd env refresh
 
       - name: AZD Get Values
         run: azd env get-values
