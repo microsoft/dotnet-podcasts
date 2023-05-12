@@ -21,7 +21,7 @@ jobs:
 
       - name: ADE Setup
         id: setup
-        uses: colbylwilliams/deployment-environments@main
+        uses: colbylwilliams/deployment-environments@v1
 
   delete:
     if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
@@ -38,6 +38,6 @@ jobs:
         run: az login --service-principal --tenant ${{ vars.AZURE_TENANT_ID }} -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: ADE Create
-        uses: colbylwilliams/deployment-environments@main
+        uses: colbylwilliams/deployment-environments@v1
         with:
           action: delete
