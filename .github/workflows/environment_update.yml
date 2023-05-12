@@ -71,11 +71,11 @@ jobs:
           azd env set AZURE_RESOURCE_GROUP $ADE_RESOURCE_GROUP
 
       - name: created
-        if: ${{ steps.ade.outputs.created }}
+        if: ${{ steps.ade.outputs.created == 'true' }}
         run: echo "created"
 
       - name: not created
-        if: ${{ !steps.ade.outputs.created }}
+        if: ${{ steps.ade.outputs.created == 'false' }}
         run: echo "not created"
 
       # - name: AZD Provision
