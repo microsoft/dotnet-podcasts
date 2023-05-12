@@ -8,93 +8,62 @@ on:
 concurrency: ${{ github.event.number || github.ref_name }}
 
 jobs:
-  config:
+  setup:
     if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
-    name: Get Configuration
-    uses: ./.github/workflows/environment_config.yml
-
-  create_env:
-    if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
-    name: Create ${{ needs.config.outputs.type }} Environment
+    name: Setup
     runs-on: ubuntu-latest
 
-    needs: config
-    environment: ${{ needs.config.outputs.type }}
+    outputs:
+      type: ${{ steps.setup.outputs.type }}
 
-    env:
-      ENVIRONMENT_NAME: ${{ needs.config.outputs.name }}
-      ENVIRONMENT_TYPE: ${{ needs.config.outputs.type }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ADE Setup
+        id: setup
+        uses: colbylwilliams/deployment-environments@v1
+
+  create:
+    if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
+    name: Create ${{ needs.setup.outputs.type }} Environment
+    runs-on: ubuntu-latest
+
+    needs: setup
+    environment: ${{ needs.setup.outputs.type }}
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Azure CLI login
-        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ vars.AZURE_TENANT_ID }}
+        run: az login --service-principal --tenant ${{ vars.AZURE_TENANT_ID }} -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }}
 
-      - name: Install DevCenter CLI Extension
-        run: az extension add --name devcenter --upgrade
+      - name: ADE Create
+        uses: colbylwilliams/deployment-environments@v1
+        with:
+          action: create
 
-      - name: Install Azure Developer CLI (azd)
-        run: curl -fsSL https://azuresdkreleasepreview.blob.core.windows.net/azd/standalone/pr/2021/install-azd.sh | bash -s -- --base-url https://azuresdkreleasepreview.blob.core.windows.net/azd/standalone/pr/2021 --version '' --verbose --skip-verify
+      # - name: AZD Install
+      #   run: curl -fsSL https://aka.ms/install-azd.sh | bash
 
-      - name: Azure Developer CLI login
-        run: azd auth login --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }} --tenant-id ${{ vars.AZURE_TENANT_ID }}
+      # - name: AZD Config
+      #   run: azd config set alpha.resourceGroupDeployments on
 
-      - name: Create Environment
-        run: |
-          az devcenter dev environment create \
-              --name ${{ env.ENVIRONMENT_NAME }} --environment-type ${{ env.ENVIRONMENT_TYPE }} \
-              --dev-center ${{ vars.AZURE_DEVCENTER }} --project ${{ vars.AZURE_PROJECT }} \
-              --catalog-name ${{ vars.AZURE_CATALOG }} --catalog-item-name ${{ vars.AZURE_CATALOG_ITEM }} \
-              --only-show-errors
+      # - name: AZD Login
+      #   run: azd auth login --tenant-id ${{ vars.AZURE_TENANT_ID }} --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }}
 
-      - name: Get Resource Group
-        shell: bash {0}
-        run: |
-          environment_rg=$(az devcenter dev environment show --name ${{ env.ENVIRONMENT_NAME }} \
-              --dev-center ${{ vars.AZURE_DEVCENTER }} --project ${{ vars.AZURE_PROJECT }} \
-              --only-show-errors --query resourceGroupId --output tsv 2>&1)
+      # - name: azd init
+      #   # TODO ADE_REGION
+      #   run: azd init --location eastus2 --subscription $ADE_SUBSCRIPTION --environment $ADE_NAME
 
-          if [ $? -ne 0 ]; then
-              echo "::error::az devcenter dev environment show command failed: $environment_rg"; exit 1
-          fi
+      # - name: azd env set AZURE_RESOURCE_GROUP
+      #   run: azd env set AZURE_RESOURCE_GROUP $ADE_RESOURCE_GROUP
 
-          environment_group=${environment_rg##*/}
-          environment_sub=${environment_rg%/resourceGroups*}
-          environment_sub=${environment_sub##*/}
+      # - name: azd provision
+      #   run: |
+      #     azd provision
 
-          echo "ENVIRONMENT_RESOURCE_GROUP=$environment_group" >> $GITHUB_ENV
-          echo "ENVIRONMENT_SUBSCRIPTION_ID=$environment_sub" >> $GITHUB_ENV
+      #     web_endpoint=$( azd env get-values -o json | jq -r '.SERVICE_WEB_URI' )
+      #     echo "- [View the deployed Website]($web_endpoint)" >> $GITHUB_STEP_SUMMARY
 
-          environment_loc=$(az group show --subscription $environment_sub --name $environment_group --query location --output tsv 2>&1)
-
-          if [ $? -ne 0 ]; then
-              echo "::error::az group show command failed: $environment_loc"; exit 1
-          fi
-
-          echo "ENVIRONMENT_LOCATION=$environment_loc" >> $GITHUB_ENV
-
-          echo "- [View environment resources in the Azure portal](https://portal.azure.com/#@${{ vars.AZURE_TENANT_ID }}/resource$environment_rg)" >> $GITHUB_STEP_SUMMARY
-
-      - name: azd init
-        run: azd init --location ${{ env.ENVIRONMENT_LOCATION }} --subscription ${{ env.ENVIRONMENT_SUBSCRIPTION_ID }} --environment ${{ env.ENVIRONMENT_NAME }}
-
-      - name: azd env set AZURE_RESOURCE_GROUP
-        run: azd env set AZURE_RESOURCE_GROUP ${{ env.ENVIRONMENT_RESOURCE_GROUP }}
-
-      - name: azd provision
-        run: |
-          azd provision
-
-          web_endpoint=$( azd env get-values -o json | jq -r '.SERVICE_WEB_URI' )
-          echo "- [View the deployed Website]($web_endpoint)" >> $GITHUB_STEP_SUMMARY
-
-      - name: azd deploy
-        run: azd deploy --all
-
-      - name: Load Test
-        if: github.event_name == 'pull_request'
-        run: |
-          echo "Starting load test..."
-          sleep 10
-          echo "Load test finished."
+      # - name: azd deploy
+      #   run: azd deploy --all

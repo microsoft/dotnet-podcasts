@@ -24,8 +24,7 @@
     <component type="typeof(HeadOutlet)" render-mode="WebAssemblyPrerendered" />
 </head>
 <body>
-    <script src="_content/Podcast.Pages/js/theme.js"></script>
-    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/Podcast.Pages/js/theme.js"></script>    
 
     @RenderBody()
 
@@ -41,6 +40,7 @@
     </div>
 
     <persist-component-state />
+    <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/Podcast.Pages/js/customEvents.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
