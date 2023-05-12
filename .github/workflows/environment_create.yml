@@ -42,28 +42,23 @@ jobs:
         with:
           action: create
 
-      # - name: AZD Install
-      #   run: curl -fsSL https://aka.ms/install-azd.sh | bash
+      - name: AZD Install
+        run: curl -fsSL https://aka.ms/install-azd.sh | bash
 
-      # - name: AZD Config
-      #   run: azd config set alpha.resourceGroupDeployments on
+      - name: AZD Login
+        run: azd auth login --tenant-id ${{ vars.AZURE_TENANT_ID }} --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }}
 
-      # - name: AZD Login
-      #   run: azd auth login --tenant-id ${{ vars.AZURE_TENANT_ID }} --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }}
+      - name: AZD Init
+        # TODO ADE_REGION
+        run: |
+          azd config set alpha.resourceGroupDeployments on
+          azd init --location eastus2 --subscription $ADE_SUBSCRIPTION --environment $ADE_NAME
+          azd env set AZURE_RESOURCE_GROUP $ADE_RESOURCE_GROUP
 
-      # - name: azd init
-      #   # TODO ADE_REGION
-      #   run: azd init --location eastus2 --subscription $ADE_SUBSCRIPTION --environment $ADE_NAME
+      - name: AZD Provision
+        run: |
+          azd provision
+          azd env get-values
 
-      # - name: azd env set AZURE_RESOURCE_GROUP
-      #   run: azd env set AZURE_RESOURCE_GROUP $ADE_RESOURCE_GROUP
-
-      # - name: azd provision
-      #   run: |
-      #     azd provision
-
-      #     web_endpoint=$( azd env get-values -o json | jq -r '.SERVICE_WEB_URI' )
-      #     echo "- [View the deployed Website]($web_endpoint)" >> $GITHUB_STEP_SUMMARY
-
-      # - name: azd deploy
-      #   run: azd deploy --all
+      - name: AZD Deploy
+        run: azd deploy --all

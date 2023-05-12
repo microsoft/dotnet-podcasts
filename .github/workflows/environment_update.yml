@@ -72,11 +72,15 @@ jobs:
 
       - name: AZD Provision
         if: ${{ steps.ade.outputs.created == 'true' }}
-        run: azd provision
+        run: |
+          azd provision
+          azd env get-values
 
       - name: AZD Refresh
         if: ${{ steps.ade.outputs.created == 'false' }}
-        run: azd env refresh
+        run: |
+          azd env refresh
+          azd env get-values
 
-      - name: AZD Get Values
-        run: azd env get-values
+      - name: AZD Deploy
+        run: azd deploy --all
