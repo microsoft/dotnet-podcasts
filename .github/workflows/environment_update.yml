@@ -2,48 +2,16 @@ name: Update Environment
 
 on:
   push:
-    # paths:
-    #   - 'src/Services/**'
-    #   - 'deploy/Services/**'
-    #   - 'deploy/Services/*.bicep'
-    #   - 'src/Web/**'
-    #   - 'deploy/Web/*.bicep'
-    #   - '.github/workflows/environment_update.yml'
   pull_request:
     types: [synchronize]
-    # paths:
-    #   - 'src/Services/**'
-    #   - 'deploy/Services/**'
-    #   - 'deploy/Services/*.bicep'
-    #   - 'src/Web/**'
-    #   - 'deploy/Web/*.bicep'
-    #   - '.github/workflows/environment_update.yml'
 
 concurrency: ${{ github.event.number || github.ref_name }}
 
 jobs:
-  setup:
-    if: github.event_name == 'pull_request' || (contains(github.event.ref, 'refs/heads') && !github.event.created)
-    name: Setup
-    runs-on: ubuntu-latest
-
-    outputs:
-      type: ${{ steps.setup.outputs.type }}
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: ADE Setup
-        id: setup
-        uses: colbylwilliams/deployment-environments@v1
-
   update:
     if: github.event_name == 'pull_request' || (contains(github.event.ref, 'refs/heads') && !github.event.created)
-    name: Update ${{ needs.setup.outputs.type }} Environment
+    name: Update Environment
     runs-on: ubuntu-latest
-
-    needs: setup
-    environment: ${{ needs.setup.outputs.type }}
 
     steps:
       - uses: actions/checkout@v3
