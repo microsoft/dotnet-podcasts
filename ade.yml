@@ -1,7 +1,8 @@
+suffix: ade
+prod-environment-name: contoso-radio-podcasts
 tenant: 72f988bf-86f1-41af-91ab-2d7cd011db47
 subscription: 090cfcd9-42da-4b2b-a3d3-0fa4b90babf5
 devcenter: Contoso-Radio
 project: Podcast-App
 catalog: Environments
 catalog-item: Podcast
-suffix: bldmos
