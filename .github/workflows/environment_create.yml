@@ -49,7 +49,6 @@ jobs:
         run: azd auth login --tenant-id ${{ vars.AZURE_TENANT_ID }} --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: AZD Init
-        # TODO ADE_REGION
         run: |
           azd config set alpha.resourceGroupDeployments on
           azd init --location eastus2 --subscription $ADE_SUBSCRIPTION --environment $ADE_NAME
