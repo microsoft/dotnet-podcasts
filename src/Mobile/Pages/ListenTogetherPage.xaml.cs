@@ -1,4 +1,5 @@
-﻿
+﻿using CommunityToolkit.Mvvm.Messaging;
+
 namespace Microsoft.NetConf2021.Maui.Pages
 {
     public partial class ListenTogetherPage
@@ -17,7 +18,7 @@ namespace Microsoft.NetConf2021.Maui.Pages
         protected override void OnDisappearing()
         {
             player.OnDisappearing();
-            MessagingCenter.Instance.Send<string>(".NET Pods", "LeaveRoom");
+            WeakReferenceMessenger.Default.Send<string, string>(".NET Pods", "LeaveRoom");
             base.OnDisappearing();
         }
     }

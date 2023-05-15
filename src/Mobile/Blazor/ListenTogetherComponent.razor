@@ -1,5 +1,6 @@
 ﻿@implements IDisposable
 @using Podcast.Components.ListenTogether
+@using CommunityToolkit.Mvvm.Messaging
 @using static Podcast.Components.ListenTogether.ListenTogether
 @inject ThemeInterop ThemeInterop
 @inject PlayerService PlayerService
@@ -22,17 +23,17 @@
 
 	protected override void OnInitialized()
 	{
-		MessagingCenter.Instance.Subscribe<string>(
+		WeakReferenceMessenger.Default.Register<object, string>(
 			".NET Pods",
 			"ChangeWebTheme",
-			async (sender) =>
+			async (_, __) =>
 				{
 					await UpdateWebThemeAsync();
 				});
-		MessagingCenter.Instance.Subscribe<string>(
+		WeakReferenceMessenger.Default.Register<object, string>(
 			".NET Pods",
 			"LeaveRoom",
-			async (sender) =>
+			async (_, __) =>
 				{
 					LeaveRoom();
 					await InvokeAsync(StateHasChanged);
@@ -54,8 +55,8 @@
 	{
 		PlayerService.IsPlayingChanged -= IsLocalPlayingChanged;
 		PlayerService.NewEpisodeAdded -= NewEpisodeAddedToPlayer;
-		MessagingCenter.Instance.Unsubscribe<string>(".NET Pods", "ChangeWebTheme");
-		MessagingCenter.Instance.Unsubscribe<string>(".NET Pods", "LeaveRoom");
+		WeakReferenceMessenger.Default.Unregister<string, string>(".NET Pods", "ChangeWebTheme");
+		WeakReferenceMessenger.Default.Unregister<string, string>(".NET Pods", "LeaveRoom");
 	}
 
 	private void JoinRoom(string roomCode)

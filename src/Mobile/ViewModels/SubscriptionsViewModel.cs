@@ -1,4 +1,6 @@
-﻿namespace Microsoft.NetConf2021.Maui.ViewModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+
+namespace Microsoft.NetConf2021.Maui.ViewModels;
 
 public class SubscriptionsViewModel : BaseViewModel
 {
@@ -59,7 +61,7 @@ public class SubscriptionsViewModel : BaseViewModel
         {
             await subscriptionsService.UnSubscribeFromShowAsync(vm.Show); 
             SubscribedShows.Remove(podcastToRemove);
-            MessagingCenter.Instance.Send<string>(".NET Pods", "UnSubscribe");
+            WeakReferenceMessenger.Default.Send<string, string>(".NET Pods", "UnSubscribe");
         }
     }
 }
