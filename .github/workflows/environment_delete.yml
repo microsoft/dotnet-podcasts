@@ -20,6 +20,6 @@ jobs:
         run: az login --service-principal --tenant ${{ vars.AZURE_TENANT_ID }} -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: ADE Delete
-        uses: colbylwilliams/deployment-environments@v1
+        uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: delete

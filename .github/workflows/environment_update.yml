@@ -21,7 +21,7 @@ jobs:
 
       - name: ADE Update
         id: ade
-        uses: colbylwilliams/deployment-environments@v1
+        uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: ensure
 
