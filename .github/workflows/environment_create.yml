@@ -43,3 +43,6 @@ jobs:
 
       - name: AZD Deploy
         run: azd deploy --all
+
+      - name: AZD Summary
+        run: python3 ./.github/scripts/service_summary.py
