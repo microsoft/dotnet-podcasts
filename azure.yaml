@@ -9,7 +9,6 @@ services:
     docker:
       path: ./src/Web/Server/Dockerfile
       context: .
-      platform: amd64
     language: csharp
     host: containerapp
   hub:
@@ -17,7 +16,6 @@ services:
     docker:
       path: ./src/Services/ListenTogether/ListenTogether.Hub/Dockerfile
       context: .
-      platform: amd64
     language: csharp
     host: containerapp
   api:
@@ -25,7 +23,6 @@ services:
     docker:
       path: ./src/Services/Podcasts/Podcast.API/Dockerfile
       context: .
-      platform: amd64
     language: csharp
     host: containerapp
   ingestion:
@@ -33,7 +30,6 @@ services:
     docker:
       path: ./src/Services/Podcasts/Podcast.Ingestion.Worker/Dockerfile
       context: .
-      platform: amd64
     language: csharp
     host: containerapp
   updater:
@@ -41,7 +37,6 @@ services:
     docker:
       path: ./src/Services/Podcasts/Podcast.Updater.Worker/Dockerfile
       context: .
-      platform: amd64
     language: csharp
     host: containerapp
 infra:
