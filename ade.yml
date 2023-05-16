@@ -6,3 +6,4 @@ devcenter: Contoso-Radio
 project: Podcast-App
 catalog: Environments
 catalog-item: Podcast
+devcenter-extension: 'https://github.com/tbyfield/azure-cli-extensions/raw/main/src/devcenter/azext_devcenter/versions/2023-04-01/devcenter-0.2.0-py3-none-any.whl'
