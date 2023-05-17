@@ -1,4 +1,4 @@
-name: Create Environment
+name: Create Deployment Environment
 
 on:
   create:
@@ -8,10 +8,28 @@ on:
 concurrency: ${{ github.event.number || github.ref_name }}
 
 jobs:
+  setup:
+    if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
+    name: Setup
+    runs-on: ubuntu-latest
+
+    outputs:
+      type: ${{ steps.setup.outputs.type }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ADE Setup
+        id: setup
+        uses: colbylwilliams/deployment-environments@v2-preview
+
   create:
     if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
-    name: Create Environment
+    name: Create Deployment Environment (${{ needs.setup.outputs.type }})
     runs-on: ubuntu-latest
+
+    needs: setup
+    environment: ${{ needs.setup.outputs.type }}
 
     steps:
       - uses: actions/checkout@v3
@@ -20,9 +38,11 @@ jobs:
         run: az login --service-principal --tenant ${{ vars.AZURE_TENANT_ID }} -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: ADE Create
+        id: create
         uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: create
+          summary: true
 
       - name: AZD Install
         run: curl -fsSL https://aka.ms/install-azd.sh | bash
@@ -45,4 +65,21 @@ jobs:
         run: azd deploy --all
 
       - name: AZD Summary
+        id: summary
         run: python3 ./.github/scripts/service_summary.py
+
+      - name: Add Link to Pull Request
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const webUrl = '${{ steps.summary.outputs.web }}'
+            const apiUrl = '${{ steps.summary.outputs.api }}'
+            const portalUrl = '${{ steps.create.outputs.portal-url }}'
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `The source in this Pull Request has been deployed to Azure for review and can be accessed [here](${portalUrl})\n- View the website: ${webUrl}\n- Explore the API: ${apiUrl}`,
+            });

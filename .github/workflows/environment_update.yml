@@ -1,4 +1,4 @@
-name: Update Environment
+name: Update Deployment Environment
 
 on:
   push:
@@ -8,10 +8,28 @@ on:
 concurrency: ${{ github.event.number || github.ref_name }}
 
 jobs:
+  setup:
+    if: github.event_name == 'pull_request' || (contains(github.event.ref, 'refs/heads') && !github.event.created)
+    name: Setup
+    runs-on: ubuntu-latest
+
+    outputs:
+      type: ${{ steps.setup.outputs.type }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ADE Setup
+        id: setup
+        uses: colbylwilliams/deployment-environments@v2-preview
+
   update:
     if: github.event_name == 'pull_request' || (contains(github.event.ref, 'refs/heads') && !github.event.created)
-    name: Update Environment
+    name: Update Deployment Environment (${{ needs.setup.outputs.type }})
     runs-on: ubuntu-latest
+
+    needs: setup
+    environment: ${{ needs.setup.outputs.type }}
 
     steps:
       - uses: actions/checkout@v3
@@ -24,6 +42,7 @@ jobs:
         uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: ensure
+          summary: true
 
       - name: AZD Install
         run: curl -fsSL https://aka.ms/install-azd.sh | bash

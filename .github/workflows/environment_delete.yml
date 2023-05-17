@@ -1,4 +1,4 @@
-name: Delete Environment
+name: Delete Deployment Environment
 
 on:
   delete:
@@ -8,10 +8,28 @@ on:
 concurrency: ${{ github.event.number || github.ref_name }}
 
 jobs:
+  setup:
+    if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
+    name: Setup
+    runs-on: ubuntu-latest
+
+    outputs:
+      type: ${{ steps.setup.outputs.type }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: ADE Setup
+        id: setup
+        uses: colbylwilliams/deployment-environments@v2-preview
+
   delete:
     if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
-    name: Delete Environment
+    name: Delete Deployment Environment (${{ needs.setup.outputs.type }})
     runs-on: ubuntu-latest
+
+    needs: setup
+    environment: ${{ needs.setup.outputs.type }}
 
     steps:
       - uses: actions/checkout@v3
@@ -23,3 +41,4 @@ jobs:
         uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: delete
+          summary: true
