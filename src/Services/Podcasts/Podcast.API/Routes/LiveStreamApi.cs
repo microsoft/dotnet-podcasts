@@ -1,17 +1,17 @@
-﻿using Podcast.Infrastructure.Http;
+using Podcast.Infrastructure.Http;
 
 namespace Podcast.API.Routes;
 
-public static class ShowsApi
+public static class LiveStreamApi
 {
-    public static RouteGroupBuilder MapShowsApi(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapLiveStreamApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/", GetAllShows).WithName("GetShows");
-        group.MapGet("/{id}", GetShowById).WithName("GetShowsById");
+        group.MapGet("/", GetAllLiveStreams).WithName("GetLiveStreams");
+        group.MapGet("/{id}", GetLiveStreamById).WithName("GetLiveStreamsById");
         return group;
     }
 
-    public static async ValueTask<Ok<List<ShowDto>>> GetAllShows(int limit, string? term, Guid? categoryId, CancellationToken cancellationToken, PodcastDbContext podcastDbContext, ShowClient showClient)
+    public static async ValueTask<Ok<List<ShowDto>>> GetAllLiveStreams(int limit, string? term, Guid? categoryId, CancellationToken cancellationToken, PodcastDbContext podcastDbContext, ShowClient showClient)
     {
         var showsQuery = podcastDbContext.Shows.Include(show => show.Feed!.Categories)
         .ThenInclude(x => x.Category)
@@ -35,7 +35,7 @@ public static class ShowsApi
     }
 
 
-    public static async ValueTask<Results<NotFound, Ok<ShowDto>>> GetShowById(PodcastDbContext podcastDbContext, Guid id, CancellationToken cancellationToken)
+    public static async ValueTask<Results<NotFound, Ok<ShowDto>>> GetLiveStreamById(PodcastDbContext podcastDbContext, Guid id, CancellationToken cancellationToken)
     {
         var show = await podcastDbContext.Shows
             .Include(show => show.Episodes.OrderByDescending(episode => episode.Published))
