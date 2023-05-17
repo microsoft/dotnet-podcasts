@@ -39,5 +39,3 @@ services:
       context: .
     language: csharp
     host: containerapp
-infra:
-  scope: resourcegroup
