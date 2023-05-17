@@ -41,4 +41,4 @@ jobs:
         uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: delete
-          summary: true
+          summary: 'true'
