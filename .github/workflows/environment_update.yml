@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Echo concurrency
+      - name: concurrency ${{ github.ref }}
         run: echo ${{ github.ref }}
 
       - name: Setup Deployment Environment
