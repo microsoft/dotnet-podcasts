@@ -40,3 +40,4 @@ services:
     language: csharp
     host: containerapp
 
+
