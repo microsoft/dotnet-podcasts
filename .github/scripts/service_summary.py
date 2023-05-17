@@ -65,9 +65,15 @@ def get_row(envs, service):
         url = f'[visit {service}]({url})'
 
     row.append(url)
+
+    # portal = os.environ.get('ADE_PORTAL_URL', None)
+
     img = envs.get(f'SERVICE_{service.upper()}_IMAGE_NAME', '')
-    img_name = img.removeprefix(img_prefix)
+    img_name = img.removeprefix(img_prefix).split(':')[0]
+    img_tag = img.removeprefix(img_prefix).split(':')[1].removeprefix('azd-deploy-')
+
     row.append(f'[{img_name}]({img})')
+    row.append(f'[{img_tag}]({img})')
 
     return row
 
@@ -80,7 +86,7 @@ def get_table():
     envs = json.loads(env.stdout)
 
     services = ['web', 'api', 'hub', 'ingestion', 'updater']
-    table = [['Service', 'Name', 'Url', 'Image'], ['-' * 10, '-' * 28, '-' * 105, '-' * 46]]
+    table = [['Service', 'Name', 'Url', 'Image', 'Tag'], ['-' * 10, '-' * 28, '-' * 105, '-' * 113, '-' * 101]]
 
     for service in services:
         table.append(get_row(envs, service))
@@ -95,6 +101,6 @@ if portal_url := os.environ.get('ADE_PORTAL_URL', None):
 
 table = get_table()
 
-write_summary('\n#### Services\n')
+write_summary('\n#### Services Deployed:\n')
 
-write_summary(['| {: <10} | {: <28} | {: <105} | {: <46} |'.format(*row) for row in table])
+write_summary(['| {: <10} | {: <28} | {: <105} | {: <113} | {: <101} |'.format(*row) for row in table])

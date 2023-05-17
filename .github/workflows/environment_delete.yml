@@ -10,7 +10,7 @@ concurrency: ${{ github.event.number || github.ref_name }}
 jobs:
   setup:
     if: github.event_name == 'pull_request' || github.event.ref_type == 'branch'
-    name: Setup
+    name: Setup Deployment Environment
     runs-on: ubuntu-latest
 
     outputs:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: ADE Setup
+      - name: Setup Deployment Environment
         id: setup
         uses: colbylwilliams/deployment-environments@v2-preview
 
@@ -37,7 +37,7 @@ jobs:
       - name: Azure CLI login
         run: az login --service-principal --tenant ${{ vars.AZURE_TENANT_ID }} -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }}
 
-      - name: ADE Delete
+      - name: Delete Deployment Environment
         uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: delete
