@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [opened, reopened]
 
-concurrency: ${{ github.event.number || github.ref_name }}
+# concurrency: ${{ github.event.number || github.ref_name }}
 
 jobs:
   setup:
@@ -15,6 +15,7 @@ jobs:
 
     outputs:
       type: ${{ steps.setup.outputs.type }}
+      name: ${{ steps.setup.outputs.type }}
 
     steps:
       - uses: actions/checkout@v3
@@ -30,6 +31,8 @@ jobs:
 
     needs: setup
     environment: ${{ needs.setup.outputs.type }}
+
+    concurrency: ${{ needs.setup.outputs.name }}
 
     steps:
       - uses: actions/checkout@v3
