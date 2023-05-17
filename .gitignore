@@ -357,3 +357,4 @@ src/Web/E2E/playwright/.cache/
 
 .local
 trystuff.sh
+.vscode/settings.json
