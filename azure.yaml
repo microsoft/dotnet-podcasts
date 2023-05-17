@@ -39,3 +39,5 @@ services:
       context: .
     language: csharp
     host: containerapp
+
+
