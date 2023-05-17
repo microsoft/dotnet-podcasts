@@ -42,7 +42,7 @@ jobs:
         uses: colbylwilliams/deployment-environments@v2-preview
         with:
           action: ensure
-          summary: 'true'
+          summary: true
 
       - name: AZD Install
         run: curl -fsSL https://aka.ms/install-azd.sh | bash
