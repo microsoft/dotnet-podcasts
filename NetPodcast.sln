@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Podcast.Ingestion.Worker", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actions", "Actions", "{1B0A13EE-F8DB-4734-ACE6-FD5EB19BA5D3}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\podcast-api.yml = .github\workflows\podcast-api.yml
-		.github\workflows\podcast-hub.yml = .github\workflows\podcast-hub.yml
-		.github\workflows\podcast-web.yml = .github\workflows\podcast-web.yml
+		.github\workflows\environment_create.yml = .github\workflows\environment_create.yml
+		.github\workflows\environment_delete.yml = .github\workflows\environment_delete.yml
+		.github\workflows\environment_update.yml = .github\workflows\environment_update.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{CE88241B-B740-4E6A-9D73-7C0B9F7CC069}"
