@@ -4,16 +4,11 @@ using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
 using Azure.Monitor.OpenTelemetry.Exporter;
-using Azure.Storage.Queues;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Podcast.API.Routes;
-using Podcast.Infrastructure.Data;
 using Podcast.Infrastructure.Http;
-using Podcast.Infrastructure.Http.Feeds;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Identity.Web;
 
@@ -156,6 +151,7 @@ var shows = app.MapGroup("/shows");
 var categories = app.MapGroup("/categories");
 var episodes = app.MapGroup("/episodes");
 var feeds = app.MapGroup("/feeds");
+var liveStreams = app.MapGroup("/livestreams");
 
 shows
     .MapShowsApi()
@@ -171,6 +167,12 @@ categories
 
 episodes
     .MapEpisodesApi()
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(1.0)
+    .MapToApiVersion(2.0);
+
+liveStreams
+    .MapLiveStreamApi()
     .WithApiVersionSet(versionSet)
     .MapToApiVersion(1.0)
     .MapToApiVersion(2.0);
