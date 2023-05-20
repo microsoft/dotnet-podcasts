@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Podcast.Infrastructure.Data.Models;
+﻿using Podcast.Infrastructure.Data.Models;
 
 namespace Podcast.API.Models;
 
@@ -19,6 +16,7 @@ public record ShowDto
         Email = show.Email;
         Language = show.Language;
         IsFeatured = show.Feed!.IsFeatured;
+        IsLiveStreamed = show.Link?.Contains("youtube.com") ?? false;
         Categories = show.Feed.Categories
             .Select(category => new CategoryDto(category.Category!.Id, category.Category.Genre)).ToList();
         Episodes = show.Episodes.Select(episode =>
@@ -36,6 +34,7 @@ public record ShowDto
     public string Email { get; }
     public string Language { get; }
     public bool IsFeatured { get; set; }
+    public bool IsLiveStreamed { get; set; }
     public List<CategoryDto> Categories { get; }
     public List<EpisodeDetailDto> Episodes { get; set; }
 
