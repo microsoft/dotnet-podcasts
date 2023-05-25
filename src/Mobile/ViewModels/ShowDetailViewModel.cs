@@ -1,4 +1,5 @@
-﻿using Microsoft.NetConf2021.Maui.Resources.Strings;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.NetConf2021.Maui.Resources.Strings;
 
 namespace Microsoft.NetConf2021.Maui.ViewModels
 {
@@ -72,7 +73,7 @@ namespace Microsoft.NetConf2021.Maui.ViewModels
             subscriptionsService = subs;
             listenLaterService = later;
 
-            MessagingCenter.Instance.Subscribe<string>(".NET Pods", "UnSubscribe", async (sender) =>
+            WeakReferenceMessenger.Default.Register<string, string>(".NET Pods", "UnSubscribe", async (_, __) =>
             {
                 await Show.InitializeAsync();
 
