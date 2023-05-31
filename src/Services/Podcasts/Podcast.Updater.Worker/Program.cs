@@ -1,9 +1,8 @@
 using Podcast.Updater.Worker;
 
-var host = Host.CreateDefaultBuilder(args)
+using var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
-        services.AddHostedService<Worker>();
         services
             .AddDbContext<PodcastDbContext>(options =>
             {
@@ -23,4 +22,15 @@ var host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
+await UpdatePodcasts(host.Services);
+
 await host.RunAsync();
+
+static async Task UpdatePodcasts(IServiceProvider hostProvider)
+{
+
+    using var scope = hostProvider.CreateScope();
+
+    var handler = scope.ServiceProvider.GetRequiredService<IPodcastUpdateHandler>();
+    await handler.HandleUpdateAsync();
+}
