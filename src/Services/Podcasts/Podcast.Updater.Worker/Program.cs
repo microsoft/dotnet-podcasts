@@ -28,9 +28,7 @@ await host.RunAsync();
 
 static async Task UpdatePodcasts(IServiceProvider hostProvider)
 {
-
     using var scope = hostProvider.CreateScope();
-
     var handler = scope.ServiceProvider.GetRequiredService<IPodcastUpdateHandler>();
     await handler.HandleUpdateAsync();
 }
