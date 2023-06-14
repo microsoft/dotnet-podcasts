@@ -25,7 +25,7 @@ jobs:
 
       - name: Setup Deployment Environment
         id: setup
-        uses: colbylwilliams/deployment-environments@v2-preview
+        uses: colbylwilliams/deployment-environments@v1
 
   update:
     if: github.event_name == 'pull_request' || (contains(github.event.ref, 'refs/heads') && !github.event.created)
@@ -43,7 +43,7 @@ jobs:
 
       - name: Update Deployment Environment
         id: ade
-        uses: colbylwilliams/deployment-environments@v2-preview
+        uses: colbylwilliams/deployment-environments@v1
         with:
           action: ensure
           summary: true
