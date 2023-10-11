@@ -80,19 +80,18 @@ var enableMonitor = !string.IsNullOrWhiteSpace(azureMonitorConnectionString);
 if (enableMonitor)
 {
 
-    builder.Services.AddOpenTelemetryTracing(tracing =>
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(tracing =>
         tracing.SetResourceBuilder(serviceResource)
         .AddAzureMonitorTraceExporter(o =>
         {
             o.ConnectionString = azureMonitorConnectionString;
         })
-        .AddJaegerExporter()
+        .AddOtlpExporter()
         .AddHttpClientInstrumentation()
         .AddAspNetCoreInstrumentation()
         .AddEntityFrameworkCoreInstrumentation()
-    );
-
-    builder.Services.AddOpenTelemetryMetrics(metrics =>
+    ).WithMetrics(metrics =>
     {
         metrics
         .SetResourceBuilder(serviceResource)

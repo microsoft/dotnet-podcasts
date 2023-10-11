@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -15,13 +15,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-    <PackageReference Include="Azure.Storage.Queues" Version="12.11.0" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.16.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.*" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.*" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.*" />
     <PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.*" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
   </ItemGroup>
 
   <ItemGroup>
