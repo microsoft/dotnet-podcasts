@@ -34,7 +34,7 @@ In the `appsettings.json` (or the file for your environment, such as `appsetting
   "ConnectionStrings": {
     "PodcastDb": "Server=localhost, 5433;Database=Podcast;User Id=sa;Password=Pass@word;Encrypt=False",
     "FeedQueue": "UseDevelopmentStorage=true",
-    "AzureMonitor": "InstrumentationKey=XXXXXXXXXX;IngestionEndpoint=https://centralus-0.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/"
+    "AzureMonitor": "InstrumentationKey=XXXXXXXXXX;IngestionEndpoint=XXXXX/;LiveEndpoint=XXXXX"
   }
 }
 ```
