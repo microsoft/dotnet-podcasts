@@ -50,6 +50,12 @@ Run the following command to ensure the following dependencies
 az provider register --namespace Microsoft.ContainerRegistry
 ```
 
+and
+
+```console
+az provider register --namespace Microsoft.Storage
+```
+
 and also Microsoft.App
 
 ```console
