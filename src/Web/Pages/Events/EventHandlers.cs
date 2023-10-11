@@ -6,7 +6,7 @@ namespace Podcast.Pages.Events;
     enableStopPropagation: true, enablePreventDefault: true)]
 [EventHandler("oncustomtimeupdate", typeof(TimeUpdateEventArgs),
     enableStopPropagation: true, enablePreventDefault: true)]
-[EventHandler("playbackratechange", typeof(TimeUpdateEventArgs),
+[EventHandler("playbackratechange", typeof(PlaybackRateChangeEventArgs),
     enableStopPropagation: true, enablePreventDefault: true)]
 public static class EventHandlers
 {
