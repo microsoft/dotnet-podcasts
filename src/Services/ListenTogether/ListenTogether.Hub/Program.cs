@@ -1,3 +1,4 @@
+using Azure.Identity;
 using ListenTogether.Application;
 using ListenTogether.Hub;
 using ListenTogether.Infrastructure;
@@ -5,6 +6,8 @@ using ListenTogether.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var credential = new ChainedTokenCredential(new AzureDeveloperCliCredential(), new DefaultAzureCredential());
+builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"]), credential);
 builder.AddOrleans();
 
 var serviceCollection = builder.Services;

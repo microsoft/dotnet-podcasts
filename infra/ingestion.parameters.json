@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "name": {
+      "value": "${SERVICE_INGESTION_NAME}"
+    },
+    "imageName": {
+      "value": "${SERVICE_INGESTION_IMAGE_NAME}"
+    },
+    "applicationInsightsName": {
+      "value": "${APPLICATIONINSIGHTS_NAME}"
+    },
+    "containerAppsEnvironmentName": {
+      "value": "${AZURE_CONTAINER_ENVIRONMENT_NAME}"
+    },
+    "containerRegistryName": {
+      "value": "${AZURE_CONTAINER_REGISTRY_NAME}"
+    },
+    "keyVaultName": {
+      "value": "${AZURE_KEY_VAULT_NAME}"
+    },
+    "feedQueueConnectionStringKey" :{
+      "value": "${AZURE_FEED_QUEUE_CONNECTION_STRING_KEY}"
+    },
+    "dbConnectionStringKey": {
+      "value": "${AZURE_API_SQL_CONNECTION_STRING_KEY}"
+    },
+    "keyVaultEndpoint": {
+      "value": "${AZURE_KEY_VAULT_ENDPOINT}"
+    },
+    "applicationInsightsConnectionString": {
+      "value": "${APPLICATIONINSIGHTS_CONNECTION_STRING}"
+    }
+  }
+}

@@ -11,7 +11,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient<PodcastService>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["PodcastApi:BaseAddress"]!);
+    client.BaseAddress = new Uri(builder.Configuration["REACT_APP_API_BASE_URL"]!);
     client.DefaultRequestHeaders.Add("api-supported-versions", "1.0,2.0");
 });
 builder.Services.AddScoped<ThemeInterop>();
@@ -22,7 +22,7 @@ builder.Services.AddScoped<SubscriptionsService>();
 builder.Services.AddScoped<ListenLaterService>();
 builder.Services.AddSingleton<PlayerService>();
 builder.Services.AddScoped<ListenTogetherHubClient>(_ =>
-    new ListenTogetherHubClient(builder.Configuration["ListenTogetherHub"]!));
+    new ListenTogetherHubClient(builder.Configuration["REACT_LISTEN_TOGETHER_HUB"]!));
 
 var app = builder.Build();
 

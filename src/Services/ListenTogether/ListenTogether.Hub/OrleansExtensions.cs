@@ -1,4 +1,5 @@
-﻿using Orleans;
+﻿using Azure.Identity;
+using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 
@@ -8,9 +9,11 @@ namespace ListenTogether.Hub
     {
         public static WebApplicationBuilder AddOrleans(this WebApplicationBuilder builder)
         {
+            var credential = new ChainedTokenCredential(new AzureDeveloperCliCredential(), new DefaultAzureCredential());
+            builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"]), credential);
             builder.Host.UseOrleans(silo =>
              {
-                 var connectionString = builder.Configuration.GetConnectionString("OrleansStorage");
+                var connectionString = builder.Configuration[builder.Configuration["AZURE_ORLEANS_STORAGE_CONNECTION_STRING_KEY"]];
                  silo
                     .Configure<ClusterOptions>(options =>
                      {
