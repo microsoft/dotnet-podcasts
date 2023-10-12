@@ -10,16 +10,17 @@ public static class ServicesExtensions
         builder.Services.AddSingleton<SubscriptionsService>();
         builder.Services.AddSingleton<ShowsService>();
         builder.Services.AddSingleton<ListenLaterService>();
-#if WINDOWS
-        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Windows.NativeAudioService>();
-#elif ANDROID
-        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Android.NativeAudioService>();
-#elif MACCATALYST
-        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.MacCatalyst.NativeAudioService>();
-        builder.Services.TryAddSingleton< Platforms.MacCatalyst.ConnectivityService>();
-#elif IOS
-        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.iOS.NativeAudioService>();
-#endif
+        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.MediaElementAudioService>();
+//#if WINDOWS
+//        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Windows.NativeAudioService>();
+//#elif ANDROID
+//        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.Android.NativeAudioService>();
+//#elif MACCATALYST
+//        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.MacCatalyst.NativeAudioService>();
+//        builder.Services.TryAddSingleton< Platforms.MacCatalyst.ConnectivityService>();
+//#elif IOS
+//        builder.Services.TryAddSingleton<SharedMauiLib.INativeAudioService, SharedMauiLib.Platforms.iOS.NativeAudioService>();
+//#endif
 
         builder.Services.TryAddTransient<WifiOptionsService>();
         builder.Services.TryAddSingleton<PlayerService>();

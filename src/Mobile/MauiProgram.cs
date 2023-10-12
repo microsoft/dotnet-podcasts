@@ -1,4 +1,5 @@
-﻿using MonkeyCache.FileStore;
+﻿using CommunityToolkit.Maui;
+using MonkeyCache.FileStore;
 
 namespace Microsoft.NetConf2021.Maui;
 
@@ -9,6 +10,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkitMediaElement()
             .ConfigureEssentials()
             .ConfigureServices()
             .ConfigurePages()
