@@ -274,6 +274,14 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   properties: {
     managedEnvironmentId: kubernetesEnvId
     configuration: {
+      scheduleTriggerConfig: {
+        cronExpression: "0 0 * * *",
+        parallelism: 1,
+        replicaCompletionCount: 1
+      },
+      replicaRetryLimit: 1,
+      replicaTimeout: 60,
+      triggerType: "Schedule"
       dapr: {
         enabled: false
       }
@@ -317,10 +325,6 @@ resource updaterContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
           ]
         }
       ]
-      scale: {
-        minReplicas: 0
-        maxReplicas: 1
-      }
     }
   }
   dependsOn: [

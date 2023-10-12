@@ -2,7 +2,7 @@
 
 public interface IPodcastUpdateHandler
 {
-    Task HandleUpdateAsync(CancellationToken cancellationToken);
+    Task HandleUpdateAsync();
 }
 
 public class PodcastUpdateHandler : IPodcastUpdateHandler
@@ -19,9 +19,9 @@ public class PodcastUpdateHandler : IPodcastUpdateHandler
         _feedClient = feedClient;
     }
 
-    public async Task HandleUpdateAsync(CancellationToken cancellationToken)
+    public async Task HandleUpdateAsync()
     {
-        var feeds = await _podcastDbContext.Feeds.Include(x => x.Show!.Episodes).ToListAsync(cancellationToken);
+        var feeds = await _podcastDbContext.Feeds.Include(x => x.Show!.Episodes).ToListAsync();
 
         foreach (var feed in feeds)
         {
@@ -29,7 +29,7 @@ public class PodcastUpdateHandler : IPodcastUpdateHandler
 
             try
             {
-                var show = await _feedClient.GetShowAsync(feed, cancellationToken);
+                var show = await _feedClient.GetShowAsync(feed);
 
                 if (!show.Episodes.Any()) continue;
 
@@ -43,7 +43,7 @@ public class PodcastUpdateHandler : IPodcastUpdateHandler
                     newEpisodes.ToList().ForEach(episode => feed.Show.Episodes.Add(episode));
                 }
 
-                await _podcastDbContext.SaveChangesAsync(cancellationToken);
+                await _podcastDbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
