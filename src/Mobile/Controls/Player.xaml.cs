@@ -51,8 +51,10 @@ public partial class Player : ContentView
         epiosdeTitle.Text = this.playerService.CurrentEpisode.Title;
         authorText.Text = $"{this.playerService.CurrentShow?.Author} - {this.playerService.CurrentEpisode?.Published.ToString("MMM, d yyy")}";
 
+#if WINDOWS || MACCATALYST
         podcastImage.Source = this.playerService.CurrentShow?.Image;
         duration.Text = this.playerService.CurrentEpisode?.Duration.ToString();
+#endif
     }
 
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
