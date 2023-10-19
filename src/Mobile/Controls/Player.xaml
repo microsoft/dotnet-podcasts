@@ -10,7 +10,7 @@
     <ContentView.HeightRequest>
         <OnPlatform x:TypeArguments="x:Double">
             <On Platform="Android,iOS">70</On>
-            <On Platform="UWP,macOS">90</On>
+            <On Platform="UWP,MacCatalyst">90</On>
         </OnPlatform>
     </ContentView.HeightRequest>
 
@@ -42,7 +42,7 @@
 
                 </Grid>
             </On>
-            <On Platform="UWP, macOS">
+            <On Platform="UWP, MacCatalyst">
                 <Grid ColumnDefinitions="auto, *, auto">
                     <Grid ColumnDefinitions="auto, auto"
                           RowDefinitions="auto,auto"
