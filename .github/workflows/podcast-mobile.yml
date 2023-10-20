@@ -34,7 +34,7 @@ jobs:
         run: |
           $ProgressPreference = 'SilentlyContinue'
           Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/net8.0/NuGet.config -OutFile maui-main-NuGet.config
-          & .\dotnet workload install maui wasi-experimental --from-rollback-file https://aka.ms/dotnet/maui/net8.0.json --configfile maui-main-NuGet.config
+          & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/net8.0.json --configfile maui-main-NuGet.config
 
       - name: build Microsoft.NetConf2021.Maui.csproj
         shell: pwsh
