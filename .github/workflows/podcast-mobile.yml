@@ -28,14 +28,10 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: install MAUI workload
-        shell: pwsh
-        run: |
-          & .\dotnet workload install maui
+        run: dotnet workload install maui
 
       - name: build Microsoft.NetConf2021.Maui.csproj
-        shell: pwsh
-        run: |
-          & .\dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
+        run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
 
       - name: archive logs
         if: always()
