@@ -23,23 +23,15 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install .NET
-        shell: pwsh
-        run: |
-          $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
-          .\dotnet-install.ps1 -Channel 8.0 -Quality daily -InstallDir .
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
 
       - name: install MAUI workload
-        shell: pwsh
-        run: |
-          $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest https://raw.githubusercontent.com/dotnet/maui/net8.0/NuGet.config -OutFile maui-main-NuGet.config
-          & .\dotnet workload install maui --from-rollback-file https://aka.ms/dotnet/maui/net8.0.json --configfile maui-main-NuGet.config
+        run: dotnet workload install maui
 
       - name: build Microsoft.NetConf2021.Maui.csproj
-        shell: pwsh
-        run: |
-          & .\dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
+        run: dotnet build src/Mobile/Microsoft.NetConf2021.Maui.csproj -bl:mobile.binlog
 
       - name: archive logs
         if: always()

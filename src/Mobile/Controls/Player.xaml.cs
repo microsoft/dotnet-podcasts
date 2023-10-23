@@ -46,13 +46,15 @@ public partial class Player : ContentView
     {
         this.IsVisible = true;
 
+#if ANDROID || IOS
         this.playButton.Source = this.playerService.IsPlaying ? "player_pause.png" : "player_play.png";
 
         epiosdeTitle.Text = this.playerService.CurrentEpisode.Title;
         authorText.Text = $"{this.playerService.CurrentShow?.Author} - {this.playerService.CurrentEpisode?.Published.ToString("MMM, d yyy")}";
-
+#else
         podcastImage.Source = this.playerService.CurrentShow?.Image;
         duration.Text = this.playerService.CurrentEpisode?.Duration.ToString();
+#endif
     }
 
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
