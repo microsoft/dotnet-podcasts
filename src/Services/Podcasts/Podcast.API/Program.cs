@@ -1,20 +1,12 @@
-using System.Reflection;
-using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
-using Azure.Monitor.OpenTelemetry.Exporter;
-using Azure.Storage.Queues;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using Podcast.API.Routes;
-using Podcast.Infrastructure.Data;
-using Podcast.Infrastructure.Http;
-using Podcast.Infrastructure.Http.Feeds;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Identity.Web;
+using OpenTelemetry.Resources;
+using Podcast.Infrastructure.Http;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,48 +72,48 @@ var enableMonitor = !string.IsNullOrWhiteSpace(azureMonitorConnectionString);
 if (enableMonitor)
 {
 
-    builder.Services.AddOpenTelemetryTracing(tracing =>
-        tracing.SetResourceBuilder(serviceResource)
-        .AddAzureMonitorTraceExporter(o =>
-        {
-            o.ConnectionString = azureMonitorConnectionString;
-        })
-        .AddJaegerExporter()
-        .AddHttpClientInstrumentation()
-        .AddAspNetCoreInstrumentation()
-        .AddEntityFrameworkCoreInstrumentation()
-    );
+    //builder.Services.AddOpenTelemetryTracing(tracing =>
+    //    tracing.SetResourceBuilder(serviceResource)
+    //    .AddAzureMonitorTraceExporter(o =>
+    //    {
+    //        o.ConnectionString = azureMonitorConnectionString;
+    //    })
+    //    .AddJaegerExporter()
+    //    .AddHttpClientInstrumentation()
+    //    .AddAspNetCoreInstrumentation()
+    //    .AddEntityFrameworkCoreInstrumentation()
+    //);
 
-    builder.Services.AddOpenTelemetryMetrics(metrics =>
-    {
-        metrics
-        .SetResourceBuilder(serviceResource)
-        .AddPrometheusExporter()
-        .AddAzureMonitorMetricExporter(o =>
-        {
-            o.ConnectionString = azureMonitorConnectionString;
-        })
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddRuntimeInstrumentation()
-        .AddProcessInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddEventCountersInstrumentation(ec =>
-        {
-            ec.AddEventSources("Microsoft.AspNetCore.Hosting");
-        });
-    });
+    //builder.Services.AddOpenTelemetryMetrics(metrics =>
+    //{
+    //    metrics
+    //    .SetResourceBuilder(serviceResource)
+    //    .AddPrometheusExporter()
+    //    .AddAzureMonitorMetricExporter(o =>
+    //    {
+    //        o.ConnectionString = azureMonitorConnectionString;
+    //    })
+    //    .AddAspNetCoreInstrumentation()
+    //    .AddHttpClientInstrumentation()
+    //    .AddRuntimeInstrumentation()
+    //    .AddProcessInstrumentation()
+    //    .AddHttpClientInstrumentation()
+    //    .AddEventCountersInstrumentation(ec =>
+    //    {
+    //        ec.AddEventSources("Microsoft.AspNetCore.Hosting");
+    //    });
+    //});
 
-    builder.Logging.AddOpenTelemetry(logging =>
-    {
-        logging
-        .SetResourceBuilder(serviceResource)
-        .AddAzureMonitorLogExporter(o =>
-        {
-            o.ConnectionString = azureMonitorConnectionString;
-        })
-        .AttachLogsToActivityEvent();
-    });
+    //builder.Logging.AddOpenTelemetry(logging =>
+    //{
+    //    logging
+    //    .SetResourceBuilder(serviceResource)
+    //    .AddAzureMonitorLogExporter(o =>
+    //    {
+    //        o.ConnectionString = azureMonitorConnectionString;
+    //    })
+    //    .AttachLogsToActivityEvent();
+    //});
 }
 
 var app = builder.Build();
@@ -139,8 +131,8 @@ app.UseCors();
 app.UseRateLimiter();
 app.UseOutputCache();
 
-if (enableMonitor)
-    app.MapPrometheusScrapingEndpoint();
+//if (enableMonitor)
+//    app.MapPrometheusScrapingEndpoint();
 
 app.MapGet("/version", () => serviceVersion);
 
