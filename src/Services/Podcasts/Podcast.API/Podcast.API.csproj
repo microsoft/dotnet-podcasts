@@ -29,7 +29,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-rc.2.22472.11" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0-rc.2.22472.11" />
 		<PackageReference Include="Microsoft.Identity.Web" Version="1.25.3" />
-		<PackageReference Include="Microsoft.NET.Build.Containers" Version="0.2.7" />
+		<PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.404" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.4.3" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.4.0-beta.2" />
