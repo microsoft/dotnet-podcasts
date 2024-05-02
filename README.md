@@ -23,8 +23,6 @@ The .NET Podcast app is a sample application showcasing [.NET](https://dotnet.mi
 
 In addition, we created an Approval App using [Microsoft Power Apps](https://docs.microsoft.com/en-us/power-apps/) to handle incoming podcast requests.
 
-You can browse a [live running version of the .NET Podcasts app](https://dotnetpodcasts.azurewebsites.net/) powered by ASP.NET Core and Blazor.
-
 ![Logo](./docs/images/net-podcasts.png)
 
 
